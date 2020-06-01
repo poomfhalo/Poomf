@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using GW_Lib.Utility;
 using UnityEngine;
 using UnityEngine.AI;
@@ -120,7 +119,7 @@ namespace GW_Lib
         }
         public static void GetViewPos(this Transform transform, out float x, out float y)
         {
-            if(transform == null)
+            if (transform == null)
             {
                 x = 0.5f;
                 y = 0.5f;
@@ -224,7 +223,11 @@ namespace GW_Lib
 
             return startVel;
         }
-        public static float GetTravelTime(Vector3 xi,Vector3 xf, Vector3 vi,Vector3 vf)
+        public static float GetJumpVelocity(float jumpHeigth, float gravity)
+        {
+            return Mathf.Sqrt(-2 * gravity * jumpHeigth);
+        }
+        public static float GetTravelTime(Vector3 xi, Vector3 xf, Vector3 vi, Vector3 vf)
         {
             //x=x0+0.5(vi+vf)t
             //delta*2 = (vi+vf)t
@@ -796,7 +799,7 @@ namespace GW_Lib
             }
             else if (comparisionType == Comparision.Eq)
             {
-                leftMakesRight = leftTerm == rightTerm;
+                leftMakesRight = Mathf.Abs(leftTerm - rightTerm) < Mathf.Epsilon;
             }
             return leftMakesRight;
         }
@@ -860,8 +863,6 @@ namespace GW_Lib
                 return bCol.size.x / 2.0f;
             return defVal;
         }
-
-      
     }
     public static class MathExtensions
     {

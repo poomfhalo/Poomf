@@ -11,6 +11,9 @@ public class MatchInputController : Singleton<MatchInputController>
     public static event Action OnFriendly = null;
     public static event Action OnEnemy = null;
     public static event Action OnDodge = null;
+    public static event Action OnFakeFire = null;
+    public static event Action OnJump = null;
+
     public static bool IsEnabled { set; get; } = true;
 
     void OnDestroy()
@@ -21,6 +24,8 @@ public class MatchInputController : Singleton<MatchInputController>
         OnFriendly = null;
         OnEnemy = null;
         OnDodge = null;
+        OnFakeFire = null;
+        OnJump = null;
     }
     public void I_OnMove(InputAction.CallbackContext ctx)
     {
@@ -66,6 +71,20 @@ public class MatchInputController : Singleton<MatchInputController>
             return;
 
         OnDodge?.Invoke();
+    }
+    public void I_OnFakeFire(InputAction.CallbackContext ctx)
+    {
+        if (!ButtonDownTest(ctx))
+            return;
+
+        OnFakeFire?.Invoke();
+    }
+    public void I_OnJump(InputAction.CallbackContext ctx)
+    {
+        if (!ButtonDownTest(ctx))
+            return;
+
+        OnJump?.Invoke();
     }
     private bool ButtonDownTest(InputAction.CallbackContext ctx)
     {

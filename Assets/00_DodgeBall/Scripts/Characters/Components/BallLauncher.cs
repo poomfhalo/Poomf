@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using GW_Lib;
 using UnityEngine;
 
@@ -8,23 +6,28 @@ using UnityEngine;
 public class BallLauncher : MonoBehaviour,ICharaAction
 {
     public event Action onThrowPointReached = null;
-    public bool IsThrowing => isThrowing;
-    public string actionName => "Throw Action";
+    public event Action onFakeThrowEnded = null;
 
+    public bool IsThrowing => isThrowing;
+    public string actionName => activityName;
+
+    [SerializeField] float throwFacingSpeed = 200;
+    [Header("Throw Data")]
     [SerializeField] float heigth = 10;
     [SerializeField] float gravity = 5;
     [Tooltip("If the value is less than 1 then we will use the Mover turn speed, noting that, if its too low, character may not" +
-    	"\nface the target, by the end of the animation, but the ball, will still travel towards the target")]
-    [SerializeField] float throwFacingSpeed = 200;
+        "\nface the target, by the end of the animation, but the ball, will still travel towards the target")]
 
     [Header("Read Only")]
     [SerializeField] bool isThrowing = false;
+    [SerializeField] string activityName = "Throw Action";
 
     DodgeballCharacter chara = null;
     Animator animator = null;
     ActionsScheduler scheduler = null;
     DodgeballCharacter aimedAtChara = null;
     Mover mover = null;
+    Vector3 lastInput = new Vector3();
 
     void Awake()
     {
@@ -54,7 +57,26 @@ public class BallLauncher : MonoBehaviour,ICharaAction
         aimedAtChara = toChara;
         Action a = () =>{
             animator.SetTrigger("Throw");
-            scheduler.StartAction(this);
+            activityName = "Throw Action";
+            scheduler.StartAction(this,false);
+        };
+        if (mover.IsMoving)
+            mover.SmoothStop(a);
+        else
+            a.Invoke();
+    }
+    public void StartFakeThrow(DodgeballCharacter activeChara)
+    {
+        if (isThrowing)
+            return;
+
+        isThrowing = true;
+        aimedAtChara = activeChara;
+
+        Action a = () => {
+            animator.SetTrigger("FakeThrow");
+            activityName = "Fake Throw Action";
+            scheduler.StartAction(this,false);
         };
         if (mover.IsMoving)
             mover.SmoothStop(a);
@@ -62,6 +84,11 @@ public class BallLauncher : MonoBehaviour,ICharaAction
             a.Invoke();
     }
 
+    public void A_OnFakeThrowEnded()
+    {
+        isThrowing = false;
+        onFakeThrowEnded?.Invoke();
+    }
     public void A_OnThrowPointReached()
     {
         Dodgeball.instance.transform.SetParent(null);
@@ -81,5 +108,14 @@ public class BallLauncher : MonoBehaviour,ICharaAction
             //this.InvokeDelayed(f, () => { Debug.Log("Finished?"); Debug.Break(); });
             Dodgeball.GoLaunchTo(aimedAtChara, vel, Vector3.down * gravity, null);
         }
+    }
+    public void UpdateInput(Vector3 i)
+    {
+        this.lastInput = i;
+    }
+    public void A_OnThrowEnded()
+    {
+        mover.ReadFacingValues();
+        mover.UpdateInput(lastInput);
     }
 }

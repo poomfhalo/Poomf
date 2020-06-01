@@ -16,6 +16,8 @@ namespace GW_Lib.Utility.Events
     public class UnityTransformEvent : UnityEvent<Transform> { }
     [Serializable]
     public class UnityColliderEvent : UnityEvent<Collider> { }
+    [Serializable]
+    public class UnityCollisionEvent : UnityEvent<Collision> { }
     [Serializable] 
     public class UnityPSEvent : UnityEvent<ParticleSystem> { }
 }

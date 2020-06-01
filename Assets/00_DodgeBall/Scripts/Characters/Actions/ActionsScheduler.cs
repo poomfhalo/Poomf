@@ -8,6 +8,7 @@
 /// </summary>
 public class ActionsScheduler : MonoBehaviour
 {
+    public string CurrActionName => currActionName;
     [SerializeField] string currActionName = "";
     ICharaAction currAction = null;
     public void StartAction(ICharaAction action,bool cancelPrevious = true)

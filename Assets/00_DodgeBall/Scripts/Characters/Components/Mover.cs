@@ -1,16 +1,53 @@
 ﻿using System;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.AI;
 
 [RequireComponent(typeof(ActionsScheduler))]
-public class Mover : MonoBehaviour,ICharaAction
+public class Mover : MonoBehaviour, ICharaAction
 {
+    //Note: Y vel is directly changed by gravity
+    //this script, only modifies the XZVel for the characters.
+    public Vector3 YVel
+    {
+        get
+        {
+            Vector3 yVel = rb3d.velocity;
+            yVel.x = yVel.z = 0;
+            return yVel;
+        }
+        set
+        {
+            Vector3 oldVel = rb3d.velocity;
+            Vector3 newVel = value;
+            newVel.x = oldVel.x;
+            newVel.z = oldVel.z;
+            rb3d.velocity = newVel;
+        }
+    }
+    private Vector3 XZVel
+    {
+        get
+        {
+            Vector3 xzVel = rb3d.velocity;
+            xzVel.y = 0;
+            return xzVel;
+        }
+        set
+        {
+            Vector3 oldVel = rb3d.velocity;
+            Vector3 newVel = value;
+            newVel.y = oldVel.y;
+            rb3d.velocity = newVel;
+        }
+    }
+
+    public float GetGravity => cf.force.y;
     public bool IsMoving => currState != MovementState.Stopped;
     enum MovementState { Stopped,ByInput,ToPoint }
     [SerializeField] MovementState currState = MovementState.Stopped;
     [SerializeField] float accel = 10;
     [SerializeField] float maxSpeed = 3;
+    [SerializeField] float gravity = -20;
 
     [Header("Slowing Down")]
     [Tooltip("how fast speed decreases, when no input is being applied")]
@@ -34,7 +71,7 @@ public class Mover : MonoBehaviour,ICharaAction
     [SerializeField] Vector3 vel = Vector3.zero;
     [SerializeField] Vector3 lastNonZeroVel = Vector3.zero;
 
-    Vector3 input = Vector3.zero;
+    public Vector3 input { private set; get; } = Vector3.zero;
     Vector3 dir = Vector3.zero;
 
     Transform currMovePoint = null;
@@ -42,6 +79,7 @@ public class Mover : MonoBehaviour,ICharaAction
     Animator animator = null;
     Rigidbody rb3d = null;
     ActionsScheduler scheduler = null;
+    ConstantForce cf = null;
 
     public string actionName => "Move Action";
     Vector3 right = new Vector3(), fwd = new Vector3();
@@ -50,10 +88,12 @@ public class Mover : MonoBehaviour,ICharaAction
     {
         animator = GetComponent<Animator>();
         rb3d = GetComponent<Rigidbody>();
+        rb3d.useGravity = false;
         scheduler = GetComponent<ActionsScheduler>();
+        cf = GetComponent<ConstantForce>();
+        cf.force = Vector3.up * gravity;
 
-        lastNonZeroDir = transform.forward;
-        lastNonZeroVel = lastNonZeroDir * (stoppingSpeed + 0.05f);
+        ReadFacingValues();
     }
     void Update()
     {
@@ -86,7 +126,7 @@ public class Mover : MonoBehaviour,ICharaAction
         currMovePoint = null;
         vel = Vector3.zero;
         speed = 0;
-        rb3d.velocity = vel;
+        XZVel = vel;
         animator.SetFloat("Speed", speed);
     }
     public void SmoothStop(Action onCompleted)
@@ -98,11 +138,11 @@ public class Mover : MonoBehaviour,ICharaAction
 
         float f = 0;
         DOTween.To(() => f, (newF) => f = newF, 1, cancelationTime).SetEase(Ease.InOutSine).OnUpdate(() => {
-            rb3d.velocity = Vector3.Slerp(cancelStartVel, Vector3.zero, f);
+            XZVel = Vector3.Slerp(cancelStartVel, Vector3.zero, f);
             speed = Mathf.Lerp(startCancelSpeed, 0, f);
             animator.SetFloat("Speed", speed);
         }).OnComplete(() => {
-            rb3d.velocity = Vector3.zero;
+            XZVel = Vector3.zero;
             speed = 0;
             animator.SetFloat("Speed", speed);
             onCompleted?.Invoke();
@@ -114,10 +154,14 @@ public class Mover : MonoBehaviour,ICharaAction
         currState = MovementState.ToPoint;
         this.currMovePoint = point;
     }
+    public void ReadFacingValues()
+    {
+        lastNonZeroDir = transform.forward;
+        lastNonZeroVel = lastNonZeroDir * (stoppingSpeed + 0.05f);
+    }
     public void UpdateInput(Vector3 newInput,Transform withRespectTo)
     {
-        currState = MovementState.ByInput;
-        this.input = newInput;
+        UpdateInput(newInput);
         if(withRespectTo == null)
         {
             right = Vector3.right;
@@ -128,6 +172,11 @@ public class Mover : MonoBehaviour,ICharaAction
             right = withRespectTo.right;
             fwd = withRespectTo.forward;
         }
+    }
+    public void UpdateInput(Vector3 input)
+    {
+        currState = MovementState.ByInput;
+        this.input = input;
     }
 
     public void TurnToPoint(Vector3 pos, float turnSpeed)
@@ -175,7 +224,7 @@ public class Mover : MonoBehaviour,ICharaAction
             lastNonZeroVel = vel;
             vel = Vector3.ClampMagnitude(vel, maxSpeed);
         }
-        rb3d.velocity = vel;
+        XZVel = vel;
     }
     private void SetMoveDir()
     {

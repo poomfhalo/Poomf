@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody))]
@@ -11,6 +10,8 @@ public abstract class DodgeballCharacter : MonoBehaviour
     public bool IsThrowing => launcher.IsThrowing;
     public bool IsMoving => mover.IsMoving;
     public bool IsDodging => dodger.IsDodging;
+    public bool IsBallInGrabZone => catcher.IsBallInGrabZone;
+    public bool IsJumping => jumper.IsJumping;
 
     //Body Parts
     public Transform BallGrabPoint => ballGrabPoint;
@@ -41,6 +42,8 @@ public abstract class DodgeballCharacter : MonoBehaviour
     protected Mover mover = null;
     protected BallLauncher launcher = null;
     protected Dodger dodger = null;
+    protected BallCatcher catcher = null;
+    protected Jumper jumper = null;
 
     protected virtual void Reset()
     {
@@ -62,7 +65,8 @@ public abstract class DodgeballCharacter : MonoBehaviour
         launcher = GetComponent<BallLauncher>();
         mover = GetComponent<Mover>();
         dodger = GetComponent<Dodger>();
-
+        catcher = GetComponent<BallCatcher>();
+        jumper = GetComponent<Jumper>();
 
         if (selectionIndicator == null)
             selectionIndicator = GetComponentInChildren<SelectionIndicator>();
@@ -76,6 +80,9 @@ public abstract class DodgeballCharacter : MonoBehaviour
 
         if(launcher)
             launcher.onThrowPointReached += OnThrewBall;
+
+        if (catcher)
+            catcher.onBallInHands += OnBallInHands;
     }
 
     public void SetTeam(TeamTag team)
@@ -89,20 +96,14 @@ public abstract class DodgeballCharacter : MonoBehaviour
 
     }
 
-    protected void GrabBall()
-    {
-        if (HasBall)
-            return;
-
-        Dodgeball.GoTo(this, () => {
-            hasBall = true;
-            selectionIndicator.SetNewFocus(false);
-        });
-        animator.SetBool("HasBall", true);
-    }
     protected void OnThrewBall()
     {
         hasBall = false;
         selectionIndicator.SetFocus(null);
+    }
+    private void OnBallInHands()
+    {
+        hasBall = true;
+        selectionIndicator.SetNewFocus(false);
     }
 }

@@ -1,20 +1,9 @@
-﻿using GW_Lib.Utility;
+﻿using System;
+using GW_Lib.Utility;
 using UnityEngine;
 
 public class PC : DodgeballCharacter
 {
-    [Header("Ball Grabbing")]
-    [SerializeField] TriggerDelegator ballGrabbingZone = null;
-
-    [Header("Read Only")]
-    [SerializeField] bool isBallInGrabZone = false;
-
-    protected override void Awake()
-    {
-        base.Awake();
-        ballGrabbingZone.onTriggerEnter.AddListener(OnBallGrabZoneEntered);
-        ballGrabbingZone.onTriggerExit.AddListener(OnBallGrabZoneExitted);
-    }
     void OnEnable()
     {
         MatchInputController.OnMoveInput += OnMoveInput;
@@ -23,6 +12,8 @@ public class PC : DodgeballCharacter
         MatchInputController.OnFriendly += OnFriendly;
         MatchInputController.OnFire += OnFire;
         MatchInputController.OnDodge+= OnDodge;
+        MatchInputController.OnFakeFire += OnFakeFire;
+        MatchInputController.OnJump += OnJump;
     }
     void OnDisable()
     {
@@ -32,34 +23,28 @@ public class PC : DodgeballCharacter
         MatchInputController.OnFriendly -= OnFriendly;
         MatchInputController.OnFire -= OnFire;
         MatchInputController.OnDodge -= OnDodge;
+        MatchInputController.OnFakeFire -= OnFakeFire;
+        MatchInputController.OnJump -= OnJump;
     }
 
     private void OnMoveInput(Vector3 i)
     {
-        if (launcher.IsThrowing)
+        if (jumper.IsJumping)
+        {
+            jumper.UpdateInput(i);
             return;
+        }
         mover.StartMoveByInput(i, cam.transform);
     }
     private void OnCatch()
     {
-        if (isBallInGrabZone)
-            GrabBall();
-    }
-
-    private void OnBallGrabZoneEntered(Collider col)
-    {
-        if (!col.GetComponent<Dodgeball>())
+        if (HasBall)
             return;
-        isBallInGrabZone = true;
-    }
-    private void OnBallGrabZoneExitted(Collider col)
-    {
-        if (!col.GetComponent<Dodgeball>())
+        if (!IsBallInGrabZone)
             return;
 
-        isBallInGrabZone = false;
+        catcher.StartCatchAction();
     }
-
     private void OnFriendly()
     {
         if(HasBall)
@@ -78,10 +63,10 @@ public class PC : DodgeballCharacter
     {
         if (IsThrowing)
             return;
-        if(HasBall)
-        {
-            launcher.StartThrowAction(selectionIndicator.ActiveSelection);
-        }
+        if (!HasBall)
+            return;
+        launcher.UpdateInput(mover.input);
+        launcher.StartThrowAction(selectionIndicator.ActiveSelection);
     }
     private void OnDodge()
     {
@@ -93,5 +78,27 @@ public class PC : DodgeballCharacter
             return;
 
         dodger.StartDodgeAction();
+    }
+    private void OnFakeFire()
+    {
+        if (!HasBall)
+            return;
+        if (IsThrowing)
+            return;
+        launcher.UpdateInput(mover.input);
+        launcher.StartFakeThrow(selectionIndicator.ActiveSelection);
+    }
+    private void OnJump()
+    {
+        if (HasBall)
+            return;
+        if (IsThrowing)
+            return;
+        if (IsDodging)
+            return;
+        if (IsJumping)
+            return;
+        jumper.StartJumpAction();
+
     }
 }
