@@ -16,4 +16,9 @@ public class LaunchManager : MonoBehaviourPunCallbacks
         base.OnConnectedToMaster();
         print("Connected To Master");
     }
+    public override void OnConnected()
+    {
+        base.OnConnected();
+        print("Connected to internet");
+    }
 }
