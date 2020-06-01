@@ -1171,18 +1171,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1069208380}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32827a34725b7e06d97dbb9fdfc9e014, type: 3}
+  m_Script: {fileID: 11500000, guid: 2b8da439be305104dbad9d09103a6b44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   currState: 0
-  accel: 42
-  maxSpeed: 7
-  deAccel: 33
-  dampingSpeed: 0.525
+  accel: 10
+  maxSpeed: 3
+  deAccel: 5
+  dampingSpeed: 0.1
   speedDamper: 1.5
-  stoppingSpeed: 0.1
-  cancelationTime: 0.45
-  turningSpeed: 350
+  stoppingSpeed: 0.01
+  cancelationTime: 0.1
+  turningSpeed: 290
   speed: 0
   lastNonZeroDir: {x: 0, y: 0, z: 0}
   vel: {x: 0, y: 0, z: 0}
