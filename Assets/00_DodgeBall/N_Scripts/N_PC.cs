@@ -1,19 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Photon.Pun;
+﻿using UnityEngine;
+using Photon.Realtime;
 
-[RequireComponent(typeof(PhotonView))]
 [RequireComponent(typeof(PC))]
 public class N_PC : MonoBehaviour
 {
-    PhotonView photonView = null;
+    public Player controller = null;
     void Start()
     {
-        photonView = GetComponent<PhotonView>();
-        if(photonView && !photonView.IsMine)
+        if(controller.IsLocal)
         {
             GetComponent<PC>().enabled = false;
         }
+    }
+
+    internal void Initialize(Player controller)
+    {
+        this.controller = controller;
     }
 }
