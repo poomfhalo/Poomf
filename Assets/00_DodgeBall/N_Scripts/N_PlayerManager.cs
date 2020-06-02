@@ -13,7 +13,7 @@ public class N_PlayerManager : MonoBehaviour
     void Start()
     {
         view = GetComponent<PhotonView>();
-        view.RPC("SpawnPC", view.Controller,new object[1] { 5 });
+        view.RPC("SpawnPC", RpcTarget.All, new object[1] { 5 });
     }
 
     [PunRPC]
@@ -23,6 +23,7 @@ public class N_PlayerManager : MonoBehaviour
         int i = UnityEngine.Random.Range(0, playerSpawnPoints.Count);
         SpawnPoint s = playerSpawnPoints[i];
         GameObject g = N_GameManager.MakeObj(N_Prefab.Player, s.position, s.rotation);
+        g.GetComponent<PhotonView>().TransferOwnership(view.Owner);
         Debug.Log("Created PC " + someNum, g);
     }
 }
