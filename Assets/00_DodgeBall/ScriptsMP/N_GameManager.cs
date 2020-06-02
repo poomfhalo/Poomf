@@ -27,6 +27,11 @@ public class N_GameManager : N_Singleton<N_GameManager>
     List<SpawnPoint> playerSpawnPoints = new List<SpawnPoint>();
     void Start()
     {
+        if(!PhotonNetwork.IsConnected)
+        {
+            Debug.LogWarning("Must be connected, for Networked game manager to work");
+            return;
+        }
         playerSpawnPoints = FindObjectsOfType<SpawnPoint>().ToList();
         int i = UnityEngine.Random.Range(0, playerSpawnPoints.Count);
         SpawnPoint s = playerSpawnPoints[i];
