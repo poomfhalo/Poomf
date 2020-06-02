@@ -46,11 +46,7 @@ public class N_LaunchManager : MonoBehaviourPunCallbacks
     {
         print("failed to join room :: " + message);
         string rnd = "Room : " + UnityEngine.Random.Range(-100, 100);
-        RoomOptions ops = new RoomOptions();
-        ops.MaxPlayers = 6;
-        ops.IsVisible = true;
-        ops.IsOpen = true;
-        PhotonNetwork.CreateRoom(rnd, ops);
+        PhotonNetwork.CreateRoom(rnd, GetDefOptions());
     }
     public override void OnJoinedRoom()
     {
@@ -85,5 +81,13 @@ public class N_LaunchManager : MonoBehaviourPunCallbacks
     private void JoinOrCreateGame()
     {
         PhotonNetwork.JoinRandomRoom();
+    }
+    public static RoomOptions GetDefOptions()
+    {
+        RoomOptions ops = new RoomOptions();
+        ops.MaxPlayers = 6;
+        ops.IsVisible = true;
+        ops.IsOpen = true;
+        return ops;
     }
 }
