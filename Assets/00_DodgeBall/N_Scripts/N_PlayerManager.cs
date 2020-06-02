@@ -13,16 +13,16 @@ public class N_PlayerManager : MonoBehaviour
     void Start()
     {
         view = GetComponent<PhotonView>();
-        view.RPC("SpawnPC", view.Controller, null);
+        SpawnPC();
     }
 
-    [PunRPC]
     void SpawnPC()
     {
         playerSpawnPoints = FindObjectsOfType<SpawnPoint>().ToList();
         int i = UnityEngine.Random.Range(0, playerSpawnPoints.Count);
         SpawnPoint s = playerSpawnPoints[i];
         GameObject g = N_GameManager.MakeObj(N_Prefab.Player, s.position, s.rotation);
+        g.transform.SetParent(transform);
         N_PC player = g.GetComponent<N_PC>();
         player.Initialize(view.Controller);
         Debug.Log(view.Controller + " Created a PC ", g);
