@@ -23,7 +23,6 @@ public class N_PlayerManager : MonoBehaviour
         int i = UnityEngine.Random.Range(0, playerSpawnPoints.Count);
         SpawnPoint s = playerSpawnPoints[i];
         GameObject g = N_GameManager.MakeObj(N_Prefab.Player, s.position, s.rotation);
-        g.GetComponent<PhotonView>().TransferOwnership(view.Owner);
         Debug.Log("Created PC ",g);
     }
 }
