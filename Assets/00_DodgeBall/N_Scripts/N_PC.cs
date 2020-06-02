@@ -13,7 +13,7 @@ public class N_PC : MonoBehaviour
         photonView = GetComponent<PhotonView>();
         if(photonView && !photonView.IsMine)
         {
-            photonView.enabled = false;
+            GetComponent<PC>().enabled = false;
         }
     }
 }
