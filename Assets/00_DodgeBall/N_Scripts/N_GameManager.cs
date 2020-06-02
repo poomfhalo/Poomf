@@ -84,7 +84,7 @@ public class N_GameManager : N_Singleton<N_GameManager>
             Debug.Log("Waiting for second player");
         }
     }
-
+    [PunRPC]
     private void CreatePlayerManager()
     {
         GameObject g = N_MakeObj(N_Prefab.PlayerManager, Vector3.zero, Quaternion.identity);
