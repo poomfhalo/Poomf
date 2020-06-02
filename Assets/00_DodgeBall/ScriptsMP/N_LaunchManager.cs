@@ -8,8 +8,9 @@ using UnityEngine.UI;
 using System;
 using Photon.Realtime;
 
-public class LaunchManager : MonoBehaviourPunCallbacks
+public class N_LaunchManager : MonoBehaviourPunCallbacks
 {
+    [SerializeField] int levelIndex = 1;
     [Header("Start")]
     [SerializeField] GameObject enterGamePanel = null;
     [SerializeField] TMP_InputField playerName = null;
@@ -55,6 +56,7 @@ public class LaunchManager : MonoBehaviourPunCallbacks
     {
         Debug.Log(PhotonNetwork.NickName + " have joined room " + PhotonNetwork.CurrentRoom.Name);
         lobbyPanel.SetActive(false);
+        PhotonNetwork.LoadLevel(levelIndex);
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
