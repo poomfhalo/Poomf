@@ -13,7 +13,7 @@ public class N_PC : MonoBehaviour
         }
     }
 
-    internal void Initialize(Player controller)
+    public void Initialize(Player controller)
     {
         this.controller = controller;
     }
