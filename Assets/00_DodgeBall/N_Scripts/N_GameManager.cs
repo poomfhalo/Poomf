@@ -36,6 +36,7 @@ public class N_GameManager : N_Singleton<N_GameManager>
             return;
         }
         autoStart = false;
+        GameObject g = N_MakeObj(N_Prefab.PlayerManager, Vector3.zero, Quaternion.identity);
     }
 
     public static GameObject N_MakeObj(N_Prefab prefab, Vector3 pos, Quaternion rot, byte group = 0, object[] data = null)

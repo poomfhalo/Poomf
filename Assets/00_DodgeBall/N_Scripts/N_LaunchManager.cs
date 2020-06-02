@@ -52,11 +52,12 @@ public class N_LaunchManager : MonoBehaviourPunCallbacks
     {
         Debug.Log(PhotonNetwork.NickName + " have joined room " + PhotonNetwork.CurrentRoom.Name);
         lobbyPanel.SetActive(false);
-        PhotonNetwork.LoadLevel(levelIndex);
+        Debug.Log("Wait For Second Player");
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Debug.Log(newPlayer.NickName + " Have Joined Total Count :: " + PhotonNetwork.CurrentRoom.PlayerCount);
+        PhotonNetwork.LoadLevel(levelIndex);
     }
 
 
