@@ -34,7 +34,7 @@ public class N_GameManager : N_Singleton<N_GameManager>
             Debug.LogWarning("Must be connected, for Networked game manager to work");
             return;
         }
-        print("N_GameManager() :: in room " + PhotonNetwork.CurrentRoom.Name);
+        print(PhotonNetwork.NickName+ " N_GameManager() :: in room " + PhotonNetwork.CurrentRoom.Name);
         playerSpawnPoints = FindObjectsOfType<SpawnPoint>().ToList();
         int i = UnityEngine.Random.Range(0, playerSpawnPoints.Count);
         SpawnPoint s = playerSpawnPoints[i];
@@ -57,6 +57,6 @@ public class N_GameManager : N_Singleton<N_GameManager>
     {
         base.OnJoinedRoom();
         var room = PhotonNetwork.CurrentRoom;
-        Debug.Log(" i " + PhotonNetwork.NickName + " joined room " + room.Name + " now there are " + room.PlayerCount + " in room ");
+        Debug.Log(PhotonNetwork.NickName + " joined room " + room.Name + " now there are " + room.PlayerCount + " in room ");
     }
 }
