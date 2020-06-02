@@ -70,12 +70,20 @@ public class N_GameManager : N_Singleton<N_GameManager>
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Debug.Log(newPlayer.NickName + " Have Joined Total Count :: " + PhotonNetwork.CurrentRoom.PlayerCount);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            photonView.RPC("CreatePlayerManager", RpcTarget.All);
+        }
     }
     public override void OnJoinedRoom()
     {
         var room = PhotonNetwork.CurrentRoom;
+        Debug.Log(PhotonNetwork.NickName + " joined room " + room.Name + " now there are " + room.PlayerCount + " in room ");
+    }
 
+    private void CreatePlayerManager()
+    {
         GameObject g = N_MakeObj(N_Prefab.PlayerManager, Vector3.zero, Quaternion.identity);
-        Debug.Log(PhotonNetwork.NickName + " joined room " + room.Name + " now there are " + room.PlayerCount + " in room ", g);
+        Debug.Log("Created PlayerManager " + PhotonNetwork.LocalPlayer.NickName, g);
     }
 }
