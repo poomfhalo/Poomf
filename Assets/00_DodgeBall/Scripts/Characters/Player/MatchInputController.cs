@@ -1,9 +1,8 @@
 ﻿using System;
-using GW_Lib.Utility;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MatchInputController : Singleton<MatchInputController>
+public class MatchInputController : MonoBehaviour
 {
     public static event Action<Vector3> OnMoveInput = null;
     public static event Action OnFire = null;

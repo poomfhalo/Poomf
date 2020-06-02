@@ -1,10 +1,9 @@
-﻿using GW_Lib.Utility;
-using UnityEngine;
+﻿using UnityEngine;
 using DG.Tweening;
 using System;
 using GW_Lib;
 
-public class Dodgeball : Singleton<Dodgeball>
+public class Dodgeball : N_Singleton<Dodgeball>
 {
     public static BallState ballState => instance.m_ballState;
     public enum BallState { OnGround,Held,Flying,GoingToChara,PostContact }
