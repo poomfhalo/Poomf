@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SpawnPoint : MonoBehaviour
 {
@@ -8,6 +6,7 @@ public class SpawnPoint : MonoBehaviour
     public Quaternion rotation => transform.rotation;
     public bool HasSpawned => hasSpawned;
 
+    [Header("Read Only")]
     [SerializeField] bool hasSpawned = false;
 
     public void Fill()
