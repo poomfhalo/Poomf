@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using System;
 using System.Linq;
+using Photon.Realtime;
 
 public enum N_Prefab { Player }
 
@@ -44,5 +45,11 @@ public class N_GameManager : N_Singleton<N_GameManager>
         LoadablePrefab p = instance.prefabs.Single(f => f.type == prefab);
         GameObject o = PhotonNetwork.Instantiate(p.name, pos, rot, group, data);
         return o;
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        base.OnPlayerEnteredRoom(newPlayer);
+        Debug.Log(newPlayer.NickName + " Have Joined Total Count :: " + PhotonNetwork.CurrentRoom.PlayerCount);
     }
 }
