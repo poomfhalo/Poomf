@@ -30,17 +30,17 @@ public class N_LaunchManager : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
+    public override void OnConnected()
+    {
+        base.OnConnected();
+        print("Connected to internet");
+    }
     public override void OnConnectedToMaster()
     {
         base.OnConnectedToMaster();
         print("I " + PhotonNetwork.NickName + " have Connected To Master");
         lobbyPanel.SetActive(true);
         intermediatePanel.SetActive(false);
-    }
-    public override void OnConnected()
-    {
-        base.OnConnected();
-        print("Connected to internet");
     }
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
