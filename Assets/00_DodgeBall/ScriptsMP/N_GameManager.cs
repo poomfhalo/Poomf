@@ -26,6 +26,7 @@ public class N_GameManager : N_Singleton<N_GameManager>
     [SerializeField] List<LoadablePrefab> prefabs = new List<LoadablePrefab> { new LoadablePrefab(N_Prefab.Player,"N_Player") };
 
     List<SpawnPoint> playerSpawnPoints = new List<SpawnPoint>();
+
     void Start()
     {
         if(!PhotonNetwork.IsConnected)
@@ -40,10 +41,10 @@ public class N_GameManager : N_Singleton<N_GameManager>
         MakeObj(N_Prefab.Player, s.position, s.rotation);
     }
 
-    public static GameObject MakeObj(N_Prefab prefab,Vector3 pos,Quaternion rot, byte group = 0, object[] data = null)
+    public static GameObject MakeObj(N_Prefab prefab,Vector3 pos,Quaternion rot)
     {
         LoadablePrefab p = instance.prefabs.Single(f => f.type == prefab);
-        GameObject o = PhotonNetwork.Instantiate(p.name, pos, rot, group, data);
+        GameObject o = PhotonNetwork.Instantiate(p.name, pos, rot);
         return o;
     }
 
@@ -51,5 +52,11 @@ public class N_GameManager : N_Singleton<N_GameManager>
     {
         base.OnPlayerEnteredRoom(newPlayer);
         Debug.Log(newPlayer.NickName + " Have Joined Total Count :: " + PhotonNetwork.CurrentRoom.PlayerCount);
+    }
+    public override void OnJoinedRoom()
+    {
+        base.OnJoinedRoom();
+        var room = PhotonNetwork.CurrentRoom;
+        Debug.Log(" i " + PhotonNetwork.NickName + " joined room " + room.Name + " now there are " + room.PlayerCount + " in room ");
     }
 }
