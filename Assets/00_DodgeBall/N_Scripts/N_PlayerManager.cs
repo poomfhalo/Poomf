@@ -13,7 +13,7 @@ public class N_PlayerManager : MonoBehaviour
     void Start()
     {
         view = GetComponent<PhotonView>();
-        view.RPC("SpawnPC", RpcTarget.All, new object[1] { 5 });
+        view.RPC("SpawnPC", view.Controller, new object[1] { 5 });
     }
 
     [PunRPC]
