@@ -14,11 +14,10 @@ public class N_PlayerManager : MonoBehaviour
     {
         view = GetComponent<PhotonView>();
         view.RPC("SpawnPC", view.Controller, null);
-        print("This was called?");
     }
 
     [PunRPC]
-    void SpawsnPC()
+    void SpawnPC()
     {
         playerSpawnPoints = FindObjectsOfType<SpawnPoint>().ToList();
         int i = UnityEngine.Random.Range(0, playerSpawnPoints.Count);
