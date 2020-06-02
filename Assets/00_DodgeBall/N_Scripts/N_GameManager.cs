@@ -79,6 +79,10 @@ public class N_GameManager : N_Singleton<N_GameManager>
     {
         var room = PhotonNetwork.CurrentRoom;
         Debug.Log(PhotonNetwork.NickName + " joined room " + room.Name + " now there are " + room.PlayerCount + " in room ");
+        if(autoStart)
+        {
+            Debug.Log("Waiting for second player");
+        }
     }
 
     private void CreatePlayerManager()
