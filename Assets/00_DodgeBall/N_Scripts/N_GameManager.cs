@@ -74,6 +74,5 @@ public class N_GameManager : N_Singleton<N_GameManager>
     public void CreatePlayerManager()
     {
         localPlayer = N_Extentions.N_MakeObj(N_Prefab.PlayerManager, Vector3.zero, Quaternion.identity);
-        localPlayer.name = "Manager " + PhotonNetwork.NickName;
     }
 }

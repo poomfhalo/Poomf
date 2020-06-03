@@ -28,6 +28,7 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
         {
             yield return StartCoroutine(SpawnPC());
         }
+        name = "Manager " + GetComponent<PhotonView>().Controller.NickName;
     }
     IEnumerator SpawnPC()
     {
