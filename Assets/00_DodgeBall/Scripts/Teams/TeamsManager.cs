@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW_Lib.Utility;
 using UnityEngine;
 
 public class TeamsManager : Singleton<TeamsManager>
 {
+    public List<DodgeballCharacter> AllCharacters => allCharacters;
+    [SerializeField] List<DodgeballCharacter> allCharacters = new List<DodgeballCharacter>();
     [SerializeField] List<Team> teams = new List<Team> { new Team(TeamTag.A), new Team(TeamTag.B) };
 
     public static void JoinTeam(TeamTag team, DodgeballCharacter player)
@@ -12,6 +15,7 @@ public class TeamsManager : Singleton<TeamsManager>
         Team wantedTeam = instance.teams.Single(t => t.teamTag == team);
         wantedTeam.Join(player);
     }
+
     public static bool AreFriendlies(DodgeballCharacter chara1, DodgeballCharacter chara2)
     {
         if (chara1 == null || chara2 == null)
@@ -53,5 +57,12 @@ public class TeamsManager : Singleton<TeamsManager>
     {
         Team team = instance.teams.Single(t => t.palyersNames.Contains(chara.charaName));
         return team;
+    }
+    public static void AddCharacter(DodgeballCharacter dodgeballCharacter)
+    {
+        if (instance.allCharacters.Contains(dodgeballCharacter))
+            return;
+
+        instance.allCharacters.Add(dodgeballCharacter);
     }
 }

@@ -1,16 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using UnityEngine;
 
 public class N_PlayerManager : MonoBehaviourPunCallbacks
 {
+    [SerializeField] GameObject localPC = null;
     List<SpawnPoint> playerSpawnPoints = new List<SpawnPoint>();
 
     IEnumerator Start()
     {
-        yield return new WaitForSeconds(3);
         if (photonView.IsMine)
         {
             yield return StartCoroutine(SpawnPC());
@@ -19,7 +20,19 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
 
     IEnumerator SpawnPC()
     {
+        yield return 0;
+        localPC = N_Extentions.N_MakeObj(N_Prefab.Player, Vector3.zero,Quaternion.identity);
+        localPC.GetComponent<PhotonView>().RPC("Initialize", RpcTarget.All);
+        yield return new WaitForSeconds(0.1f);
+        Debug.Log(photonView.Controller + " Created a PC ", localPC);
+        PhotonNetwork.RaiseEvent(N_GameManager.OnCreatedPC, null, N_GameManager.GetDefOps, SendOptions.SendReliable);
+    }
+
+    private SpawnPoint SetUpPosition()
+    {
+        //N_TeamsManager.GetTeam();
         playerSpawnPoints = FindObjectsOfType<SpawnPoint>().ToList();
+        //playerSpawnPoints.FindAll(p=>p.BelongsTo == )
         SpawnPoint s = playerSpawnPoints.Find(p => p.CheckPlayer(photonView.Controller.ActorNumber));
         if (s == null)
         {
@@ -34,11 +47,7 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
             } while (s == null || s.CheckPlayer(photonView.Controller.ActorNumber));
             s.GetComponent<PhotonView>().RPC("Fill", RpcTarget.All, photonView.Controller.ActorNumber);
         }
-        yield return 0;
 
-        GameObject g = N_Extentions.N_MakeObj(N_Prefab.Player, s.position, s.rotation);
-        yield return new WaitForSeconds(0.1f);
-        g.transform.SetParent(transform);
-        Debug.Log(photonView.Controller + " Created a PC ", g);
+        return s;
     }
 }

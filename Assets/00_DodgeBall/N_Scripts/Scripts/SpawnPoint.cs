@@ -6,7 +6,9 @@ public class SpawnPoint : MonoBehaviourPunCallbacks
     public Vector3 position => transform.position;
     public Quaternion rotation => transform.rotation;
     public bool HasSpawned => hasSpawned;
-    
+    public TeamTag BelongsTo => belongsTo;
+
+    [SerializeField] TeamTag belongsTo = TeamTag.A;
     [Header("Read Only")]
     [SerializeField] bool hasSpawned = false;
     [SerializeField] int activePlayer = -1;

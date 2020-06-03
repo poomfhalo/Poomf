@@ -12,4 +12,10 @@ public class N_PC : MonoBehaviour
         if (!GetComponent<PhotonView>().IsMine)
             GetComponent<PC>().enabled = false;
     }
+
+    private void Initialize()
+    {
+        TeamsManager.AddCharacter(GetComponent<DodgeballCharacter>());
+        gameObject.SetActive(false);
+    }
 }

@@ -15,7 +15,7 @@ public static class N_Extentions
         {
             if(m_prefabs == null)
             {
-                N_GameManager gm = Object.FindObjectOfType<N_GameManager>();
+                N_GameManager gm = UnityEngine.Object.FindObjectOfType<N_GameManager>();
                 if (gm == null)
                     return null;
 
@@ -47,5 +47,17 @@ public static class N_Extentions
     public static LoadablePrefab GetPrefab(N_Prefab prefab)
     {
         return prefabs.Single(f => f.type == prefab);
+    }
+
+    public static DodgeballCharacter GetCharacter(int actorNumber)
+    {
+        DodgeballCharacter chara = null;
+        chara = TeamsManager.instance.AllCharacters.Find(c =>{
+            PhotonView pv = c.GetComponent<PhotonView>();
+            if (c.GetComponent<PhotonView>())
+                return false;
+            return pv.Controller.ActorNumber == actorNumber;
+        });
+        return chara;
     }
 }

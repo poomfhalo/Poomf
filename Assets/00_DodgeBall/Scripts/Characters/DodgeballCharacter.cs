@@ -12,6 +12,7 @@ public abstract class DodgeballCharacter : MonoBehaviour
     public bool IsDodging => dodger.IsDodging;
     public bool IsBallInGrabZone => catcher.IsBallInGrabZone;
     public bool IsJumping => jumper.IsJumping;
+    public string charaName => name;
 
     //Body Parts
     public Transform BallGrabPoint => ballGrabPoint;
@@ -27,7 +28,6 @@ public abstract class DodgeballCharacter : MonoBehaviour
     [SerializeField] Transform ballGrabPoint = null;
 
     [Header("Core")]
-    public string charaName = "";
     [SerializeField] TeamTag team = TeamTag.A;
     [SerializeField] bool isEnabled = false;
     [SerializeField] protected SelectionIndicator selectionIndicator = null;
@@ -49,15 +49,10 @@ public abstract class DodgeballCharacter : MonoBehaviour
     {
         if (!GetComponent<CapsuleCollider>())
             gameObject.AddComponent<CapsuleCollider>();
-        charaName = name;
         selectionIndicator = GetComponentInChildren<SelectionIndicator>();
     }
     protected virtual void Awake()
     {
-        if(string.IsNullOrEmpty( charaName) || string.IsNullOrWhiteSpace(charaName))
-        {
-            charaName = name;
-        }
         rb3d = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         cam = Camera.main;
