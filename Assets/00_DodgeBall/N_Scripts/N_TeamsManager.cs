@@ -84,7 +84,6 @@ public class N_TeamsManager : N_Singleton<N_TeamsManager>, IOnEventCallback
                 TeamsManager.JoinTeam(t.t, chara);
             }
         }
-
         onTeamsAreSynced?.Invoke();
     }
 
