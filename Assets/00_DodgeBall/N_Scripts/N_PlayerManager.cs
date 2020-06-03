@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class N_PlayerManager : MonoBehaviourPunCallbacks
 {
-    [SerializeField] GameObject localPC = null;
+    [SerializeField] GameObject pc = null;
     List<SpawnPoint> playerSpawnPoints = new List<SpawnPoint>();
 
     IEnumerator Start()
@@ -21,10 +21,10 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
     IEnumerator SpawnPC()
     {
         yield return 0;
-        localPC = N_Extentions.N_MakeObj(N_Prefab.Player, Vector3.zero,Quaternion.identity);
-        localPC.GetComponent<PhotonView>().RPC("Initialize", RpcTarget.All);
+        pc = N_Extentions.N_MakeObj(N_Prefab.Player, Vector3.zero,Quaternion.identity);
+        pc.GetComponent<PhotonView>().RPC("Initialize", RpcTarget.All, GetComponent<PhotonView>().ViewID);
         yield return new WaitForSeconds(0.1f);
-        Debug.Log(photonView.Controller + " Created a PC ", localPC);
+        Debug.Log(photonView.Controller + " Created a PC ", pc);
         PhotonNetwork.RaiseEvent(N_GameManager.OnCreatedPC, null, N_GameManager.GetDefOps, SendOptions.SendReliable);
     }
 

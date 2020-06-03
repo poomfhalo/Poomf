@@ -5,8 +5,8 @@ using Photon.Pun;
 [RequireComponent(typeof(PC))]
 public class N_PC : MonoBehaviour
 {
-    public Player controller = null;
-
+    public int Maker => maker;
+    [SerializeField] int maker = 0;
     void Start()
     {
         if (!GetComponent<PhotonView>().IsMine)
@@ -14,9 +14,11 @@ public class N_PC : MonoBehaviour
     }
 
     [PunRPC]
-    private void Initialize()
+    private void Initialize(int maker)
     {
+        this.maker = maker;
         TeamsManager.AddCharacter(GetComponent<DodgeballCharacter>());
         gameObject.SetActive(false);
+        name = PhotonNetwork.NickName;
     }
 }

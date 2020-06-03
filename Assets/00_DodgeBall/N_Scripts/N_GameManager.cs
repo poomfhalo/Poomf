@@ -21,6 +21,7 @@ public enum N_Prefab { PlayerManager,Player }
 
 public class N_GameManager : N_Singleton<N_GameManager>
 {
+    public GameObject localPlayer = null;
     public static RaiseEventOptions GetDefOps
     {
         get
@@ -75,6 +76,21 @@ public class N_GameManager : N_Singleton<N_GameManager>
             GameObject g = N_Extentions.N_MakeObj(N_Prefab.PlayerManager, Vector3.zero, Quaternion.identity);
             g.GetComponent<PhotonView>().TransferOwnership(p);
         }
+
+        photonView.RPC("FindLocalPlayer", RpcTarget.All);
     }
 
+    [PunRPC]
+    private void FindLocalPlayer()
+    {
+        N_PlayerManager[] players = FindObjectsOfType<N_PlayerManager>();
+        foreach (var player in players)
+        {
+            if(player.GetComponent<PhotonView>().IsMine)
+            {
+                localPlayer = player.gameObject;
+                break;
+            }
+        }
+    }
 }
