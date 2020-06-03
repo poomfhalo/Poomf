@@ -19,6 +19,6 @@ public class N_PC : MonoBehaviour
         this.maker = maker;
         TeamsManager.AddCharacter(GetComponent<DodgeballCharacter>());
         gameObject.SetActive(false);
-        name = PhotonNetwork.NickName;
+        name = GetComponent<PhotonView>().Controller.NickName;
     }
 }
