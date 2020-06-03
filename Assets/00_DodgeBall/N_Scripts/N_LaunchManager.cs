@@ -57,7 +57,9 @@ public class N_LaunchManager : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Debug.Log(newPlayer.NickName + " Have Joined Total Count :: " + PhotonNetwork.CurrentRoom.PlayerCount);
-        PhotonNetwork.LoadLevel(levelIndex);
+
+        if(PhotonNetwork.IsMasterClient)
+            PhotonNetwork.LoadLevel(levelIndex);
     }
 
 

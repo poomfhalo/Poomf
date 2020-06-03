@@ -9,12 +9,16 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
 {
     List<SpawnPoint> playerSpawnPoints = new List<SpawnPoint>();
 
-    void Start()
+    IEnumerator Start()
     {
-        SpawnPC();
+        yield return new WaitForSeconds(3);
+        if (photonView.IsMine)
+        {
+            yield return StartCoroutine(SpawnPC());
+        }
     }
 
-    void SpawnPC()
+    IEnumerator SpawnPC()
     {
         playerSpawnPoints = FindObjectsOfType<SpawnPoint>().ToList();
         SpawnPoint s = playerSpawnPoints.Find(p => p.CheckPlayer(photonView.Controller.ActorNumber));
@@ -31,8 +35,9 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
             } while (s == null || s.CheckPlayer(photonView.Controller.ActorNumber));
             s.GetComponent<PhotonView>().RPC("Fill", RpcTarget.All, photonView.Controller.ActorNumber);
         }
+        yield return 0;
 
-        GameObject g = N_GameManager.MakeObj(N_Prefab.Player, s.position, s.rotation);
+        GameObject g = N_Extentions.N_MakeObj(N_Prefab.Player, s.position, s.rotation);
         g.transform.SetParent(transform);
         N_PC player = g.GetComponent<N_PC>();
         player.Initialize(photonView.Controller);

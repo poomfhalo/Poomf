@@ -9,6 +9,7 @@ public enum N_Prefab { PlayerManager,Player }
 
 public class N_GameManager : N_Singleton<N_GameManager>
 {
+    public List<LoadablePrefab> Prefabs => prefabs;
     [SerializeField] bool autoStart = true;
     [SerializeField] List<LoadablePrefab> prefabs = new List<LoadablePrefab> { new LoadablePrefab(N_Prefab.Player,"N_PlayerManager") };
 
@@ -22,6 +23,7 @@ public class N_GameManager : N_Singleton<N_GameManager>
     }
     void Start()
     {
+        N_Extentions.prefabs = prefabs;
         if (!PhotonNetwork.IsConnected)
         {
             if (autoStart)
@@ -36,25 +38,7 @@ public class N_GameManager : N_Singleton<N_GameManager>
             return;
         }
         autoStart = false;
-        GameObject g = N_MakeObj(N_Prefab.PlayerManager, Vector3.zero, Quaternion.identity);
-    }
-
-    public static GameObject N_MakeObj(N_Prefab prefab, Vector3 pos, Quaternion rot, byte group = 0, object[] data = null)
-    {
-        LoadablePrefab p = GetPrefab(prefab);
-        GameObject o = PhotonNetwork.Instantiate(p.name, pos, rot, group, data);
-        return o;
-    }
-    public static GameObject MakeObj(N_Prefab prefab, Vector3 pos, Quaternion rot)
-    {
-        GameObject g = Instantiate(GetPrefab(prefab).LoadPrefab());
-        g.transform.position = pos;
-        g.transform.rotation = rot;
-        return g;
-    }
-    public static LoadablePrefab GetPrefab(N_Prefab prefab)
-    {
-        return instance.prefabs.Single(f => f.type == prefab);
+        GameObject g = N_Extentions.N_MakeObj(N_Prefab.PlayerManager, Vector3.zero, Quaternion.identity);
     }
 
     public override void OnConnectedToMaster()
@@ -84,10 +68,11 @@ public class N_GameManager : N_Singleton<N_GameManager>
             Debug.Log("Waiting for second player");
         }
     }
+
     [PunRPC]
     private void CreatePlayerManager()
     {
-        GameObject g = N_MakeObj(N_Prefab.PlayerManager, Vector3.zero, Quaternion.identity);
+        GameObject g = N_Extentions.N_MakeObj(N_Prefab.PlayerManager, Vector3.zero, Quaternion.identity);
         Debug.Log("Created PlayerManager " + PhotonNetwork.LocalPlayer.NickName, g);
     }
 }
