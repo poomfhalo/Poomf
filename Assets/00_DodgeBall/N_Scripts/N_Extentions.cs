@@ -2,6 +2,7 @@
 using UnityEngine;
 using Photon.Pun;
 using System.Linq;
+using System;
 
 public static class N_Extentions
 {
@@ -24,6 +25,7 @@ public static class N_Extentions
             return m_prefabs;
         }
     }
+
     private static List<LoadablePrefab> m_prefabs = new List<LoadablePrefab>();
     public static GameObject N_MakeObj(N_Prefab prefab, Vector3 pos, Quaternion rot, byte group = 0, object[] data = null)
     {
@@ -59,5 +61,17 @@ public static class N_Extentions
             return pv.Controller.ActorNumber == actorNumber;
         });
         return chara;
+    }
+    public static T FindNetworkedObj<T>() where T : UnityEngine.Component
+    {
+        T[] tes = UnityEngine.Object.FindObjectsOfType<T>();
+        foreach (var t in tes)
+        {
+            if (!t.GetComponent<PhotonView>())
+                continue;
+            if (t.GetComponent<PhotonView>().IsMine)
+                return t;
+        }
+        return null;
     }
 }

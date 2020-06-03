@@ -4,9 +4,12 @@ using Photon.Pun;
 using System.Linq;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
+using System;
 
 public class N_TeamsManager : N_Singleton<N_TeamsManager>, IOnEventCallback
 {
+    public event Action onTeamsAreSynced = null;
+
     [Header("Read Only")]
     [SerializeField] List<MPTeam> mpTeams = new List<MPTeam>();
     [SerializeField] int creationsCount = 0;
@@ -86,6 +89,8 @@ public class N_TeamsManager : N_Singleton<N_TeamsManager>, IOnEventCallback
                 TeamsManager.JoinTeam(t.t, chara);
             }
         }
+
+        onTeamsAreSynced?.Invoke();
     }
 
     //Call backs

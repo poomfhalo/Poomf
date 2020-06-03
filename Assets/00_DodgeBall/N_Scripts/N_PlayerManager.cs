@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ExitGames.Client.Photon;
@@ -10,6 +11,17 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject pc = null;
     List<SpawnPoint> playerSpawnPoints = new List<SpawnPoint>();
 
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        N_TeamsManager.instance.onTeamsAreSynced += OnTeamsAreSynced;
+    }
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        N_TeamsManager.instance.onTeamsAreSynced -= OnTeamsAreSynced;
+    }
+
     IEnumerator Start()
     {
         if (photonView.IsMine)
@@ -17,7 +29,6 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
             yield return StartCoroutine(SpawnPC());
         }
     }
-
     IEnumerator SpawnPC()
     {
         yield return 0;
@@ -49,5 +60,11 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
         }
 
         return s;
+    }
+
+    private void OnTeamsAreSynced()
+    {
+        if (pc == null)
+            pc = N_Extentions.FindNetworkedObj<N_PC>().gameObject;
     }
 }

@@ -57,7 +57,8 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            GetComponent<N_GameManager>().CreatePlayers();
+            GetComponent<N_GameManager>().SetUpTeams();
         }
+        GetComponent<N_GameManager>().CreatePlayerManager();
     }
 }
