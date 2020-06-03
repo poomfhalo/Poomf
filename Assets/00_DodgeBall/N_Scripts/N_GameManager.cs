@@ -48,20 +48,22 @@ public class N_GameManager : N_Singleton<N_GameManager>
         base.Awake();
         N_Extentions.prefabs = prefabs;
     }
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        N_TeamsManager.instance.onTeamsAreSynced += OnTeamsAreSynced;
+    }
     public override void OnDisable()
     {
         base.OnDisable();
-        if (PhotonNetwork.IsMasterClient)
-        {
+        if(N_TeamsManager.instance)
             N_TeamsManager.instance.onTeamsAreSynced -= OnTeamsAreSynced;
-        }
     }
 
     public void SetUpTeams()
     {
         if (!PhotonNetwork.IsMasterClient)
             return;
-        N_TeamsManager.instance.onTeamsAreSynced += OnTeamsAreSynced;
 
         N_TeamsManager teams = GetComponent<N_TeamsManager>();
         var players = PhotonNetwork.PlayerList;

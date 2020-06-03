@@ -18,7 +18,8 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
     public override void OnDisable()
     {
         base.OnDisable();
-        N_TeamsManager.instance.onTeamsAreSynced -= OnTeamsAreSynced;
+        if(N_TeamsManager.instance)
+            N_TeamsManager.instance.onTeamsAreSynced -= OnTeamsAreSynced;
     }
 
     IEnumerator Start()

@@ -30,5 +30,6 @@ public class N_PC : MonoBehaviour
         SpawnPoint s = FindObjectsOfType<SpawnPoint>().ToList().Find(p => p.CheckPlayer(GetComponent<PhotonView>().Controller.ActorNumber));
         transform.position = s.position;
         transform.rotation = s.rotation;
+        gameObject.SetActive(true);
     }
 }
