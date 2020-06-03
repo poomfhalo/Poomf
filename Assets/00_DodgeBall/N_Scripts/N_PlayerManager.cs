@@ -37,6 +37,7 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
         yield return 0;
 
         GameObject g = N_Extentions.N_MakeObj(N_Prefab.Player, s.position, s.rotation);
+        yield return new WaitForSeconds(0.1f);
         g.transform.SetParent(transform);
         N_PC player = g.GetComponent<N_PC>();
         player.Initialize(photonView.Controller);

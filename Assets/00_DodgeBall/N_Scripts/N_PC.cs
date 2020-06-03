@@ -1,19 +1,15 @@
 ﻿using UnityEngine;
 using Photon.Realtime;
+using Photon.Pun;
 
 [RequireComponent(typeof(PC))]
 public class N_PC : MonoBehaviour
 {
     public Player controller = null;
-    [SerializeField] int actorID = -1;
- 
-    public void Initialize(Player controller)
+
+    void Start()
     {
-        actorID = controller.ActorNumber;
-        this.controller = controller;
-        if (!controller.IsLocal)
-        {
+        if (!GetComponent<PhotonView>().IsMine)
             GetComponent<PC>().enabled = false;
-        }
     }
 }
