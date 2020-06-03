@@ -54,7 +54,7 @@ public static class N_Extentions
         DodgeballCharacter chara = null;
         chara = TeamsManager.instance.AllCharacters.Find(c =>{
             PhotonView pv = c.GetComponent<PhotonView>();
-            if (c.GetComponent<PhotonView>())
+            if (!c.GetComponent<PhotonView>())
                 return false;
             return pv.Controller.ActorNumber == actorNumber;
         });
