@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW_Lib.Utility;
 using UnityEngine;
 
 public class TeamsManager : Singleton<TeamsManager>
 {
-    public List<DodgeballCharacter> AllCharacters => allCharacters;
+    public List<DodgeballCharacter> AllCharacters
+    {
+        get
+        {
+            allCharacters.RemoveAll(c => c == null);
+            return allCharacters;
+        }
+    }
+
     [SerializeField] List<DodgeballCharacter> allCharacters = new List<DodgeballCharacter>();
     [SerializeField] List<Team> teams = new List<Team> { new Team(TeamTag.A), new Team(TeamTag.B) };
 
