@@ -65,6 +65,6 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
     private void OnTeamsAreSynced()
     {
         if (pc == null)
-            pc = N_Extentions.FindNetworkedObj<N_PC>().gameObject;
+            pc = N_Extentions.GetCharacter(GetComponent<PhotonView>().Controller.ActorNumber).gameObject;
     }
 }

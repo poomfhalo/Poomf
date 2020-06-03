@@ -62,7 +62,7 @@ public static class N_Extentions
         });
         return chara;
     }
-    public static T FindNetworkedObj<T>() where T : UnityEngine.Component
+    public static T FindMyNetworkedObj<T>() where T : UnityEngine.Component
     {
         T[] tes = UnityEngine.Object.FindObjectsOfType<T>();
         foreach (var t in tes)
@@ -70,6 +70,18 @@ public static class N_Extentions
             if (!t.GetComponent<PhotonView>())
                 continue;
             if (t.GetComponent<PhotonView>().IsMine)
+                return t;
+        }
+        return null;
+    }
+    public static T FindNetworkedObj<T>(int actorNumber) where T : UnityEngine.Component
+    {
+        T[] tes = UnityEngine.Object.FindObjectsOfType<T>();
+        foreach (var t in tes)
+        {
+            if (!t.GetComponent<PhotonView>())
+                continue;
+            if (t.GetComponent<PhotonView>().Controller.ActorNumber == actorNumber)
                 return t;
         }
         return null;
