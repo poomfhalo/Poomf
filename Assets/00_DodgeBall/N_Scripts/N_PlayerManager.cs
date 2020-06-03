@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine;
 
 public class N_PlayerManager : MonoBehaviourPunCallbacks
