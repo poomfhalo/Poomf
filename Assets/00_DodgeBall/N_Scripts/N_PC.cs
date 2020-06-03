@@ -13,6 +13,7 @@ public class N_PC : MonoBehaviour
             GetComponent<PC>().enabled = false;
     }
 
+    [PunRPC]
     private void Initialize()
     {
         TeamsManager.AddCharacter(GetComponent<DodgeballCharacter>());
