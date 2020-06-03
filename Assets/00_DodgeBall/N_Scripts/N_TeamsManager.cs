@@ -2,8 +2,10 @@
 using UnityEngine;
 using Photon.Pun;
 using System.Linq;
+using ExitGames.Client.Photon;
+using Photon.Realtime;
 
-public class N_TeamsManager : N_Singleton<N_TeamsManager>
+public class N_TeamsManager : N_Singleton<N_TeamsManager>, IOnEventCallback
 {
     [Header("Read Only")]
     [SerializeField] List<MPTeam> mpTeams = new List<MPTeam>();
@@ -87,17 +89,15 @@ public class N_TeamsManager : N_Singleton<N_TeamsManager>
     }
 
     //Call backs
-    private void OnEvent(byte eventCode, object content, int senderId)
+    public void OnEvent(EventData photonEvent)
     {
         if (!PhotonNetwork.IsMasterClient)
             return;
-        if (eventCode != N_GameManager.OnCreatedPC)
+        if (photonEvent.Code != N_GameManager.OnCreatedPC)
             return;
-
         creationsCount = creationsCount + 1;
         if (creationsCount < playersCount)
             return;
-
         photonView.RPC("SyncWithTeamsManager", RpcTarget.All);
     }
 
