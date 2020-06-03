@@ -36,11 +36,25 @@ public class N_GameManager : N_Singleton<N_GameManager>
     {
         if (!PhotonNetwork.IsMasterClient)
             return;
+
+        N_TeamsManager teams = GetComponent<N_TeamsManager>();
         var players = PhotonNetwork.PlayerList;
         foreach (var p in players)
         {
             GameObject g = N_Extentions.N_MakeObj(N_Prefab.PlayerManager, Vector3.zero, Quaternion.identity);
             g.GetComponent<PhotonView>().TransferOwnership(p);
+
+            if (p.ActorNumber % 2 == 0)
+            {
+                Debug.Log(p.NickName + " Joined team A");
+                teams.AddPlayer(TeamTag.A, p.ActorNumber);
+            }
+            else
+            {
+                Debug.Log(p.NickName + " Joined team B");
+                teams.AddPlayer(TeamTag.B, p.ActorNumber);
+            }
         }
     }
+
 }
