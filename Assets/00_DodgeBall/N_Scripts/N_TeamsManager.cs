@@ -63,12 +63,7 @@ public class N_TeamsManager : N_Singleton<N_TeamsManager>, IOnEventCallback
         photonView.RPC("RecieveTeamsData", RpcTarget.Others, GetMPTeamsData);
     }
 
-    public static TeamTag GetTeam(int actorID)
-    {
-        return TeamTag.A;
-    }
-
-
+    
     [PunRPC]
     private void RecieveTeamsData(Dictionary<int, int[]> teamsData)
     {
@@ -107,8 +102,24 @@ public class N_TeamsManager : N_Singleton<N_TeamsManager>, IOnEventCallback
     }
 
     //Helper Functions
-    private MPTeam GetMPTeam(TeamTag team)
+    public static MPTeam GetMPTeam(TeamTag team)
     {
-        return mpTeams.Find(t => t.t == team);
+        return instance.mpTeams.Find(t => t.t == team);
+    }
+    public static MPTeam GetMPTeam(int actorNumber)
+    {
+        return instance.mpTeams.Find(t => t.actors.Contains(actorNumber));
+    }
+    public static TeamTag GetTeam(int actorID)
+    {
+        MPTeam team = GetMPTeam(actorID);
+        if (team == null)
+            return TeamTag.A;
+        return team.t;
+    }
+    public static N_PC GetPlayer(int actorNumber)
+    {
+        DodgeballCharacter chara = N_Extentions.GetCharacter(actorNumber);
+        return chara.GetComponent<N_PC>();
     }
 }

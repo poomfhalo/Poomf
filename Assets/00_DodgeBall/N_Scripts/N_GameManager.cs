@@ -48,6 +48,18 @@ public class N_GameManager : N_Singleton<N_GameManager>
         base.Awake();
         N_Extentions.prefabs = prefabs;
     }
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        if(PhotonNetwork.IsMasterClient)
+            N_TeamsManager.instance.onTeamsAreSynced += OnTeamsAreSynced;
+    }
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        if (PhotonNetwork.IsMasterClient)
+            N_TeamsManager.instance.onTeamsAreSynced -= OnTeamsAreSynced;
+    }
 
     public void SetUpTeams()
     {
@@ -74,5 +86,44 @@ public class N_GameManager : N_Singleton<N_GameManager>
     public void CreatePlayerManager()
     {
         localPlayer = N_Extentions.N_MakeObj(N_Prefab.PlayerManager, Vector3.zero, Quaternion.identity);
+    }
+
+    //Events Connections
+    private void OnTeamsAreSynced()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
+        List<SpawnPoint> playerSpawnPoints = FindObjectsOfType<SpawnPoint>().ToList();
+        SpawnPoint GetSpawnPosition(Player player)
+        {
+            TeamTag t = N_TeamsManager.GetTeam(player.ActorNumber);
+            List<SpawnPoint> spawnPoints = playerSpawnPoints.FindAll(p => p.CheckTeam(t));
+            SpawnPoint s = null;
+
+            int maxTries = 60;
+            do
+            {
+                int i = UnityEngine.Random.Range(0, spawnPoints.Count);
+                s = spawnPoints[i];
+                maxTries = maxTries - 1;
+                if (maxTries <= 0)
+                    break;
+            } while (s == null || s.HasPlayer);
+            
+            return s;
+        }
+
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            SpawnPoint s = GetSpawnPosition(player);
+            N_PC n_pc = N_TeamsManager.GetPlayer(player.ActorNumber);
+            s.GetComponent<PhotonView>().RPC("Fill", RpcTarget.All, player.ActorNumber);
+        }
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            N_PC n_pc = N_TeamsManager.GetPlayer(player.ActorNumber);
+            n_pc.GetComponent<PhotonView>().RPC("OnBeforeGameStart", RpcTarget.All);
+        }
     }
 }

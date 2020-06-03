@@ -9,7 +9,6 @@ using UnityEngine;
 public class N_PlayerManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] GameObject pc = null;
-    List<SpawnPoint> playerSpawnPoints = new List<SpawnPoint>();
 
     public override void OnEnable()
     {
@@ -34,33 +33,10 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
     {
         yield return 0;
         pc = N_Extentions.N_MakeObj(N_Prefab.Player, Vector3.zero,Quaternion.identity);
-        pc.GetComponent<PhotonView>().RPC("Initialize", RpcTarget.All, GetComponent<PhotonView>().ViewID);
+        pc.GetComponent<PhotonView>().RPC("OnCreated", RpcTarget.All, GetComponent<PhotonView>().ViewID);
         yield return new WaitForSeconds(0.1f);
         Debug.Log(photonView.Controller + " Created a PC ", pc);
         PhotonNetwork.RaiseEvent(N_GameManager.OnCreatedPC, null, N_GameManager.GetDefOps, SendOptions.SendReliable);
-    }
-
-    private SpawnPoint SetUpPosition()
-    {
-        //N_TeamsManager.GetTeam();
-        playerSpawnPoints = FindObjectsOfType<SpawnPoint>().ToList();
-        //playerSpawnPoints.FindAll(p=>p.BelongsTo == )
-        SpawnPoint s = playerSpawnPoints.Find(p => p.CheckPlayer(photonView.Controller.ActorNumber));
-        if (s == null)
-        {
-            int maxTries = 60;
-            do
-            {
-                int i = UnityEngine.Random.Range(0, playerSpawnPoints.Count);
-                s = playerSpawnPoints[i];
-                maxTries = maxTries - 1;
-                if (maxTries <= 0)
-                    break;
-            } while (s == null || s.CheckPlayer(photonView.Controller.ActorNumber));
-            s.GetComponent<PhotonView>().RPC("Fill", RpcTarget.All, photonView.Controller.ActorNumber);
-        }
-
-        return s;
     }
 
     private void OnTeamsAreSynced()
