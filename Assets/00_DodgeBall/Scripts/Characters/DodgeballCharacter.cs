@@ -86,11 +86,6 @@ public abstract class DodgeballCharacter : MonoBehaviour
         TeamsManager.JoinTeam(team, this);
     }
 
-    public virtual void InitCharacter()//To be used for multiplayer?
-    {
-
-    }
-
     protected void OnThrewBall()
     {
         hasBall = false;
@@ -101,4 +96,84 @@ public abstract class DodgeballCharacter : MonoBehaviour
         hasBall = true;
         selectionIndicator.SetNewFocus(false);
     }
+
+
+    #region Commands
+    protected void C_MoveInput(Vector3 i)
+    {
+        if (jumper.IsJumping)
+        {
+            jumper.UpdateInput(i);
+            return;
+        }
+        mover.StartMoveByInput(i, cam.transform);
+    }
+    protected void C_Catch()
+    {
+        if (HasBall)
+            return;
+        if (!IsBallInGrabZone)
+            return;
+
+        catcher.StartCatchAction();
+    }
+    protected void C_Friendly()
+    {
+        if (HasBall)
+        {
+            selectionIndicator.SetNewFocus(true);
+        }
+    }
+    protected void C_Enemy()
+    {
+        if (HasBall)
+        {
+            selectionIndicator.SetNewFocus(false);
+        }
+    }
+    protected void C_Fire()
+    {
+        if (IsThrowing)
+            return;
+        if (!HasBall)
+            return;
+        launcher.UpdateInput(mover.input);
+        launcher.StartThrowAction(selectionIndicator.ActiveSelection);
+    }
+    protected void C_Dodge()
+    {
+        if (HasBall)
+            return;
+        if (IsThrowing)
+            return;
+        if (IsDodging)
+            return;
+
+        dodger.StartDodgeAction();
+    }
+    protected void C_FakeFire()
+    {
+        if (!HasBall)
+            return;
+        if (IsThrowing)
+            return;
+        launcher.UpdateInput(mover.input);
+        launcher.StartFakeThrow(selectionIndicator.ActiveSelection);
+    }
+    protected void C_Jump()
+    {
+        if (HasBall)
+            return;
+        if (IsThrowing)
+            return;
+        if (IsDodging)
+            return;
+        if (IsJumping)
+            return;
+        jumper.StartJumpAction();
+
+    }
+    #endregion
+
+
 }

@@ -5,21 +5,23 @@ using System;
 using System.Linq;
 
 [RequireComponent(typeof(PC))]
-public class N_PC : MonoBehaviour
+public class N_PC : MonoBehaviour,IPunObservable
 {
-    public int Maker => maker;
-    [SerializeField] int maker = 0;
+    public int CreatorViewID => creatorViewID;
+    public int ActorID => GetComponent<PhotonView>().Controller.ActorNumber;
 
-    void Start()
+    [SerializeField] int creatorViewID = 0;
+
+    protected virtual void Start()
     {
         if (!GetComponent<PhotonView>().IsMine)
             GetComponent<PC>().enabled = false;
     }
 
     [PunRPC]
-    private void OnCreated(int maker)
+    private void OnCreated(int creatorViewID)
     {
-        this.maker = maker;
+        this.creatorViewID = creatorViewID;
         TeamsManager.AddCharacter(GetComponent<DodgeballCharacter>());
         gameObject.SetActive(false);
         name = GetComponent<PhotonView>().Controller.NickName;
@@ -31,5 +33,12 @@ public class N_PC : MonoBehaviour
         transform.position = s.position;
         transform.rotation = s.rotation;
         gameObject.SetActive(true);
+
+        GetComponent<PC>().SetTeam(N_TeamsManager.GetTeam(ActorID));
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+
     }
 }
