@@ -50,9 +50,10 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Debug.Log(newPlayer.NickName + " Have Joined Total Count :: " + PhotonNetwork.CurrentRoom.PlayerCount);
-        StartGame();
+        photonView.RPC("StartGame", RpcTarget.All);
     }
 
+    [PunRPC]
     private void StartGame()
     {
         if (PhotonNetwork.IsMasterClient)
