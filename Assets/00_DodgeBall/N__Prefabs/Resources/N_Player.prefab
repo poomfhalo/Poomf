@@ -59,7 +59,8 @@ MonoBehaviour:
   posWeigth: 6
   inputWeigth: 1
   lagWeigth: 1.5
-  autoMoveThreshold: 0.1
+  autoMoveThreshold: 0.125
+  autoMoveSatisfaction: 0.1
   networkedInput: {x: 0, y: 0, z: 0}
   networkedPos: {x: 0, y: 0, z: 0}
   lastLag: 0
