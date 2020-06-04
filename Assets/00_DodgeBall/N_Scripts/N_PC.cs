@@ -179,6 +179,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         weithedInput.y = 0;
         weithedInput.Normalize();
         chara.syncedInput = weithedInput;
+        chara.syncedInput = networkedInput;
 
         //Debug.Log(dist);
         //if(dist<autoMoveSatisfaction)
