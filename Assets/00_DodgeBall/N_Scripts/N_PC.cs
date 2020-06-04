@@ -179,6 +179,7 @@ public class N_PC : MonoBehaviour,IPunObservable
 
         if(dist<autoMoveSatisfaction)
         {
+            chara.syncedInput = Vector3.zero;
             return;
         }
         if (dist>=autoMoveThreshold)
