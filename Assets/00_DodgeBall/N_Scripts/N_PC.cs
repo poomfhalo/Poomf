@@ -158,7 +158,11 @@ public class N_PC : MonoBehaviour,IPunObservable
         float normDist = dist / snapXZDist;
         float catchUpVal = distToInputCurve.Evaluate(normDist) * posWeigth;
         Vector3 dirToNetPos = (networkedPos - rb3d.position).normalized;
-        Vector3 weithedInput = dirToNetPos * catchUpVal + networkedInput * inputWeigth;
+        Vector3 dirElement = dirToNetPos * catchUpVal;
+        Vector3 inputElement = networkedInput * inputWeigth;
+
+        //Vector3 weithedInput = dirElement + inputElement;
+        Vector3 weithedInput = Vector3.Lerp(inputElement, dirElement, Time.fixedDeltaTime);
         weithedInput.y = 0;
         weithedInput.Normalize();
         chara.syncedInput = weithedInput;
