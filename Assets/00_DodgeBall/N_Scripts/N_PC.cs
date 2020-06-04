@@ -26,6 +26,8 @@ public class N_PC : MonoBehaviour,IPunObservable
     [Header("Read Only")]
     [SerializeField] Vector3 networkedInput = new Vector3();
     [SerializeField] Vector3 networkedPos = new Vector3();
+    [SerializeField] float lastLag = 0;
+
     protected virtual void Start()
     {
         pv = GetComponent<PhotonView>();
@@ -95,6 +97,7 @@ public class N_PC : MonoBehaviour,IPunObservable
 
             chara.C_MoveInput();
         }
+        lastLag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
     }
     void FixedUpdate()
     {
@@ -161,8 +164,8 @@ public class N_PC : MonoBehaviour,IPunObservable
         Vector3 dirElement = dirToNetPos * catchUpVal;
         Vector3 inputElement = networkedInput * inputWeigth;
 
-        //Vector3 weithedInput = dirElement + inputElement;
-        Vector3 weithedInput = Vector3.Lerp(inputElement, dirElement, Time.fixedDeltaTime);
+        Vector3 weithedInput = dirElement + inputElement;
+        //Vector3 weithedInput = Vector3.Lerp(inputElement, dirElement, Time.fixedDeltaTime);
         weithedInput.y = 0;
         weithedInput.Normalize();
         chara.syncedInput = weithedInput;
