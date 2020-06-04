@@ -21,11 +21,13 @@ public class N_PC : MonoBehaviour,IPunObservable
     void OnEnable()
     {
         chara = GetComponent<DodgeballCharacter>();
-        chara.OnCommandActivated += SendCommand;
+        if(GetComponent<PhotonView>().IsMine)
+            chara.OnCommandActivated += SendCommand;
     }
     void OnDisable()
     {
-        chara.OnCommandActivated -= SendCommand;
+        if (GetComponent<PhotonView>().IsMine)
+            chara.OnCommandActivated -= SendCommand;
     }
 
     [PunRPC]
@@ -67,6 +69,8 @@ public class N_PC : MonoBehaviour,IPunObservable
     {
         GetComponent<PhotonView>().RPC("RecieveCommand", RpcTarget.Others, (int)command);
     }
+
+    [PunRPC]
     private void RecieveCommand(int c)
     {
         DodgeballCharaCommand command = (DodgeballCharaCommand)c;
