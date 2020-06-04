@@ -62,6 +62,7 @@ public class N_PC : MonoBehaviour,IPunObservable
             chara.syncedInput.x = (float)stream.ReceiveNext();
             chara.syncedInput.z = (float)stream.ReceiveNext();
             chara.syncedYAngle = (float)stream.ReceiveNext();
+            chara.C_MoveInput();
         }
     }
 
