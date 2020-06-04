@@ -6,10 +6,22 @@ public class N_PC : MonoBehaviour,IPunObservable
 {
     public int CreatorViewID => creatorViewID;
     public int ActorID => GetComponent<PhotonView>().Controller.ActorNumber;
+    [Tooltip("if this distance between current position and networked position is higher than this, we snap to correct XZ place")]
+    [SerializeField] float snapXZDist = 2;
+
+    [Tooltip("Curve that Governs how close we get to posWeigth (try to catch up) to the networked position as we move," +
+    	" starting from 0 to snapXZDist\n")]
+    [SerializeField] AnimationCurve distToInputCurve = AnimationCurve.Linear(0, 0, 1, 1);
+    [SerializeField] float posWeigth = 2;
+    [SerializeField] float inputWeigth = 1;
 
     [SerializeField] int creatorViewID = 0;
     protected PC pc = null;
     DodgeballCharacter chara = null;
+    Rigidbody rb3d = null;
+
+    Vector3 networkedInput = new Vector3();
+    Vector3 networkedPos = new Vector3();
     protected virtual void Start()
     {
         pc = GetComponent<PC>();
@@ -20,6 +32,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     }
     void OnEnable()
     {
+        rb3d = GetComponent<Rigidbody>();
         chara = GetComponent<DodgeballCharacter>();
         if(GetComponent<PhotonView>().IsMine)
             chara.OnCommandActivated += SendCommand;
@@ -30,7 +43,7 @@ public class N_PC : MonoBehaviour,IPunObservable
             chara.OnCommandActivated -= SendCommand;
     }
 
-    [PunRPC]
+    [PunRPC]//Called In N_PlayerManager
     private void OnCreated(int creatorViewID)
     {
         this.creatorViewID = creatorViewID;
@@ -38,7 +51,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         gameObject.SetActive(false);
         name = GetComponent<PhotonView>().Controller.NickName;
     }
-    [PunRPC]
+    [PunRPC]//Called In N_GameManager
     private void PrepareForGame()
     {
         SpawnPoint s = FindObjectsOfType<SpawnPoint>().ToList().Find(p => p.CheckPlayer(GetComponent<PhotonView>().Controller.ActorNumber));
@@ -55,15 +68,31 @@ public class N_PC : MonoBehaviour,IPunObservable
         {
             stream.SendNext(chara.syncedInput.x);
             stream.SendNext(chara.syncedInput.z);
+
+            stream.SendNext(rb3d.position.x);
+            stream.SendNext(rb3d.position.z);
+
             stream.SendNext(chara.syncedYAngle);
         }
         else if (stream.IsReading)
         {
-            chara.syncedInput.x = (float)stream.ReceiveNext();
-            chara.syncedInput.z = (float)stream.ReceiveNext();
+            networkedInput.x = (float)stream.ReceiveNext();
+            networkedInput.z = (float)stream.ReceiveNext();
+
+            networkedPos.x = (float)stream.ReceiveNext();
+            networkedPos.z = (float)stream.ReceiveNext();
+
+            TrySnapToNetPos();
+            UpdateSyncedInput();
+
             chara.syncedYAngle = (float)stream.ReceiveNext();
+
             chara.C_MoveInput();
         }
+    }
+    void FixedUpdate()
+    {
+        UpdateSyncedInput();
     }
 
     private void SendCommand(DodgeballCharaCommand command)
@@ -102,5 +131,26 @@ public class N_PC : MonoBehaviour,IPunObservable
                 chara.C_MoveInput();
                 break;
         }
+    }
+
+    //Helper Functions
+    private void TrySnapToNetPos()
+    {
+        float dist = Vector3.Distance(rb3d.position, networkedPos);
+
+        if (dist <= snapXZDist)
+        {
+            rb3d.MovePosition(networkedPos);
+        }
+    }
+    private void UpdateSyncedInput()
+    {
+        float dist = Vector3.Distance(rb3d.position, networkedPos);
+        float normDist = dist / snapXZDist;
+        float catchUpVal = distToInputCurve.Evaluate(normDist) * posWeigth;
+        Vector3 dirToNetPos = (networkedPos - rb3d.position).normalized;
+        Vector3 weithedInput = dirToNetPos * catchUpVal + networkedInput * inputWeigth;
+        weithedInput.Normalize();
+        chara.syncedInput = weithedInput;
     }
 }
