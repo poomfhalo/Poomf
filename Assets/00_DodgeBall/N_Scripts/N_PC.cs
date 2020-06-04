@@ -21,20 +21,23 @@ public class N_PC : MonoBehaviour,IPunObservable
     protected PC pc = null;
     DodgeballCharacter chara = null;
     Rigidbody rb3d = null;
+    PhotonView pv = null;
 
     [Header("Read Only")]
     [SerializeField] Vector3 networkedInput = new Vector3();
     [SerializeField] Vector3 networkedPos = new Vector3();
     protected virtual void Start()
     {
+        pv = GetComponent<PhotonView>();
         pc = GetComponent<PC>();
-        if (!GetComponent<PhotonView>().IsMine)
+        if (!pv.IsMine)
         {
             pc.enabled = false;
         }
     }
     void OnEnable()
     {
+        pv = GetComponent<PhotonView>();
         rb3d = GetComponent<Rigidbody>();
         chara = GetComponent<DodgeballCharacter>();
         if(GetComponent<PhotonView>().IsMine)
@@ -42,7 +45,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     }
     void OnDisable()
     {
-        if (GetComponent<PhotonView>().IsMine)
+        if (pv.IsMine)
             chara.OnCommandActivated -= SendCommand;
     }
 
@@ -52,12 +55,12 @@ public class N_PC : MonoBehaviour,IPunObservable
         this.creatorViewID = creatorViewID;
         TeamsManager.AddCharacter(GetComponent<DodgeballCharacter>());
         gameObject.SetActive(false);
-        name = GetComponent<PhotonView>().Controller.NickName;
+        name = pv.Controller.NickName;
     }
     [PunRPC]//Called In N_GameManager
     private void PrepareForGame()
     {
-        SpawnPoint s = FindObjectsOfType<SpawnPoint>().ToList().Find(p => p.CheckPlayer(GetComponent<PhotonView>().Controller.ActorNumber));
+        SpawnPoint s = FindObjectsOfType<SpawnPoint>().ToList().Find(p => p.CheckPlayer(pv.Controller.ActorNumber));
         transform.position = s.position;
         transform.rotation = s.rotation;
         gameObject.SetActive(true);
@@ -100,7 +103,7 @@ public class N_PC : MonoBehaviour,IPunObservable
 
     private void SendCommand(DodgeballCharaCommand command)
     {
-        GetComponent<PhotonView>().RPC("RecieveCommand", RpcTarget.Others, (int)command);
+        pv.RPC("RecieveCommand", RpcTarget.Others, (int)command);
     }
 
     [PunRPC]
@@ -148,14 +151,17 @@ public class N_PC : MonoBehaviour,IPunObservable
     }
     private void UpdateSyncedInput()
     {
-        //float dist = Vector3.Distance(rb3d.position, networkedPos);
-        //float normDist = dist / snapXZDist;
-        //float catchUpVal = distToInputCurve.Evaluate(normDist) * posWeigth;
-        //Vector3 dirToNetPos = (networkedPos - rb3d.position).normalized;
-        //Vector3 weithedInput = dirToNetPos * catchUpVal + networkedInput * inputWeigth;
-        //weithedInput.y = 0;
-        //weithedInput.Normalize();
-        //chara.syncedInput = weithedInput;
+        if (pv.IsMine)
+            return;
+
+        float dist = Vector3.Distance(rb3d.position, networkedPos);
+        float normDist = dist / snapXZDist;
+        float catchUpVal = distToInputCurve.Evaluate(normDist) * posWeigth;
+        Vector3 dirToNetPos = (networkedPos - rb3d.position).normalized;
+        Vector3 weithedInput = dirToNetPos * catchUpVal + networkedInput * inputWeigth;
+        weithedInput.y = 0;
+        weithedInput.Normalize();
+        chara.syncedInput = weithedInput;
         chara.syncedInput = networkedInput;
     }
 }
