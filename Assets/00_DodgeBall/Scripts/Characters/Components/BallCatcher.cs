@@ -41,7 +41,7 @@ public class BallCatcher : MonoBehaviour,ICharaAction
     }
     public void StartCatchAction()
     {
-        switch (Dodgeball.ballState)
+        switch (Dodgeball.instance.ballState)
         {
             case Dodgeball.BallState.OnGround:
                 GrabBall();
@@ -50,10 +50,10 @@ public class BallCatcher : MonoBehaviour,ICharaAction
                 GrabBall();
                 break;
             default:
-                Debug.LogWarning(Dodgeball.ballState + " catching in when ball in this state, has Not been impelemted yet");
+                Debug.LogWarning(Dodgeball.instance.ballState + " catching in when ball in this state, has Not been impelemted yet");
                 break;
         }
-        if (Dodgeball.ballState == Dodgeball.BallState.OnGround || Dodgeball.ballState == Dodgeball.BallState.PostContact)
+        if (Dodgeball.instance.ballState == Dodgeball.BallState.OnGround || Dodgeball.instance.ballState == Dodgeball.BallState.PostContact)
         {
             GrabBall();
         }

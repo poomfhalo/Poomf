@@ -5,7 +5,7 @@ using System.Linq;
 public class N_PC : MonoBehaviour,IPunObservable
 {
     public int CreatorViewID => creatorViewID;
-    public int ActorID => GetComponent<PhotonView>().Controller.ActorNumber;
+    public int ActorID => pv.Controller.ActorNumber;
     [SerializeField] int creatorViewID = 0;
 
     [Header("Move Smoothing Settings")]

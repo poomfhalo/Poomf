@@ -22,8 +22,13 @@ PrefabInstance:
     - target: {fileID: 57221109919460755, guid: 3d80c75df7c98542c9e7d1832ad9730d,
         type: 3}
       propertyPath: viewIdField
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 57221109919460755, guid: 3d80c75df7c98542c9e7d1832ad9730d,
+        type: 3}
+      propertyPath: ObservedComponents.Array.data[0]
+      value: 
+      objectReference: {fileID: 7364748680064816816}
     - target: {fileID: 57221109919460844, guid: 3d80c75df7c98542c9e7d1832ad9730d,
         type: 3}
       propertyPath: m_Name
@@ -84,7 +89,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 57221109919460754, guid: 3d80c75df7c98542c9e7d1832ad9730d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3d80c75df7c98542c9e7d1832ad9730d, type: 3}
 --- !u!1 &6805236992681871744 stripped
 GameObject:

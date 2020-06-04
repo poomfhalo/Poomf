@@ -2,6 +2,7 @@
 using UnityEngine;
 using Photon.Pun;
 using System.Linq;
+using System;
 
 public class N_TeamsManager : N_Singleton<N_TeamsManager>
 {
@@ -48,7 +49,6 @@ public class N_TeamsManager : N_Singleton<N_TeamsManager>
         GetMPTeam(team).actors.Add(actorNumber);
     }
 
-    
     [PunRPC]
     private void RecieveTeamsData(Dictionary<int, int[]> teamsData)
     {
