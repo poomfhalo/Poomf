@@ -117,7 +117,6 @@ public class N_PC : MonoBehaviour,IPunObservable
     private void RecieveCommand(int c)
     {
         DodgeballCharaCommand command = (DodgeballCharaCommand)c;
-        Debug.Log("What Command " + command);
         switch (command)
         {
             case DodgeballCharaCommand.Catch:
@@ -176,7 +175,6 @@ public class N_PC : MonoBehaviour,IPunObservable
         weithedInput.y = 0;
         weithedInput.Normalize();
         chara.syncedInput = weithedInput;
-        chara.syncedInput = networkedInput;
 
         if(dist>=autoMoveThreshold)
         {
