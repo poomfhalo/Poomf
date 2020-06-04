@@ -56,10 +56,13 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  posWeigth: 2
+  posWeigth: 6
   inputWeigth: 1
+  lagWeigth: 1.5
+  autoMoveThreshold: 0.3
   networkedInput: {x: 0, y: 0, z: 0}
   networkedPos: {x: 0, y: 0, z: 0}
+  lastLag: 0
 --- !u!114 &5241043169954617695
 MonoBehaviour:
   m_ObjectHideFlags: 0

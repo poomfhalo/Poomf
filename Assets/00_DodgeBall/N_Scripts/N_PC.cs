@@ -17,6 +17,10 @@ public class N_PC : MonoBehaviour,IPunObservable
     [SerializeField] AnimationCurve distToInputCurve = AnimationCurve.Linear(0, 0, 1, 1);
     [SerializeField] float posWeigth = 2;
     [SerializeField] float inputWeigth = 1;
+    [Tooltip("Lag Weigth, increases leaning toweards the last taken input direction")]
+    [SerializeField] float lagWeigth = 1.5f;
+    [Tooltip("Distance (Networked Pos/Current Position) of which above we will keep trying to actively move")]
+    [SerializeField] float autoMoveThreshold = 0.3f;
 
     protected PC pc = null;
     DodgeballCharacter chara = null;
@@ -80,7 +84,7 @@ public class N_PC : MonoBehaviour,IPunObservable
             stream.SendNext(rb3d.position.x);
             stream.SendNext(rb3d.position.z);
 
-            stream.SendNext(chara.syncedYAngle);
+            //stream.SendNext(chara.syncedYAngle);
         }
         else if (stream.IsReading)
         {
@@ -93,7 +97,7 @@ public class N_PC : MonoBehaviour,IPunObservable
             TrySnapToNetPos();
             UpdateSyncedInput();
 
-            chara.syncedYAngle = (float)stream.ReceiveNext();
+            //chara.syncedYAngle = (float)stream.ReceiveNext();
 
             chara.C_MoveInput();
         }
@@ -162,13 +166,19 @@ public class N_PC : MonoBehaviour,IPunObservable
         float catchUpVal = distToInputCurve.Evaluate(normDist) * posWeigth;
         Vector3 dirToNetPos = (networkedPos - rb3d.position).normalized;
         Vector3 dirElement = dirToNetPos * catchUpVal;
+        Vector3 lagPart = networkedInput * lastLag * lagWeigth;
         Vector3 inputElement = networkedInput * inputWeigth;
 
-        Vector3 weithedInput = dirElement + inputElement;
+        Vector3 weithedInput = dirElement + inputElement + lagPart;
         //Vector3 weithedInput = Vector3.Lerp(inputElement, dirElement, Time.fixedDeltaTime);
         weithedInput.y = 0;
         weithedInput.Normalize();
         chara.syncedInput = weithedInput;
         chara.syncedInput = networkedInput;
+
+        if(dist>=autoMoveThreshold)
+        {
+            chara.C_MoveInput();
+        }
     }
 }
