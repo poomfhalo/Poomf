@@ -169,6 +169,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         float normDist = dist / snapXZDist;
         float catchUpVal = distToInputCurve.Evaluate(normDist) * posWeigth;
         Vector3 dirToNetPos = -(networkedPos - currPos).normalized;
+
         Vector3 dirElement = dirToNetPos * catchUpVal;
         Vector3 lagPart = networkedInput * lastLag * lagWeigth;
         Vector3 inputElement = networkedInput * inputWeigth;
@@ -179,15 +180,17 @@ public class N_PC : MonoBehaviour,IPunObservable
         weithedInput.Normalize();
         chara.syncedInput = weithedInput;
 
-        if(dist<autoMoveSatisfaction)
-        {
-            chara.syncedInput = Vector3.zero;
-            chara.C_MoveInput();
-            return;
-        }
-        if (dist>=autoMoveThreshold)
-        {
-            chara.C_MoveInput();
-        }
+        //Debug.Log(dist);
+        //if(dist<autoMoveSatisfaction)
+        //{
+        //    chara.syncedInput = Vector3.zero;
+        //    chara.C_MoveInput();
+        //    Debug.LogWarning("Should have stopped ?!");
+        //    return;
+        //}
+        //if (dist>=autoMoveThreshold)
+        //{
+        //    chara.C_MoveInput();
+        //}
     }
 }

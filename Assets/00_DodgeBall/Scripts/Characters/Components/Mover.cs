@@ -70,10 +70,9 @@ public class Mover : MonoBehaviour, ICharaAction
     [SerializeField] Vector3 lastNonZeroDir = Vector3.zero;
     [SerializeField] Vector3 vel = Vector3.zero;
     [SerializeField] Vector3 lastNonZeroVel = Vector3.zero;
+    public Vector3 input = Vector3.zero;
 
-    public Vector3 input { private set; get; } = Vector3.zero;
     Vector3 dir = Vector3.zero;
-
     Transform currMovePoint = null;
 
     Animator animator = null;
@@ -161,7 +160,6 @@ public class Mover : MonoBehaviour, ICharaAction
     }
     public void UpdateInput(Vector3 newInput,Transform withRespectTo)
     {
-        UpdateInput(newInput);
         if(withRespectTo == null)
         {
             right = Vector3.right;
@@ -172,6 +170,7 @@ public class Mover : MonoBehaviour, ICharaAction
             right = withRespectTo.right;
             fwd = withRespectTo.forward;
         }
+        UpdateInput(newInput);
     }
     public void UpdateInput(Vector3 input)
     {
