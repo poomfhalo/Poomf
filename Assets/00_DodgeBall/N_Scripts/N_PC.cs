@@ -21,6 +21,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     [SerializeField] float lagWeigth = 1.5f;
     [Tooltip("Distance (Networked Pos/Current Position) of which above we will keep trying to actively move")]
     [SerializeField] float autoMoveThreshold = 0.3f;
+    [SerializeField] float autoMoveSatisfaction = 0.1f;
 
     protected PC pc = null;
     DodgeballCharacter chara = null;
@@ -165,7 +166,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         float dist = Vector3.Distance(rb3d.position, networkedPos);
         float normDist = dist / snapXZDist;
         float catchUpVal = distToInputCurve.Evaluate(normDist) * posWeigth;
-        Vector3 dirToNetPos = (networkedPos - rb3d.position).normalized;
+        Vector3 dirToNetPos = -(networkedPos - rb3d.position).normalized;
         Vector3 dirElement = dirToNetPos * catchUpVal;
         Vector3 lagPart = networkedInput * lastLag * lagWeigth;
         Vector3 inputElement = networkedInput * inputWeigth;
@@ -176,7 +177,11 @@ public class N_PC : MonoBehaviour,IPunObservable
         weithedInput.Normalize();
         chara.syncedInput = weithedInput;
 
-        if(dist>=autoMoveThreshold)
+        if(dist<autoMoveSatisfaction)
+        {
+            return;
+        }
+        if (dist>=autoMoveThreshold)
         {
             chara.C_MoveInput();
         }
