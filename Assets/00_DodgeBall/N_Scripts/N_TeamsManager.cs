@@ -2,20 +2,16 @@
 using UnityEngine;
 using Photon.Pun;
 using System.Linq;
-using ExitGames.Client.Photon;
-using Photon.Realtime;
 using System;
+using ExitGames.Client.Photon;
 
-public class N_TeamsManager : N_Singleton<N_TeamsManager>, IOnEventCallback
+public class N_TeamsManager : N_Singleton<N_TeamsManager>
 {
-    public event Action onTeamsAreSynced = null;
-
     [Header("Read Only")]
     [SerializeField] List<MPTeam> mpTeams = new List<MPTeam>();
     [SerializeField] int creationsCount = 0;
-    [SerializeField] int playersCount = 0;
 
-    Dictionary<int,int[]> GetMPTeamsData
+    public Dictionary<int,int[]> GetMPTeamsData
     {
         get
         {
@@ -53,14 +49,6 @@ public class N_TeamsManager : N_Singleton<N_TeamsManager>, IOnEventCallback
             mpTeams.Add(new MPTeam(team, new List<int>()));
 
         GetMPTeam(team).actors.Add(actorNumber);
-        playersCount = playersCount + 1;
-    }
-    public void SpreadTeamsData()
-    {
-        if (!PhotonNetwork.IsMasterClient)
-            return;
-
-        photonView.RPC("RecieveTeamsData", RpcTarget.Others, GetMPTeamsData);
     }
 
     
@@ -84,20 +72,8 @@ public class N_TeamsManager : N_Singleton<N_TeamsManager>, IOnEventCallback
                 TeamsManager.JoinTeam(t.t, chara);
             }
         }
-        onTeamsAreSynced?.Invoke();
-    }
-
-    //Call backs
-    public void OnEvent(EventData photonEvent)
-    {
-        if (!PhotonNetwork.IsMasterClient)
-            return;
-        if (photonEvent.Code != N_GameManager.OnCreatedPC)
-            return;
-        creationsCount = creationsCount + 1;
-        if (creationsCount < playersCount)
-            return;
-        photonView.RPC("SyncWithTeamsManager", RpcTarget.All);
+        if (PhotonNetwork.IsMasterClient)
+            PhotonNetwork.RaiseEvent(N_GameManager.N_OnTeamsAreSynced, null, N_GameManager.GetDefOps, SendOptions.SendReliable);
     }
 
     //Helper Functions

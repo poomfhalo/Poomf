@@ -13,13 +13,12 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
     public override void OnEnable()
     {
         base.OnEnable();
-        N_TeamsManager.instance.onTeamsAreSynced += OnTeamsAreSynced;
+        N_GameManager.OnTeamsAreSynced += OnTeamsAreSynced;
     }
     public override void OnDisable()
     {
         base.OnDisable();
-        if(N_TeamsManager.instance)
-            N_TeamsManager.instance.onTeamsAreSynced -= OnTeamsAreSynced;
+        N_GameManager.OnTeamsAreSynced -= OnTeamsAreSynced;
     }
 
     IEnumerator Start()
@@ -37,7 +36,7 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
         pc.GetComponent<PhotonView>().RPC("OnCreated", RpcTarget.All, GetComponent<PhotonView>().ViewID);
         yield return new WaitForSeconds(0.1f);
         Debug.Log(photonView.Controller + " Created a PC ", pc);
-        PhotonNetwork.RaiseEvent(N_GameManager.OnCreatedPC, null, N_GameManager.GetDefOps, SendOptions.SendReliable);
+        PhotonNetwork.RaiseEvent(N_GameManager.N_OnCreatedPC, null, N_GameManager.GetDefOps, SendOptions.SendReliable);
     }
 
     private void OnTeamsAreSynced()
