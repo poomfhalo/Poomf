@@ -146,7 +146,7 @@ public class N_PC : MonoBehaviour,IPunObservable
                 chara.C_MoveInput();
                 break;
         }
-    }
+    }   
 
     //Helper Functions
     private void TrySnapToNetPos()
