@@ -22,8 +22,9 @@ public class N_PC : MonoBehaviour,IPunObservable
     DodgeballCharacter chara = null;
     Rigidbody rb3d = null;
 
-    Vector3 networkedInput = new Vector3();
-    Vector3 networkedPos = new Vector3();
+    [Header("Read Only")]
+    [SerializeField] Vector3 networkedInput = new Vector3();
+    [SerializeField] Vector3 networkedPos = new Vector3();
     protected virtual void Start()
     {
         pc = GetComponent<PC>();
@@ -147,12 +148,14 @@ public class N_PC : MonoBehaviour,IPunObservable
     }
     private void UpdateSyncedInput()
     {
-        float dist = Vector3.Distance(rb3d.position, networkedPos);
-        float normDist = dist / snapXZDist;
-        float catchUpVal = distToInputCurve.Evaluate(normDist) * posWeigth;
-        Vector3 dirToNetPos = (networkedPos - rb3d.position).normalized;
-        Vector3 weithedInput = dirToNetPos * catchUpVal + networkedInput * inputWeigth;
-        weithedInput.Normalize();
-        chara.syncedInput = weithedInput;
+        //float dist = Vector3.Distance(rb3d.position, networkedPos);
+        //float normDist = dist / snapXZDist;
+        //float catchUpVal = distToInputCurve.Evaluate(normDist) * posWeigth;
+        //Vector3 dirToNetPos = (networkedPos - rb3d.position).normalized;
+        //Vector3 weithedInput = dirToNetPos * catchUpVal + networkedInput * inputWeigth;
+        //weithedInput.y = 0;
+        //weithedInput.Normalize();
+        //chara.syncedInput = weithedInput;
+        chara.syncedInput = networkedInput;
     }
 }
