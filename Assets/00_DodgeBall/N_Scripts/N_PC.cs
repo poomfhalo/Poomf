@@ -6,6 +6,9 @@ public class N_PC : MonoBehaviour,IPunObservable
 {
     public int CreatorViewID => creatorViewID;
     public int ActorID => GetComponent<PhotonView>().Controller.ActorNumber;
+    [SerializeField] int creatorViewID = 0;
+
+    [Header("Move Smoothing Settings")]
     [Tooltip("if this distance between current position and networked position is higher than this, we snap to correct XZ place")]
     [SerializeField] float snapXZDist = 2;
 
@@ -15,7 +18,6 @@ public class N_PC : MonoBehaviour,IPunObservable
     [SerializeField] float posWeigth = 2;
     [SerializeField] float inputWeigth = 1;
 
-    [SerializeField] int creatorViewID = 0;
     protected PC pc = null;
     DodgeballCharacter chara = null;
     Rigidbody rb3d = null;
