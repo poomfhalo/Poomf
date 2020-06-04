@@ -144,7 +144,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     {
         float dist = Vector3.Distance(rb3d.position, networkedPos);
 
-        if (dist <= snapXZDist)
+        if (dist > snapXZDist)
         {
             rb3d.MovePosition(networkedPos);
         }
