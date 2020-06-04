@@ -58,6 +58,7 @@ public class N_Dodgeball : MonoBehaviour, IPunObservable
         switch (command)
         {
             case DodgeballCommand.GoToChara:
+                Debug.Log("Ball().GoingToChara Command RPC");
                 //Dodgeball.GoTo(n_holder,);
                 break;
         }
