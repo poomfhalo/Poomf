@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f79e826eb37fc7ea8a7120c45d91f22e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  networkedPos: {x: 0, y: 0, z: 0}
 --- !u!1001 &6825843737520874604
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22,7 +23,7 @@ PrefabInstance:
     - target: {fileID: 57221109919460755, guid: 3d80c75df7c98542c9e7d1832ad9730d,
         type: 3}
       propertyPath: viewIdField
-      value: 9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 57221109919460755, guid: 3d80c75df7c98542c9e7d1832ad9730d,
         type: 3}
