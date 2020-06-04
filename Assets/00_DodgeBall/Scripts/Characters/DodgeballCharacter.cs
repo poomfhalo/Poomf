@@ -1,9 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+
+public enum DodgeballCharaCommand { MoveInput, Catch, Friendly, Enemy, Fire, Dodge, FakeFire, Jump }
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody))]
-public abstract class DodgeballCharacter : MonoBehaviour
+public class DodgeballCharacter : MonoBehaviour
 {
+    //Events
+    public event Action<DodgeballCharaCommand> OnCommandActivated = null;
+
     //State
     public bool IsEnabled => isEnabled;
     public bool HasBall => hasBall;
@@ -34,6 +40,9 @@ public abstract class DodgeballCharacter : MonoBehaviour
 
     [Header("Read Only")]
     [SerializeField] bool hasBall = false;
+    [Header("Synced Variables")]
+    public Vector3 syncedInput = new Vector3();
+    public float syncedYAngle = 0;
 
     protected Rigidbody rb3d = null;
     protected Animator animator = null;
@@ -79,6 +88,10 @@ public abstract class DodgeballCharacter : MonoBehaviour
         if (catcher)
             catcher.onBallInHands += OnBallInHands;
     }
+    protected virtual void FixedUpdate()
+    {
+        syncedYAngle = transform.eulerAngles.y;
+    }
 
     public void SetTeam(TeamTag team)
     {
@@ -99,16 +112,23 @@ public abstract class DodgeballCharacter : MonoBehaviour
 
 
     #region Commands
-    protected void C_MoveInput(Vector3 i)
+    public void C_MoveInput(Vector3 i)
     {
+        syncedInput = i;
         if (jumper.IsJumping)
         {
             jumper.UpdateInput(i);
+            OnCommandActivated?.Invoke(DodgeballCharaCommand.MoveInput);
             return;
         }
         mover.StartMoveByInput(i, cam.transform);
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.MoveInput);
     }
-    protected void C_Catch()
+    public void C_MoveInput()
+    {
+        C_MoveInput(syncedInput);
+    }
+    public void C_Catch()
     {
         if (HasBall)
             return;
@@ -116,22 +136,25 @@ public abstract class DodgeballCharacter : MonoBehaviour
             return;
 
         catcher.StartCatchAction();
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.Catch);
     }
-    protected void C_Friendly()
+    public void C_Friendly()
     {
         if (HasBall)
         {
             selectionIndicator.SetNewFocus(true);
+            OnCommandActivated?.Invoke(DodgeballCharaCommand.Friendly);
         }
     }
-    protected void C_Enemy()
+    public void C_Enemy()
     {
         if (HasBall)
         {
             selectionIndicator.SetNewFocus(false);
+            OnCommandActivated?.Invoke(DodgeballCharaCommand.Enemy);
         }
     }
-    protected void C_Fire()
+    public void C_Fire()
     {
         if (IsThrowing)
             return;
@@ -139,8 +162,9 @@ public abstract class DodgeballCharacter : MonoBehaviour
             return;
         launcher.UpdateInput(mover.input);
         launcher.StartThrowAction(selectionIndicator.ActiveSelection);
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.Fire);
     }
-    protected void C_Dodge()
+    public void C_Dodge()
     {
         if (HasBall)
             return;
@@ -150,8 +174,9 @@ public abstract class DodgeballCharacter : MonoBehaviour
             return;
 
         dodger.StartDodgeAction();
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.Dodge);
     }
-    protected void C_FakeFire()
+    public void C_FakeFire()
     {
         if (!HasBall)
             return;
@@ -159,8 +184,9 @@ public abstract class DodgeballCharacter : MonoBehaviour
             return;
         launcher.UpdateInput(mover.input);
         launcher.StartFakeThrow(selectionIndicator.ActiveSelection);
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.FakeFire);
     }
-    protected void C_Jump()
+    public void C_Jump()
     {
         if (HasBall)
             return;
@@ -171,9 +197,7 @@ public abstract class DodgeballCharacter : MonoBehaviour
         if (IsJumping)
             return;
         jumper.StartJumpAction();
-
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.Jump);
     }
     #endregion
-
-
 }

@@ -65,7 +65,7 @@ public class BallCatcher : MonoBehaviour,ICharaAction
 
     private void GrabBall()
     {
-        Dodgeball.GoTo(GetComponent<PC>(), () => {
+        Dodgeball.GoTo(GetComponent<DodgeballCharacter>(), () => {
             onBallInHands?.Invoke();
         });
         animator.SetBool("HasBall", true);

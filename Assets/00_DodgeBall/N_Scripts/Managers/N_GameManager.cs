@@ -19,7 +19,14 @@ using ExitGames.Client.Photon;
 /// </summary>
 
 public enum N_Prefab { PlayerManager,Player }
-
+/// <summary>
+/// Script Flow:
+/// 1.Initialize Is called from N_ShortStarter
+/// 2.Which Creates PCS
+/// 3.Triggers OnEvent N_OnCreatedPC
+/// 4.after all are created, we syncronize N_TeamsManager with TeamsManager on all clients
+/// 5.Triggers N_OnTeamsAreSynced
+/// </summary>
 public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback
 {
     #region Properties
@@ -37,7 +44,6 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback
     public const byte N_OnTeamsAreSynced = 1;
 
     public static event Action OnTeamsAreSynced = null;
-    public static event Action OnPrepsAreDone = null;
 
     public List<LoadablePrefab> Prefabs => prefabs;
     [SerializeField] List<LoadablePrefab> prefabs = new List<LoadablePrefab> { new LoadablePrefab(N_Prefab.Player, "N_PlayerManager") };
@@ -58,7 +64,6 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback
         base.Awake();
         N_Extentions.prefabs = prefabs;
         OnTeamsAreSynced = null;
-        OnPrepsAreDone = null;
     }
     public override void OnEnable()
     {
@@ -74,7 +79,6 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback
     {
         base.OnDestroy();
         OnTeamsAreSynced = null;
-        OnPrepsAreDone = null;
     }
     #endregion
 
@@ -133,6 +137,14 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback
         }
     }
 
+    public static void N_RaiseEvent(byte b, object content,bool raiseOnMasterOnly = true)
+    {
+        if (raiseOnMasterOnly && !PhotonNetwork.IsMasterClient)
+            return;
+
+        PhotonNetwork.RaiseEvent(b, content, GetDefOps, SendOptions.SendReliable);
+    }
+
     private void SetUpStartingPositions()
     {
         if (!PhotonNetwork.IsMasterClient)
@@ -169,7 +181,7 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback
         foreach (var player in PhotonNetwork.PlayerList)
         {
             N_PC n_pc = N_TeamsManager.GetPlayer(player.ActorNumber);
-            n_pc.GetComponent<PhotonView>().RPC("OnBeforeGameStart", RpcTarget.All);
+            n_pc.GetComponent<PhotonView>().RPC("PrepareForGame", RpcTarget.All);
         }
     }
 }

@@ -43,8 +43,9 @@ public class Dodgeball : N_Singleton<Dodgeball>
         bodyCol.onCollisionEnter.AddListener(OnBodyExitted);
     }
 
-    void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         isCaught = false;
         holder = null;
         currTweener = 0;

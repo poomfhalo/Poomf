@@ -2,14 +2,11 @@
 using UnityEngine;
 using Photon.Pun;
 using System.Linq;
-using System;
-using ExitGames.Client.Photon;
 
 public class N_TeamsManager : N_Singleton<N_TeamsManager>
 {
     [Header("Read Only")]
     [SerializeField] List<MPTeam> mpTeams = new List<MPTeam>();
-    [SerializeField] int creationsCount = 0;
 
     public Dictionary<int,int[]> GetMPTeamsData
     {
@@ -72,8 +69,7 @@ public class N_TeamsManager : N_Singleton<N_TeamsManager>
                 TeamsManager.JoinTeam(t.t, chara);
             }
         }
-        if (PhotonNetwork.IsMasterClient)
-            PhotonNetwork.RaiseEvent(N_GameManager.N_OnTeamsAreSynced, null, N_GameManager.GetDefOps, SendOptions.SendReliable);
+        N_GameManager.N_RaiseEvent(N_GameManager.N_OnTeamsAreSynced,null);
     }
 
     //Helper Functions
