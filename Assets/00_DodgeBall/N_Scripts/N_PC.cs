@@ -111,17 +111,18 @@ public class N_PC : MonoBehaviour,IPunObservable
 
     private void SendCommand(DodgeballCharaCommand command)
     {
-        pv.RPC("RecieveCommand", RpcTarget.Others, (int)command);
+        float currX = rb3d.position.x;
+        float currZ = rb3d.position.z;
+        pv.RPC("RecieveCommand", RpcTarget.Others, (int)command,currX,currZ);
     }
 
     [PunRPC]
-    private void RecieveCommand(int c)
+    private void RecieveCommand(int c,float currX,float currZ)
     {
         DodgeballCharaCommand command = (DodgeballCharaCommand)c;
         switch (command)
         {
             case DodgeballCharaCommand.Catch:
-                Debug.Log("What Happened?");
                 chara.C_Catch();
                 break;
             case DodgeballCharaCommand.Dodge:
@@ -143,6 +144,10 @@ public class N_PC : MonoBehaviour,IPunObservable
                 chara.C_Jump();
                 break;
             case DodgeballCharaCommand.MoveInput:
+                networkedPos.x = currX;
+                networkedPos.z = currZ;
+                UpdateSyncedInput();
+
                 chara.C_MoveInput();
                 break;
         }
