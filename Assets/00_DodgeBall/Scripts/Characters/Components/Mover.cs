@@ -79,7 +79,6 @@ public class Mover : MonoBehaviour, ICharaAction
     [SerializeField] float minInputTimeCounter = 0;
     [SerializeField] int movabilityDir = 0;
     [SerializeField] Vector3 usableInput = Vector3.zero;
-    [SerializeField] Vector3 extraVel = Vector3.zero;
 
     Vector3 dir = Vector3.zero;
     Transform currMovePoint = null;
@@ -219,14 +218,6 @@ public class Mover : MonoBehaviour, ICharaAction
     {
         TurnToDir(pos - rb3d.position, turningSpeed);
     }
-
-    public void SetExtraVel(Vector3 extraVel)
-    {
-        float sameDir = Vector3.Dot(transform.forward, extraVel.normalized);
-        this.extraVel = extraVel*sameDir;
-        vel = vel + extraVel;
-    }
-
     private void TurnToDir(Vector3 facingDir,float turnSpeed)
     {
         if (turnSpeed < 1)
