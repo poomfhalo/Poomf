@@ -180,11 +180,6 @@ public class Mover : MonoBehaviour, ICharaAction
         currState = MovementState.ToPoint;
         this.currMovePoint = point;
     }
-    public void MoveTo(Vector3 pos)
-    {
-        input = (rb3d.position - pos).normalized;
-        currState = MovementState.ByInput;
-    }
     public void ReadFacingValues()
     {
         lastNonZeroDir = transform.forward;
