@@ -185,7 +185,6 @@ public class N_PC : MonoBehaviour,IPunObservable
         if(dist<autoMoveSatisfaction)
         {
             chara.syncedInput = Vector3.zero;
-            chara.C_MoveInput();
             Debug.LogWarning("Should have stopped ?!", gameObject);
             return;
         }
