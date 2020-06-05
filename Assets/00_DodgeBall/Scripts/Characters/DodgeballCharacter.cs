@@ -9,6 +9,8 @@ public class DodgeballCharacter : MonoBehaviour
 {
     //Events
     public event Action<DodgeballCharaCommand> OnCommandActivated = null;
+    //Properties
+    public Vector3 lastInput => mover.input;
 
     //State
     public bool IsEnabled => isEnabled;
@@ -87,10 +89,6 @@ public class DodgeballCharacter : MonoBehaviour
 
         if (catcher)
             catcher.onBallInHands += OnBallInHands;
-    }
-    protected virtual void FixedUpdate()
-    {
-        syncedYAngle = transform.eulerAngles.y;
     }
 
     public void SetTeam(TeamTag team)

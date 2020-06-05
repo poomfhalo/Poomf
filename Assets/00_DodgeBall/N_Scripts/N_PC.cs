@@ -85,7 +85,7 @@ public class N_PC : MonoBehaviour,IPunObservable
             stream.SendNext(rb3d.position.x);
             stream.SendNext(rb3d.position.z);
 
-            //stream.SendNext(chara.syncedYAngle);
+            stream.SendNext(rb3d.rotation.eulerAngles.y);
         }
         else if (stream.IsReading)
         {
@@ -98,7 +98,7 @@ public class N_PC : MonoBehaviour,IPunObservable
             TrySnapToNetPos();
             UpdateSyncedInput();
 
-            //chara.syncedYAngle = (float)stream.ReceiveNext();
+            chara.syncedYAngle = (float)stream.ReceiveNext();
 
             chara.C_MoveInput();
         }
@@ -113,11 +113,13 @@ public class N_PC : MonoBehaviour,IPunObservable
     {
         float currX = rb3d.position.x;
         float currZ = rb3d.position.z;
-        pv.RPC("RecieveCommand", RpcTarget.Others, (int)command,currX,currZ);
+        float ix = chara.lastInput.x;
+        float iz = chara.lastInput.z;
+        pv.RPC("RecieveCommand", RpcTarget.Others, (int)command,currX,currZ,ix,iz);
     }
 
     [PunRPC]
-    private void RecieveCommand(int c,float currX,float currZ)
+    private void RecieveCommand(int c,float currX,float currZ,float ix,float iz)
     {
         DodgeballCharaCommand command = (DodgeballCharaCommand)c;
         switch (command)
@@ -146,6 +148,10 @@ public class N_PC : MonoBehaviour,IPunObservable
             case DodgeballCharaCommand.MoveInput:
                 networkedPos.x = currX;
                 networkedPos.z = currZ;
+
+                networkedInput.x = ix;
+                networkedInput.z = iz;
+
                 UpdateSyncedInput();
 
                 chara.C_MoveInput();
@@ -182,13 +188,21 @@ public class N_PC : MonoBehaviour,IPunObservable
         weigthedInput.Normalize();
         chara.syncedInput = weigthedInput;
 
-        if (dist >= autoMoveThreshold && networkedInput == Vector3.zero)
+        if (dist >= autoMoveThreshold)
         {
             float normDist = dist / snapXZDist;
             float catchUpVal = distToInputCurve.Evaluate(normDist) * posWeigth;
 
             Vector3 lerpedNetPos = Vector3.Lerp(rb3d.position, networkedPos, catchUpVal * Time.fixedDeltaTime);
-            rb3d.MovePosition(lerpedNetPos);
+            if (networkedInput == Vector3.zero)
+            {
+                rb3d.MovePosition(lerpedNetPos);
+            }
+            else
+            {
+                Vector3 extraVel = (rb3d.position - networkedPos).normalized * catchUpVal;
+                chara.GetComponent<Mover>().SetExtraVel(extraVel);
+            }
         }
     }
 }
