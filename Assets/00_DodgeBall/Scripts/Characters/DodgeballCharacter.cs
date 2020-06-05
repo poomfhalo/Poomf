@@ -202,5 +202,6 @@ public class DodgeballCharacter : MonoBehaviour
     public void ClearInputDelay()
     {
         mover.usesInputDelay = false;
+        mover.minMoveInput = 0;
     }
 }

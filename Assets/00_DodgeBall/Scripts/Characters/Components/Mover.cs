@@ -68,7 +68,7 @@ public class Mover : MonoBehaviour, ICharaAction
     [Header("Input Saftey")]
     [SerializeField] float minInputTime = 0.08f;
     [SerializeField] float inputSensitivity = 3f;
-    [SerializeField] float minMoveInput = 0.325f;
+    public float minMoveInput = 0.325f;
     public bool usesInputDelay = true;
 
     [Header("Read Only")]
@@ -265,13 +265,13 @@ public class Mover : MonoBehaviour, ICharaAction
                 float ax = Mathf.Abs(usableInput.x);
                 if (ax > 0)
                 {
-                    float usableX = ax < minMoveInput ? 0 : usableInput.x;
+                    float usableX = ax <= minMoveInput ? 0 : usableInput.x;
                     dir = dir + right * usableX;
                 }
                 float az = Mathf.Abs(usableInput.z);
                 if (az > 0)
                 {
-                    float usableZ = az < minMoveInput ? 0 : usableInput.z;
+                    float usableZ = az <= minMoveInput ? 0 : usableInput.z;
                     dir = dir + fwd * usableZ;
                 }
                 dir.y = 0;
