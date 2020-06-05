@@ -50,6 +50,10 @@ public class N_PC : MonoBehaviour,IPunObservable
         chara = GetComponent<DodgeballCharacter>();
         if(GetComponent<PhotonView>().IsMine)
             chara.OnCommandActivated += SendCommand;
+        else
+        {
+            chara.ClearInputDelay();
+        }
     }
     void OnDisable()
     {
@@ -100,6 +104,7 @@ public class N_PC : MonoBehaviour,IPunObservable
 
     void FixedUpdate()
     {
+        UpdateNetData();
         UpdateSyncedInput();
     }
 

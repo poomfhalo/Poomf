@@ -69,6 +69,7 @@ public class Mover : MonoBehaviour, ICharaAction
     [SerializeField] float minInputTime = 0.08f;
     [SerializeField] float inputSensitivity = 3f;
     [SerializeField] float minMoveInput = 0.325f;
+    public bool usesInputDelay = true;
 
     [Header("Read Only")]
     [SerializeField] float speed = 0;
@@ -108,28 +109,33 @@ public class Mover : MonoBehaviour, ICharaAction
         if (!IsMoving)
             return;
 
-        bool isZero = Mathf.Abs(minInputTimeCounter) < Mathf.Epsilon;
+        if (usesInputDelay)
+        {
+            bool isZero = Mathf.Abs(minInputTimeCounter) < Mathf.Epsilon;
 
-        if (isGoingToStop&&isZero)
-            return;
-        if (isGoingToMove&& minInputTimeCounter < 1)
-            return;
+            if (isGoingToStop && isZero)
+                return;
+            if (isGoingToMove && minInputTimeCounter < 1)
+                return;
+        }
         animator.SetFloat("Speed", speed);
     }
     void FixedUpdate()
     {
-        minInputTimeCounter = minInputTimeCounter + Time.fixedDeltaTime / minInputTime * movabilityDir;
-        minInputTimeCounter = Mathf.Clamp(minInputTimeCounter, 0, 1);
-
         usableInput = Vector3.MoveTowards(usableInput, input, inputSensitivity * Time.fixedDeltaTime);
 
-        if (isGoingToStop && minInputTimeCounter < 0)
-            return;
-        if (isGoingToMove && minInputTimeCounter < 1)
-            return;
-        if (!IsMoving)
-            return;
+        if (usesInputDelay)
+        {
+            minInputTimeCounter = minInputTimeCounter + Time.fixedDeltaTime / minInputTime * movabilityDir;
+            minInputTimeCounter = Mathf.Clamp(minInputTimeCounter, 0, 1);
 
+            if (isGoingToStop && minInputTimeCounter < 0)
+                return;
+            if (isGoingToMove && minInputTimeCounter < 1)
+                return;
+            if (!IsMoving)
+                return;
+        }
         SetMoveDir();
         SetVel();
         TurnToDir(lastNonZeroVel,turningSpeed);
