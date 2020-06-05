@@ -192,14 +192,15 @@ public class N_PC : MonoBehaviour,IPunObservable
         {
             float normDist = dist / snapXZDist;
             float catchUpVal = distToInputCurve.Evaluate(normDist) * posWeigth;
-
             if (networkedInput == Vector3.zero)
             {
+
                 Vector3 lerpedNetPos = Vector3.Lerp(rb3d.position, networkedPos, catchUpVal * Time.fixedDeltaTime);
                 rb3d.MovePosition(lerpedNetPos);
             }
             else
             {
+
                 Vector3 dirToPos = (rb3d.position - networkedPos).normalized;
                 dirToPos.y = 0;
                 dirToPos.Normalize();
@@ -209,8 +210,11 @@ public class N_PC : MonoBehaviour,IPunObservable
                     amountInSameDir = 0;
                 }
 
-                Vector3 nPos = dirToPos * amountInSameDir * Time.fixedDeltaTime*catchUpVal;
-                rb3d.MovePosition(rb3d.position + nPos);
+                Vector3 p1 = transform.forward * lastLag * chara.GetComponent<Mover>().maxSpeed*Time.fixedDeltaTime;
+                Vector3 p2 = dirToPos * amountInSameDir * Time.fixedDeltaTime * catchUpVal * lastLag * lagWeigth;
+                Vector3 p = (p1 + p2) / 2.0f;
+
+                rb3d.MovePosition(rb3d.position + p);
             }
         }
     }

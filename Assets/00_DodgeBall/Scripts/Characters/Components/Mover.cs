@@ -46,7 +46,7 @@ public class Mover : MonoBehaviour, ICharaAction
     enum MovementState { Stopped,ByInput,ToPoint }
     [SerializeField] MovementState currState = MovementState.Stopped;
     [SerializeField] float accel = 10;
-    [SerializeField] float maxSpeed = 3;
+    public float maxSpeed = 3;
     [SerializeField] float gravity = -20;
 
     [Header("Slowing Down")]
