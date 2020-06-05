@@ -32,6 +32,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     [SerializeField] Vector3 networkedInput = new Vector3();
     [SerializeField] Vector3 networkedPos = new Vector3();
     [SerializeField] float lastLag = 0;
+    [SerializeField] float dist = 0;
 
     protected virtual void Start()
     {
@@ -151,7 +152,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     //Helper Functions
     private void TrySnapToNetPos()
     {
-        float dist = Vector3.Distance(rb3d.position, networkedPos);
+        dist = Vector3.Distance(rb3d.position, networkedPos);
 
         if (dist > snapXZDist)
         {
@@ -165,33 +166,32 @@ public class N_PC : MonoBehaviour,IPunObservable
 
         Vector3 currPos = rb3d.position;
         currPos.y = 0;
-        float dist = Vector3.Distance(currPos, networkedPos);
+        dist = Vector3.Distance(currPos, networkedPos);
         float normDist = dist / snapXZDist;
         float catchUpVal = distToInputCurve.Evaluate(normDist) * posWeigth;
-        Vector3 dirToNetPos = -(networkedPos - currPos).normalized;
+        Vector3 dirToNetPos = (currPos - networkedPos).normalized;
 
         Vector3 dirElement = dirToNetPos * catchUpVal;
         Vector3 lagPart = networkedInput * lastLag * lagWeigth;
         Vector3 inputElement = networkedInput * inputWeigth;
 
-        Vector3 weithedInput = dirElement + inputElement + lagPart;
+        Vector3 weigthedInput = dirElement + inputElement + lagPart;
         //Vector3 weithedInput = Vector3.Lerp(inputElement, dirElement, Time.fixedDeltaTime);
-        weithedInput.y = 0;
-        weithedInput.Normalize();
-        chara.syncedInput = weithedInput;
+        weigthedInput.y = 0;
+        weigthedInput.Normalize();
+        chara.syncedInput = weigthedInput;
         chara.syncedInput = networkedInput;
 
-        //Debug.Log(dist);
-        //if(dist<autoMoveSatisfaction)
-        //{
-        //    chara.syncedInput = Vector3.zero;
-        //    chara.C_MoveInput();
-        //    Debug.LogWarning("Should have stopped ?!");
-        //    return;
-        //}
-        //if (dist>=autoMoveThreshold)
-        //{
-        //    chara.C_MoveInput();
-        //}
+        if(dist<autoMoveSatisfaction)
+        {
+            chara.syncedInput = Vector3.zero;
+            chara.C_MoveInput();
+            Debug.LogWarning("Should have stopped ?!");
+            return;
+        }
+        if (dist>=autoMoveThreshold)
+        {
+            chara.C_MoveInput();
+        }
     }
 }
