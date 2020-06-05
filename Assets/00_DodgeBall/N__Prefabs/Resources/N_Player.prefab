@@ -58,8 +58,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  posWeigth: 7
-  autoMoveThreshold: 0.15
+  posWeigth: 6
+  autoMoveThreshold: 0.04
   networkedInput: {x: 0, y: 0, z: 0}
   networkedPos: {x: 0, y: 0, z: 0}
   lastLag: 0
@@ -79,7 +79,7 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 3
+  Synchronization: 2
   OwnershipTransfer: 1
   ObservedComponents:
   - {fileID: -5122021242519779985}
