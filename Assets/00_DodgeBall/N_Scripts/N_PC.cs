@@ -180,13 +180,13 @@ public class N_PC : MonoBehaviour,IPunObservable
         weigthedInput.y = 0;
         weigthedInput.Normalize();
         chara.syncedInput = weigthedInput;
-        chara.syncedInput = networkedInput;
+        //chara.syncedInput = networkedInput;
 
         if(dist<autoMoveSatisfaction)
         {
             chara.syncedInput = Vector3.zero;
             chara.C_MoveInput();
-            Debug.LogWarning("Should have stopped ?!");
+            Debug.LogWarning("Should have stopped ?!", gameObject);
             return;
         }
         if (dist>=autoMoveThreshold)
