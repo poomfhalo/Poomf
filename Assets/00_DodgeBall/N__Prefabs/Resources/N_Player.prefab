@@ -56,11 +56,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  posWeigth: 6
+  posWeigth: 0.1
   inputWeigth: 1
   lagWeigth: 1.5
-  autoMoveThreshold: 0.2
-  autoMoveSatisfaction: 0.1
+  autoMoveThreshold: 0.15
   networkedInput: {x: 0, y: 0, z: 0}
   networkedPos: {x: 0, y: 0, z: 0}
   lastLag: 0

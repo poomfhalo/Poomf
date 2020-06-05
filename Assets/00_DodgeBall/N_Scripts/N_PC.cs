@@ -12,16 +12,15 @@ public class N_PC : MonoBehaviour,IPunObservable
     [Tooltip("if this distance between current position and networked position is higher than this, we snap to correct XZ place")]
     [SerializeField] float snapXZDist = 2;
 
+    [SerializeField] float inputWeigth = 1;
+    [Tooltip("Lag Weigth, increases leaning toweards the last taken input direction")]
+    [SerializeField] float lagWeigth = 1.5f;
     [Tooltip("Curve that Governs how close we get to posWeigth (try to catch up) to the networked position as we move," +
     	" starting from 0 to snapXZDist\n")]
     [SerializeField] AnimationCurve distToInputCurve = AnimationCurve.Linear(0, 0, 1, 1);
     [SerializeField] float posWeigth = 2;
-    [SerializeField] float inputWeigth = 1;
-    [Tooltip("Lag Weigth, increases leaning toweards the last taken input direction")]
-    [SerializeField] float lagWeigth = 1.5f;
     [Tooltip("Distance (Networked Pos/Current Position) of which above we will keep trying to actively move")]
     [SerializeField] float autoMoveThreshold = 0.3f;
-    [SerializeField] float autoMoveSatisfaction = 0.1f;
 
     protected PC pc = null;
     DodgeballCharacter chara = null;
@@ -152,6 +151,8 @@ public class N_PC : MonoBehaviour,IPunObservable
     //Helper Functions
     private void TrySnapToNetPos()
     {
+        Vector3 currPos = rb3d.position;
+        currPos.y = 0;
         dist = Vector3.Distance(rb3d.position, networkedPos);
 
         if (dist > snapXZDist)
@@ -167,30 +168,21 @@ public class N_PC : MonoBehaviour,IPunObservable
         Vector3 currPos = rb3d.position;
         currPos.y = 0;
         dist = Vector3.Distance(currPos, networkedPos);
-        float normDist = dist / snapXZDist;
-        float catchUpVal = distToInputCurve.Evaluate(normDist) * posWeigth;
-        Vector3 dirToNetPos = (currPos - networkedPos).normalized;
 
-        Vector3 dirElement = dirToNetPos * catchUpVal;
         Vector3 lagPart = networkedInput * lastLag * lagWeigth;
         Vector3 inputElement = networkedInput * inputWeigth;
+        Vector3 weigthedInput = inputElement + lagPart;
 
-        Vector3 weigthedInput = dirElement + inputElement + lagPart;
-        //Vector3 weithedInput = Vector3.Lerp(inputElement, dirElement, Time.fixedDeltaTime);
         weigthedInput.y = 0;
         weigthedInput.Normalize();
         chara.syncedInput = weigthedInput;
-        //chara.syncedInput = networkedInput;
 
-        if(dist<autoMoveSatisfaction)
+        if (dist >= autoMoveThreshold && networkedInput == Vector3.zero)
         {
-            chara.syncedInput = Vector3.zero;
-            Debug.LogWarning("Should have stopped ?!", gameObject);
-            return;
-        }
-        if (dist>=autoMoveThreshold)
-        {
-            chara.C_MoveInput();
+            float normDist = dist / snapXZDist;
+            float catchUpVal = distToInputCurve.Evaluate(normDist) * posWeigth;
+
+            rb3d.MovePosition(Vector3.Lerp(rb3d.position, networkedPos, catchUpVal * Time.fixedDeltaTime));
         }
     }
 }
