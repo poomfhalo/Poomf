@@ -65,12 +65,20 @@ public class Mover : MonoBehaviour, ICharaAction
     [Header("Turning")]
     [SerializeField] float turningSpeed = 290;
 
+    [Header("Input Saftey")]
+    [SerializeField] float minInputTime = 0.08f;
+    [SerializeField] float inputSensitivity = 3f;
+    [SerializeField] float minMoveInput = 0.325f;
+
     [Header("Read Only")]
     [SerializeField] float speed = 0;
     [SerializeField] Vector3 lastNonZeroDir = Vector3.zero;
     [SerializeField] Vector3 vel = Vector3.zero;
     [SerializeField] Vector3 lastNonZeroVel = Vector3.zero;
     public Vector3 input = Vector3.zero;
+    [SerializeField] float minInputTimeCounter = 0;
+    [SerializeField] int movabilityDir = 0;
+    [SerializeField] Vector3 usableInput = Vector3.zero;
 
     Vector3 dir = Vector3.zero;
     Transform currMovePoint = null;
@@ -82,6 +90,8 @@ public class Mover : MonoBehaviour, ICharaAction
 
     public string actionName => "Move Action";
     Vector3 right = new Vector3(), fwd = new Vector3();
+    bool isGoingToMove => movabilityDir == 1;
+    bool isGoingToStop => movabilityDir == -1;
 
     void OnEnable()
     {
@@ -98,12 +108,29 @@ public class Mover : MonoBehaviour, ICharaAction
     {
         if (!IsMoving)
             return;
+
+        bool isZero = Mathf.Abs(minInputTimeCounter) < Mathf.Epsilon;
+
+        if (isGoingToStop&&isZero)
+            return;
+        if (isGoingToMove&& minInputTimeCounter < 1)
+            return;
         animator.SetFloat("Speed", speed);
     }
     void FixedUpdate()
     {
+        minInputTimeCounter = minInputTimeCounter + Time.fixedDeltaTime / minInputTime * movabilityDir;
+        minInputTimeCounter = Mathf.Clamp(minInputTimeCounter, 0, 1);
+
+        usableInput = Vector3.MoveTowards(usableInput, input, inputSensitivity * Time.fixedDeltaTime);
+
+        if (isGoingToStop && minInputTimeCounter < 0)
+            return;
+        if (isGoingToMove && minInputTimeCounter < 1)
+            return;
         if (!IsMoving)
             return;
+
         SetMoveDir();
         SetVel();
         TurnToDir(lastNonZeroVel,turningSpeed);
@@ -153,6 +180,11 @@ public class Mover : MonoBehaviour, ICharaAction
         currState = MovementState.ToPoint;
         this.currMovePoint = point;
     }
+    public void MoveTo(Vector3 pos)
+    {
+        input = (rb3d.position - pos).normalized;
+        currState = MovementState.ByInput;
+    }
     public void ReadFacingValues()
     {
         lastNonZeroDir = transform.forward;
@@ -176,6 +208,11 @@ public class Mover : MonoBehaviour, ICharaAction
     {
         currState = MovementState.ByInput;
         this.input = input;
+        movabilityDir = 1;
+        if (input == Vector3.zero)
+        {
+            movabilityDir = -1;
+        }
     }
 
     public void TurnToPoint(Vector3 pos, float turnSpeed)
@@ -214,7 +251,8 @@ public class Mover : MonoBehaviour, ICharaAction
             else if (speed <= stoppingSpeed && IsMoving)
             {
                 vel = Vector3.zero;
-                Cancel();
+                if(isGoingToStop)
+                    Cancel();
             }
         }
         speed = vel.magnitude;
@@ -225,6 +263,7 @@ public class Mover : MonoBehaviour, ICharaAction
         }
         XZVel = vel;
     }
+
     private void SetMoveDir()
     {
         dir = Vector3.zero;
@@ -232,13 +271,17 @@ public class Mover : MonoBehaviour, ICharaAction
         switch (currState)
         {
             case MovementState.ByInput:
-                if (Mathf.Abs(input.x) > 0)
+                float ax = Mathf.Abs(usableInput.x);
+                if (ax > 0)
                 {
-                    dir = dir + right * Mathf.Sign(input.x);
+                    float usableX = ax < minMoveInput ? 0 : usableInput.x;
+                    dir = dir + right * usableX;
                 }
-                if (Mathf.Abs(input.z) > 0)
+                float az = Mathf.Abs(usableInput.z);
+                if (az > 0)
                 {
-                    dir = dir + fwd * Mathf.Sign(input.z);
+                    float usableZ = az < minMoveInput ? 0 : usableInput.z;
+                    dir = dir + fwd * usableZ;
                 }
                 dir.y = 0;
                 break;
@@ -250,6 +293,7 @@ public class Mover : MonoBehaviour, ICharaAction
 
         if (dir == Vector3.zero)
             return;
+
         lastNonZeroDir = dir;
         dir.Normalize();
     }

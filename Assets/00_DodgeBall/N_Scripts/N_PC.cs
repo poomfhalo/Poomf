@@ -182,7 +182,8 @@ public class N_PC : MonoBehaviour,IPunObservable
             float normDist = dist / snapXZDist;
             float catchUpVal = distToInputCurve.Evaluate(normDist) * posWeigth;
 
-            rb3d.MovePosition(Vector3.Lerp(rb3d.position, networkedPos, catchUpVal * Time.fixedDeltaTime));
+            Vector3 lerpedNetPos = Vector3.Lerp(rb3d.position, networkedPos, catchUpVal * Time.fixedDeltaTime);
+            chara.GetComponent<Mover>().MoveTo(lerpedNetPos);
         }
     }
 }

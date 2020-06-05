@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   creatorViewID: 0
   snapXZDist: 3.5
+  inputWeigth: 1
+  lagWeigth: 1.5
   distToInputCurve:
     serializedVersion: 2
     m_Curve:
@@ -56,9 +58,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  posWeigth: 0.1
-  inputWeigth: 1
-  lagWeigth: 1.5
+  posWeigth: 7
   autoMoveThreshold: 0.15
   networkedInput: {x: 0, y: 0, z: 0}
   networkedPos: {x: 0, y: 0, z: 0}

@@ -326,10 +326,17 @@ MonoBehaviour:
   stoppingSpeed: 0.1
   cancelationTime: 0.35
   turningSpeed: 470
+  minInputTime: 0.02
+  inputSensitivity: 5
+  minMoveInput: 0.1
   speed: 0
   lastNonZeroDir: {x: 0, y: 0, z: 0}
   vel: {x: 0, y: 0, z: 0}
   lastNonZeroVel: {x: 0, y: 0, z: 0}
+  input: {x: 0, y: 0, z: 0}
+  minInputTimeCounter: 0
+  movabilityDir: 0
+  usableInput: {x: 0, y: 0, z: 0}
 --- !u!114 &6963099543513805062
 MonoBehaviour:
   m_ObjectHideFlags: 0
