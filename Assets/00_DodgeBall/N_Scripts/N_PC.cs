@@ -69,8 +69,8 @@ public class N_PC : MonoBehaviour,IPunObservable
     private void PrepareForGame()
     {
         SpawnPoint s = FindObjectsOfType<SpawnPoint>().ToList().Find(p => p.CheckPlayer(pv.Controller.ActorNumber));
-        rb3d.MovePosition(s.position);
-        rb3d.MoveRotation(s.rotation);
+        transform.position = s.position;
+        transform.rotation = s.rotation;
         //netPos = s.position;
 
         gameObject.SetActive(true);
@@ -172,7 +172,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         if (pv.IsMine)
             return;
 
-        if (netDist < 0.5f)
+        if (netDist < autoMoveThreshold)
         {
             chara.syncedInput = Vector3.zero;
             chara.C_MoveInput(chara.syncedInput);
