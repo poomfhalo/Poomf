@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class MenuNavigator : MonoBehaviour
 {
@@ -8,11 +9,27 @@ public class MenuNavigator : MonoBehaviour
     [SerializeField] private MenuItemBase[] menuItems = null;
     [SerializeField] private MenuTabButton defaultMenuButton = null;
 
+    private PlayerInput playerInput = null;
     private MenuTabButton[] menuTabsButtons = null;
     private int? currentActiveMenuIndex = null;
     private bool initialized = false;
 
     #region UNITY
+    private void Awake()
+    {
+        // playerInput = new PlayerInput();
+    }
+
+    private void OnEnable()
+    {
+        // playerInput.UI.Enable();
+    }
+
+    private void OnDisable()
+    {
+        // playerInput.UI.Disable();
+    }
+
     private void Start()
     {
         initialize();
@@ -22,11 +39,12 @@ public class MenuNavigator : MonoBehaviour
     {
         reset();
     }
-
+    /*
     private void Update()
     {
         processPlayerInput();
     }
+    */
     #endregion
 
     #region PRIVATE
@@ -35,7 +53,8 @@ public class MenuNavigator : MonoBehaviour
         if (false == initializeButtons() ||
             false == initializeMenus() ||
             false == bindButtonsToMenus() ||
-            false == launchDefaultMenu())
+            false == launchDefaultMenu() ||
+            false == bindPlayerInput())
         {
             Debug.LogError("MenuNavigator::initialize -> Initialization failed.");
             return;
@@ -116,6 +135,19 @@ public class MenuNavigator : MonoBehaviour
         return true;
     }
 
+    private bool bindPlayerInput()
+    {
+        /*
+        if (null == playerInput)
+        {
+            Debug.LogError("MenuNavigator::bindPlayerInput -> player input was not assigned.");
+            return false;
+        }
+        */
+
+        return true;
+    }
+
     private void bindButtonToMenu(MenuTabButton i_button, int i_menuIndex)
     {
         i_button.Initialize(i_menuIndex);
@@ -165,14 +197,14 @@ public class MenuNavigator : MonoBehaviour
             menuTabsButtons[i].ResetButton();
         }
     }
-
+    /*
     private void processPlayerInput()
     {
         if (false == initialized) return;
 
         checkIfAnyBtnIsSelected();
     }
-
+    */
     private void checkIfAnyBtnIsSelected()
     {
         GameObject selectedButtonObj = EventSystem.current.currentSelectedGameObject;
