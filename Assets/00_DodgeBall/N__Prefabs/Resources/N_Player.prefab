@@ -41,11 +41,12 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   posWeigth: 6
-  autoMoveThreshold: 0.04
-  networkedInput: {x: 0, y: 0, z: 0}
-  networkedPos: {x: 0, y: 0, z: 0}
+  autoMoveThreshold: 0.1
   lastLag: 0
-  dist: 0
+  netDist: 0
+  netPos: {x: 0, y: 0, z: 0}
+  netDisp: {x: 0, y: 0, z: 0}
+  netDir: {x: 0, y: 0, z: 0}
 --- !u!114 &5241043169954617695
 MonoBehaviour:
   m_ObjectHideFlags: 0

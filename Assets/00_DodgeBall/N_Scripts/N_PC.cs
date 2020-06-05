@@ -71,7 +71,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         SpawnPoint s = FindObjectsOfType<SpawnPoint>().ToList().Find(p => p.CheckPlayer(pv.Controller.ActorNumber));
         rb3d.MovePosition(s.position);
         rb3d.MoveRotation(s.rotation);
-        netPos = s.position;
+        //netPos = s.position;
 
         gameObject.SetActive(true);
 
@@ -143,7 +143,6 @@ public class N_PC : MonoBehaviour,IPunObservable
                 break;
             case DodgeballCharaCommand.MoveInput:
                 UpdateSyncedInput();
-
                 chara.C_MoveInput();
                 break;
         }
@@ -173,7 +172,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         if (pv.IsMine)
             return;
 
-        if (netDist < autoMoveThreshold)
+        if (netDist < 0.5f)
         {
             chara.syncedInput = Vector3.zero;
             chara.C_MoveInput(chara.syncedInput);
