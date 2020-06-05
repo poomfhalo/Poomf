@@ -43,7 +43,7 @@ public class Mover : MonoBehaviour, ICharaAction
 
     public float GetGravity => cf.force.y;
     public bool IsMoving => currState != MovementState.Stopped;
-    enum MovementState { Stopped,ByInput,ToPoint }
+    enum MovementState { Stopped,ByInput }
     [SerializeField] MovementState currState = MovementState.Stopped;
     [SerializeField] float accel = 10;
     public float maxSpeed = 3;
@@ -81,7 +81,6 @@ public class Mover : MonoBehaviour, ICharaAction
     [SerializeField] Vector3 usableInput = Vector3.zero;
 
     Vector3 dir = Vector3.zero;
-    Transform currMovePoint = null;
 
     Animator animator = null;
     Rigidbody rb3d = null;
@@ -141,15 +140,9 @@ public class Mover : MonoBehaviour, ICharaAction
         scheduler.StartAction(this);
         UpdateInput(newInput, withRespectTo);
     }
-    public void StartMoveTo(Transform point)
-    {
-        scheduler.StartAction(this);
-        MoveTo(point);
-    }
     public void Cancel()
     {
         currState = MovementState.Stopped;
-        currMovePoint = null;
         vel = Vector3.zero;
         speed = 0;
         XZVel = vel;
@@ -158,7 +151,6 @@ public class Mover : MonoBehaviour, ICharaAction
     public void SmoothStop(Action onCompleted)
     {
         currState = MovementState.Stopped;
-        currMovePoint = null;
         Vector3 cancelStartVel = vel;
         float startCancelSpeed = speed;
 
@@ -175,11 +167,6 @@ public class Mover : MonoBehaviour, ICharaAction
         });
     }
 
-    public void MoveTo(Transform point)
-    {
-        currState = MovementState.ToPoint;
-        this.currMovePoint = point;
-    }
     public void ReadFacingValues()
     {
         lastNonZeroDir = transform.forward;
@@ -261,6 +248,10 @@ public class Mover : MonoBehaviour, ICharaAction
     private void SetMoveDir()
     {
         dir = Vector3.zero;
+        if (input == Vector3.zero)
+        {
+            return;
+        }
 
         switch (currState)
         {
@@ -278,10 +269,6 @@ public class Mover : MonoBehaviour, ICharaAction
                     dir = dir + fwd * usableZ;
                 }
                 dir.y = 0;
-                break;
-            case MovementState.ToPoint:
-                if (currMovePoint != null)
-                    dir = (currMovePoint.position - rb3d.position).normalized;
                 break;
         }
 

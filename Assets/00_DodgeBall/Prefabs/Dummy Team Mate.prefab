@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 1626062983448845741}
   - component: {fileID: 1626062983448845740}
   - component: {fileID: 1626062983448845728}
+  - component: {fileID: 770106765873612968}
   m_Layer: 0
   m_Name: Dummy Team Mate
   m_TagString: Untagged
@@ -177,14 +178,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ee44e7d42711f4e1bae972a85f490d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &770106765873612968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1626062983448845739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37edd8b262aaa86549af522f7e76d27d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   shootablePoint: {fileID: 8722972996740017719}
   recievablePoint: {fileID: 589574651469481021}
-  ballGrabPoint: {fileID: 1626062983448845743}
-  charaName: 
-  team: 1
+  ballGrabPoint: {fileID: 0}
+  team: 0
   isEnabled: 0
   selectionIndicator: {fileID: 0}
   hasBall: 0
+  syncedInput: {x: 0, y: 0, z: 0}
+  syncedYAngle: 0
 --- !u!1 &1626062984606179360
 GameObject:
   m_ObjectHideFlags: 0

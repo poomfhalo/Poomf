@@ -28,10 +28,11 @@ public class N_PC : MonoBehaviour,IPunObservable
     PhotonView pv = null;
 
     [Header("Read Only")]
-    [SerializeField] Vector3 networkedInput = new Vector3();
-    [SerializeField] Vector3 networkedPos = new Vector3();
     [SerializeField] float lastLag = 0;
-    [SerializeField] float dist = 0;
+    [SerializeField] float netDist = 0;
+    [SerializeField] Vector3 netPos = new Vector3();
+    [SerializeField] Vector3 netDisp = new Vector3();
+    [SerializeField] Vector3 netDir = new Vector3();
 
     protected virtual void Start()
     {
@@ -68,8 +69,10 @@ public class N_PC : MonoBehaviour,IPunObservable
     private void PrepareForGame()
     {
         SpawnPoint s = FindObjectsOfType<SpawnPoint>().ToList().Find(p => p.CheckPlayer(pv.Controller.ActorNumber));
-        transform.position = s.position;
-        transform.rotation = s.rotation;
+        rb3d.MovePosition(s.position);
+        rb3d.MoveRotation(s.rotation);
+        netPos = s.position;
+
         gameObject.SetActive(true);
 
         GetComponent<DodgeballCharacter>().SetTeam(N_TeamsManager.GetTeam(ActorID));
@@ -79,31 +82,22 @@ public class N_PC : MonoBehaviour,IPunObservable
     {
         if (stream.IsWriting)
         {
-            stream.SendNext(chara.syncedInput.x);
-            stream.SendNext(chara.syncedInput.z);
-
             stream.SendNext(rb3d.position.x);
             stream.SendNext(rb3d.position.z);
-
-            stream.SendNext(rb3d.rotation.eulerAngles.y);
         }
         else if (stream.IsReading)
         {
-            networkedInput.x = (float)stream.ReceiveNext();
-            networkedInput.z = (float)stream.ReceiveNext();
-
-            networkedPos.x = (float)stream.ReceiveNext();
-            networkedPos.z = (float)stream.ReceiveNext();
+            netPos.x = (float)stream.ReceiveNext();
+            netPos.z = (float)stream.ReceiveNext();
+            UpdateNetData();
 
             TrySnapToNetPos();
             UpdateSyncedInput();
-
-            chara.syncedYAngle = (float)stream.ReceiveNext();
-
             chara.C_MoveInput();
         }
         lastLag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
     }
+
     void FixedUpdate()
     {
         UpdateSyncedInput();
@@ -113,14 +107,16 @@ public class N_PC : MonoBehaviour,IPunObservable
     {
         float currX = rb3d.position.x;
         float currZ = rb3d.position.z;
-        float ix = chara.lastInput.x;
-        float iz = chara.lastInput.z;
-        pv.RPC("RecieveCommand", RpcTarget.Others, (int)command,currX,currZ,ix,iz);
+        pv.RPC("RecieveCommand", RpcTarget.Others, (int)command,currX,currZ);
     }
 
     [PunRPC]
-    private void RecieveCommand(int c,float currX,float currZ,float ix,float iz)
+    private void RecieveCommand(int c,float currX,float currZ)
     {
+        netPos.x = currX;
+        netPos.z = currZ;
+        UpdateNetData();
+
         DodgeballCharaCommand command = (DodgeballCharaCommand)c;
         switch (command)
         {
@@ -146,12 +142,6 @@ public class N_PC : MonoBehaviour,IPunObservable
                 chara.C_Jump();
                 break;
             case DodgeballCharaCommand.MoveInput:
-                networkedPos.x = currX;
-                networkedPos.z = currZ;
-
-                networkedInput.x = ix;
-                networkedInput.z = iz;
-
                 UpdateSyncedInput();
 
                 chara.C_MoveInput();
@@ -160,15 +150,22 @@ public class N_PC : MonoBehaviour,IPunObservable
     }   
 
     //Helper Functions
+    private void UpdateNetData()
+    {
+        netDisp = (rb3d.position - netPos);
+        netDisp.y = 0;
+        netDist = netDisp.magnitude;
+        netDir = netDisp.normalized;
+    }
     private void TrySnapToNetPos()
     {
         Vector3 currPos = rb3d.position;
         currPos.y = 0;
-        dist = Vector3.Distance(rb3d.position, networkedPos);
+        netDist = Vector3.Distance(rb3d.position, netPos);
 
-        if (dist > snapXZDist)
+        if (netDist > snapXZDist)
         {
-            rb3d.MovePosition(networkedPos);
+            rb3d.MovePosition(netPos);
         }
     }
     private void UpdateSyncedInput()
@@ -176,46 +173,58 @@ public class N_PC : MonoBehaviour,IPunObservable
         if (pv.IsMine)
             return;
 
-        Vector3 currPos = rb3d.position;
-        currPos.y = 0;
-        dist = Vector3.Distance(currPos, networkedPos);
-
-        Vector3 lagPart = networkedInput * lastLag * lagWeigth;
-        Vector3 inputElement = networkedInput * inputWeigth;
-        Vector3 weigthedInput = inputElement + lagPart;
-
-        weigthedInput.y = 0;
-        weigthedInput.Normalize();
-        chara.syncedInput = weigthedInput;
-
-        if (dist >= autoMoveThreshold)
+        if (netDist < autoMoveThreshold)
         {
-            float normDist = dist / snapXZDist;
-            float catchUpVal = distToInputCurve.Evaluate(normDist) * posWeigth;
-            if (networkedInput == Vector3.zero)
-            {
-
-                Vector3 lerpedNetPos = Vector3.Lerp(rb3d.position, networkedPos, catchUpVal * Time.fixedDeltaTime);
-                rb3d.MovePosition(lerpedNetPos);
-            }
-            else
-            {
-
-                Vector3 dirToPos = (rb3d.position - networkedPos).normalized;
-                dirToPos.y = 0;
-                dirToPos.Normalize();
-                float amountInSameDir = Vector3.Dot(transform.forward, dirToPos.normalized);
-                if(amountInSameDir<0)
-                {
-                    amountInSameDir = 0;
-                }
-
-                Vector3 p1 = transform.forward * lastLag * chara.GetComponent<Mover>().maxSpeed*Time.fixedDeltaTime;
-                Vector3 p2 = dirToPos * amountInSameDir * Time.fixedDeltaTime * catchUpVal * lastLag * lagWeigth;
-                Vector3 p = (p1 + p2) / 2.0f;
-
-                rb3d.MovePosition(rb3d.position + p);
-            }
+            chara.syncedInput = Vector3.zero;
+            chara.C_MoveInput(chara.syncedInput);
+            return;
         }
+
+        chara.syncedInput = netDir;
+    }
+
+    private void DeprecatedInputSync()
+    {
+        //Vector3 currPos = rb3d.position;
+        //currPos.y = 0;
+        //dist = Vector3.Distance(currPos, networkedPos);
+
+        //Vector3 lagPart = networkedInput * lastLag * lagWeigth;
+        //Vector3 inputElement = networkedInput * inputWeigth;
+        //Vector3 weigthedInput = inputElement;
+
+        //weigthedInput.y = 0;
+        //weigthedInput.Normalize();
+        //chara.syncedInput = weigthedInput;
+
+        //if (dist >= autoMoveThreshold)
+        //{
+        //    float normDist = dist / snapXZDist;
+        //    float catchUpVal = distToInputCurve.Evaluate(normDist) * posWeigth;
+        //    if (networkedInput == Vector3.zero)
+        //    {
+
+        //        Vector3 lerpedNetPos = Vector3.Lerp(rb3d.position, networkedPos, catchUpVal * Time.fixedDeltaTime);
+        //        rb3d.MovePosition(lerpedNetPos);
+        //    }
+        //    else
+        //    {
+
+        //        Vector3 dirToPos = (rb3d.position - networkedPos).normalized;
+        //        dirToPos.y = 0;
+        //        dirToPos.Normalize();
+        //        float amountInSameDir = Vector3.Dot(transform.forward, dirToPos.normalized);
+        //        if (amountInSameDir < 0)
+        //        {
+        //            amountInSameDir = 0;
+        //        }
+
+        //        Vector3 p1 = transform.forward * lastLag * chara.GetComponent<Mover>().maxSpeed;
+        //        Vector3 p2 = dirToPos * amountInSameDir * catchUpVal * lastLag * lagWeigth;
+        //        Vector3 p = Time.fixedDeltaTime * (p1 + p2) / 2.0f;
+
+        //        rb3d.MovePosition(rb3d.position + p);
+        //    }
+        //}
     }
 }
