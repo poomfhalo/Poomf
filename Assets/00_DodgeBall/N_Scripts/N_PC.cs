@@ -96,9 +96,11 @@ public class N_PC : MonoBehaviour,IPunObservable
         else if (stream.IsReading)
         {
             if (firstRead)
+            {
+                firstRead = false;
                 return;
+            }
 
-            firstRead = false;
             netPos.x = (float)stream.ReceiveNext();
             netPos.z = (float)stream.ReceiveNext();
             UpdateNetData();
