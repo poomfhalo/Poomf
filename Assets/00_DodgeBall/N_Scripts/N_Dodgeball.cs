@@ -54,7 +54,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
                 if (photonView.IsMine)
                     break;
 
-                rb3d.isKinematic = true;
+                ball.SetKinematicState(true);
                 Vector3 targetPos = Vector3.MoveTowards(rb3d.position, netPos, catchUpSpeed * Time.fixedDeltaTime);
                 rb3d.MovePosition(targetPos);
                 break;
