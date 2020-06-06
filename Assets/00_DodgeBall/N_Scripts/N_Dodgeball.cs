@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using Photon.Pun;
+using GW_Lib;
 
 [RequireComponent(typeof(Dodgeball))]
 public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
 {
     [SerializeField] bool disableOnStart = true;
+    [SerializeField] float timeBeforeBallLaunch = 1f;
     [Header("Read Only")]
     [SerializeField] Vector3 netPos = new Vector3();
 
@@ -72,6 +74,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     private void PrepareForGame()
     {
         gameObject.SetActive(true);
-        ball.LaunchUp(-1);
+        this.InvokeDelayed(timeBeforeBallLaunch, () => ball.LaunchUp(-1));
     }
 }
