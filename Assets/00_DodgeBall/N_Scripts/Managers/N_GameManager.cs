@@ -84,7 +84,8 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback
 
     public void Initialize()
     {
-        localPlayer = N_Extentions.N_MakeObj(N_Prefab.PlayerManager, Vector3.zero, Quaternion.identity);
+        if(!localPlayer)
+            localPlayer = N_Extentions.N_MakeObj(N_Prefab.PlayerManager, Vector3.zero, Quaternion.identity);
 
         if (!PhotonNetwork.IsMasterClient)
             return;

@@ -63,6 +63,10 @@ public class N_TeamsManager : N_Singleton<N_TeamsManager>
     {
         foreach (var t in mpTeams)
         {
+            t.actors.RemoveAll(a => N_Extentions.GetCharacter(a) == null);
+        }
+        foreach (var t in mpTeams)
+        {
             foreach (var actorNum in t.actors)
             {
                 DodgeballCharacter chara = N_Extentions.GetCharacter(actorNum);
