@@ -65,7 +65,6 @@ public class Mover : MonoBehaviour, ICharaAction
 
     [Header("Move To Point Data")]
     [SerializeField] float slowingDist = 0.5f;
-    [SerializeField] float smoothingDist = 0.2f;
     [SerializeField] float stoppingDist = 0.11f;
     [Header("Turning")]
     [SerializeField] float turningSpeed = 290;
@@ -254,17 +253,10 @@ public class Mover : MonoBehaviour, ICharaAction
         {
             vel = vel + dir * accel * Time.fixedDeltaTime;
         }
-        else if (distToLastPos < slowingDist && distToLastPos > smoothingDist)
+        else if (distToLastPos < slowingDist && distToLastPos > stoppingDist)
         {
             float distFactor = distToLastPos / slowingDist;
             vel = dir * distFactor * maxSpeed;
-        }
-        else if(distToLastPos<smoothingDist && distToLastPos>stoppingDist)
-        {
-            float factor = smoothingDist / slowingDist;
-            Vector3 targetPos = Vector3.MoveTowards(rb3d.position, input, maxSpeed * factor * Time.fixedDeltaTime);
-            rb3d.MovePosition(targetPos);
-            vel = Vector3.zero;
         }
         else if (distToLastPos < stoppingDist)
         {
