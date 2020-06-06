@@ -1,30 +1,35 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Photon.Pun;
-using System;
 
 [RequireComponent(typeof(Dodgeball))]
-public class N_Dodgeball : MonoBehaviour, IPunObservable
+public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
 {
+    [SerializeField] bool disableOnStart = true;
     [Header("Read Only")]
-    [SerializeField] Vector3 networkedPos = new Vector3();
+    [SerializeField] Vector3 netPos = new Vector3();
 
     Rigidbody rb3d = null;
     PhotonView pv = null;
     Dodgeball ball = null;
 
-    void OnEnable()
+    public override void OnEnable()
     {
+        base.OnEnable();
         pv = GetComponent<PhotonView>();
         ball = GetComponent<Dodgeball>();
         rb3d = GetComponent<Rigidbody>();
 
         ball.OnCommandActivated += SendCommand;
     }
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        ball.OnCommandActivated -= SendCommand;
+    }
     void Start()
     {
-
+        if (disableOnStart)
+            gameObject.SetActive(false);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -38,9 +43,9 @@ public class N_Dodgeball : MonoBehaviour, IPunObservable
         }
         else if(stream.IsReading)
         {
-            networkedPos.x = (float)stream.ReceiveNext();
-            networkedPos.y = (float)stream.ReceiveNext();
-            networkedPos.z = (float)stream.ReceiveNext();
+            netPos.x = (float)stream.ReceiveNext();
+            netPos.y = (float)stream.ReceiveNext();
+            netPos.z = (float)stream.ReceiveNext();
             ball.ballState = (Dodgeball.BallState)(int)stream.ReceiveNext();
         }
     }
@@ -63,5 +68,10 @@ public class N_Dodgeball : MonoBehaviour, IPunObservable
                 break;
         }
     }
-
+    [PunRPC]
+    private void PrepareForGame()
+    {
+        gameObject.SetActive(true);
+        ball.LaunchUp(-1);
+    }
 }

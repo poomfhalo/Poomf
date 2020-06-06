@@ -4,6 +4,9 @@ using System;
 using GW_Lib;
 using GW_Lib.Utility;
 
+//TODO: based on Dodgeball speed, we increase size of body colliders of characters up to 4, so that, the dodge ball
+//does not get missed by smaller colliders, when its going too fast.
+//TODO: dynamically find the gravity, depending on distance, such that, speed never exceeds a certain value?
 public enum DodgeballCommand { GoToChara }
 public class Dodgeball : Singleton<Dodgeball>
 {
@@ -17,6 +20,7 @@ public class Dodgeball : Singleton<Dodgeball>
     [SerializeField] float leavingHandsTime = 0.1f;
     [SerializeField] float defGrabTime = 0.1f;
     [SerializeField] CollisionDelegator bodyCol = null;
+    [SerializeField] float gameStartLaunchHeigth = 3;
 
     [Header("Read Only")]
     [SerializeField] bool isCaught = false;
@@ -24,10 +28,6 @@ public class Dodgeball : Singleton<Dodgeball>
     [SerializeField] float currTweener = 0;
     [Header("Synced Variables")]
     public BallState ballState = BallState.Flying;
-
-    //TODO: based on Dodgeball speed, we increase size of body colliders of characters up to 4, so that, the dodge ball
-    //does not get missed by smaller colliders, when its going too fast.
-    //TODO: dynamically find the gravity, depending on distance, such that, speed never exceeds a certain value?
 
     Rigidbody rb3d = null;
     ConstantForce cf = null;
@@ -53,6 +53,7 @@ public class Dodgeball : Singleton<Dodgeball>
         isCaught = false;
         holder = null;
         currTweener = 0;
+        transform.DOKill();
     }
 
     void OnTriggerEnter(Collider col)
@@ -76,7 +77,6 @@ public class Dodgeball : Singleton<Dodgeball>
             ballState = BallState.Flying;
         }
     }
-
     private void OnBodyEntered(Collision col)
     {
 
@@ -86,12 +86,12 @@ public class Dodgeball : Singleton<Dodgeball>
         //m_ballState = BallState.PostContact;
     }
 
+
     private static void SetHolder(DodgeballCharacter chara)
     {
         instance.isCaught = true;
         instance.holder = chara;
     }
-
     public static void GoLaunchTo(DodgeballCharacter chara,Vector3 launchVel,Vector3 gravity, Action onCompleted)
     {
         instance.rb3d.isKinematic = false;
@@ -101,7 +101,6 @@ public class Dodgeball : Singleton<Dodgeball>
         instance.cf.force = gravity;
         instance.ballState = BallState.Flying;
     }
-
     public static void GoTo(DodgeballCharacter chara, Action onCompleted ,float grabTime = -1)
     {
         instance.ballState = BallState.GoingToChara;
@@ -115,7 +114,7 @@ public class Dodgeball : Singleton<Dodgeball>
         instance.rb3d.isKinematic = true;
 
         Vector3 startPos = instance.position;
-        DOTween.To(instance.Getter, instance.Setter, 1, dur).OnUpdate(OnUpdate).OnComplete(OnComplete).SetEase(Ease.InOutSine);
+        DOTween.To(Getter, Setter, 1, dur).OnUpdate(OnUpdate).OnComplete(OnComplete).SetEase(Ease.InOutSine);
 
         void OnUpdate()
         {
@@ -130,14 +129,23 @@ public class Dodgeball : Singleton<Dodgeball>
             instance.currTweener = 0;
             instance.transform.SetParent(chara.BallGrabPoint);
         }
+        void Setter(float pNewValue)
+        {
+            instance.currTweener = pNewValue;
+        }
+        float Getter()
+        {
+            return instance.currTweener;
+        }
     }
+    public void LaunchUp(float byHeigth = -1)
+    {
+        if (Mathf.Abs(byHeigth - -1) < Mathf.Epsilon)
+            byHeigth = gameStartLaunchHeigth;
 
-    private void Setter(float pNewValue)
-    {
-        instance.currTweener = pNewValue;
-    }
-    private float Getter()
-    {
-        return instance.currTweener;
+        rb3d.isKinematic = false;
+        rb3d.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        float yVel = Extentions.GetJumpVelocity(byHeigth, cf.force.y);
+        rb3d.velocity = Vector3.up * yVel;
     }
 }

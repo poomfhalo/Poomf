@@ -133,6 +133,7 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback
             case N_OnTeamsAreSynced:
                 SetUpStartingPositions();
                 PreparePlayersForGame();
+                PrepareBallForGame();
                 break;
         }
     }
@@ -183,5 +184,9 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback
             N_PC n_pc = N_TeamsManager.GetPlayer(player.ActorNumber);
             n_pc.GetComponent<PhotonView>().RPC("PrepareForGame", RpcTarget.All);
         }
+    }
+    private void PrepareBallForGame()
+    {
+        N_Dodgeball.instance.GetComponent<PhotonView>().RPC("PrepareForGame",RpcTarget.AllViaServer);
     }
 }
