@@ -191,9 +191,4 @@ public class DodgeballCharacter : MonoBehaviour
         OnCommandActivated?.Invoke(DodgeballCharaCommand.Jump);
     }
     #endregion
-
-    public void ClearInputDelay()
-    {
-        mover.movementMode = Mover.MovementType.ToPoint;
-    }
 }

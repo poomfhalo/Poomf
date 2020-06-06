@@ -48,11 +48,14 @@ public class N_PC : MonoBehaviour,IPunObservable
         pv = GetComponent<PhotonView>();
         rb3d = GetComponent<Rigidbody>();
         chara = GetComponent<DodgeballCharacter>();
-        if(GetComponent<PhotonView>().IsMine)
+        if (GetComponent<PhotonView>().IsMine)
+        {
             chara.OnCommandActivated += SendCommand;
+            chara.GetComponent<Mover>().movementMode = Mover.MovementType.ByInput;
+        }
         else
         {
-            chara.ClearInputDelay();
+            chara.GetComponent<Mover>().movementMode = Mover.MovementType.ToPoint;
         }
     }
     void OnDisable()

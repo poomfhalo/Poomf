@@ -375,6 +375,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: AI Chara
       objectReference: {fileID: 0}
+    - target: {fileID: 6963099543513805181, guid: c395b7056ca0ebe79951bbb94ce6667d,
+        type: 3}
+      propertyPath: movementMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6963099543513805183, guid: c395b7056ca0ebe79951bbb94ce6667d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -452,7 +457,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveTarget: {fileID: 1953382152}
-  stoppingDist: 0.5
+  lastDist: 0
 --- !u!4 &665735301 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1626062983448845743, guid: eadd1616fa10fae31af875c0fa1f7f8d,
