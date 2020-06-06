@@ -42,12 +42,13 @@ public class Mover : MonoBehaviour, ICharaAction
     }
 
     public float GetGravity => cf.force.y;
-    public bool IsMoving => currState != MovementState.Stopped;
-    enum MovementState { Stopped,ByInput }
-    [SerializeField] MovementState currState = MovementState.Stopped;
+
+    public enum MovementType { ByInput,ToPoint }
+    public MovementType movementMode = MovementType.ByInput;
     [SerializeField] float accel = 10;
     public float maxSpeed = 3;
     [SerializeField] float gravity = -20;
+    public bool IsMoving = false;
 
     [Header("Slowing Down")]
     [Tooltip("how fast speed decreases, when no input is being applied")]
@@ -62,24 +63,27 @@ public class Mover : MonoBehaviour, ICharaAction
     [Tooltip("If we enter an action, how long it will take the character to stop in seconds")]
     [SerializeField] float cancelationTime = 0.1f;
 
+    [Header("Move To Point Data")]
+    [SerializeField] float slowingDist = 0.5f;
+    [SerializeField] float stoppingDist = 0.11f;
     [Header("Turning")]
     [SerializeField] float turningSpeed = 290;
 
     [Header("Input Saftey")]
     [SerializeField] float minInputTime = 0.08f;
     [SerializeField] float inputSensitivity = 3f;
-    public float minMoveInput = 0.325f;
-    public bool usesInputDelay = true;
+    [SerializeField] float minMoveInput = 0.325f;
+    [SerializeField] bool usesInputDelay = true;
 
     [Header("Read Only")]
     [SerializeField] float speed = 0;
-    [SerializeField] Vector3 lastNonZeroDir = Vector3.zero;
     [SerializeField] Vector3 vel = Vector3.zero;
     [SerializeField] Vector3 lastNonZeroVel = Vector3.zero;
     public Vector3 input = Vector3.zero;
     [SerializeField] float minInputTimeCounter = 0;
     [SerializeField] int movabilityDir = 0;
-    [SerializeField] Vector3 usableInput = Vector3.zero;
+    [SerializeField] Vector3 smoothMoveInput = Vector3.zero;
+    [SerializeField] float distToLastPos = 0;
 
     Vector3 dir = Vector3.zero;
 
@@ -109,7 +113,7 @@ public class Mover : MonoBehaviour, ICharaAction
         if (!IsMoving)
             return;
 
-        if (usesInputDelay)
+        if (usesInputDelay && movementMode == MovementType.ByInput)
         {
             bool isZero = Mathf.Abs(minInputTimeCounter) < Mathf.Epsilon;
 
@@ -118,13 +122,14 @@ public class Mover : MonoBehaviour, ICharaAction
             if (isGoingToMove && minInputTimeCounter < 1)
                 return;
         }
+
         animator.SetFloat("Speed", speed);
     }
     void FixedUpdate()
     {
-        usableInput = Vector3.MoveTowards(usableInput, input, inputSensitivity * Time.fixedDeltaTime);
+        smoothMoveInput = Vector3.MoveTowards(smoothMoveInput, input, inputSensitivity * Time.fixedDeltaTime);
 
-        if (usesInputDelay)
+        if (usesInputDelay && movementMode == MovementType.ByInput)
         {
             minInputTimeCounter = minInputTimeCounter + Time.fixedDeltaTime / minInputTime * movabilityDir;
             minInputTimeCounter = Mathf.Clamp(minInputTimeCounter, 0, 1);
@@ -133,9 +138,10 @@ public class Mover : MonoBehaviour, ICharaAction
                 return;
             if (isGoingToMove && minInputTimeCounter < 1)
                 return;
-            if (!IsMoving)
-                return;
         }
+
+        if (!IsMoving)
+            return;
         SetMoveDir();
         SetVel();
         TurnToDir(lastNonZeroVel,turningSpeed);
@@ -148,7 +154,7 @@ public class Mover : MonoBehaviour, ICharaAction
     }
     public void Cancel()
     {
-        currState = MovementState.Stopped;
+        IsMoving = false;
         vel = Vector3.zero;
         speed = 0;
         XZVel = vel;
@@ -156,7 +162,7 @@ public class Mover : MonoBehaviour, ICharaAction
     }
     public void SmoothStop(Action onCompleted)
     {
-        currState = MovementState.Stopped;
+        IsMoving = false;
         Vector3 cancelStartVel = vel;
         float startCancelSpeed = speed;
 
@@ -171,36 +177,6 @@ public class Mover : MonoBehaviour, ICharaAction
             animator.SetFloat("Speed", speed);
             onCompleted?.Invoke();
         });
-    }
-
-    public void ReadFacingValues()
-    {
-        lastNonZeroDir = transform.forward;
-        lastNonZeroVel = lastNonZeroDir * (stoppingSpeed + 0.05f);
-    }
-    public void UpdateInput(Vector3 newInput,Transform withRespectTo)
-    {
-        if(withRespectTo == null)
-        {
-            right = Vector3.right;
-            fwd = Vector3.forward;
-        }
-        else
-        {
-            right = withRespectTo.right;
-            fwd = withRespectTo.forward;
-        }
-        UpdateInput(newInput);
-    }
-    public void UpdateInput(Vector3 input)
-    {
-        currState = MovementState.ByInput;
-        this.input = input;
-        movabilityDir = 1;
-        if (input == Vector3.zero)
-        {
-            movabilityDir = -1;
-        }
     }
 
     public void TurnToPoint(Vector3 pos, float turnSpeed)
@@ -221,17 +197,37 @@ public class Mover : MonoBehaviour, ICharaAction
     }
     private void SetVel()
     {
+        switch (movementMode)
+        {
+            case MovementType.ByInput:
+                SetVelByInput();
+                break;
+            case MovementType.ToPoint:
+                SetVelByPoint();
+                break;
+        }
+
+        speed = vel.magnitude;
+        if(speed>dampingSpeed)
+        {
+            lastNonZeroVel = vel;
+            vel = Vector3.ClampMagnitude(vel, maxSpeed);
+        }
+        XZVel = vel;
+    }
+    private void SetVelByInput()
+    {
         if (dir != Vector3.zero)
         {
-            vel = vel + dir * accel * Time.fixedDeltaTime;
+            vel = vel + dir* accel * Time.fixedDeltaTime;
         }
         else
         {
             if (speed > dampingSpeed)
             {
-                vel = vel + -vel.normalized * deAccel * Time.fixedDeltaTime;
+                vel = vel + -vel.normalized* deAccel * Time.fixedDeltaTime;
             }
-            if (speed < dampingSpeed && speed > stoppingSpeed)
+            if (speed<dampingSpeed && speed> stoppingSpeed)
             {
                 vel = vel / speedDamper;
             }
@@ -242,46 +238,85 @@ public class Mover : MonoBehaviour, ICharaAction
                     Cancel();
             }
         }
-        speed = vel.magnitude;
-        if(speed>dampingSpeed)
-        {
-            lastNonZeroVel = vel;
-            vel = Vector3.ClampMagnitude(vel, maxSpeed);
-        }
-        XZVel = vel;
     }
-
+    private void SetVelByPoint()
+    {
+        if (distToLastPos > slowingDist)
+        {
+            vel = vel + dir * accel * Time.fixedDeltaTime;
+        }
+        else if (distToLastPos < slowingDist && distToLastPos > stoppingDist)
+        {
+            float distFactor = distToLastPos / slowingDist;
+            vel = dir * distFactor * maxSpeed;
+        }
+        else if (distToLastPos < stoppingDist)
+        {
+            vel = Vector3.zero;
+            Cancel();
+        }
+    }
     private void SetMoveDir()
     {
         dir = Vector3.zero;
-        if (input == Vector3.zero)
+        switch (movementMode)
         {
-            return;
-        }
-
-        switch (currState)
-        {
-            case MovementState.ByInput:
-                float ax = Mathf.Abs(usableInput.x);
+            case MovementType.ByInput:
+                float ax = Mathf.Abs(smoothMoveInput.x);
                 if (ax > 0)
                 {
-                    float usableX = ax <= minMoveInput ? 0 : usableInput.x;
+                    float usableX = ax <= minMoveInput ? 0 : smoothMoveInput.x;
                     dir = dir + right * usableX;
                 }
-                float az = Mathf.Abs(usableInput.z);
+                float az = Mathf.Abs(smoothMoveInput.z);
                 if (az > 0)
                 {
-                    float usableZ = az <= minMoveInput ? 0 : usableInput.z;
+                    float usableZ = az <= minMoveInput ? 0 : smoothMoveInput.z;
                     dir = dir + fwd * usableZ;
                 }
                 dir.y = 0;
+                break;
+            case MovementType.ToPoint:
+                dir = input - rb3d.position;
+                dir.y = 0;
+                distToLastPos = dir.magnitude;
                 break;
         }
 
         if (dir == Vector3.zero)
             return;
 
-        lastNonZeroDir = dir;
         dir.Normalize();
     }
+
+    #region UpdateInput
+    public void ReadFacingValues()
+    {
+        lastNonZeroVel = transform.forward * (stoppingSpeed + 0.05f);
+    }
+    public void UpdateInput(Vector3 newInput, Transform withRespectTo)
+    {
+        if (withRespectTo == null)
+        {
+            right = Vector3.right;
+            fwd = Vector3.forward;
+        }
+        else
+        {
+            right = withRespectTo.right;
+            fwd = withRespectTo.forward;
+        }
+        UpdateInput(newInput);
+    }
+    public void UpdateInput(Vector3 input)
+    {
+        IsMoving = true;
+        this.input = input;
+        movabilityDir = 1;
+        if (input == Vector3.zero && movementMode == MovementType.ByInput)
+        {
+            movabilityDir = -1;
+        }
+    }
+    #endregion
 }

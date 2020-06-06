@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AIController : MonoBehaviour
 {
     [SerializeField] Transform moveTarget = null;
-    [SerializeField] float stoppingDist = 0.5f;
-
+    [Header("Read Only")]
+    [SerializeField] float lastDist = 0;
     DodgeballCharacter chara = null;
     Rigidbody rb3d = null;
 
@@ -20,14 +18,9 @@ public class AIController : MonoBehaviour
         if (!moveTarget)
             return;
 
-        Vector3 disp = rb3d.position - moveTarget.position;
-        if (disp.magnitude < stoppingDist)
-        {
-            chara.C_MoveInput(Vector3.zero);
-            return;
-        }
+        Vector3 disp = moveTarget.position - rb3d.position;
         disp.y = 0;
-        disp.Normalize();
-        chara.C_MoveInput(disp);
+        lastDist = disp.magnitude;
+        chara.C_MoveInput(moveTarget.position);
     }
 }

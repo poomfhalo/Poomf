@@ -42,9 +42,6 @@ public class DodgeballCharacter : MonoBehaviour
 
     [Header("Read Only")]
     [SerializeField] bool hasBall = false;
-    [Header("Synced Variables")]
-    public Vector3 syncedInput = new Vector3();
-    public float syncedYAngle = 0;
 
     protected Rigidbody rb3d = null;
     protected Animator animator = null;
@@ -112,7 +109,6 @@ public class DodgeballCharacter : MonoBehaviour
     #region Commands
     public void C_MoveInput(Vector3 i)
     {
-        syncedInput = i;
         if (jumper.IsJumping)
         {
             jumper.UpdateInput(i);
@@ -122,10 +118,7 @@ public class DodgeballCharacter : MonoBehaviour
         mover.StartMoveByInput(i, cam.transform);
         OnCommandActivated?.Invoke(DodgeballCharaCommand.MoveInput);
     }
-    public void C_MoveInput()
-    {
-        C_MoveInput(syncedInput);
-    }
+
     public void C_Catch()
     {
         if (HasBall)
@@ -201,7 +194,6 @@ public class DodgeballCharacter : MonoBehaviour
 
     public void ClearInputDelay()
     {
-        mover.usesInputDelay = false;
-        mover.minMoveInput = 0;
+        mover.movementMode = Mover.MovementType.ToPoint;
     }
 }

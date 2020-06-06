@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 public enum TeamTag { A, B }
 
@@ -16,6 +15,11 @@ public class Team
 
     public void Join(DodgeballCharacter player)
     {
+        if (!player)
+        {
+            UnityEngine.Debug.Log("Null player trying to join ");
+            return;
+        }
         if (IsInTeam(player.charaName))
             return;
 

@@ -97,7 +97,6 @@ public class N_PC : MonoBehaviour,IPunObservable
 
             TrySnapToNetPos();
             UpdateSyncedInput();
-            chara.C_MoveInput();
         }
         lastLag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
     }
@@ -148,7 +147,6 @@ public class N_PC : MonoBehaviour,IPunObservable
                 break;
             case DodgeballCharaCommand.MoveInput:
                 UpdateSyncedInput();
-                chara.C_MoveInput();
                 break;
         }
     }   
@@ -179,12 +177,13 @@ public class N_PC : MonoBehaviour,IPunObservable
 
         if (netDist < autoMoveThreshold)
         {
-            chara.syncedInput = Vector3.zero;
-            chara.C_MoveInput(chara.syncedInput);
+            Debug.LogWarning("WTF");
+            //chara.C_MoveInput(Vector3.zero);
+            chara.GetComponent<Mover>().Cancel();
             return;
         }
 
-        chara.syncedInput = netDir;
+        chara.C_MoveInput(netDir);
     }
 
     private void DeprecatedInputSync()
@@ -230,5 +229,14 @@ public class N_PC : MonoBehaviour,IPunObservable
         //        rb3d.MovePosition(rb3d.position + p);
         //    }
         //}
+    }
+
+    void OnDrawGizmos()
+    {
+        Color c = Color.red;
+        c.a = 0.5f;
+        Gizmos.color = c;
+
+        Gizmos.DrawSphere(netPos, autoMoveThreshold);
     }
 }
