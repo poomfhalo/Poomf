@@ -138,11 +138,12 @@ public class Dodgeball : Singleton<Dodgeball>
             return instance.currTweener;
         }
     }
-    public void LaunchUp(float byHeigth = -1)
+    public void LaunchUp(float byHeigth, float launchGravity)
     {
-        if (Mathf.Abs(byHeigth - -1) < Mathf.Epsilon)
+        if (Mathf.Approximately(byHeigth,3))
             byHeigth = gameStartLaunchHeigth;
 
+        cf.force = Vector3.up * launchGravity;
         rb3d.isKinematic = false;
         rb3d.collisionDetectionMode = CollisionDetectionMode.Continuous;
         float yVel = Extentions.GetJumpVelocity(byHeigth, cf.force.y);

@@ -6,7 +6,6 @@ using GW_Lib;
 public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
 {
     [SerializeField] bool disableOnStart = true;
-    [SerializeField] float timeBeforeBallLaunch = 1f;
     [Header("Read Only")]
     [SerializeField] Vector3 netPos = new Vector3();
 
@@ -70,10 +69,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
                 break;
         }
     }
-    [PunRPC]
-    private void PrepareForGame()
-    {
-        gameObject.SetActive(true);
-        this.InvokeDelayed(timeBeforeBallLaunch, () => ball.LaunchUp(-1));
-    }
+
+
 }

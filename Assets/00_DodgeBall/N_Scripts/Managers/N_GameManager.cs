@@ -6,18 +6,6 @@ using System.Linq;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 
-/// <summary>
-/// How does mp work?
-/// 1.ShortStarter handles, starting when there are enough players, whether we came from MP_Launcher or MP_Game
-/// 2.CreatePlayers is called, which handles, creating all N_PlayersManagers along side.
-/// 3.We then call SetUpTeams only on the Master Client.
-/// 4.once Teams for PlayerManagers are assigned, we spread data to other clients
-/// 5.each player Manager, handles creating his own PC/N_PC, no need to transfer ownership, as its handled by photon.
-/// 6.Once PC is created, its disabled, and on server, we recieve an event called OnCreatedPC
-/// 7.once all players have a PC, we Sync the N_TeamsManager multiplayer connected teams, to local TeamsManager
-/// 8.we assign the starting positions
-/// </summary>
-
 public enum N_Prefab { PlayerManager,Player }
 /// <summary>
 /// Script Flow:
@@ -31,15 +19,7 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback
 {
     #region Properties
     public GameObject localPlayer = null;
-    public static RaiseEventOptions GetDefOps
-    {
-        get
-        {
-            RaiseEventOptions ops = new RaiseEventOptions();
-            ops.Receivers = ReceiverGroup.All;
-            return ops;
-        }
-    }
+   
     public const byte N_OnCreatedPC = 0;
     public const byte N_OnTeamsAreSynced = 1;
 
@@ -96,12 +76,12 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback
         {
             if (p.ActorNumber % 2 == 0)
             {
-                Debug.Log(p.NickName + " Joined team A");
+                Debug.Log(p.NickName + " Added to team A");
                 teams.AddPlayer(TeamTag.A, p.ActorNumber);
             }
             else
             {
-                Debug.Log(p.NickName + " Joined team B");
+                Debug.Log(p.NickName + " Added to team B");
                 teams.AddPlayer(TeamTag.B, p.ActorNumber);
             }
         }
@@ -131,53 +111,24 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback
                 }
                 break;
             case N_OnTeamsAreSynced:
-                SetUpStartingPositions();
-                PreparePlayersForGame();
-                PrepareBallForGame();
+                M_SetUpStartingPositions();
+                M_PreparePlayersForGame();
+                M_PrepareForGame();
                 break;
         }
     }
 
-    public static void N_RaiseEvent(byte b, object content,bool raiseOnMasterOnly = true)
+    //Master Functions
+    private void M_SetUpStartingPositions()
     {
-        if (raiseOnMasterOnly && !PhotonNetwork.IsMasterClient)
-            return;
-
-        PhotonNetwork.RaiseEvent(b, content, GetDefOps, SendOptions.SendReliable);
-    }
-
-    private void SetUpStartingPositions()
-    {
-        if (!PhotonNetwork.IsMasterClient)
-            return;
-
-        List<SpawnPoint> playerSpawnPoints = FindObjectsOfType<SpawnPoint>().ToList();
-        SpawnPoint GetSpawnPosition(Player player)
-        {
-            TeamTag t = N_TeamsManager.GetTeam(player.ActorNumber);
-            List<SpawnPoint> spawnPoints = playerSpawnPoints.FindAll(p => p.CheckTeam(t));
-            SpawnPoint s = null;
-
-            int maxTries = 60;
-            do
-            {
-                int i = UnityEngine.Random.Range(0, spawnPoints.Count);
-                s = spawnPoints[i];
-                maxTries = maxTries - 1;
-                if (maxTries <= 0)
-                    break;
-            } while (s == null || s.HasPlayer);
-
-            return s;
-        }
-
         foreach (var player in PhotonNetwork.PlayerList)
         {
-            SpawnPoint s = GetSpawnPosition(player);
+            TeamTag t = N_TeamsManager.GetTeam(player.ActorNumber);
+            SpawnPoint s = DodgeballGameManager.GetSpawnPosition(t);
             s.GetComponent<PhotonView>().RPC("Fill", RpcTarget.All, player.ActorNumber);
         }
     }
-    private void PreparePlayersForGame()
+    private void M_PreparePlayersForGame()
     {
         foreach (var player in PhotonNetwork.PlayerList)
         {
@@ -185,8 +136,15 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback
             n_pc.GetComponent<PhotonView>().RPC("PrepareForGame", RpcTarget.All);
         }
     }
-    private void PrepareBallForGame()
+    private void M_PrepareForGame()
     {
-        N_Dodgeball.instance.GetComponent<PhotonView>().RPC("PrepareForGame",RpcTarget.AllViaServer);
+        photonView.RPC("PrepareForGame",RpcTarget.AllViaServer);
+    }
+
+
+    [PunRPC]
+    private void PrepareForGame()
+    {
+        DodgeballGameManager.instance.StartBallLaunch();
     }
 }

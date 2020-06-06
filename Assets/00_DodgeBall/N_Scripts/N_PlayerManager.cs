@@ -32,7 +32,7 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
         pc.GetComponent<PhotonView>().RPC("OnCreated", RpcTarget.All, GetComponent<PhotonView>().ViewID);
         yield return new WaitForSeconds(0.1f);
         Debug.Log(photonView.Controller + " Created a PC ", pc);
-        N_GameManager.N_RaiseEvent(N_GameManager.N_OnCreatedPC, null, false);
+        N_Extentions.N_RaiseEvent(N_GameManager.N_OnCreatedPC, null);
     }
 
     private void OnTeamsAreSynced()

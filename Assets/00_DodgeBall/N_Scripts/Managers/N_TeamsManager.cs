@@ -2,7 +2,6 @@
 using UnityEngine;
 using Photon.Pun;
 using System.Linq;
-using System;
 
 public class N_TeamsManager : N_Singleton<N_TeamsManager>
 {
@@ -73,7 +72,7 @@ public class N_TeamsManager : N_Singleton<N_TeamsManager>
                 TeamsManager.JoinTeam(t.t, chara);
             }
         }
-        N_GameManager.N_RaiseEvent(N_GameManager.N_OnTeamsAreSynced,null);
+        N_Extentions.N_RaiseEvent(N_GameManager.N_OnTeamsAreSynced,null);
     }
 
     //Helper Functions

@@ -3,6 +3,8 @@ using UnityEngine;
 using Photon.Pun;
 using System.Linq;
 using System;
+using ExitGames.Client.Photon;
+using Photon.Realtime;
 
 public static class N_Extentions
 {
@@ -27,6 +29,17 @@ public static class N_Extentions
     }
 
     private static List<LoadablePrefab> m_prefabs = new List<LoadablePrefab>();
+
+    public static RaiseEventOptions GetDefOps
+    {
+        get
+        {
+            RaiseEventOptions ops = new RaiseEventOptions();
+            ops.Receivers = ReceiverGroup.All;
+            return ops;
+        }
+    }
+
     public static GameObject N_MakeObj(N_Prefab prefab, Vector3 pos, Quaternion rot, byte group = 0, object[] data = null)
     {
         LoadablePrefab p = GetPrefab(prefab);
@@ -85,5 +98,12 @@ public static class N_Extentions
                 return t;
         }
         return null;
+    }
+    public static void N_RaiseEvent(byte b, object content, bool raiseOnMasterOnly = true)
+    {
+        if (raiseOnMasterOnly && !PhotonNetwork.IsMasterClient)
+            return;
+
+        PhotonNetwork.RaiseEvent(b, content, GetDefOps, SendOptions.SendReliable);
     }
 }
