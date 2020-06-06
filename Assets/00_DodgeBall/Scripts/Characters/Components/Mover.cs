@@ -124,7 +124,15 @@ public class Mover : MonoBehaviour, ICharaAction
                 return;
         }
 
-        animator.SetFloat("Speed", speed);
+        switch (movementMode)
+        {
+            case MovementType.ByInput:
+                animator.SetFloat("Speed", speed);
+                break;
+            case MovementType.ToPoint:
+                animator.SetFloat("Speed", speed, speedDamper, Time.deltaTime);
+                break;
+        }
     }
     void FixedUpdate()
     {
