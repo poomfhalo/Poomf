@@ -33,6 +33,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     [SerializeField] Vector3 netPos = new Vector3();
     [SerializeField] Vector3 netDisp = new Vector3();
     [SerializeField] Vector3 netDir = new Vector3();
+    bool firstRead = true;
 
     protected virtual void Start()
     {
@@ -78,7 +79,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         SpawnPoint s = FindObjectsOfType<SpawnPoint>().ToList().Find(p => p.CheckPlayer(pv.Controller.ActorNumber));
         transform.position = s.position;
         transform.rotation = s.rotation;
-        //netPos = s.position;
+        netPos = s.position;
 
         gameObject.SetActive(true);
 
@@ -94,6 +95,10 @@ public class N_PC : MonoBehaviour,IPunObservable
         }
         else if (stream.IsReading)
         {
+            if (firstRead)
+                return;
+
+            firstRead = false;
             netPos.x = (float)stream.ReceiveNext();
             netPos.z = (float)stream.ReceiveNext();
             UpdateNetData();
