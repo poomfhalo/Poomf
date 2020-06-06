@@ -180,13 +180,13 @@ public class N_PC : MonoBehaviour,IPunObservable
 
         if (netDist < autoMoveThreshold)
         {
-            Debug.LogWarning("WTF");
+            //Debug.LogWarning("WTF");
             //chara.C_MoveInput(Vector3.zero);
-            chara.GetComponent<Mover>().Cancel();
+            //chara.GetComponent<Mover>().Cancel();
             return;
         }
 
-        chara.C_MoveInput(netDir);
+        chara.C_MoveInput(netPos);
     }
 
     private void DeprecatedInputSync()
