@@ -5,6 +5,7 @@ using GW_Lib;
 [RequireComponent(typeof(Dodgeball))]
 public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
 {
+    [SerializeField] float catchUpSpeed = 0;
     [Header("Read Only")]
     [SerializeField] Vector3 netPos = new Vector3();
 
@@ -44,6 +45,21 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
             ball.ballState = (Dodgeball.BallState)(int)stream.ReceiveNext();
         }
     }
+
+    void FixedUpdate()
+    {
+        switch (ball.ballState)
+        {
+            case Dodgeball.BallState.OnGround:
+                if (photonView.IsMine)
+                    break;
+
+                rb3d.isKinematic = true;
+                Vector3 targetPos = Vector3.MoveTowards(rb3d.position, netPos, catchUpSpeed * Time.fixedDeltaTime);
+                rb3d.MovePosition(targetPos);
+                break;
+        }
+    }
     private void SendCommand(DodgeballCommand command)
     {
         int holder = ball.GetHolder().GetComponent<N_PC>().ActorID;
@@ -59,7 +75,8 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         {
             case DodgeballCommand.GoToChara:
                 Debug.Log("Ball().GoingToChara Command RPC");
-                //Dodgeball.GoTo(n_holder,);
+                if (!n_holder.HasBall)
+                    n_holder.GetComponent<BallCatcher>().StartCatchAction();
                 break;
         }
     }

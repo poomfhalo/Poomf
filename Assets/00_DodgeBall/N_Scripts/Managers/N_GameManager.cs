@@ -76,12 +76,12 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback
         {
             if (p.ActorNumber % 2 == 0)
             {
-                Debug.Log(p.NickName + " Added to team A");
+                Debug.Log(p.NickName + " Added to team A with num :: " + p.ActorNumber);
                 teams.AddPlayer(TeamTag.A, p.ActorNumber);
             }
             else
             {
-                Debug.Log(p.NickName + " Added to team B");
+                Debug.Log(p.NickName + " Added to team B with num :: " + p.ActorNumber);
                 teams.AddPlayer(TeamTag.B, p.ActorNumber);
             }
         }
