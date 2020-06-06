@@ -2988,7 +2988,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 1.2, y: 5.800293}
-  m_SizeDelta: {x: 1934.0232, y: 79.448}
+  m_SizeDelta: {x: 1934.0232, y: 121.74}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1913944793338433637
 CanvasRenderer:
@@ -3011,7 +3011,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.6862745}
+  m_Color: {r: 0, g: 0.13094546, b: 0.23584908, a: 0.6862745}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3176,6 +3176,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4992233363219232993}
     m_Modifications:
+    - target: {fileID: 534110891376614427, guid: 13ecebe338115ac43a8118b7746b4abf,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 534110891376614427, guid: 13ecebe338115ac43a8118b7746b4abf,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 149.99995
+      objectReference: {fileID: 0}
+    - target: {fileID: 534110891376614427, guid: 13ecebe338115ac43a8118b7746b4abf,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 92.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 534110891376614427, guid: 13ecebe338115ac43a8118b7746b4abf,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 263.96368
+      objectReference: {fileID: 0}
     - target: {fileID: 1176365828009229487, guid: 13ecebe338115ac43a8118b7746b4abf,
         type: 3}
       propertyPath: defaultMenuButton
@@ -3186,6 +3206,31 @@ PrefabInstance:
       propertyPath: m_Navigation.m_SelectOnUp
       value: 
       objectReference: {fileID: 4992233362522261830}
+    - target: {fileID: 5538642942108947696, guid: 13ecebe338115ac43a8118b7746b4abf,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -1674
+      objectReference: {fileID: 0}
+    - target: {fileID: 5538642942108947696, guid: 13ecebe338115ac43a8118b7746b4abf,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -58
+      objectReference: {fileID: 0}
+    - target: {fileID: 5857607521452194338, guid: 13ecebe338115ac43a8118b7746b4abf,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -1680
+      objectReference: {fileID: 0}
+    - target: {fileID: 5857607521452194338, guid: 13ecebe338115ac43a8118b7746b4abf,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -327
+      objectReference: {fileID: 0}
+    - target: {fileID: 6021516515352363108, guid: 13ecebe338115ac43a8118b7746b4abf,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 539.73
+      objectReference: {fileID: 0}
     - target: {fileID: 6124444341524134948, guid: 13ecebe338115ac43a8118b7746b4abf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3295,6 +3340,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Menu_Item_Lobby
+      objectReference: {fileID: 0}
+    - target: {fileID: 6124444341581479757, guid: 13ecebe338115ac43a8118b7746b4abf,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 304
+      objectReference: {fileID: 0}
+    - target: {fileID: 7199226855723911564, guid: 13ecebe338115ac43a8118b7746b4abf,
+        type: 3}
+      propertyPath: m_Text
+      value: The new outfit ANGELIC HORNS is now available
+      objectReference: {fileID: 0}
+    - target: {fileID: 7199226855723911564, guid: 13ecebe338115ac43a8118b7746b4abf,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13ecebe338115ac43a8118b7746b4abf, type: 3}
@@ -3717,6 +3777,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4890421265976941719, guid: ee8f8fd176e1c764d9390ed04412b5f8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -47.847656
       objectReference: {fileID: 0}
     - target: {fileID: 7350622125042282251, guid: ee8f8fd176e1c764d9390ed04412b5f8,
         type: 3}
