@@ -19,6 +19,7 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
     public void StartBallLaunch()
     {
         Dodgeball.instance.gameObject.SetActive(true);
+        Debug.Log("Okay, WTF");
         this.InvokeDelayed(timeBeforeBallLaunch, () => {
             Dodgeball.instance.LaunchUp(ballLaunchHeigth, launchGravity);
             ballLauncher.SetActive(false);

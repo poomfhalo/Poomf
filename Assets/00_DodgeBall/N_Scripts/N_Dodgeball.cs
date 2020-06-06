@@ -5,7 +5,6 @@ using GW_Lib;
 [RequireComponent(typeof(Dodgeball))]
 public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
 {
-    [SerializeField] bool disableOnStart = true;
     [Header("Read Only")]
     [SerializeField] Vector3 netPos = new Vector3();
 
@@ -26,11 +25,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     {
         base.OnDisable();
         ball.OnCommandActivated -= SendCommand;
-    }
-    void Start()
-    {
-        if (disableOnStart)
-            gameObject.SetActive(false);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
