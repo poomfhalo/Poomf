@@ -316,27 +316,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b8da439be305104dbad9d09103a6b44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currState: 0
+  movementMode: 0
   accel: 45
   maxSpeed: 7
   gravity: -20
+  IsMoving: 0
   deAccel: 35
   dampingSpeed: 0.5
   speedDamper: 1.5
   stoppingSpeed: 0.1
   cancelationTime: 0.35
+  slowingDist: 0.5
+  stoppingDist: 0.08
   turningSpeed: 470
   minInputTime: 0.02
   inputSensitivity: 5
   minMoveInput: 0.1
+  usesInputDelay: 1
   speed: 0
-  lastNonZeroDir: {x: 0, y: 0, z: 0}
   vel: {x: 0, y: 0, z: 0}
   lastNonZeroVel: {x: 0, y: 0, z: 0}
   input: {x: 0, y: 0, z: 0}
   minInputTimeCounter: 0
   movabilityDir: 0
-  usableInput: {x: 0, y: 0, z: 0}
+  smoothMoveInput: {x: 0, y: 0, z: 0}
+  distToLastPos: 0
 --- !u!114 &6963099543513805062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -445,8 +449,6 @@ MonoBehaviour:
   isEnabled: 0
   selectionIndicator: {fileID: 6963099544742490871}
   hasBall: 0
-  syncedInput: {x: 0, y: 0, z: 0}
-  syncedYAngle: 0
 --- !u!114 &6963099543513805061
 MonoBehaviour:
   m_ObjectHideFlags: 0

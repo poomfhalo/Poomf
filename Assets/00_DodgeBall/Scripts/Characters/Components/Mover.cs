@@ -129,7 +129,12 @@ public class Mover : MonoBehaviour, ICharaAction
                 animator.SetFloat("Speed", speed);
                 break;
             case MovementType.ToPoint:
-                animator.SetFloat("Speed", speed, speedDamper, Time.deltaTime);
+                float s = 0;
+                if (distToLastPos > stoppingDist)
+                {
+                    s = maxSpeed;
+                }
+                animator.SetFloat("Speed", s);
                 break;
         }
     }
