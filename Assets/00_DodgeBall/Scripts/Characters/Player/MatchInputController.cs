@@ -12,7 +12,7 @@ public class MatchInputController : MonoBehaviour
     public static event Action OnFakeFire = null;
     public static event Action OnJump = null;
 
-    public static bool IsEnabled { set; get; } = true;
+    public bool IsEnabled { set; get; } = true;
 
     void OnDestroy()
     {

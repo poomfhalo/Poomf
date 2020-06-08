@@ -16,6 +16,7 @@ public class N_OtherAdjuster : MonoBehaviour
 
         if(!pv.IsMine)
         {
+            GetComponent<MatchInputController>().IsEnabled = false;
             ApplyAdjustments();
         }
     }
