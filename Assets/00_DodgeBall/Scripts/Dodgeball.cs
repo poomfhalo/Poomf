@@ -115,6 +115,8 @@ public class Dodgeball : Singleton<Dodgeball>
         Vector3 startPos = instance.position;
         DOTween.To(Getter, Setter, 1, dur).OnUpdate(OnUpdate).OnComplete(OnComplete).SetEase(Ease.InOutSine);
 
+        instance.isCaught = true;
+        instance.holder = chara;
         instance.OnCommandActivated(DodgeballCommand.GoToChara);
 
         void OnUpdate()
@@ -123,8 +125,6 @@ public class Dodgeball : Singleton<Dodgeball>
         }
         void OnComplete()
         {
-            instance.isCaught = true;
-            instance.holder = chara;
             instance.ballState = BallState.Held;
 
             onCompleted?.Invoke();

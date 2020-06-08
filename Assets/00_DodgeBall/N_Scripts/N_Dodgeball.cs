@@ -77,8 +77,11 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
 
     private void SendCommand(DodgeballCommand command)
     {
-        int holder = ball.GetHolder().GetComponent<N_PC>().ActorID;
-        pv.RPC("RecieveCommand", RpcTarget.Others, (int)command,holder);
+        int holder = -1;
+        if (ball.GetHolder())
+            holder = ball.GetHolder().GetComponent<N_PC>().ActorID;
+
+        pv.RPC("RecieveCommand", RpcTarget.Others, (int)command, holder);
     }
     [PunRPC]
     private void RecieveCommand(int c,int holder)
