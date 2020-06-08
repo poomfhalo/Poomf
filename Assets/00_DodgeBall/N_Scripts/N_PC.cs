@@ -12,7 +12,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     [Tooltip("if this distance between current position and networked position is higher than this, we snap to correct XZ place")]
     [SerializeField] float snapXZDist = 2;
     [Tooltip("Distance (Networked Pos/Current Position) of which above we will keep trying to actively move")]
-    [SerializeField] float autoMoveThreshold = 0.3f;
+    public float autoMoveThreshold = 0.3f;
 
     PC pc = null;
     DodgeballCharacter chara = null;

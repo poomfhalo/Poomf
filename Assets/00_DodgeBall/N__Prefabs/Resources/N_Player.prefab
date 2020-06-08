@@ -1,5 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7707696027722092188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5561391712708588574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 417ebcb12de72e6b19dbe0dcf355dca3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ballGrabZoneSkin: 0.1
+  ballGrabZone: {fileID: 5561391712587787137}
 --- !u!114 &-5122021242519779985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,6 +128,12 @@ PrefabInstance:
 --- !u!1 &5561391712708588574 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6963099543513805180, guid: c395b7056ca0ebe79951bbb94ce6667d,
+    type: 3}
+  m_PrefabInstance: {fileID: 3283104786472813922}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &5561391712587787137 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 6963099543659376355, guid: c395b7056ca0ebe79951bbb94ce6667d,
     type: 3}
   m_PrefabInstance: {fileID: 3283104786472813922}
   m_PrefabAsset: {fileID: 0}

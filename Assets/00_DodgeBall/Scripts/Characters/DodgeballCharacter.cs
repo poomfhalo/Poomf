@@ -139,11 +139,11 @@ public class DodgeballCharacter : MonoBehaviour
     {
         if (Dodgeball.instance.IsGoingToChara)
         {
-            Debug.Log("Why was i called again?");
+            Debug.Log("Why was i called again?",gameObject);
             return;
         }
 
-        Debug.Log("Called grab?");
+        Debug.Log("Called grab?",gameObject);
         if (!HasBall && IsBallInGrabZone)
         {
             catcher.StartCatchAction();

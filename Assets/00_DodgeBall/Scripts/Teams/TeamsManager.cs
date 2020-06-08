@@ -65,7 +65,6 @@ public class TeamsManager : Singleton<TeamsManager>
         int i = instance.teams.IndexOf(team);
         i = (i + 1) % instance.teams.Count;
         team = instance.teams[i];
-        Debug.Log("Next Team Is " + team.teamTag);
         return team;
     }
     public static Team GetTeam(DodgeballCharacter chara)
