@@ -126,9 +126,6 @@ public class N_PC : MonoBehaviour,IPunObservable
         DodgeballCharaCommand command = (DodgeballCharaCommand)c;
         switch (command)
         {
-            case DodgeballCharaCommand.Catch:
-                chara.C_Catch();
-                break;
             case DodgeballCharaCommand.Dodge:
                 chara.C_Dodge();
                 break;
@@ -138,8 +135,8 @@ public class N_PC : MonoBehaviour,IPunObservable
             case DodgeballCharaCommand.FakeFire:
                 chara.C_FakeFire();
                 break;
-            case DodgeballCharaCommand.Fire:
-                chara.C_Fire();
+            case DodgeballCharaCommand.BallAction:
+                chara.C_OnBallAction();
                 break;
             case DodgeballCharaCommand.Friendly:
                 chara.C_Friendly();

@@ -149,12 +149,18 @@ public class Dodgeball : Singleton<Dodgeball>
 
     public void SetKinematicState(bool toState)
     {
+        rb3d.collisionDetectionMode = CollisionDetectionMode.Discrete;
         rb3d.isKinematic = toState;
-        if(toState)
-        {
-            rb3d.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
-            return;
-        }
-        rb3d.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        this.InvokeDelayed(new WaitForEndOfFrame(), () => {
+            if (toState)
+            {
+                rb3d.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+            }
+            else
+            {
+                rb3d.collisionDetectionMode = CollisionDetectionMode.Continuous;
+            }
+        });
     }
+
 }

@@ -1,7 +1,7 @@
 ﻿using GW_Lib;
 using UnityEngine;
 
-public class Jumper : MonoBehaviour, ICharaAction
+public class Jumper : DodgeballCharaAction, ICharaAction
 {
     public bool FeelsGround => feelsGround;
     public bool IsJumping => isJumping;
@@ -57,18 +57,22 @@ public class Jumper : MonoBehaviour, ICharaAction
         float jumpVel = Extentions.GetJumpVelocity(jumpHeigth,mover.GetGravity);
         mover.YVel = Vector3.up * jumpVel;
     }
-
     public void Cancel()
     {
 
     }
-
     public void A_OnJumpEnded()
     {
         isJumping = false;
     }
-    public void UpdateInput(Vector3 i)
+    public override void RecieveInput(Vector3 i)
     {
-        mover.UpdateInput(i);
+        base.RecieveInput(i);
+
+        if (!IsJumping)
+        {
+            return;
+        }
+        mover.ApplyInput(i);
     }
 }

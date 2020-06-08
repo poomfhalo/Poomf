@@ -157,7 +157,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6963099543513805059}
-        m_MethodName: I_OnFire
+        m_MethodName: I_OnBallAction
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -209,21 +209,6 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: f1d746fc-354b-4272-94c2-94fb7d5ad8d0
     m_ActionName: UI/TrackedDeviceOrientation
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6963099543513805059}
-        m_MethodName: I_OnCatch
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 4f5cbacf-e170-4220-ae58-af9fe104dece
-    m_ActionName: Player/Catch[/Keyboard/r]
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6963099543513805059}

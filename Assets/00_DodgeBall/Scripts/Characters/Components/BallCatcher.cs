@@ -2,7 +2,7 @@
 using GW_Lib.Utility;
 using UnityEngine;
 
-public class BallCatcher : MonoBehaviour,ICharaAction
+public class BallCatcher : DodgeballCharaAction, ICharaAction
 {
     public event Action onBallInHands = null;
 

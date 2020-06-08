@@ -3,7 +3,7 @@ using GW_Lib;
 using UnityEngine;
 
 [RequireComponent(typeof(DodgeballCharacter))]
-public class BallLauncher : MonoBehaviour,ICharaAction
+public class BallLauncher : DodgeballCharaAction,ICharaAction
 {
     public event Action onThrowPointReached = null;
     public event Action onFakeThrowEnded = null;
@@ -27,7 +27,6 @@ public class BallLauncher : MonoBehaviour,ICharaAction
     ActionsScheduler scheduler = null;
     DodgeballCharacter aimedAtChara = null;
     Mover mover = null;
-    Vector3 lastInput = new Vector3();
 
     void Awake()
     {
@@ -109,13 +108,11 @@ public class BallLauncher : MonoBehaviour,ICharaAction
             Dodgeball.GoLaunchTo(aimedAtChara, vel, Vector3.down * gravity, null);
         }
     }
-    public void UpdateInput(Vector3 i)
-    {
-        this.lastInput = i;
-    }
     public void A_OnThrowEnded()
     {
         mover.ReadFacingValues();
-        mover.UpdateInput(lastInput);
+        if (recievedInput == Vector3.zero)
+            return;
+        mover.ApplyInput(recievedInput);
     }
 }

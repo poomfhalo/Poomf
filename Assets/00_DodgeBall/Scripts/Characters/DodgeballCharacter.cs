@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
-public enum DodgeballCharaCommand { MoveInput, Catch, Friendly, Enemy, Fire, Dodge, FakeFire, Jump }
+public enum DodgeballCharaCommand { MoveInput, Friendly, Enemy, BallAction, Dodge, FakeFire, Jump }
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody))]
@@ -9,8 +10,6 @@ public class DodgeballCharacter : MonoBehaviour
 {
     //Events
     public event Action<DodgeballCharaCommand> OnCommandActivated = null;
-    //Properties
-    public Vector3 lastInput => mover.input;
 
     //State
     public bool IsEnabled => isEnabled;
@@ -109,26 +108,17 @@ public class DodgeballCharacter : MonoBehaviour
     #region Commands
     public void C_MoveInput(Vector3 i)
     {
-        if (jumper.IsJumping)
-        {
-            jumper.UpdateInput(i);
-            OnCommandActivated?.Invoke(DodgeballCharaCommand.MoveInput);
+        GetComponents<DodgeballCharaAction>().ToList().ForEach(a => { a.RecieveInput(i); });
+
+        if (IsJumping)
             return;
-        }
+        if (IsThrowing)
+            return;
+
         mover.StartMoveByInput(i, cam.transform);
         OnCommandActivated?.Invoke(DodgeballCharaCommand.MoveInput);
     }
 
-    public void C_Catch()
-    {
-        if (HasBall)
-            return;
-        if (!IsBallInGrabZone)
-            return;
-
-        catcher.StartCatchAction();
-        OnCommandActivated?.Invoke(DodgeballCharaCommand.Catch);
-    }
     public void C_Friendly()
     {
         if (HasBall)
@@ -145,15 +135,19 @@ public class DodgeballCharacter : MonoBehaviour
             OnCommandActivated?.Invoke(DodgeballCharaCommand.Enemy);
         }
     }
-    public void C_Fire()
+    public void C_OnBallAction()
     {
-        if (IsThrowing)
-            return;
-        if (!HasBall)
-            return;
-        launcher.UpdateInput(mover.input);
-        launcher.StartThrowAction(selectionIndicator.ActiveSelection);
-        OnCommandActivated?.Invoke(DodgeballCharaCommand.Fire);
+        if (!HasBall && IsBallInGrabZone)
+        {
+            catcher.StartCatchAction();
+            OnCommandActivated?.Invoke(DodgeballCharaCommand.BallAction);
+        }
+
+        if (HasBall && !IsThrowing)
+        {
+            launcher.StartThrowAction(selectionIndicator.ActiveSelection);
+            OnCommandActivated?.Invoke(DodgeballCharaCommand.BallAction);
+        }
     }
     public void C_Dodge()
     {
@@ -173,7 +167,6 @@ public class DodgeballCharacter : MonoBehaviour
             return;
         if (IsThrowing)
             return;
-        launcher.UpdateInput(mover.input);
         launcher.StartFakeThrow(selectionIndicator.ActiveSelection);
         OnCommandActivated?.Invoke(DodgeballCharaCommand.FakeFire);
     }

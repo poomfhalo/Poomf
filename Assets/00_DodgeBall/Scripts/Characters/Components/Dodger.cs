@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dodger : MonoBehaviour, ICharaAction
+public class Dodger : DodgeballCharaAction, ICharaAction
 {
     public bool IsDodging => isDodging;
     public string actionName => "Dodge Action";

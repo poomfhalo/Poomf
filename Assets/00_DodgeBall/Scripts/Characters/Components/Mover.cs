@@ -3,7 +3,7 @@ using DG.Tweening;
 using UnityEngine;
 
 [RequireComponent(typeof(ActionsScheduler))]
-public class Mover : MonoBehaviour, ICharaAction
+public class Mover : DodgeballCharaAction, ICharaAction
 {
     //Note: Y vel is directly changed by gravity
     //this script, only modifies the XZVel for the characters.
@@ -79,7 +79,6 @@ public class Mover : MonoBehaviour, ICharaAction
     [SerializeField] float speed = 0;
     [SerializeField] Vector3 vel = Vector3.zero;
     [SerializeField] Vector3 lastNonZeroVel = Vector3.zero;
-    public Vector3 input = Vector3.zero;
     [SerializeField] float minInputTimeCounter = 0;
     [SerializeField] int movabilityDir = 0;
     [SerializeField] Vector3 smoothMoveInput = Vector3.zero;
@@ -140,7 +139,7 @@ public class Mover : MonoBehaviour, ICharaAction
     }
     void FixedUpdate()
     {
-        smoothMoveInput = Vector3.MoveTowards(smoothMoveInput, input, inputSensitivity * Time.fixedDeltaTime);
+        smoothMoveInput = Vector3.MoveTowards(smoothMoveInput, recievedInput, inputSensitivity * Time.fixedDeltaTime);
 
         if (usesInputDelay && movementMode == MovementType.ByInput)
         {
@@ -163,7 +162,7 @@ public class Mover : MonoBehaviour, ICharaAction
     public void StartMoveByInput(Vector3 newInput, Transform withRespectTo)
     {
         scheduler.StartAction(this);
-        UpdateInput(newInput, withRespectTo);
+        ApplyInput(newInput, withRespectTo);
     }
     public void Cancel()
     {
@@ -290,7 +289,7 @@ public class Mover : MonoBehaviour, ICharaAction
                 dir.y = 0;
                 break;
             case MovementType.ToPoint:
-                dir = input - rb3d.position;
+                dir = recievedInput - rb3d.position;
                 dir.y = 0;
                 distToLastPos = dir.magnitude;
                 break;
@@ -302,12 +301,12 @@ public class Mover : MonoBehaviour, ICharaAction
         dir.Normalize();
     }
 
-    #region UpdateInput
+    #region ApplyInput
     public void ReadFacingValues()
     {
         lastNonZeroVel = transform.forward * (stoppingSpeed + 0.05f);
     }
-    public void UpdateInput(Vector3 newInput, Transform withRespectTo)
+    public void ApplyInput(Vector3 newInput, Transform withRespectTo)
     {
         if (withRespectTo == null)
         {
@@ -319,12 +318,12 @@ public class Mover : MonoBehaviour, ICharaAction
             right = withRespectTo.right;
             fwd = withRespectTo.forward;
         }
-        UpdateInput(newInput);
+        ApplyInput(newInput);
     }
-    public void UpdateInput(Vector3 input)
+    public void ApplyInput(Vector3 input)
     {
         IsMoving = true;
-        this.input = input;
+        this.recievedInput = input;
         movabilityDir = 1;
         if (input == Vector3.zero && movementMode == MovementType.ByInput)
         {

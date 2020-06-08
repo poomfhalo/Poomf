@@ -10,10 +10,13 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
     [SerializeField] float launchGravity = -20;
     [SerializeField] float ballLaunchHeigth = 6;
     [SerializeField] GameObject ballLauncher = null;
+    [SerializeField] bool launchBallOnStart = false;
 
     void Start()
     {
         Dodgeball.instance.gameObject.SetActive(false);
+        if (launchBallOnStart)
+            StartBallLaunch();
     }
 
     public void StartBallLaunch()

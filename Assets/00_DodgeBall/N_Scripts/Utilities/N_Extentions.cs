@@ -2,7 +2,6 @@
 using UnityEngine;
 using Photon.Pun;
 using System.Linq;
-using System;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
 
