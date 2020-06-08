@@ -14,6 +14,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     Dodgeball ball = null;
     float lastLag = 0;
     Vector3 netVel = Vector3.zero;
+    bool firstRead = true;
 
     public override void OnEnable()
     {
@@ -22,12 +23,14 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         ball = GetComponent<Dodgeball>();
         rb3d = GetComponent<Rigidbody>();
 
+        netPos = rb3d.position;
         ball.OnCommandActivated += SendCommand;
     }
     public override void OnDisable()
     {
         base.OnDisable();
         ball.OnCommandActivated -= SendCommand;
+        firstRead = true;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -43,6 +46,12 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         }
         else if (stream.IsReading)
         {
+            if(firstRead)
+            {
+                firstRead = false;
+                return;
+            }
+
             netPos.x = (float)stream.ReceiveNext();
             netPos.y = (float)stream.ReceiveNext();
             netPos.z = (float)stream.ReceiveNext();
@@ -56,17 +65,9 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
 
     void FixedUpdate()
     {
-        switch (ball.ballState)
-        {
-            case Dodgeball.BallState.OnGround:
-                if (photonView.IsMine)
-                    break;
-
-
-                //transform.position = targetPos;
-                break;
-        }
         if (photonView.IsMine)
+            return;
+        if (ball.IsHeld || ball.IsGoingToChara)
             return;
 
         ball.SetKinematic(true);

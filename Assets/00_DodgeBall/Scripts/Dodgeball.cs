@@ -10,6 +10,12 @@ using GW_Lib.Utility;
 public enum DodgeballCommand { GoToChara }
 public class Dodgeball : Singleton<Dodgeball>
 {
+    public bool IsOnGround => ballState == BallState.OnGround;
+    public bool IsHeld => ballState == BallState.Held;
+    public bool IsFlying => ballState == BallState.Flying;
+    public bool IsGoingToChara => ballState == BallState.GoingToChara;
+    public bool IsPostContact => ballState == BallState.PostContact;
+
     public event Action<DodgeballCommand> OnCommandActivated = null;
 
     public enum BallState { OnGround,Held,Flying,GoingToChara,PostContact }
