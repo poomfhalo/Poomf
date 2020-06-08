@@ -115,6 +115,8 @@ public class Dodgeball : Singleton<Dodgeball>
         Vector3 startPos = instance.position;
         DOTween.To(Getter, Setter, 1, dur).OnUpdate(OnUpdate).OnComplete(OnComplete).SetEase(Ease.InOutSine);
 
+        instance.OnCommandActivated(DodgeballCommand.GoToChara);
+
         void OnUpdate()
         {
              instance.position = Vector3.Lerp(startPos, chara.BallGrabPoint.position, instance.currTweener);
@@ -148,6 +150,5 @@ public class Dodgeball : Singleton<Dodgeball>
         float yVel = Extentions.GetJumpVelocity(byHeigth, cf.force.y);
         rb3d.velocity = Vector3.up * yVel;
     }
-
 
 }

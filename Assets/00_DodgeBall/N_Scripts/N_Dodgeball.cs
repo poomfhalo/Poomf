@@ -37,9 +37,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     {
         if (stream.IsWriting)
         {
-            stream.SendNext(rb3d.position.x);
-            stream.SendNext(rb3d.position.y);
-            stream.SendNext(rb3d.position.z);
+            stream.SendNext(rb3d.position);
 
             stream.SendNext(rb3d.velocity);
             stream.SendNext((int)ball.ballState);
@@ -52,9 +50,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
                 return;
             }
 
-            netPos.x = (float)stream.ReceiveNext();
-            netPos.y = (float)stream.ReceiveNext();
-            netPos.z = (float)stream.ReceiveNext();
+            netPos = (Vector3)stream.ReceiveNext();
             netVel = (Vector3)stream.ReceiveNext();
             ball.ballState = (Dodgeball.BallState)(int)stream.ReceiveNext();
         }
@@ -93,8 +89,8 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         {
             case DodgeballCommand.GoToChara:
                 Debug.Log("Ball().GoingToChara Command RPC");
-                if (!n_holder.HasBall)
-                    n_holder.GetComponent<BallCatcher>().StartCatchAction();
+                if (!n_holder.HasBall && !ball.IsGoingToChara)
+                    n_holder.GetComponent<BallCatcher>().GrabBall();
                 break;
         }
     }

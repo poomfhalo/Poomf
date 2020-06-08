@@ -57,7 +57,7 @@ public class BallCatcher : DodgeballCharaAction, ICharaAction
 
     }
 
-    private void GrabBall()
+    public void GrabBall()
     {
         Dodgeball.GoTo(GetComponent<DodgeballCharacter>(), () => {
             onBallInHands?.Invoke();
