@@ -24,6 +24,6 @@ public class N_OtherAdjuster : MonoBehaviour
     private void ApplyAdjustments()
     {
         float increment = n_pc.autoMoveThreshold + ballGrabZoneSkin;
-        ballGrabZone.size = ballGrabZone.size + increment * Vector3.up;
+        ballGrabZone.size = ballGrabZone.size + increment * new Vector3(1, 0, 1);
     }
 }
