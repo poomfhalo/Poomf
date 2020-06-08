@@ -36,6 +36,8 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
             stream.SendNext(rb3d.position.x);
             stream.SendNext(rb3d.position.y);
             stream.SendNext(rb3d.position.z);
+
+            stream.SendNext(rb3d.velocity);
             stream.SendNext((int)ball.ballState);
         }
         else if (stream.IsReading)
@@ -43,9 +45,11 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
             netPos.x = (float)stream.ReceiveNext();
             netPos.y = (float)stream.ReceiveNext();
             netPos.z = (float)stream.ReceiveNext();
+            rb3d.velocity = (Vector3)stream.ReceiveNext();
             ball.ballState = (Dodgeball.BallState)(int)stream.ReceiveNext();
         }
         lastLag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
+        rb3d.MovePosition(rb3d.position + rb3d.velocity * lastLag);
     }
 
     void FixedUpdate()
@@ -56,10 +60,11 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
                 if (photonView.IsMine)
                     break;
 
-                ball.SetKinematic(true);
+                //ball.SetKinematic(true);
                 Vector3 targetPos = Vector3.Lerp(rb3d.position, netPos, catchUpSpeed * Time.fixedDeltaTime);
+
                 //rb3d.MovePosition(targetPos);
-                transform.position = targetPos;
+                //transform.position = targetPos;
                 break;
         }
     }
