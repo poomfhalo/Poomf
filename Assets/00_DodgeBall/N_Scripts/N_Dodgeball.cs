@@ -60,7 +60,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         }
         lastLag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
         netPos = netPos + netVel * lastLag;
-        //rb3d.MovePosition(rb3d.position + rb3d.velocity * lastLag);
     }
 
     void FixedUpdate()
@@ -79,12 +78,12 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         Gizmos.color = Color.grey;
         Gizmos.DrawSphere(netPos,GetComponent<SphereCollider>().radius);
     }
+
     private void SendCommand(DodgeballCommand command)
     {
         int holder = ball.GetHolder().GetComponent<N_PC>().ActorID;
         pv.RPC("RecieveCommand", RpcTarget.Others, (int)command,holder);
     }
-
     [PunRPC]
     private void RecieveCommand(int c,int holder)
     {
@@ -99,6 +98,5 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
                 break;
         }
     }
-
 
 }

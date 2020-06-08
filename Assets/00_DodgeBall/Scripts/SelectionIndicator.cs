@@ -59,6 +59,7 @@ public class SelectionIndicator : MonoBehaviour
     {
         DodgeballCharacter newFocus = null;
         bool wasLookingAtFriendly = TeamsManager.AreFriendlies(owner, activeSelection);
+        Debug.Log(toFriendly);
 
         if (toFriendly)
         {
@@ -80,6 +81,7 @@ public class SelectionIndicator : MonoBehaviour
             else
             {
                 newFocus = TeamsManager.GetNextEnemy(owner, lastEnemy);
+                print(newFocus.name);
             }
         }
         SetFocus(newFocus);

@@ -137,6 +137,10 @@ public class DodgeballCharacter : MonoBehaviour
     }
     public void C_OnBallAction()
     {
+        if (Dodgeball.instance.IsGoingToChara)
+            return;
+
+        Debug.Log("Called grab?");
         if (!HasBall && IsBallInGrabZone)
         {
             catcher.StartCatchAction();
