@@ -62,12 +62,14 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
                 if (photonView.IsMine)
                     break;
 
-                ball.SetKinematic(true);
-                Vector3 targetPos = Vector3.Lerp(rb3d.position, netPos, catchUpSpeed * Time.fixedDeltaTime);
-                rb3d.MovePosition(targetPos);
+
                 //transform.position = targetPos;
                 break;
         }
+
+        ball.SetKinematic(true);
+        Vector3 targetPos = Vector3.Lerp(rb3d.position, netPos, catchUpSpeed * Time.fixedDeltaTime);
+        rb3d.MovePosition(targetPos);
     }
     void OnDrawGizmos()
     {
