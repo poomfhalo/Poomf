@@ -137,8 +137,10 @@ public class DodgeballCharacter : MonoBehaviour
     }
     public void C_OnBallAction()
     {
+        Debug.Log("Action Was Called");
         if (!HasBall && IsBallInGrabZone)
         {
+            Debug.Log("Should Have Caught Ball?");
             catcher.StartCatchAction();
             OnCommandActivated?.Invoke(DodgeballCharaCommand.BallAction);
         }
