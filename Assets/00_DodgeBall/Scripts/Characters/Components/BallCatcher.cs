@@ -16,9 +16,11 @@ public class BallCatcher : DodgeballCharaAction, ICharaAction
     [SerializeField] string activityName = "Grab Ball";
 
     Animator animator = null;
+    Dodgeball ball = null;
 
     void Awake()
     {
+        ball = Dodgeball.instance;
         animator = GetComponent<Animator>();
 
         ballGrabbingZone.onTriggerEnter.AddListener(OnBallGrabZoneEntered);
@@ -41,21 +43,13 @@ public class BallCatcher : DodgeballCharaAction, ICharaAction
     }
     public void StartCatchAction()
     {
-        switch (Dodgeball.instance.ballState)
-        {
-            case Dodgeball.BallState.OnGround:
-                GrabBall();
-                break;
-            case Dodgeball.BallState.PostContact:
-                GrabBall();
-                break;
-            default:
-                Debug.LogWarning(Dodgeball.instance.ballState + " catching in when ball in this state, has Not been impelemted yet");
-                break;
-        }
-        if (Dodgeball.instance.ballState == Dodgeball.BallState.OnGround || Dodgeball.instance.ballState == Dodgeball.BallState.PostContact)
+        if (ball.IsOnGround || ball.IsPostContact)
         {
             GrabBall();
+        }
+        else
+        {
+            Debug.LogWarning(ball.ballState + " catching in when ball in this state, has Not been impelemted yet");
         }
     }
     public void Cancel()

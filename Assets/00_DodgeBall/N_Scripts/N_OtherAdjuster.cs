@@ -9,7 +9,7 @@ public class N_OtherAdjuster : MonoBehaviour
     PhotonView pv = null;
     N_PC n_pc = null;
 
-    void OnEnable()
+    void Start()
     {
         pv = GetComponent<PhotonView>();
         n_pc = GetComponent<N_PC>();
@@ -24,7 +24,7 @@ public class N_OtherAdjuster : MonoBehaviour
     private void ApplyAdjustments()
     {
         float increment = n_pc.autoMoveThreshold + ballGrabZoneSkin;
-        print(increment);
+        Debug.Log(increment,gameObject);
         ballGrabZone.size = ballGrabZone.size + increment * new Vector3(1, 0, 1);
     }
 }

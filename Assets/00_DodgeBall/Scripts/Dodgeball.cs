@@ -93,11 +93,6 @@ public class Dodgeball : Singleton<Dodgeball>
     }
 
 
-    private static void SetHolder(DodgeballCharacter chara)
-    {
-        instance.isCaught = true;
-        instance.holder = chara;
-    }
     public static void GoLaunchTo(DodgeballCharacter chara,Vector3 launchVel,Vector3 gravity, Action onCompleted)
     {
         instance.SetKinematic(false);
@@ -126,7 +121,8 @@ public class Dodgeball : Singleton<Dodgeball>
         }
         void OnComplete()
         {
-            SetHolder(chara);
+            instance.isCaught = true;
+            instance.holder = chara;
             instance.ballState = BallState.Held;
 
             onCompleted?.Invoke();
