@@ -13,6 +13,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     PhotonView pv = null;
     Dodgeball ball = null;
     float lastLag = 0;
+    Vector3 netVel = Vector3.zero;
 
     public override void OnEnable()
     {
@@ -45,11 +46,12 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
             netPos.x = (float)stream.ReceiveNext();
             netPos.y = (float)stream.ReceiveNext();
             netPos.z = (float)stream.ReceiveNext();
-            rb3d.velocity = (Vector3)stream.ReceiveNext();
+            netVel = (Vector3)stream.ReceiveNext();
             ball.ballState = (Dodgeball.BallState)(int)stream.ReceiveNext();
         }
         lastLag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
-        rb3d.MovePosition(rb3d.position + rb3d.velocity * lastLag);
+        netPos = netPos + netVel * lastLag;
+        //rb3d.MovePosition(rb3d.position + rb3d.velocity * lastLag);
     }
 
     void FixedUpdate()
@@ -60,10 +62,9 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
                 if (photonView.IsMine)
                     break;
 
-                //ball.SetKinematic(true);
+                ball.SetKinematic(true);
                 Vector3 targetPos = Vector3.Lerp(rb3d.position, netPos, catchUpSpeed * Time.fixedDeltaTime);
-
-                //rb3d.MovePosition(targetPos);
+                rb3d.MovePosition(targetPos);
                 //transform.position = targetPos;
                 break;
         }
