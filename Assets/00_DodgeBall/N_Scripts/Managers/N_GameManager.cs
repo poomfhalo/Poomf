@@ -140,5 +140,6 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback
     {
         photonView.RPC("PrepareForGame", RpcTarget.All);
     }
+    [PunRPC]
     private void PrepareforGame() => DodgeballGameManager.instance.StartBallLaunch();
 }
