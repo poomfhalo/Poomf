@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Photon.Pun;
+using GW_Lib;
 
 [RequireComponent(typeof(Dodgeball))]
 public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
@@ -53,7 +54,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
                 if (photonView.IsMine)
                     break;
 
-                ball.SetKinematicState(true);
+                ball.SetKinematic(true);
                 Vector3 targetPos = Vector3.MoveTowards(rb3d.position, netPos, catchUpSpeed * Time.fixedDeltaTime);
                 rb3d.MovePosition(targetPos);
                 break;

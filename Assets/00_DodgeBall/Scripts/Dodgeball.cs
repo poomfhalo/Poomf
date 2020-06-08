@@ -94,7 +94,7 @@ public class Dodgeball : Singleton<Dodgeball>
     }
     public static void GoLaunchTo(DodgeballCharacter chara,Vector3 launchVel,Vector3 gravity, Action onCompleted)
     {
-        instance.SetKinematicState(false);
+        instance.SetKinematic(false);
         instance.InvokeDelayed(instance.leavingHandsTime, () => instance.bodyCol.GetCollider.enabled = true);
         instance.rb3d.velocity = launchVel;
         instance.cf.force = gravity;
@@ -109,7 +109,7 @@ public class Dodgeball : Singleton<Dodgeball>
             dur = instance.defGrabTime;
 
         instance.bodyCol.GetCollider.enabled = false;
-        instance.SetKinematicState(true);
+        instance.SetKinematic(true);
 
         Vector3 startPos = instance.position;
         DOTween.To(Getter, Setter, 1, dur).OnUpdate(OnUpdate).OnComplete(OnComplete).SetEase(Ease.InOutSine);
@@ -142,25 +142,10 @@ public class Dodgeball : Singleton<Dodgeball>
             byHeigth = gameStartLaunchHeigth;
 
         cf.force = Vector3.up * launchGravity;
-        SetKinematicState(false);
+        this.SetKinematic(false);
         float yVel = Extentions.GetJumpVelocity(byHeigth, cf.force.y);
         rb3d.velocity = Vector3.up * yVel;
     }
 
-    public void SetKinematicState(bool toState)
-    {
-        rb3d.collisionDetectionMode = CollisionDetectionMode.Discrete;
-        rb3d.isKinematic = toState;
-        this.InvokeDelayed(new WaitForEndOfFrame(), () => {
-            if (toState)
-            {
-                rb3d.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
-            }
-            else
-            {
-                rb3d.collisionDetectionMode = CollisionDetectionMode.Continuous;
-            }
-        });
-    }
 
 }

@@ -85,6 +85,27 @@ namespace GW_Lib
 
     public static class Extentions
     {
+        public static void SetKinematic(this MonoBehaviour caller,bool toState)
+        {
+            Rigidbody rb3d = caller.GetComponent<Rigidbody>();
+            if (rb3d == null)
+                return;
+            if (rb3d.isKinematic == toState)
+                return;
+
+            rb3d.collisionDetectionMode = CollisionDetectionMode.Discrete;
+            rb3d.isKinematic = toState;
+            caller.InvokeDelayed(new WaitForEndOfFrame(), () => {
+                if (toState)
+                {
+                    rb3d.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+                }
+                else
+                {
+                    rb3d.collisionDetectionMode = CollisionDetectionMode.Continuous;
+                }
+            });
+        }
         public static void KillCoro(this MonoBehaviour caller, ref Coroutine c)
         {
             if (caller == null || c == null)
