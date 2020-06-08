@@ -20,6 +20,13 @@ public class TeamsManager : Singleton<TeamsManager>
     public static void JoinTeam(TeamTag team, DodgeballCharacter player)
     {
         Team wantedTeam = instance.teams.Single(t => t.teamTag == team);
+
+        Team currTeam = instance.teams.Find(testTeam => testTeam.IsInTeam(player));
+        if(currTeam != null)
+        {
+            currTeam.Leave(player);
+        }
+
         wantedTeam.Join(player);
     }
 
@@ -58,11 +65,12 @@ public class TeamsManager : Singleton<TeamsManager>
         int i = instance.teams.IndexOf(team);
         i = (i + 1) % instance.teams.Count;
         team = instance.teams[i];
+        Debug.Log("Next Team Is " + team.teamTag);
         return team;
     }
     public static Team GetTeam(DodgeballCharacter chara)
     {
-        Team team = instance.teams.Single(t => t.palyersNames.Contains(chara.charaName));
+        Team team = instance.teams.Single(t => t.players.Contains(chara));
         return team;
     }
     public static void AddCharacter(DodgeballCharacter dodgeballCharacter)

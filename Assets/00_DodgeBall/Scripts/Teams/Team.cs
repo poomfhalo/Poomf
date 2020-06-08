@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 public enum TeamTag { A, B }
 
@@ -6,7 +7,7 @@ public enum TeamTag { A, B }
 public class Team
 {
     public List<DodgeballCharacter> players = new List<DodgeballCharacter>();
-    public List<string> palyersNames = new List<string>();
+    public List<string> playersNames = new List<string>();
     public TeamTag teamTag = TeamTag.A;
     public Team(TeamTag teamTag)
     {
@@ -17,18 +18,35 @@ public class Team
     {
         if (!player)
         {
-            UnityEngine.Debug.Log("Null player trying to join ");
+            UnityEngine.Debug.Log("Null player trying to join " + teamTag);
             return;
         }
         if (IsInTeam(player.charaName))
             return;
 
-        palyersNames.Add(player.charaName);
+        playersNames.Add(player.charaName);
         players.Add(player);
     }
     public bool IsInTeam(string player)
     {
-        return palyersNames.Contains(player);
+        return playersNames.Contains(player);
+    }
+    public bool IsInTeam(DodgeballCharacter chara)
+    {
+        return players.Contains(chara);
+    }
+
+    public void Leave(DodgeballCharacter player)
+    {
+        if(!player)
+        {
+            UnityEngine.Debug.Log("Null player trying to leave " + teamTag);
+        }
+        if (!IsInTeam(player))
+            return;
+
+        playersNames.Remove(player.charaName);
+        players.Remove(player);
     }
 
     public DodgeballCharacter GetNext(DodgeballCharacter curr)
