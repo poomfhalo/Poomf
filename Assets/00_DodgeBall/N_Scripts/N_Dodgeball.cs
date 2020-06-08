@@ -12,6 +12,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     Rigidbody rb3d = null;
     PhotonView pv = null;
     Dodgeball ball = null;
+    float lastLag = 0;
 
     public override void OnEnable()
     {
@@ -30,20 +31,21 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if(stream.IsWriting)
+        if (stream.IsWriting)
         {
             stream.SendNext(rb3d.position.x);
             stream.SendNext(rb3d.position.y);
             stream.SendNext(rb3d.position.z);
             stream.SendNext((int)ball.ballState);
         }
-        else if(stream.IsReading)
+        else if (stream.IsReading)
         {
             netPos.x = (float)stream.ReceiveNext();
             netPos.y = (float)stream.ReceiveNext();
             netPos.z = (float)stream.ReceiveNext();
             ball.ballState = (Dodgeball.BallState)(int)stream.ReceiveNext();
         }
+        lastLag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
     }
 
     void FixedUpdate()
@@ -55,10 +57,16 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
                     break;
 
                 ball.SetKinematic(true);
-                Vector3 targetPos = Vector3.MoveTowards(rb3d.position, netPos, catchUpSpeed * Time.fixedDeltaTime);
-                rb3d.MovePosition(targetPos);
+                Vector3 targetPos = Vector3.Lerp(rb3d.position, netPos, catchUpSpeed * Time.fixedDeltaTime);
+                //rb3d.MovePosition(targetPos);
+                transform.position = targetPos;
                 break;
         }
+    }
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.grey;
+        Gizmos.DrawSphere(netPos,GetComponent<SphereCollider>().radius);
     }
     private void SendCommand(DodgeballCommand command)
     {
