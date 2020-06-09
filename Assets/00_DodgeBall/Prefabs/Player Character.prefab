@@ -154,7 +154,7 @@ RectTransform:
   m_GameObject: {fileID: 6167937996938106693}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7346324663508175731}
   m_RootOrder: 0
@@ -628,6 +628,7 @@ MonoBehaviour:
   throwFacingSpeed: 200
   heigth: 0.3
   gravity: 15
+  throwData: {fileID: 0}
   isThrowing: 0
   activityName: Throw Action
 --- !u!114 &6963099543513805063
@@ -663,6 +664,7 @@ MonoBehaviour:
   ballGrabbingZone: {fileID: 6963099543659376354}
   isBallInGrabZone: 0
   activityName: Grab Ball
+  hasBall: 0
 --- !u!114 &6963099543513805065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -710,8 +712,10 @@ MonoBehaviour:
   recievedInput: {x: 0, y: 0, z: 0}
   maxHP: 2
   hurtAnimsCount: 2
+  hurtZone: {fileID: 6963099543659376354}
   currHP: 0
   isBeingHurt: 0
+  isWaitingForHit: 0
 --- !u!114 &6963099543513805059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -754,7 +758,6 @@ MonoBehaviour:
   team: 0
   isEnabled: 0
   selectionIndicator: {fileID: 6963099544742490871}
-  hasBall: 0
 --- !u!114 &6963099543513805061
 MonoBehaviour:
   m_ObjectHideFlags: 0
