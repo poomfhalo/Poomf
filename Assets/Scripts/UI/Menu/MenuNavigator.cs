@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class MenuNavigator : MonoBehaviour
 {
     [SerializeField] private Transform menuTabsButtonsTransform = null;
-    [SerializeField] private MenuItemBase[] menuItems = null;
+    [SerializeField] private Transform[] menuItems = null;
     [SerializeField] private MenuTabButton defaultMenuButton = null;
 
     private PlayerInput playerInput = null;
@@ -22,7 +22,9 @@ public class MenuNavigator : MonoBehaviour
 
     private void OnEnable()
     {
+        if (false == initialized) return;
         // playerInput.UI.Enable();
+        launchDefaultMenu();
     }
 
     private void OnDisable()
