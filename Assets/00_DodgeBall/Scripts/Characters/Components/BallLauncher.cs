@@ -10,13 +10,13 @@ public class BallLauncher : DodgeballCharaAction,ICharaAction
 
     public bool IsThrowing => isThrowing;
     public string actionName => activityName;
-
+    [Tooltip("If the value is less than 1 then we will use the Mover turn speed, noting that, if its too low, character may not" +
+    "\nface the target, by the end of the animation, but the ball, will still travel towards the target")]
     [SerializeField] float throwFacingSpeed = 200;
-    [Header("Throw Data")]
+
     [SerializeField] float heigth = 10;
     [SerializeField] float gravity = 5;
-    [Tooltip("If the value is less than 1 then we will use the Mover turn speed, noting that, if its too low, character may not" +
-        "\nface the target, by the end of the animation, but the ball, will still travel towards the target")]
+    [SerializeField] BallThrowData throwData = null;
 
     [Header("Read Only")]
     [SerializeField] bool isThrowing = false;
@@ -93,19 +93,22 @@ public class BallLauncher : DodgeballCharaAction,ICharaAction
         Dodgeball.instance.transform.SetParent(null);
         if (TeamsManager.AreFriendlies(aimedAtChara, chara))
         {
+            aimedAtChara.C_EnableReciption();
             Debug.LogWarning("Passing To Friendlies has not been implemented yet");
         }
         else
         {
             animator.SetBool("HasBall", false);
-            onThrowPointReached?.Invoke();
             isThrowing = false;
+            aimedAtChara.C_EnableHit();
 
-            Vector3 vel = Extentions.GetLaunchVelocity(Dodgeball.instance.position,
-                                                        aimedAtChara.ShootablePoint.position, heigth, -gravity);
+            //Vector3 vel = Extentions.GetLaunchVelocity(Dodgeball.instance.position,
+                                                            //aimedAtChara.ShootablePoint.position, heigth, -gravity);
             //float f =Extentions.GetTravelTime(chara.BallGrabPoint.position, toChara.ShootablePoint.position, vel, Vector3.zero);
             //this.InvokeDelayed(f, () => { Debug.Log("Finished?"); Debug.Break(); });
-            Dodgeball.GoLaunchTo(aimedAtChara, vel, Vector3.down * gravity, null);
+            //Dodgeball.GoLaunchTo(aimedAtChara, vel, Vector3.down * gravity, null);
+            Dodgeball.GoLaunchTo(aimedAtChara.ShootablePoint.position, throwData);
+            onThrowPointReached?.Invoke();
         }
     }
     public void A_OnThrowEnded()

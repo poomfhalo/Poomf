@@ -7,7 +7,8 @@ using GW_Lib.Utility;
 //TODO: based on Dodgeball speed, we increase size of body colliders of characters up to 4, so that, the dodge ball
 //does not get missed by smaller colliders, when its going too fast.
 //TODO: dynamically find the gravity, depending on distance, such that, speed never exceeds a certain value?
-public enum DodgeballCommand { GoToChara }
+public enum DodgeballCommand { GoToChara, LaunchUp, LaunchTo }
+
 public class Dodgeball : Singleton<Dodgeball>
 {
     public bool IsOnGround => ballState == BallState.OnGround;
@@ -32,12 +33,18 @@ public class Dodgeball : Singleton<Dodgeball>
     [SerializeField] bool isCaught = false;
     [SerializeField] DodgeballCharacter holder = null;
     [SerializeField] float currTweener = 0;
+    public byte lastAppliedThrow = 0;
+    public Vector3 lastTargetPos = new Vector3();
     [Header("Synced Variables")]
     public BallState ballState = BallState.Flying;
 
     Rigidbody rb3d = null;
     ConstantForce cf = null;
     Vector3 startGravity = Vector3.zero;
+    Tweener activeTweener = null;
+
+    public Func<bool> CanApplyLaunchToAction = () => true;
+    public Func<bool> CanApplyGoToAction = () => true;
 
     public DodgeballCharacter GetHolder()
     {
@@ -92,7 +99,31 @@ public class Dodgeball : Singleton<Dodgeball>
         //m_ballState = BallState.PostContact;
     }
 
+    public static void GoLaunchTo(Vector3 targetPos, BallThrowData d)
+    {
+        if (instance.CanApplyLaunchToAction())
+        {
+            instance.SetKinematic(true);
+            instance.InvokeDelayed(instance.leavingHandsTime, () => instance.bodyCol.GetCollider.enabled = true);
+            float dist = Vector3.Distance(instance.rb3d.position, targetPos);
+            float time = d.GetTimeOfDist(dist);
+            float tweener = 0;
 
+            instance.activeTweener = DOTween.To(() => tweener, f => tweener = f, 1, time).SetEase(d.ease).OnUpdate(OnUpdate).OnComplete(OnComplete);
+            void OnUpdate()
+            {
+                Vector3 lerpedPos = Vector3.Lerp(instance.position, targetPos, tweener);
+                instance.rb3d.MovePosition(lerpedPos);
+            }
+            void OnComplete()
+            {
+
+            }
+        }
+        instance.lastTargetPos = targetPos;
+        instance.lastAppliedThrow = d.id;
+        instance.OnCommandActivated?.Invoke(DodgeballCommand.LaunchTo);
+    }
     public static void GoLaunchTo(DodgeballCharacter chara,Vector3 launchVel,Vector3 gravity, Action onCompleted)
     {
         instance.SetKinematic(false);
@@ -117,7 +148,7 @@ public class Dodgeball : Singleton<Dodgeball>
 
         instance.isCaught = true;
         instance.holder = chara;
-        instance.OnCommandActivated(DodgeballCommand.GoToChara);
+        instance.OnCommandActivated?.Invoke(DodgeballCommand.GoToChara);
 
         void OnUpdate()
         {
@@ -140,6 +171,7 @@ public class Dodgeball : Singleton<Dodgeball>
             return instance.currTweener;
         }
     }
+
     public void LaunchUp(float byHeigth, float launchGravity)
     {
         if (Mathf.Approximately(byHeigth,3))

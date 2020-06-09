@@ -25,6 +25,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
 
         netPos = rb3d.position;
         ball.OnCommandActivated += SendCommand;
+        ball.CanApplyLaunchToAction = () => false;
     }
     public override void OnDisable()
     {
@@ -81,19 +82,34 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         if (ball.GetHolder())
             holder = ball.GetHolder().GetComponent<N_PC>().ActorID;
 
-        pv.RPC("RecieveCommand", RpcTarget.Others, (int)command, holder);
+        if(command  == DodgeballCommand.LaunchTo)
+        {
+            pv.RPC("RecieveCommand", RpcTarget.AllViaServer, (int)command, holder, ball.lastAppliedThrow, ball.lastTargetPos);
+        }
+        else
+        {
+            pv.RPC("RecieveCommand", RpcTarget.Others, (int)command, holder, ball.lastAppliedThrow, ball.lastTargetPos);
+        }
     }
+
     [PunRPC]
-    private void RecieveCommand(int c,int holder)
+    private void RecieveCommand(int cmd,int holder,byte lastAppliedThrow,Vector3 lastTargetPos)
     {
-        DodgeballCommand command = (DodgeballCommand)c;
+        DodgeballCommand command = (DodgeballCommand)cmd;
         DodgeballCharacter n_holder = N_TeamsManager.GetPlayer(holder).GetComponent<DodgeballCharacter>();
         switch (command)
         {
             case DodgeballCommand.GoToChara:
                 Debug.Log("Ball().GoingToChara Command RPC");
                 if (!n_holder.HasBall && !ball.IsGoingToChara)
-                    n_holder.GetComponent<BallCatcher>().GrabBall();
+                    n_holder.GetComponent<BallGrabber>().GrabBall();
+                break;
+            case DodgeballCommand.LaunchTo:
+                ball.CanApplyLaunchToAction = () => true;
+                BallThrowData d = DodgeballGameManager.GetThrow(lastAppliedThrow);
+                Dodgeball.GoLaunchTo(lastTargetPos, d);
+                ball.CanApplyLaunchToAction = () => false;
+                Debug.Log("Ball().LaunchTo Command RPC");
                 break;
         }
     }

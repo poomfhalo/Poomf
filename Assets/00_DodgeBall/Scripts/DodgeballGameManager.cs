@@ -12,6 +12,8 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
     [SerializeField] GameObject ballLauncher = null;
     [SerializeField] bool launchBallOnStart = false;
 
+    BallThrowData[] throws = new BallThrowData[0];
+
     void Start()
     {
         Dodgeball.instance.gameObject.SetActive(false);
@@ -43,5 +45,18 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
                 break;
         } while (s == null || s.HasPlayer);
         return s;
+    }
+    public static BallThrowData GetThrow(byte id)
+    {
+        if(instance.throws == null||instance.throws.Length == 0)
+        {
+            instance.throws = Resources.LoadAll<BallThrowData>("");
+        }
+        foreach (BallThrowData t in instance.throws)
+        {
+            if (t.id == id)
+                return t;
+        }
+        return null;
     }
 }

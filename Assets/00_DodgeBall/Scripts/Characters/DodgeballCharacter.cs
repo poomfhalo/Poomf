@@ -2,7 +2,10 @@
 using System.Linq;
 using UnityEngine;
 
-public enum DodgeballCharaCommand { MoveInput, Friendly, Enemy, BallAction, Dodge, FakeFire, Jump }
+public enum DodgeballCharaCommand { MoveInput, Friendly, Enemy, BallAction, Dodge, FakeFire, Jump,
+    EnableReciption,
+    EnableHit
+}
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody))]
@@ -13,12 +16,14 @@ public class DodgeballCharacter : MonoBehaviour
 
     //State
     public bool IsEnabled => isEnabled;
-    public bool HasBall => hasBall;
+    public bool HasBall => grabber.HasBall;
     public bool IsThrowing => launcher.IsThrowing;
     public bool IsMoving => mover.IsMoving;
     public bool IsDodging => dodger.IsDodging;
-    public bool IsBallInGrabZone => catcher.IsBallInGrabZone;
+    public bool IsBallInGrabZone => grabber.IsBallInGrabZone;
     public bool IsJumping => jumper.IsJumping;
+    public bool IsBeingHurt => hp.IsBeingHurt;
+    public bool IsWaitingForHit => hp.IsWaitingForHit;
     public string charaName => name;
 
     //Body Parts
@@ -39,9 +44,6 @@ public class DodgeballCharacter : MonoBehaviour
     [SerializeField] bool isEnabled = false;
     [SerializeField] protected SelectionIndicator selectionIndicator = null;
 
-    [Header("Read Only")]
-    [SerializeField] bool hasBall = false;
-
     protected Rigidbody rb3d = null;
     protected Animator animator = null;
     protected Camera cam = null;
@@ -49,8 +51,10 @@ public class DodgeballCharacter : MonoBehaviour
     protected Mover mover = null;
     protected BallLauncher launcher = null;
     protected Dodger dodger = null;
-    protected BallCatcher catcher = null;
+    protected BallGrabber grabber = null;
     protected Jumper jumper = null;
+    protected BallReciever reciever = null;
+    protected CharaHitPoints hp = null;
 
     protected virtual void Reset()
     {
@@ -58,6 +62,7 @@ public class DodgeballCharacter : MonoBehaviour
             gameObject.AddComponent<CapsuleCollider>();
         selectionIndicator = GetComponentInChildren<SelectionIndicator>();
     }
+
     protected virtual void Awake()
     {
         rb3d = GetComponent<Rigidbody>();
@@ -67,8 +72,11 @@ public class DodgeballCharacter : MonoBehaviour
         launcher = GetComponent<BallLauncher>();
         mover = GetComponent<Mover>();
         dodger = GetComponent<Dodger>();
-        catcher = GetComponent<BallCatcher>();
+        grabber = GetComponent<BallGrabber>();
         jumper = GetComponent<Jumper>();
+        reciever = GetComponent<BallReciever>();
+        hp = GetComponent<CharaHitPoints>();
+
 
         if (selectionIndicator == null)
             selectionIndicator = GetComponentInChildren<SelectionIndicator>();
@@ -80,11 +88,11 @@ public class DodgeballCharacter : MonoBehaviour
         selectionIndicator.SetOwner(this);
         selectionIndicator.SetFocus(null);
 
-        if(launcher)
+        if (launcher)
             launcher.onThrowPointReached += OnThrewBall;
 
-        if (catcher)
-            catcher.onBallInHands += OnBallInHands;
+        if (grabber)
+            grabber.onBallInHands += OnBallInHands;
     }
 
     public void SetTeam(TeamTag team)
@@ -95,17 +103,15 @@ public class DodgeballCharacter : MonoBehaviour
 
     protected void OnThrewBall()
     {
-        hasBall = false;
         selectionIndicator.SetFocus(null);
     }
-    private void OnBallInHands()
+    protected void OnBallInHands()
     {
-        hasBall = true;
         selectionIndicator.SetNewFocus(false);
     }
 
 
-    #region Commands
+    #region Input Commands
     public void C_MoveInput(Vector3 i)
     {
         GetComponents<DodgeballCharaAction>().ToList().ForEach(a => { a.RecieveInput(i); });
@@ -137,11 +143,9 @@ public class DodgeballCharacter : MonoBehaviour
     }
     public void C_OnBallAction()
     {
-        Debug.Log("Action Was Called");
         if (!HasBall && IsBallInGrabZone)
         {
-            Debug.Log("Should Have Caught Ball?");
-            catcher.StartCatchAction();
+            grabber.StartCatchAction();
             OnCommandActivated?.Invoke(DodgeballCharaCommand.BallAction);
         }
 
@@ -186,4 +190,21 @@ public class DodgeballCharacter : MonoBehaviour
         OnCommandActivated?.Invoke(DodgeballCharaCommand.Jump);
     }
     #endregion
+
+    #region Gameplay Commands
+    public void C_EnableReciption()
+    {
+        reciever.StartReciptionAction();
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.EnableReciption);
+    }
+    public void C_EnableHit()
+    {
+        if (IsBeingHurt)
+            return;
+
+        hp.EnableHitDetection();
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.EnableHit);
+    }
+    #endregion
+
 }

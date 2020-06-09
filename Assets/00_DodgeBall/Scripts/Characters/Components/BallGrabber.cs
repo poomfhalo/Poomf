@@ -2,11 +2,12 @@
 using GW_Lib.Utility;
 using UnityEngine;
 
-public class BallCatcher : DodgeballCharaAction, ICharaAction
+public class BallGrabber : DodgeballCharaAction, ICharaAction
 {
     public event Action onBallInHands = null;
 
     public bool IsBallInGrabZone => isBallInGrabZone;
+    public bool HasBall => hasBall;
     public string actionName => activityName;
 
     [Header("Ball Grabbing")]
@@ -14,6 +15,7 @@ public class BallCatcher : DodgeballCharaAction, ICharaAction
     [Header("Read Only")]
     [SerializeField] bool isBallInGrabZone = false;
     [SerializeField] string activityName = "Grab Ball";
+    [SerializeField] bool hasBall = false;
 
     Animator animator = null;
     Dodgeball ball = null;
@@ -22,6 +24,7 @@ public class BallCatcher : DodgeballCharaAction, ICharaAction
     {
         ball = Dodgeball.instance;
         animator = GetComponent<Animator>();
+        GetComponent<BallLauncher>().onThrowPointReached += () => hasBall = false;
 
         ballGrabbingZone.onTriggerEnter.AddListener(OnBallGrabZoneEntered);
         ballGrabbingZone.onTriggerExit.AddListener(OnBallGrabZoneExitted);
@@ -60,6 +63,7 @@ public class BallCatcher : DodgeballCharaAction, ICharaAction
     public void GrabBall()
     {
         Dodgeball.GoTo(GetComponent<DodgeballCharacter>(), () => {
+            hasBall = true;
             onBallInHands?.Invoke();
         });
         animator.SetBool("HasBall", true);
