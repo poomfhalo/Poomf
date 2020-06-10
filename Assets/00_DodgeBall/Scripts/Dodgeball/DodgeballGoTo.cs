@@ -23,6 +23,7 @@ public class DodgeballGoTo : DodgeballAction
     }
     public void GoTo(DodgeballCharacter chara, Action onCompleted)
     {
+        isRunning = true;
         scheduler.StartAction(this);
 
         float currTweener = 0;
@@ -42,6 +43,7 @@ public class DodgeballGoTo : DodgeballAction
 
             onCompleted?.Invoke();
             Dodgeball.instance.transform.SetParent(chara.BallGrabPoint);
+            Cancel();
         }
     }
 }

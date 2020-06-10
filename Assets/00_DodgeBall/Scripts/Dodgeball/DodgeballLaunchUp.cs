@@ -13,15 +13,23 @@ public class DodgeballLaunchUp : DodgeballAction
         base.Awake();
         cf = GetComponent<ConstantForce>();
     }
+    void OnEnable()
+    {
+        ball.OnHitGround += OnHitGround;
+    }
+    void OnDisable()
+    {
+        ball.OnHitGround -= OnHitGround;
+    }
 
     public void C_LaunchUp(float byHeigth, float launchGravity)
     {
+        isRunning = true;
         ball.RunCommand(Command);
         if (!ApplyActionWithCommand())
             return;
 
         LaunchUp(byHeigth,launchGravity);
-
     }
     public void LaunchUp(float byHeigth, float launchGravity)
     {
@@ -29,5 +37,13 @@ public class DodgeballLaunchUp : DodgeballAction
         this.SetKinematic(false);
         float yVel = Extentions.GetJumpVelocity(byHeigth, cf.force.y);
         rb3d.velocity = Vector3.up * yVel;
+    }
+
+    private void OnHitGround()
+    {
+        if (isRunning)
+        {
+            Cancel();
+        }
     }
 }

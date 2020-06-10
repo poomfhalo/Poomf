@@ -14,19 +14,24 @@ public class DodgeballGoLaunchTo : DodgeballAction
 
     public void C_GoLaunchTo(Vector3 targetPos, BallThrowData d)
     {
+        Debug.Log("Called Command To Launch To ");
         ball.lastTargetPos = targetPos;
         ball.lastAppliedThrow = d.id;
         ball.RunCommand(Command);
 
         if (ApplyActionWithCommand())
         {
-            GoLaunchTo(targetPos, d);
+            return;
         }
+
+        GoLaunchTo(targetPos, d);
     }
     public void GoLaunchTo(Vector3 targetPos, BallThrowData d)
     {
+        isRunning = true;
         scheduler.StartAction(this);
         ball.SetKinematic(true);
+        ball.ballState = Dodgeball.BallState.LaunchedToChara;
 
         //instance.InvokeDelayed(instance.leavingHandsTime, () => instance.bodyCol.GetCollider.enabled = true);
         float dist = Vector3.Distance(rb3d.position, targetPos);
@@ -41,7 +46,7 @@ public class DodgeballGoLaunchTo : DodgeballAction
         }
         void OnComplete()
         {
-
+            Cancel();
         }
     }
 }

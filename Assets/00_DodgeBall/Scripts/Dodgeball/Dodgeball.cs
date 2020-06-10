@@ -8,6 +8,8 @@ using GW_Lib.Utility;
 //TODO: dynamically find the gravity, depending on distance, such that, speed never exceeds a certain value?
 public class Dodgeball : Singleton<Dodgeball>
 {
+    public event Action OnHitGround = null;
+
     public bool IsOnGround => ballState == BallState.OnGround;
     public bool IsHeld => ballState == BallState.Held;
     public bool IsFlying => ballState == BallState.Flying;
@@ -16,7 +18,9 @@ public class Dodgeball : Singleton<Dodgeball>
 
     public event Action<DodgeballCommand> OnCommandActivated = null;
 
-    public enum BallState { OnGround,Held,Flying,GoingToChara,PostContact }
+    public enum BallState { OnGround,Held,Flying,GoingToChara,PostContact,
+        LaunchedToChara
+    }
 
     public Vector3 position { get { return rb3d.position; } set { rb3d.MovePosition(value); } }
 
@@ -67,6 +71,7 @@ public class Dodgeball : Singleton<Dodgeball>
         Field field = col.GetComponent<Field>();
         if (!field)
             return;
+        OnHitGround?.Invoke();
         if(ballState == BallState.Flying || ballState == BallState.PostContact)
         {
             ballState = BallState.OnGround;

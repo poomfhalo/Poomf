@@ -83,10 +83,15 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         int holder = -1;
         if (ball.GetHolder())
             holder = ball.GetHolder().GetComponent<N_PC>().ActorID;
-
-        if(command  == DodgeballCommand.LaunchTo)
+        if(command == DodgeballCommand.LaunchUp)
         {
-            pv.RPC("RecieveCommand", RpcTarget.All, (int)command, holder, ball.lastAppliedThrow, ball.lastTargetPos);
+            Debug.Log("N_Ball() :: sending command " + command + " :: is not allowed");
+            return;
+        }
+
+        if (command  == DodgeballCommand.LaunchTo)
+        {
+            pv.RPC("RecieveCommand", RpcTarget.AllViaServer, (int)command, holder, ball.lastAppliedThrow, ball.lastTargetPos);
         }
         else
         {

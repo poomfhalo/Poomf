@@ -4,6 +4,10 @@ using UnityEngine;
 public enum DodgeballCommand { GoToChara, LaunchUp, LaunchTo }
 public abstract class DodgeballAction : MonoBehaviour, ICharaAction
 {
+    public bool IsRunning => isRunning;
+    [Header("Read Only")]
+    [SerializeField] protected bool isRunning = false;
+
     public abstract DodgeballCommand Command { get; }
     public abstract string actionName { get; }
 
@@ -22,6 +26,6 @@ public abstract class DodgeballAction : MonoBehaviour, ICharaAction
 
     public virtual void Cancel()
     {
-
+        isRunning = false;
     }
 }
