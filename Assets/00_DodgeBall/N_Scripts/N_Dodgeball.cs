@@ -86,18 +86,20 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
 
         if(command  == DodgeballCommand.LaunchTo)
         {
-            pv.RPC("RecieveCommand", RpcTarget.AllViaServer, (int)command, holder, ball.lastAppliedThrow, ball.lastTargetPos);
+            pv.RPC("RecieveCommand", RpcTarget.All, (int)command, holder, ball.lastAppliedThrow, ball.lastTargetPos);
         }
         else
         {
             pv.RPC("RecieveCommand", RpcTarget.Others, (int)command, holder, ball.lastAppliedThrow, ball.lastTargetPos);
         }
+        Debug.Log("N_Ball().SendCommand :: " + command, ball.GetHolder());
     }
 
     [PunRPC]
     private void RecieveCommand(int cmd,int holder,byte lastAppliedThrow,Vector3 lastTargetPos)
     {
         DodgeballCommand command = (DodgeballCommand)cmd;
+        Debug.Log("N_Ball().RecieveCommand :: " + command);
         DodgeballCharacter n_holder = null;
         if (holder != -1)
         {
@@ -106,14 +108,12 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         switch (command)
         {
             case DodgeballCommand.GoToChara:
-                Debug.Log("Ball().GoingToChara Command RPC");
                 if (n_holder && !n_holder.HasBall && !ball.IsGoingToChara)
                     n_holder.GetComponent<BallGrabber>().GrabBall();
                 break;
             case DodgeballCommand.LaunchTo:
                 BallThrowData d = DodgeballGameManager.GetThrow(lastAppliedThrow);
                 ball.launchTo.GoLaunchTo(lastTargetPos, d);
-                Debug.Log("Ball().LaunchTo Command RPC",gameObject);
                 break;
         }
     }
