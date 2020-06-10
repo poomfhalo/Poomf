@@ -13,7 +13,6 @@ public class DodgeballGoTo : DodgeballAction
     public void C_GoTo(DodgeballCharacter chara, Action onCompleted)
     {
         ball.holder = chara;
-        ball.ballState = Dodgeball.BallState.GoingToChara;
         ball.RunCommand(Command);
 
         if (!ApplyActionWithCommand())
@@ -23,6 +22,7 @@ public class DodgeballGoTo : DodgeballAction
     }
     public void GoTo(DodgeballCharacter chara, Action onCompleted)
     {
+        ball.ballState = Dodgeball.BallState.GoingToChara;
         isRunning = true;
         scheduler.StartAction(this);
 

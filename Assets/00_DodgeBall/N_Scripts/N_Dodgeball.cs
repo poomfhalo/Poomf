@@ -124,7 +124,10 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         {
             case DodgeballCommand.GoToChara:
                 if (n_holder && !n_holder.HasBall && !ball.IsGoingToChara)
+                {
+                    Debug.Log("called from here?");
                     n_holder.GetComponent<BallGrabber>().GrabBall();
+                }
                 break;
             case DodgeballCommand.LaunchTo:
                 BallThrowData d = DodgeballGameManager.GetThrow(lastAppliedThrow);
