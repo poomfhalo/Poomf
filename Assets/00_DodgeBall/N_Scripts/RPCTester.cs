@@ -12,13 +12,11 @@ public class RPCTester : MonoBehaviour
     void Start()
     {
         pv = GetComponent<PhotonView>();
-        a.started += OnStarted;
     }
-
-    private void OnStarted(InputAction.CallbackContext obj)
+    public void SendCommnad()
     {
         Debug.Log("Sending Command ");
-        pv.RPC("RecievingCommand", RpcTarget.All);
+        pv.RPC("RecievingCommand", RpcTarget.AllViaServer);
     }
     [PunRPC]
     void RecievingCommand()
