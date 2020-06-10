@@ -101,15 +101,17 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
             return;
         }
 
-        if (command  == DodgeballCommand.LaunchTo)
-        {
-            pv.RPC("RecieveCommand", RpcTarget.AllViaServer, (int)command, holder, ball.lastAppliedThrow, ball.lastTargetPos);
-        }
-        else
-        {
-            pv.RPC("RecieveCommand", RpcTarget.Others, (int)command, holder, ball.lastAppliedThrow, ball.lastTargetPos);
-        }
-        Debug.Log("N_Ball().SendCommand :: " + command, ball.GetHolder());
+        this.InvokeDelayed(lastLag * 2, () => {
+            if (command == DodgeballCommand.LaunchTo)
+            {
+                pv.RPC("RecieveCommand", RpcTarget.AllViaServer, (int)command, holder, ball.lastAppliedThrow, ball.lastTargetPos);
+            }
+            else
+            {
+                pv.RPC("RecieveCommand", RpcTarget.Others, (int)command, holder, ball.lastAppliedThrow, ball.lastTargetPos);
+            }
+            Debug.Log("N_Ball().SendCommand :: " + command, ball.GetHolder());
+        });
     }
 
     [PunRPC]
