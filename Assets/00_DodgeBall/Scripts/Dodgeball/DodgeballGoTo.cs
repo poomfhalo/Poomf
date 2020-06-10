@@ -8,6 +8,8 @@ public class DodgeballGoTo : DodgeballAction
     [SerializeField] float grabDur = 0.1f;
 
     public override DodgeballCommand Command => DodgeballCommand.GoToChara;
+    public override string actionName => "Goiing To Chara";
+
     public void C_GoTo(DodgeballCharacter chara, Action onCompleted)
     {
         ball.holder = chara;
