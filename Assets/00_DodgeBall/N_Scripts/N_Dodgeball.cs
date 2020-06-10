@@ -80,7 +80,9 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
 
     private void SendCommand(DodgeballCommand command)
     {
-        return;
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
         int holder = -1;
         if (ball.GetHolder())
         {
