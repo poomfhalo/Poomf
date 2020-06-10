@@ -93,7 +93,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
             holder = ball.GetHolder().GetComponent<N_PC>().ActorID;
         }
 
-        if(command == DodgeballCommand.LaunchUp || command == DodgeballCommand.GoToChara)
+        if(command == DodgeballCommand.LaunchUp)
         {
             Debug.Log("N_Ball() :: sending command " + command + " :: is not allowed");
             return;

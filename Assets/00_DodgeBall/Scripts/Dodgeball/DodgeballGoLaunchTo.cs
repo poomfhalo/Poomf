@@ -14,7 +14,6 @@ public class DodgeballGoLaunchTo : DodgeballAction
 
     public void C_GoLaunchTo(Vector3 targetPos, BallThrowData d)
     {
-        Debug.Log("Called Command To Launch To ");
         ball.lastTargetPos = targetPos;
         ball.lastAppliedThrow = d.id;
         ball.RunCommand(Command);
