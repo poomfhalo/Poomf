@@ -98,12 +98,16 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     private void RecieveCommand(int cmd,int holder,byte lastAppliedThrow,Vector3 lastTargetPos)
     {
         DodgeballCommand command = (DodgeballCommand)cmd;
-        DodgeballCharacter n_holder = N_TeamsManager.GetPlayer(holder).GetComponent<DodgeballCharacter>();
+        DodgeballCharacter n_holder = null;
+        if (holder != -1)
+        {
+            n_holder = N_TeamsManager.GetPlayer(holder).GetComponent<DodgeballCharacter>();
+        }
         switch (command)
         {
             case DodgeballCommand.GoToChara:
                 Debug.Log("Ball().GoingToChara Command RPC");
-                if (!n_holder.HasBall && !ball.IsGoingToChara)
+                if (n_holder && !n_holder.HasBall && !ball.IsGoingToChara)
                     n_holder.GetComponent<BallGrabber>().GrabBall();
                 break;
             case DodgeballCommand.LaunchTo:
