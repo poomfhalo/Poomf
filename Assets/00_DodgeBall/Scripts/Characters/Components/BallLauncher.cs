@@ -107,7 +107,7 @@ public class BallLauncher : DodgeballCharaAction,ICharaAction
             //float f =Extentions.GetTravelTime(chara.BallGrabPoint.position, toChara.ShootablePoint.position, vel, Vector3.zero);
             //this.InvokeDelayed(f, () => { Debug.Log("Finished?"); Debug.Break(); });
             //Dodgeball.GoLaunchTo(aimedAtChara, vel, Vector3.down * gravity, null);
-            Dodgeball.GoLaunchTo(aimedAtChara.ShootablePoint.position, throwData);
+            Dodgeball.C_GoLaunchTo(aimedAtChara.ShootablePoint.position, throwData);
             onThrowPointReached?.Invoke();
         }
     }

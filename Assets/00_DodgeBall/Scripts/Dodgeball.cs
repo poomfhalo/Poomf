@@ -32,7 +32,6 @@ public class Dodgeball : Singleton<Dodgeball>
     [Header("Read Only")]
     [SerializeField] bool isCaught = false;
     [SerializeField] DodgeballCharacter holder = null;
-    [SerializeField] float currTweener = 0;
     public byte lastAppliedThrow = 0;
     public Vector3 lastTargetPos = new Vector3();
     [Header("Synced Variables")]
@@ -65,7 +64,6 @@ public class Dodgeball : Singleton<Dodgeball>
     {
         isCaught = false;
         holder = null;
-        currTweener = 0;
         transform.DOKill();
     }
 
@@ -99,76 +97,65 @@ public class Dodgeball : Singleton<Dodgeball>
         //m_ballState = BallState.PostContact;
     }
 
-    public static void GoLaunchTo(Vector3 targetPos, BallThrowData d)
+    public static void C_GoLaunchTo(Vector3 targetPos, BallThrowData d)
     {
         if (instance.CanApplyLaunchToAction())
         {
-            instance.SetKinematic(true);
-            instance.InvokeDelayed(instance.leavingHandsTime, () => instance.bodyCol.GetCollider.enabled = true);
-            float dist = Vector3.Distance(instance.rb3d.position, targetPos);
-            float time = d.GetTimeOfDist(dist);
-            float tweener = 0;
-
-            instance.activeTweener = DOTween.To(() => tweener, f => tweener = f, 1, time).SetEase(d.ease).OnUpdate(OnUpdate).OnComplete(OnComplete);
-            void OnUpdate()
-            {
-                Vector3 lerpedPos = Vector3.Lerp(instance.position, targetPos, tweener);
-                instance.rb3d.MovePosition(lerpedPos);
-            }
-            void OnComplete()
-            {
-
-            }
+            GoLaunchTo(targetPos, d);
         }
         instance.lastTargetPos = targetPos;
         instance.lastAppliedThrow = d.id;
         instance.OnCommandActivated?.Invoke(DodgeballCommand.LaunchTo);
     }
-    public static void GoLaunchTo(DodgeballCharacter chara,Vector3 launchVel,Vector3 gravity, Action onCompleted)
+    public static void GoLaunchTo(Vector3 targetPos, BallThrowData d)
     {
-        instance.SetKinematic(false);
-        instance.InvokeDelayed(instance.leavingHandsTime, () => instance.bodyCol.GetCollider.enabled = true);
-        instance.rb3d.velocity = launchVel;
-        instance.cf.force = gravity;
-        instance.ballState = BallState.Flying;
+        instance.SetKinematic(true);
+        //instance.InvokeDelayed(instance.leavingHandsTime, () => instance.bodyCol.GetCollider.enabled = true);
+        float dist = Vector3.Distance(instance.rb3d.position, targetPos);
+        float time = d.GetTimeOfDist(dist);
+        float tweener = 0;
+
+        instance.activeTweener = DOTween.To(() => tweener, f => tweener = f, 1, time).SetEase(d.ease).OnUpdate(OnUpdate).OnComplete(OnComplete);
+        void OnUpdate()
+        {
+            Vector3 lerpedPos = Vector3.Lerp(instance.position, targetPos, tweener);
+            instance.rb3d.MovePosition(lerpedPos);
+        }
+        void OnComplete()
+        {
+
+        }
     }
-    public static void GoTo(DodgeballCharacter chara, Action onCompleted ,float grabTime = -1)
+    public static void C_GoTo(DodgeballCharacter chara, Action onCompleted ,float grabTime = -1)
     {
+        instance.isCaught = true;
+        instance.holder = chara;
+        instance.OnCommandActivated?.Invoke(DodgeballCommand.GoToChara);
         instance.ballState = BallState.GoingToChara;
+
         float dur = grabTime;
 
         if (grabTime < 0)
             dur = instance.defGrabTime;
 
+        float currTweener = 0;
+
         instance.bodyCol.GetCollider.enabled = false;
         instance.SetKinematic(true);
 
         Vector3 startPos = instance.position;
-        DOTween.To(Getter, Setter, 1, dur).OnUpdate(OnUpdate).OnComplete(OnComplete).SetEase(Ease.InOutSine);
-
-        instance.isCaught = true;
-        instance.holder = chara;
-        instance.OnCommandActivated?.Invoke(DodgeballCommand.GoToChara);
-
+        DOTween.To(() => currTweener, f => currTweener = f, 1, dur).OnUpdate(OnUpdate).
+                                                                        OnComplete(OnComplete).SetEase(Ease.InOutSine);
         void OnUpdate()
         {
-             instance.position = Vector3.Lerp(startPos, chara.BallGrabPoint.position, instance.currTweener);
+             instance.position = Vector3.Lerp(startPos, chara.BallGrabPoint.position, currTweener);
         }
         void OnComplete()
         {
             instance.ballState = BallState.Held;
 
             onCompleted?.Invoke();
-            instance.currTweener = 0;
             instance.transform.SetParent(chara.BallGrabPoint);
-        }
-        void Setter(float pNewValue)
-        {
-            instance.currTweener = pNewValue;
-        }
-        float Getter()
-        {
-            return instance.currTweener;
         }
     }
 
@@ -182,5 +169,12 @@ public class Dodgeball : Singleton<Dodgeball>
         float yVel = Extentions.GetJumpVelocity(byHeigth, cf.force.y);
         rb3d.velocity = Vector3.up * yVel;
     }
-
+    public static void GoLaunchTo(DodgeballCharacter chara, Vector3 launchVel, Vector3 gravity, Action onCompleted)
+    {
+        instance.SetKinematic(false);
+        instance.InvokeDelayed(instance.leavingHandsTime, () => instance.bodyCol.GetCollider.enabled = true);
+        instance.rb3d.velocity = launchVel;
+        instance.cf.force = gravity;
+        instance.ballState = BallState.Flying;
+    }
 }
