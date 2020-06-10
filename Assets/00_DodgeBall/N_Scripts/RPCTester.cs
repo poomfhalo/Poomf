@@ -16,7 +16,7 @@ public class RPCTester : MonoBehaviour
     public void SendCommnad()
     {
         Debug.Log("Sending Command ");
-        pv.RPC("RecievingCommand", RpcTarget.AllViaServer);
+        pv.RPC("RecievingCommand", RpcTarget.Others);
     }
     [PunRPC]
     void RecievingCommand()
