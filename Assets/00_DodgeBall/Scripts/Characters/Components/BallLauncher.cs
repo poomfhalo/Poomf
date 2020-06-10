@@ -102,7 +102,6 @@ public class BallLauncher : DodgeballCharaAction,ICharaAction
             isThrowing = false;
             aimedAtChara.C_EnableHit();
             Dodgeball.instance.launchTo.C_GoLaunchTo(aimedAtChara.ShootablePoint.position, throwData);
-            Debug.Log("Should Have Sent Command To Throw");
             onThrowPointReached?.Invoke();
         }
     }
