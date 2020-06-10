@@ -25,7 +25,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
 
         netPos = rb3d.position;
         ball.OnCommandActivated += SendCommand;
-        ball.CanApplyLaunchToAction = () => false;
+        ball.launchTo.ApplyActionWithCommand = () => false;
     }
     public override void OnDisable()
     {
@@ -105,11 +105,9 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
                     n_holder.GetComponent<BallGrabber>().GrabBall();
                 break;
             case DodgeballCommand.LaunchTo:
-                ball.CanApplyLaunchToAction = () => true;
                 BallThrowData d = DodgeballGameManager.GetThrow(lastAppliedThrow);
-                Dodgeball.GoLaunchTo(lastTargetPos, d);
-                ball.CanApplyLaunchToAction = () => false;
-                Debug.Log("Ball().LaunchTo Command RPC");
+                ball.launchTo.GoLaunchTo(lastTargetPos, d);
+                Debug.Log("Ball().LaunchTo Command RPC",gameObject);
                 break;
         }
     }

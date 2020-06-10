@@ -25,7 +25,7 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
     {
         Dodgeball.instance.gameObject.SetActive(true);
         this.InvokeDelayed(timeBeforeBallLaunch, () => {
-            Dodgeball.instance.LaunchUp(ballLaunchHeigth, launchGravity);
+            Dodgeball.instance.launchUp.C_LaunchUp(ballLaunchHeigth, launchGravity);
             ballLauncher.SetActive(false);
         });
     }

@@ -31,8 +31,10 @@ GameObject:
   - component: {fileID: 57221109919460847}
   - component: {fileID: 57221109919460752}
   - component: {fileID: 57221109919460845}
-  - component: {fileID: 57221109919460755}
-  - component: {fileID: 57221109919460754}
+  - component: {fileID: 5475323293589320073}
+  - component: {fileID: 7237304765413138185}
+  - component: {fileID: 8135899822388260389}
+  - component: {fileID: 7279175448926025499}
   m_Layer: 29
   m_Name: Dodgeball
   m_TagString: Untagged
@@ -108,14 +110,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fa56246ec2607095b3e858bd59263ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leavingHandsTime: 0.1
-  defGrabTime: 0.1
+  isPersistant: 0
   bodyCol: {fileID: 57221110444787069}
-  m_ballState: 2
-  isCaught: 0
   holder: {fileID: 0}
-  currTweener: 0
---- !u!114 &57221109919460755
+  lastAppliedThrow: 0
+  lastTargetPos: {x: 0, y: 0, z: 0}
+  ballState: 2
+--- !u!114 &5475323293589320073
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,20 +125,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 57221109919460844}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Script: {fileID: 11500000, guid: 1128aba1d82137c0d8a70ee05c4c4adb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 57221109919460754}
-  viewIdField: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
---- !u!114 &57221109919460754
+  leavingHandsTime: 0.1
+--- !u!114 &7237304765413138185
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -146,12 +138,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 57221109919460844}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Script: {fileID: 11500000, guid: 39846d39419ae4bd081e9347740e15cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
+  grabDur: 0.1
+--- !u!114 &8135899822388260389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57221109919460844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afbe17a433cdb27ddabc0268ff543ee5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7279175448926025499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57221109919460844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df7a475dd38aeb7d8f2af93ed6d0bcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currActionName: 
 --- !u!1001 &7324318474472625760
 PrefabInstance:
   m_ObjectHideFlags: 0

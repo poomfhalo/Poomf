@@ -101,13 +101,7 @@ public class BallLauncher : DodgeballCharaAction,ICharaAction
             animator.SetBool("HasBall", false);
             isThrowing = false;
             aimedAtChara.C_EnableHit();
-
-            //Vector3 vel = Extentions.GetLaunchVelocity(Dodgeball.instance.position,
-                                                            //aimedAtChara.ShootablePoint.position, heigth, -gravity);
-            //float f =Extentions.GetTravelTime(chara.BallGrabPoint.position, toChara.ShootablePoint.position, vel, Vector3.zero);
-            //this.InvokeDelayed(f, () => { Debug.Log("Finished?"); Debug.Break(); });
-            //Dodgeball.GoLaunchTo(aimedAtChara, vel, Vector3.down * gravity, null);
-            Dodgeball.C_GoLaunchTo(aimedAtChara.ShootablePoint.position, throwData);
+            Dodgeball.instance.launchTo.C_GoLaunchTo(aimedAtChara.ShootablePoint.position, throwData);
             onThrowPointReached?.Invoke();
         }
     }
