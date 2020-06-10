@@ -22,9 +22,11 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         pv = GetComponent<PhotonView>();
         ball = GetComponent<Dodgeball>();
         rb3d = GetComponent<Rigidbody>();
-
-        netPos = rb3d.position;
         ball.OnCommandActivated += SendCommand;
+    }
+    void Start()
+    {
+        netPos = rb3d.position;
         ball.launchTo.ApplyActionWithCommand = () => false;
     }
     public override void OnDisable()
