@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: 51bb29dc-94ea-4f57-a8a0-f65b749d6bc8
+    AppIdRealtime: 
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: eu
+    FixedRegion: 
     Server: 
     Port: 0
     Protocol: 0
@@ -34,23 +34,16 @@ MonoBehaviour:
   - ClickRpc
   - DestroyRpc
   - DestroySpaceship
-  - Fire
-  - RespawnSpaceship
-  - SpawnPC
-  - SpawsnPC
   - Fill
+  - Fire
   - Free
-  - CreatePlayerManager
-  - RecieveTeamsData
-  - SyncWithTeamsManager
-  - Initialize
-  - FindLocalPlayer
-  - StartGame
-  - OnBeforeGameStart
   - OnCreated
   - PrepareForGame
   - RecieveCommand
-  - PrepareforGame
+  - RecieveTeamsData
+  - RespawnSpaceship
+  - StartGame
+  - SyncWithTeamsManager
   DisableAutoOpenWizard: 1
-  ShowSettings: 1
+  ShowSettings: 0
   DevRegionSetOnce: 0
