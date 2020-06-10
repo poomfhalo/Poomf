@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 using GW_Lib;
+using System.Linq;
 
 [RequireComponent(typeof(Dodgeball))]
 public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
@@ -58,6 +59,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
             ball.ballState = (Dodgeball.BallState)(int)stream.ReceiveNext();
         }
         lastLag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
+        GetComponents<DodgeballAction>().ToList().ForEach(a => a.commandDelay = lastLag * 2);
         netPos = netPos + netVel * lastLag;
     }
 
@@ -68,9 +70,9 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         if (ball.IsHeld || ball.IsGoingToChara)
             return;
 
-        ball.SetKinematic(true);
-        Vector3 targetPos = Vector3.Lerp(rb3d.position, netPos, catchUpSpeed * Time.fixedDeltaTime);
-        rb3d.MovePosition(targetPos);
+        //ball.SetKinematic(true);
+        //Vector3 targetPos = Vector3.Lerp(rb3d.position, netPos, catchUpSpeed * Time.fixedDeltaTime);
+        //rb3d.MovePosition(targetPos);
     }
     void OnDrawGizmos()
     {
