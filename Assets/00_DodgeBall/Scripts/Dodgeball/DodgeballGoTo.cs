@@ -6,9 +6,15 @@ using UnityEngine;
 public class DodgeballGoTo : DodgeballAction
 {
     [SerializeField] float grabDur = 0.1f;
+    [SerializeField] float heldPosCheckerDur = 0.025f;
 
     public override DodgeballCommand Command => DodgeballCommand.GoToChara;
     public override string actionName => "Goiing To Chara";
+
+    void OnDisable()
+    {
+        transform.DOKill();
+    }
 
     public void C_GoTo(DodgeballCharacter chara, Action onCompleted)
     {
@@ -42,8 +48,9 @@ public class DodgeballGoTo : DodgeballAction
             ball.ballState = Dodgeball.BallState.Held;
 
             onCompleted?.Invoke();
-            Dodgeball.instance.transform.SetParent(chara.BallGrabPoint);
+            ball.transform.SetParent(chara.BallGrabPoint);
             Cancel();
+            ball.transform.DOLocalMove(Vector3.zero, heldPosCheckerDur).SetEase(Ease.InOutSine);
         }
     }
 }
