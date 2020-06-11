@@ -13,12 +13,12 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     [SerializeField] float catchUpSpeed = 0;
     [Header("Read Only")]
     [SerializeField] bool allowSync = true;
-    //[SerializeField] Vector3 netPos = new Vector3();
+    [SerializeField] Vector3 netPos = new Vector3();
+    [SerializeField] Vector3 netVel = Vector3.zero;
 
     Rigidbody rb3d = null;
     PhotonView pv = null;
     Dodgeball ball = null;
-    Vector3 netVel = Vector3.zero;
     bool firstRead = true;
 
     public override void OnEnable()
@@ -42,7 +42,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     {
         if (stream.IsWriting)
         {
-            //stream.SendNext(rb3d.position);
+            stream.SendNext(rb3d.position);
             stream.SendNext(rb3d.velocity);
             //stream.SendNext((int)ball.ballState);
         }
@@ -54,12 +54,12 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
                 return;
             }
 
-            //netPos = (Vector3)stream.ReceiveNext();
+            netPos = (Vector3)stream.ReceiveNext();
             netVel = (Vector3)stream.ReceiveNext();
             //ball.ballState = (Dodgeball.BallState)(int)stream.ReceiveNext();
         }
         lastLag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
-        //netPos = netPos + netVel * lastLag;
+        netPos = netPos + netVel * lastLag;
     }
     void FixedUpdate()
     {
@@ -71,7 +71,10 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
             return;
 
         ball.SetKinematic(false);
-        rb3d.velocity = Vector3.Slerp(rb3d.velocity, netVel, lastLag * Time.fixedDeltaTime * catchUpSpeed);
+        Vector3 posDir = (netPos - rb3d.position).normalized;
+        Vector3 posVel = posDir * catchUpSpeed;
+        Vector3 targetVel = netVel + posVel;
+        rb3d.velocity = Vector3.Slerp(rb3d.velocity, targetVel, lastLag * Time.fixedDeltaTime * catchUpSpeed);
 
         //ball.SetKinematic(true);
         //Vector3 targetPos = Vector3.Lerp(rb3d.position, netPos, catchUpSpeed * Time.fixedDeltaTime);
