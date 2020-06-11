@@ -27,6 +27,9 @@ public class DodgeballGoLaunchTo : DodgeballAction
     }
     public void GoLaunchTo(Vector3 targetPos, BallThrowData d)
     {
+        if (activeTweener != null)
+            return;
+
         isRunning = true;
         scheduler.StartAction(this);
         ball.SetKinematic(true);
@@ -47,6 +50,15 @@ public class DodgeballGoLaunchTo : DodgeballAction
         {
             Log.Message("Ball Completed Its movement");
             Cancel();
+        }
+    }
+    public override void Cancel()
+    {
+        base.Cancel();
+        if (activeTweener != null)
+        {
+            activeTweener.Kill();
+            activeTweener = null;
         }
     }
 }
