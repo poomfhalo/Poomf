@@ -36,14 +36,16 @@ public class DodgeballGoLaunchTo : DodgeballAction
         float time = d.GetTimeOfDist(dist);
         float tweenV = 0;
 
+        Vector3 startPos = ball.position;
         activeTweener = DOTween.To(() => tweenV, f => tweenV = f, 1, time).SetEase(d.ease).OnUpdate(OnUpdate).OnComplete(OnComplete);
         void OnUpdate()
         {
-            Vector3 lerpedPos = Vector3.Lerp(ball.position, targetPos, tweenV);
+            Vector3 lerpedPos = Vector3.Lerp(startPos, targetPos, tweenV);
             rb3d.MovePosition(lerpedPos);
         }
         void OnComplete()
         {
+            Debug.Log("Ball Completed Its movement");
             Cancel();
         }
     }
