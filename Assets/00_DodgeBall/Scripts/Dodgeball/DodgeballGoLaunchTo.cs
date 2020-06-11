@@ -50,6 +50,7 @@ public class DodgeballGoLaunchTo : DodgeballAction
         {
             Log.Message("Ball Completed Its movement");
             this.SetKinematic(false);
+            ball.bodyCol.GetCollider.enabled = true;
             Cancel();
         }
     }
