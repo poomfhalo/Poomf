@@ -63,10 +63,12 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
 
         OnHPUpdated?.Invoke();
         currHP = currHP - 1;
+
         if (currHP <= 0)
         {
             OnZeroHP?.Invoke();
             gameObject.SetActive(false);
+            Log.Message("HP: Zero Health", gameObject);
         }
         else
         {
@@ -75,6 +77,7 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
             animator.SetInteger("RndAnim", i);
             animator.SetTrigger("Hurt");
             scheduler.StartAction(this);
+            Log.Message("HP: Health Reduced", gameObject);
         }
     }
     public void Cancel()

@@ -36,6 +36,7 @@ public class N_CharaHitPoints : MonoBehaviour
     [PunRPC]
     private void R_StartHitAction()
     {
+        Log.Message("RPC :: R_StartHitAction");
         hp.ApplyHealthChanges = () => true;
         hp.StartHitAction();
         hp.ApplyHealthChanges = () => false;
