@@ -45,7 +45,7 @@ public class DodgeballGoLaunchTo : DodgeballAction
         }
         void OnComplete()
         {
-            Debug.Log("Ball Completed Its movement");
+            Log.Message("Ball Completed Its movement");
             Cancel();
         }
     }

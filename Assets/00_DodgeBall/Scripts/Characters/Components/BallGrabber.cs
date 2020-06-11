@@ -52,7 +52,7 @@ public class BallGrabber : DodgeballCharaAction, ICharaAction
         }
         else
         {
-            Debug.LogWarning(ball.ballState + " catching in when ball in this state, has Not been impelemted yet");
+            Log.Warning(ball.ballState + " catching in when ball in this state, has Not been impelemted yet");
         }
     }
     public void Cancel()

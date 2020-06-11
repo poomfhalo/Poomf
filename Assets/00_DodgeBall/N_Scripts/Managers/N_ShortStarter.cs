@@ -22,7 +22,7 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
             }
             else
             {
-                Debug.LogWarning("Must be connected, for Networked game manager to work");
+                Log.Warning("Must be connected, for Networked game manager to work");
             }
             return;
         }
@@ -30,7 +30,7 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
     }
     public override void OnConnectedToMaster()
     {
-        Debug.Log(PhotonNetwork.NickName + " Connected to Master, Attempting joining random room");
+        Log.Message(PhotonNetwork.NickName + " Connected to Master, Attempting joining random room");
         PhotonNetwork.JoinRandomRoom();
     }
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -41,7 +41,7 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         var room = PhotonNetwork.CurrentRoom;
-        Debug.Log(PhotonNetwork.NickName + " joined room " + room.Name + " now there are " + room.PlayerCount + " in room ");
+        Log.Message(PhotonNetwork.NickName + " joined room " + room.Name + " now there are " + room.PlayerCount + " in room ");
         if (autoStart)
         {
             Debug.Log("Waiting for second player");
@@ -49,7 +49,7 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Debug.Log(newPlayer.NickName + " Have Joined Total Count :: " + PhotonNetwork.CurrentRoom.PlayerCount);
+        Log.Message(newPlayer.NickName + " Have Joined Total Count :: " + PhotonNetwork.CurrentRoom.PlayerCount);
         photonView.RPC("StartGame", RpcTarget.AllViaServer);
     }
 

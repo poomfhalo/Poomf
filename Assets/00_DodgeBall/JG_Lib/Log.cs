@@ -59,7 +59,11 @@ public class Log : MonoBehaviour
     }
     public static void Write(object o,UnityEngine.Object ctx = null)
     {
-        Message(o);
+        Message(o,ctx);
+    }
+    public static void LogLog(object o, UnityEngine.Object ctx = null)
+    {
+        Message(o, ctx);
     }
     public static void Warning(object o, UnityEngine.Object ctx = null)
     {

@@ -27,14 +27,14 @@ public class N_DodgeballCommander : MonoBehaviour
 
         if (command == DodgeballCommand.LaunchUp)
         {
-            Debug.Log("N_Ball() :: sending command " + command + " :: is not allowed");
+            Log.Message("N_Ball() :: sending command " + command + " :: is not allowed");
             return;
         }
 
         int sender = pv.Controller.ActorNumber;
 
         this.InvokeDelayed(lastLag * 2, () => {
-            Debug.Log("N_Ball().SendCommand :: " + command, ball.GetHolder());
+            Log.Message("N_Ball().SendCommand :: " + command, ball.GetHolder());
             switch (command)
             {
                 case DodgeballCommand.GoToChara:
@@ -50,7 +50,7 @@ public class N_DodgeballCommander : MonoBehaviour
     [PunRPC]
     private void R_GoToChara(int holder)
     {
-        Debug.Log("RPC :: R_GoToChara()");
+        Log.Message("RPC :: R_GoToChara()");
         DodgeballCharacter n_holder = null;
         if (holder != -1)
         {
@@ -66,11 +66,11 @@ public class N_DodgeballCommander : MonoBehaviour
     [PunRPC]
     private void R_LaunchTo(byte lastAppliedThrow,Vector3 lastTargetPos)
     {
-        Debug.Log("RPC :: R_LaunchTo()");
+        Log.Message("RPC :: R_LaunchTo()");
         if (ball.ballState == Dodgeball.BallState.Flying)
             return;
 
-        Debug.Log("Launched Ball By RPC");
+        Log.Message("Launched Ball By RPC");
         BallThrowData d = DodgeballGameManager.GetThrow(lastAppliedThrow);
         ball.launchTo.GoLaunchTo(lastTargetPos, d);
     }
