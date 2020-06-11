@@ -33,9 +33,12 @@ public class N_CharaHitPoints : MonoBehaviour
                 break;
         }
     }
+
+    [PunRPC]
     private void R_StartHitAction()
     {
-
+        hp.ApplyHealthChanges = () => true;
         hp.StartHitAction();
+        hp.ApplyHealthChanges = () => false;
     }
 }
