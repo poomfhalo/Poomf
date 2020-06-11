@@ -13,11 +13,10 @@ public class Dodgeball : Singleton<Dodgeball>
     public bool IsOnGround => ballState == BallState.OnGround;
     public bool IsHeld => ballState == BallState.Held;
     public bool IsFlying => ballState == BallState.Flying;
-    public bool IsGoingToChara => ballState == BallState.GoingToChara;
     public bool IsPostContact => ballState == BallState.PostContact;
 
     public event Action<DodgeballCommand> OnCommandActivated = null;
-    public enum BallState { OnGround, Held, Flying, GoingToChara, PostContact }
+    public enum BallState { OnGround, Held, Flying, PostContact }
     public Vector3 position { get { return rb3d.position; } set { rb3d.MovePosition(value); } }
 
     public CollisionDelegator bodyCol = null;

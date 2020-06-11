@@ -28,7 +28,7 @@ public class DodgeballGoTo : DodgeballAction
     }
     public void GoTo(DodgeballCharacter chara, Action onCompleted)
     {
-        ball.ballState = Dodgeball.BallState.GoingToChara;
+        ball.ballState = Dodgeball.BallState.Held;
         isRunning = true;
         scheduler.StartAction(this);
 
@@ -49,7 +49,6 @@ public class DodgeballGoTo : DodgeballAction
         {
             if (!ball)
                 return;
-            ball.ballState = Dodgeball.BallState.Held;
 
             onCompleted?.Invoke();
             ball.transform.SetParent(chara.BallGrabPoint);

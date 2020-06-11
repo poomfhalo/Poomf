@@ -63,7 +63,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     {
         if (photonView.IsMine)
             return;
-        if (ball.IsHeld || ball.IsGoingToChara)
+        if (ball.IsHeld || ball.IsHeld)
             return;
 
         //ball.SetKinematic(true);

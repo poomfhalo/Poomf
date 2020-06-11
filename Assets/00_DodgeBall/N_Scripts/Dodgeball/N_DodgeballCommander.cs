@@ -59,7 +59,7 @@ public class N_DodgeballCommander : MonoBehaviour
             n_holder = N_TeamsManager.GetPlayer(holder).GetComponent<DodgeballCharacter>();
         }
 
-        if (n_holder && !n_holder.HasBall && !ball.IsGoingToChara)
+        if (n_holder && !n_holder.HasBall && !ball.IsHeld)
         {
             Debug.Log("Called Grab From Here");
             n_holder.GetComponent<BallGrabber>().GrabBall();
