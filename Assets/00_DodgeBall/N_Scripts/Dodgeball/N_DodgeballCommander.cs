@@ -43,7 +43,7 @@ public class N_DodgeballCommander : MonoBehaviour
                     pv.RPC("R_GoToChara", RpcTarget.Others, n_ball.GetHolder());
                     break;
                 case DodgeballCommand.LaunchTo:
-                    pv.RPC("RecieveCommand", RpcTarget.Others, ball.lastAppliedThrow, ball.lastTargetPos);
+                    pv.RPC("R_LaunchTo", RpcTarget.Others, ball.lastAppliedThrow, ball.lastTargetPos);
                     break;
             }
         });
