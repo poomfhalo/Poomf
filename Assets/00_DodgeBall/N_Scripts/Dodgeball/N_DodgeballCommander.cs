@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using GW_Lib;
+﻿using GW_Lib;
 using Photon.Pun;
 using UnityEngine;
 
@@ -52,7 +50,7 @@ public class N_DodgeballCommander : MonoBehaviour
     [PunRPC]
     private void R_GoToChara(int holder)
     {
-        Debug.Log("Commander :: R_GoToChara()");
+        Debug.Log("RPC :: R_GoToChara()");
         DodgeballCharacter n_holder = null;
         if (holder != -1)
         {
@@ -61,18 +59,18 @@ public class N_DodgeballCommander : MonoBehaviour
 
         if (n_holder && !n_holder.HasBall && !ball.IsHeld)
         {
-            Debug.Log("Called Grab From Here");
+            Debug.Log("Grabbed Ball By RPC");
             n_holder.GetComponent<BallGrabber>().GrabBall();
         }
     }
     [PunRPC]
     private void R_LaunchTo(byte lastAppliedThrow,Vector3 lastTargetPos)
     {
-        Debug.Log("Commander :: R_LaunchTo()");
+        Debug.Log("RPC :: R_LaunchTo()");
         if (ball.ballState == Dodgeball.BallState.Flying)
             return;
 
-        Debug.Log("Launched Ball From Here");
+        Debug.Log("Launched Ball By RPC");
         BallThrowData d = DodgeballGameManager.GetThrow(lastAppliedThrow);
         ball.launchTo.GoLaunchTo(lastTargetPos, d);
     }
