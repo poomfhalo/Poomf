@@ -18,12 +18,11 @@ public class N_CharaHitPoints : MonoBehaviour
     }
     void Start()
     {
+        hp.ApplyHealthChanges = () => false;
+
         if (PhotonNetwork.IsMasterClient)
             hp.OnHPAction += OnHPAction;
-        else
-            hp.ApplyHealthChanges = () => false;
     }
-
     private void OnHPAction(HPAction action)
     {
         switch (action)
