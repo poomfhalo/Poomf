@@ -11,78 +11,66 @@ public class N_DodgeballCommander : MonoBehaviour
     Dodgeball ball = null;
     PhotonView pv = null;
     float lastLag => n_ball.lastLag;
+
     void Awake()
     {
         n_ball = GetComponent<N_Dodgeball>();
         ball = GetComponent<Dodgeball>();
         pv = GetComponent<PhotonView>();
     }
-    void OnEnable()
-    {
-        ball.OnCommandActivated += SendCommand;
-    }
-    void OnDisable()
-    {
-        ball.OnCommandActivated -= SendCommand;
-    }
+
+    void OnEnable()=> ball.OnCommandActivated += SendCommand;
+    void OnDisable()=> ball.OnCommandActivated -= SendCommand;
 
     private void SendCommand(DodgeballCommand command)
     {
-        if (!PhotonNetwork.IsMasterClient)
-            return;
-
-        int holder = -1;
-        if (ball.GetHolder())
-        {
-            if (!ball.GetHolder().GetComponent<PhotonView>().IsMine)//Only Send commands if the command caller is the local player
-            {
-                return;
-            }
-            holder = ball.GetHolder().GetComponent<N_PC>().ActorID;
-        }
-
         if (command == DodgeballCommand.LaunchUp)
         {
             Debug.Log("N_Ball() :: sending command " + command + " :: is not allowed");
             return;
         }
 
+        int sender = pv.Controller.ActorNumber;
+
         this.InvokeDelayed(lastLag * 2, () => {
-            if (command == DodgeballCommand.LaunchTo)
-            {
-                pv.RPC("RecieveCommand", RpcTarget.AllViaServer, (int)command, holder, ball.lastAppliedThrow, ball.lastTargetPos);
-            }
-            else
-            {
-                pv.RPC("RecieveCommand", RpcTarget.Others, (int)command, holder, ball.lastAppliedThrow, ball.lastTargetPos);
-            }
             Debug.Log("N_Ball().SendCommand :: " + command, ball.GetHolder());
+            switch (command)
+            {
+                case DodgeballCommand.GoToChara:
+                    pv.RPC("R_GoToChara", RpcTarget.Others, n_ball.GetHolder(), ball.lastAppliedThrow, ball.lastTargetPos);
+                    break;
+                case DodgeballCommand.LaunchTo:
+                    pv.RPC("RecieveCommand", RpcTarget.Others, ball.lastAppliedThrow, ball.lastTargetPos);
+                    break;
+            }
         });
     }
 
     [PunRPC]
-    private void RecieveCommand(int cmd, int holder, byte lastAppliedThrow, Vector3 lastTargetPos)
+    private void R_GoToChara(int holder)
     {
-        DodgeballCommand command = (DodgeballCommand)cmd;
-        Debug.Log("N_Ball().RecieveCommand :: " + command);
+        Debug.Log("Commander :: R_GoToChara()");
         DodgeballCharacter n_holder = null;
         if (holder != -1)
         {
             n_holder = N_TeamsManager.GetPlayer(holder).GetComponent<DodgeballCharacter>();
         }
-        switch (command)
+
+        if (n_holder && !n_holder.HasBall && !ball.IsGoingToChara)
         {
-            case DodgeballCommand.GoToChara:
-                if (n_holder && !n_holder.HasBall && !ball.IsGoingToChara)
-                {
-                    Debug.Log("called from here?");
-                    n_holder.GetComponent<BallGrabber>().GrabBall();
-                }
-                break;
-            case DodgeballCommand.LaunchTo:
-                BallThrowData d = DodgeballGameManager.GetThrow(lastAppliedThrow);
-                ball.launchTo.GoLaunchTo(lastTargetPos, d);
-                break;
+            Debug.Log("Called Grab From Here");
+            n_holder.GetComponent<BallGrabber>().GrabBall();
         }
+    }
+    [PunRPC]
+    private void R_LaunchTo(byte lastAppliedThrow,Vector3 lastTargetPos)
+    {
+        Debug.Log("Commander :: R_LaunchTo()");
+        if (ball.ballState == Dodgeball.BallState.LaunchedToChara)
+            return;
+
+        Debug.Log("Launched Ball From Here");
+        BallThrowData d = DodgeballGameManager.GetThrow(lastAppliedThrow);
+        ball.launchTo.GoLaunchTo(lastTargetPos, d);
     }
 }

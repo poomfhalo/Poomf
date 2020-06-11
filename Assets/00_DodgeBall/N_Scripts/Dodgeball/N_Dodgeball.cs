@@ -2,6 +2,7 @@
 using Photon.Pun;
 using GW_Lib;
 using System.Linq;
+using System;
 
 [RequireComponent(typeof(Dodgeball))]
 public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
@@ -28,7 +29,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     void Start()
     {
         //netPos = rb3d.position;
-        ball.launchTo.ApplyActionWithCommand = () => false;
     }
     public override void OnDisable()
     {
@@ -59,7 +59,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         lastLag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
         //netPos = netPos + netVel * lastLag;
     }
-
     void FixedUpdate()
     {
         if (photonView.IsMine)
@@ -75,5 +74,19 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     {
         //Gizmos.color = Color.grey;
         //Gizmos.DrawSphere(netPos, GetComponent<SphereCollider>().radius);
+    }
+
+    public int GetHolder()
+    {
+        int holder = -1;
+        if (ball.GetHolder())//Only Send commands if the command caller is the local player
+        {
+            if (!ball.GetHolder().GetComponent<PhotonView>().IsMine)
+            {
+                return holder;
+            }
+            holder = ball.GetHolder().GetComponent<N_PC>().ActorID;
+        }
+        return holder;
     }
 }
