@@ -29,6 +29,7 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
             ballLauncher.SetActive(false);
         });
     }
+
     public static SpawnPoint GetSpawnPosition(TeamTag team)
     {
         List<SpawnPoint> playerSpawnPoints = FindObjectsOfType<SpawnPoint>().ToList();

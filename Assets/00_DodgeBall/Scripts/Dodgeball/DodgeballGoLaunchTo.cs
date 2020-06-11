@@ -49,6 +49,7 @@ public class DodgeballGoLaunchTo : DodgeballAction
         void OnComplete()
         {
             Log.Message("Ball Completed Its movement");
+            this.SetKinematic(false);
             Cancel();
         }
     }
