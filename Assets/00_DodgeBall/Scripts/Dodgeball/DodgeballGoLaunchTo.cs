@@ -34,7 +34,7 @@ public class DodgeballGoLaunchTo : DodgeballAction
         scheduler.StartAction(this);
         ball.SetKinematic(true);
         ball.ballState = Dodgeball.BallState.Flying;
-        //instance.InvokeDelayed(instance.leavingHandsTime, () => instance.bodyCol.GetCollider.enabled = true);
+        ball.InvokeDelayed(leavingHandsTime, () => ball.bodyCol.GetCollider.enabled = true);
         float dist = Vector3.Distance(rb3d.position, targetPos);
         float time = d.GetTimeOfDist(dist);
         float tweenV = 0;

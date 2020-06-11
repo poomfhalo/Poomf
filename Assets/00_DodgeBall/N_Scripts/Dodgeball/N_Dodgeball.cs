@@ -7,10 +7,12 @@ using System;
 [RequireComponent(typeof(Dodgeball))]
 public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
 {
+    public bool AllowSync { set { allowSync = value; } get { return allowSync; } }
     public float lastLag { private set; get; }
 
     [SerializeField] float catchUpSpeed = 0;
     [Header("Read Only")]
+    [SerializeField] bool allowSync = true;
     //[SerializeField] Vector3 netPos = new Vector3();
 
     Rigidbody rb3d = null;
@@ -41,8 +43,8 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         if (stream.IsWriting)
         {
             //stream.SendNext(rb3d.position);
-            //stream.SendNext(rb3d.velocity);
-            stream.SendNext((int)ball.ballState);
+            stream.SendNext(rb3d.velocity);
+            //stream.SendNext((int)ball.ballState);
         }
         else if (stream.IsReading)
         {
@@ -53,18 +55,23 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
             }
 
             //netPos = (Vector3)stream.ReceiveNext();
-            //netVel = (Vector3)stream.ReceiveNext();
-            ball.ballState = (Dodgeball.BallState)(int)stream.ReceiveNext();
+            netVel = (Vector3)stream.ReceiveNext();
+            //ball.ballState = (Dodgeball.BallState)(int)stream.ReceiveNext();
         }
         lastLag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
         //netPos = netPos + netVel * lastLag;
     }
     void FixedUpdate()
     {
-        if (photonView.IsMine)
+        if (!photonView.IsMine)
             return;
-        if (ball.IsHeld || ball.IsHeld)
+        if (ball.IsHeld || ball.IsFlying)
             return;
+        if (!AllowSync)
+            return;
+
+        ball.SetKinematic(false);
+        rb3d.velocity = Vector3.Slerp(rb3d.velocity, netVel, lastLag * Time.fixedDeltaTime * catchUpSpeed);
 
         //ball.SetKinematic(true);
         //Vector3 targetPos = Vector3.Lerp(rb3d.position, netPos, catchUpSpeed * Time.fixedDeltaTime);

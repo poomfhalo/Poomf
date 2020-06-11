@@ -13,10 +13,9 @@ public class Dodgeball : Singleton<Dodgeball>
     public bool IsOnGround => ballState == BallState.OnGround;
     public bool IsHeld => ballState == BallState.Held;
     public bool IsFlying => ballState == BallState.Flying;
-    public bool IsPostContact => ballState == BallState.PostContact;
 
     public event Action<DodgeballCommand> OnCommandActivated = null;
-    public enum BallState { OnGround, Held, Flying, PostContact }
+    public enum BallState { OnGround, Held, Flying }
     public Vector3 position { get { return rb3d.position; } set { rb3d.MovePosition(value); } }
 
     public CollisionDelegator bodyCol = null;
@@ -65,22 +64,23 @@ public class Dodgeball : Singleton<Dodgeball>
         Field field = col.GetComponent<Field>();
         if (!field)
             return;
+
         OnHitGround?.Invoke();
-        if(ballState == BallState.Flying || ballState == BallState.PostContact)
+        if(ballState == BallState.Flying)
         {
             ballState = BallState.OnGround;
         }
     }
     void OnTriggerExit(Collider col)
     {
-        Field field = col.GetComponent<Field>();
-        if (!field)
-            return;
+        //Field field = col.GetComponent<Field>();
+        //if (!field)
+        //    return;
 
-        if (ballState == BallState.OnGround)
-        {
-            ballState = BallState.Flying;
-        }
+        //if (ballState == BallState.OnGround)
+        //{
+        //    ballState = BallState.Flying;
+        //}
     }
     private void OnBodyEntered(Collision col)
     {
@@ -88,7 +88,7 @@ public class Dodgeball : Singleton<Dodgeball>
     }
     private void OnBodyExitted(Collision col)
     {
-        //m_ballState = BallState.PostContact;
+
     }
 
     public void RunCommand(DodgeballCommand command)

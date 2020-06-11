@@ -46,7 +46,7 @@ public class BallGrabber : DodgeballCharaAction, ICharaAction
     }
     public void StartCatchAction()
     {
-        if (ball.IsOnGround || ball.IsPostContact)
+        if (ball.IsOnGround)
         {
             GrabBall();
         }
