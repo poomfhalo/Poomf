@@ -30,7 +30,7 @@ public class DodgeballGoLaunchTo : DodgeballAction
         isRunning = true;
         scheduler.StartAction(this);
         ball.SetKinematic(true);
-        ball.ballState = Dodgeball.BallState.LaunchedToChara;
+        ball.ballState = Dodgeball.BallState.Flying;
 
         //instance.InvokeDelayed(instance.leavingHandsTime, () => instance.bodyCol.GetCollider.enabled = true);
         float dist = Vector3.Distance(rb3d.position, targetPos);

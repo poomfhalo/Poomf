@@ -24,6 +24,9 @@ public class N_DodgeballCommander : MonoBehaviour
 
     private void SendCommand(DodgeballCommand command)
     {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
         if (command == DodgeballCommand.LaunchUp)
         {
             Debug.Log("N_Ball() :: sending command " + command + " :: is not allowed");
@@ -66,7 +69,7 @@ public class N_DodgeballCommander : MonoBehaviour
     private void R_LaunchTo(byte lastAppliedThrow,Vector3 lastTargetPos)
     {
         Debug.Log("Commander :: R_LaunchTo()");
-        if (ball.ballState == Dodgeball.BallState.LaunchedToChara)
+        if (ball.ballState == Dodgeball.BallState.Flying)
             return;
 
         Debug.Log("Launched Ball From Here");

@@ -17,15 +17,10 @@ public class Dodgeball : Singleton<Dodgeball>
     public bool IsPostContact => ballState == BallState.PostContact;
 
     public event Action<DodgeballCommand> OnCommandActivated = null;
-
-    public enum BallState { OnGround,Held,Flying,GoingToChara,PostContact,
-        LaunchedToChara
-    }
-
+    public enum BallState { OnGround, Held, Flying, GoingToChara, PostContact }
     public Vector3 position { get { return rb3d.position; } set { rb3d.MovePosition(value); } }
 
     public CollisionDelegator bodyCol = null;
-
     [Header("Read Only")]
     public DodgeballCharacter holder = null;
     public byte lastAppliedThrow = 0;
