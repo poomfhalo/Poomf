@@ -41,10 +41,14 @@ public class DodgeballGoTo : DodgeballAction
                                                                         OnComplete(OnComplete).SetEase(Ease.InOutSine);
         void OnUpdate()
         {
-            Dodgeball.instance.position = Vector3.Lerp(startPos, chara.BallGrabPoint.position, currTweener);
+            if (!ball)
+                return;
+            ball.position = Vector3.Lerp(startPos, chara.BallGrabPoint.position, currTweener);
         }
         void OnComplete()
         {
+            if (!ball)
+                return;
             ball.ballState = Dodgeball.BallState.Held;
 
             onCompleted?.Invoke();
@@ -52,5 +56,10 @@ public class DodgeballGoTo : DodgeballAction
             Cancel();
             ball.transform.DOLocalMove(Vector3.zero, heldPosCheckerDur).SetEase(Ease.InOutSine);
         }
+    }
+    public override void Cancel()
+    {
+        base.Cancel();
+        transform.DOKill();
     }
 }
