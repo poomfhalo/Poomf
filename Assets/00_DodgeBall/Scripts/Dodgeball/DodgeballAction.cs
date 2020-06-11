@@ -7,7 +7,6 @@ public abstract class DodgeballAction : MonoBehaviour, ICharaAction
     public bool IsRunning => isRunning;
     [Header("Read Only")]
     [SerializeField] protected bool isRunning = false;
-    public float commandDelay = 0;
 
     public abstract DodgeballCommand Command { get; }
     public abstract string actionName { get; }

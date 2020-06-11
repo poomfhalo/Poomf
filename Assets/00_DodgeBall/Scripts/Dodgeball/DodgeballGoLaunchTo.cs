@@ -18,7 +18,7 @@ public class DodgeballGoLaunchTo : DodgeballAction
         ball.lastAppliedThrow = d.id;
         ball.RunCommand(Command);
 
-        if (ApplyActionWithCommand())
+        if (!ApplyActionWithCommand())
         {
             return;
         }
@@ -31,7 +31,7 @@ public class DodgeballGoLaunchTo : DodgeballAction
         scheduler.StartAction(this);
         ball.SetKinematic(true);
         ball.ballState = Dodgeball.BallState.Flying;
-
+        Debug.Log("Called GoLaunchTo");
         //instance.InvokeDelayed(instance.leavingHandsTime, () => instance.bodyCol.GetCollider.enabled = true);
         float dist = Vector3.Distance(rb3d.position, targetPos);
         float time = d.GetTimeOfDist(dist);
@@ -40,6 +40,7 @@ public class DodgeballGoLaunchTo : DodgeballAction
         activeTweener = DOTween.To(() => tweenV, f => tweenV = f, 1, time).SetEase(d.ease).OnUpdate(OnUpdate).OnComplete(OnComplete);
         void OnUpdate()
         {
+            Debug.Log("UPdating Ball");
             Vector3 lerpedPos = Vector3.Lerp(ball.position, targetPos, tweenV);
             rb3d.MovePosition(lerpedPos);
         }
