@@ -55,8 +55,8 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
     }
     public void StartHitAction()
     {
-        OnHPUpdated?.Invoke();
         currHP = currHP - 1;
+        OnHPUpdated?.Invoke();
 
         if (currHP <= 0)
         {
