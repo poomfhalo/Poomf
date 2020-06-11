@@ -21,13 +21,13 @@ public class N_CharaHitPoints : MonoBehaviour
         hp.ApplyHealthChanges = () => false;
 
         if (PhotonNetwork.IsMasterClient)
-            hp.OnHPAction += OnHPAction;
+            hp.OnHpCommand += OnHpCommand;
     }
-    private void OnHPAction(HPAction action)
+    private void OnHpCommand(HPCommand command)
     {
-        switch (action)
+        switch (command)
         {
-            case HPAction.Subtract:
+            case HPCommand.Subtract:
                 pv.RPC("R_StartHitAction", RpcTarget.AllViaServer);
                 break;
         }

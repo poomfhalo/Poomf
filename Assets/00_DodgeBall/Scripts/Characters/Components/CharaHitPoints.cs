@@ -2,13 +2,13 @@
 using GW_Lib.Utility;
 using UnityEngine;
 
-public enum HPAction { Subtract } 
+public enum HPCommand { Subtract } 
 public class CharaHitPoints : DodgeballCharaAction,ICharaAction
 {
     public int CurrHP => currHP;
     public event Action OnZeroHP;
     public event Action OnHPUpdated;
-    public event Action<HPAction> OnHPAction;
+    public event Action<HPCommand> OnHpCommand;
     public string actionName => "Get Hit";
     public bool IsBeingHurt => isBeingHurt;
     public bool IsWaitingForHit => isWaitingForHit;
@@ -46,21 +46,15 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
         if (isBeingHurt)
             return;
 
-        StartHitAction();
+        C_StartHitAction();
     }
 
     public void EnableHitDetection()
     {
         isWaitingForHit = true;
     }
-
     public void StartHitAction()
     {
-        OnHPAction?.Invoke(HPAction.Subtract);
-
-        if (!ApplyHealthChanges())
-            return;
-
         OnHPUpdated?.Invoke();
         currHP = currHP - 1;
 
@@ -79,6 +73,15 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
             scheduler.StartAction(this);
             Log.Message("HP: Health Reduced", gameObject);
         }
+    }
+    private void C_StartHitAction()
+    {
+        OnHpCommand?.Invoke(HPCommand.Subtract);
+
+        if (!ApplyHealthChanges())
+            return;
+
+        StartHitAction();
     }
     public void Cancel()
     {
