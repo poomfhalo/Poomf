@@ -63,7 +63,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     }
     void FixedUpdate()
     {
-        if (!photonView.IsMine)
+        if (photonView.IsMine)
             return;
         if (ball.IsHeld || ball.IsFlying)
             return;
@@ -75,7 +75,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         Vector3 posVel = posDir * catchUpSpeed;
         Vector3 targetVel = netVel + posVel;
         rb3d.velocity = Vector3.Slerp(rb3d.velocity, targetVel, lastLag * Time.fixedDeltaTime * catchUpSpeed);
-
+        Log.Message("Syncing Ball");
         //ball.SetKinematic(true);
         //Vector3 targetPos = Vector3.Lerp(rb3d.position, netPos, catchUpSpeed * Time.fixedDeltaTime);
         //rb3d.MovePosition(targetPos);
