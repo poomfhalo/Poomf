@@ -40,7 +40,7 @@ public class N_DodgeballCommander : MonoBehaviour
             switch (command)
             {
                 case DodgeballCommand.GoToChara:
-                    pv.RPC("R_GoToChara", RpcTarget.Others, n_ball.GetHolder(), ball.lastAppliedThrow, ball.lastTargetPos);
+                    pv.RPC("R_GoToChara", RpcTarget.Others, n_ball.GetHolder());
                     break;
                 case DodgeballCommand.LaunchTo:
                     pv.RPC("RecieveCommand", RpcTarget.Others, ball.lastAppliedThrow, ball.lastTargetPos);
