@@ -33,6 +33,7 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
 
         currHP = maxHP;
         hurtZone.onTriggerEnter.AddListener(OnObjEntered);
+        OnHPUpdated?.Invoke();
     }
 
     private void OnObjEntered(Collider other)
