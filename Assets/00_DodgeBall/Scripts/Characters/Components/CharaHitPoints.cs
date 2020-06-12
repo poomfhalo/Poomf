@@ -90,10 +90,14 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
     {
 
     }
-
     public void A_OnHitEnded()
     {
         isBeingHurt = false;
         isWaitingForHit = false;
+    }
+
+    public void DisableHitDetection()
+    {
+        A_OnHitEnded();
     }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BallReciever : DodgeballCharaAction, ICharaAction
 {
+    public event Action onBallGrabbed = null;
     public Func<bool> CanDetectBall = () => true;
     public bool IsDetecting => isDetecting;
 
@@ -30,12 +31,15 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
     {
         if (!isDetecting)
             return;
+        if (!CanDetectBall())
+            return;
+
         Bounds b = ballRecieveZone.GetCollider.bounds;
         Collider[] overlaps = Physics.OverlapBox(b.center, b.extents);
         foreach (var col in overlaps)
         {
             if (col.GetComponent<Dodgeball>())
-                isBallIn = true;
+                SetIsBallIn(true);
         }
     }
 
@@ -49,7 +53,7 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
         if (!ball)
             return;
 
-        isBallIn = true;
+        SetIsBallIn(true);
     }
     private void OnExitted(Collider other)
     {
@@ -61,20 +65,46 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
         if (!ball)
             return;
 
-        isBallIn = false;
+        SetIsBallIn(false);
     }
     private void OnHPUpdated()
     {
-        isDetecting = false;
+        DisableDetection();
     }
 
-    public void StartReciptionAction()
+    public void EnableDetection()
     {
         isDetecting = true;
-        Debug.Log("reception from team mates, has not been implemented yet, doing nothing");
+    }
+    public void DisableDetection()
+    {
+        isDetecting = false;
     }
     public void Cancel()
     {
 
+    }
+
+    private void SetIsBallIn(bool state)
+    {
+        if(isBallIn != state)
+        {
+            isBallIn = state;
+            if(state)
+            {
+                TryGrabBall();
+            }
+        }
+    }
+    public void TryGrabBall()
+    {
+        if(isBallIn && isDetecting && isButtonClicked)
+        {
+            GetComponent<DodgeballCharacter>().C_ReleaseFromBrace();
+            GetComponent<BallGrabber>().GrabBall();
+            DisableDetection();
+            isButtonClicked = false;
+            onBallGrabbed?.Invoke();
+        }
     }
 }

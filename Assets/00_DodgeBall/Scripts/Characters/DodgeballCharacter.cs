@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public enum DodgeballCharaCommand { MoveInput, Friendly, Enemy, BallAction, Dodge, FakeFire, Jump,
-    BraceForBall
+    BraceForBall,
+    ReleaseFromBrace
 }
 
 [RequireComponent(typeof(Animator))]
@@ -184,11 +185,20 @@ public class DodgeballCharacter : MonoBehaviour
     public void C_BraceForContact()
     {
         if (!reciever.IsDetecting)
-            reciever.StartReciptionAction();
+            reciever.EnableDetection();
 
         if (!hp.IsBeingHurt && !hp.IsWaitingForHit)
             hp.EnableHitDetection();
         OnCommandActivated?.Invoke(DodgeballCharaCommand.BraceForBall);
+    }
+    public void C_ReleaseFromBrace()
+    {
+        if(hp.IsWaitingForHit)
+            hp.DisableHitDetection();
+        if(reciever.IsDetecting)
+            reciever.DisableDetection();
+
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.ReleaseFromBrace);
     }
     #endregion
 
