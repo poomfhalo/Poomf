@@ -25,7 +25,7 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: 
+  DevRegion: cae
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -39,15 +39,14 @@ MonoBehaviour:
   - Free
   - OnCreated
   - PrepareForGame
+  - R_GoToChara
+  - R_LaunchTo
+  - R_StartHitAction
   - RecieveCommand
   - RecieveTeamsData
   - RespawnSpaceship
   - StartGame
   - SyncWithTeamsManager
-  - RecievingCommand
-  - R_GoToChara
-  - R_LaunchTo
-  - R_StartHitAction
   DisableAutoOpenWizard: 1
-  ShowSettings: 1
+  ShowSettings: 0
   DevRegionSetOnce: 1
