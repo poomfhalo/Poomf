@@ -25,7 +25,7 @@ public class BallLauncher : DodgeballCharaAction,ICharaAction
     ActionsScheduler scheduler = null;
     DodgeballCharacter aimedAtChara = null;
     Mover mover = null;
-    SelectionIndicator selectionIndicator => GetComponentInChildren<SelectionIndicator>();
+    SelectionIndicator selectionIndicator => GetComponent<DodgeballCharacter>().selectionIndicator;
     void Awake()
     {
         chara = GetComponent<DodgeballCharacter>();
