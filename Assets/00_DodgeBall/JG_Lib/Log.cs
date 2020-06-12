@@ -88,6 +88,6 @@ public class Log : MonoBehaviour
     }
     public bool CanLog(LogLevel logLevel)
     {
-        return (int)logLevel <= (int)this.logLevel;
+        return (int)logLevel > (int)this.logLevel;
     }
 }
