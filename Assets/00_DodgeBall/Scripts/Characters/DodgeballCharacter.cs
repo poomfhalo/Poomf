@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public enum DodgeballCharaCommand { MoveInput, Friendly, Enemy, BallAction, Dodge, FakeFire, Jump,
     BraceForBall
@@ -124,10 +125,11 @@ public class DodgeballCharacter : MonoBehaviour
             OnCommandActivated?.Invoke(DodgeballCharaCommand.Enemy);
         }
     }
-    public void C_OnBallAction(bool hasStarted)
+    public void C_OnBallAction(InputActionPhase phase)
     {
-        GetComponents<DodgeballCharaAction>().ToList().ForEach(a => a.RecieveButtonInput(hasStarted));
-        if (!hasStarted)
+        bool isDown = phase == InputActionPhase.Started || phase == InputActionPhase.Performed;
+        GetComponents<DodgeballCharaAction>().ToList().ForEach(a => a.RecieveButtonInput(isDown));
+        if (phase != InputActionPhase.Started)
             return;
 
         if (!HasBall && IsBallInGrabZone)
@@ -181,7 +183,8 @@ public class DodgeballCharacter : MonoBehaviour
     #region Gameplay Commands
     public void C_BraceForContact()
     {
-        reciever.StartReciptionAction();
+        if (!reciever.IsDetecting)
+            reciever.StartReciptionAction();
 
         if (!hp.IsBeingHurt && !hp.IsWaitingForHit)
             hp.EnableHitDetection();

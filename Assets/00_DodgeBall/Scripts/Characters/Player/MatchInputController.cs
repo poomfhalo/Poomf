@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class MatchInputController : MonoBehaviour
 {
     public static event Action<Vector3> OnMoveInput = null;
-    public static event Action<bool> OnBallAction = null;
+    public static event Action<InputActionPhase> OnBallAction = null;
     public static event Action OnFriendly = null;
     public static event Action OnEnemy = null;
     public static event Action OnDodge = null;
@@ -36,7 +36,10 @@ public class MatchInputController : MonoBehaviour
     }
     public void I_OnBallAction(InputAction.CallbackContext ctx)
     {
-        OnBallAction?.Invoke(ctx.started);
+        if(!IsEnabled)
+            return;
+
+        OnBallAction?.Invoke(ctx.phase);
     }
     public void I_OnFriendly(InputAction.CallbackContext ctx)
     {

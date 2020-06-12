@@ -139,7 +139,7 @@ public class N_PC : MonoBehaviour,IPunObservable
                 chara.C_FakeFire();
                 break;
             case DodgeballCharaCommand.BallAction:
-                chara.C_OnBallAction(true);
+                chara.C_OnBallAction(UnityEngine.InputSystem.InputActionPhase.Started);
                 break;
             case DodgeballCharaCommand.Friendly:
                 chara.C_Friendly();
@@ -151,8 +151,7 @@ public class N_PC : MonoBehaviour,IPunObservable
                 UpdateSyncedInput();
                 break;
             case DodgeballCharaCommand.BraceForBall:
-                Log.Message("RPC :: BraceForBall");
-                //chara.C_BraceForContact();
+                chara.C_BraceForContact();
                 break;
         }
     }   
