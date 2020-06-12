@@ -3,6 +3,8 @@ using System.Linq;
 using GW_Lib;
 using GW_Lib.Utility;
 using UnityEngine;
+using TMPro;
+using System;
 
 public class DodgeballGameManager : Singleton<DodgeballGameManager>
 {
@@ -11,6 +13,9 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
     [SerializeField] float ballLaunchHeigth = 6;
     [SerializeField] GameObject ballLauncher = null;
     [SerializeField] bool launchBallOnStart = false;
+    [Header("Build Settings")]
+    [SerializeField] string build = "Build : 0.0001";
+    [SerializeField] TextMeshProUGUI buildText = null;
 
     BallThrowData[] throws = new BallThrowData[0];
 
@@ -19,6 +24,8 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
         Dodgeball.instance.gameObject.SetActive(false);
         if (launchBallOnStart)
             StartBallLaunch();
+
+        buildText.text = build;
     }
 
     public void StartBallLaunch()
@@ -28,6 +35,11 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
             Dodgeball.instance.launchUp.C_LaunchUp(ballLaunchHeigth, launchGravity);
             ballLauncher.SetActive(false);
         });
+    }
+    public void OnBallThrownAtEnemy(DodgeballCharacter by)
+    {
+        Team team = TeamsManager.GetNextTeam(by);
+        team.players.ForEach(p => p.C_BraceForContact());
     }
 
     public static SpawnPoint GetSpawnPosition(TeamTag team)

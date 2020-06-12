@@ -6,8 +6,6 @@ using UnityEngine;
 public class BallLauncher : DodgeballCharaAction,ICharaAction
 {
     public event Action onThrowPointReached = null;
-    public event Action onFakeThrowEnded = null;
-
     public bool IsThrowing => isThrowing;
     public string actionName => activityName;
     [Tooltip("If the value is less than 1 then we will use the Mover turn speed, noting that, if its too low, character may not" +
@@ -27,7 +25,7 @@ public class BallLauncher : DodgeballCharaAction,ICharaAction
     ActionsScheduler scheduler = null;
     DodgeballCharacter aimedAtChara = null;
     Mover mover = null;
-
+    SelectionIndicator selectionIndicator => GetComponentInChildren<SelectionIndicator>();
     void Awake()
     {
         chara = GetComponent<DodgeballCharacter>();
@@ -83,27 +81,30 @@ public class BallLauncher : DodgeballCharaAction,ICharaAction
             a.Invoke();
     }
 
-    public void A_OnFakeThrowEnded()
-    {
-        isThrowing = false;
-        onFakeThrowEnded?.Invoke();
-    }
+    public void A_OnFakeThrowEnded() => isThrowing = false;
+    
     public void A_OnThrowPointReached()
     {
         Dodgeball.instance.transform.SetParent(null);
+        animator.SetBool("HasBall", false);
+        isThrowing = false;
+
+        Vector3 targetPos = new Vector3();
         if (TeamsManager.AreFriendlies(aimedAtChara, chara))
         {
-            aimedAtChara.C_EnableReciption();
+            //Call, recieving ball or sth here?
+            targetPos = aimedAtChara.RecievablePoint.position;
             Debug.LogWarning("Passing To Friendlies has not been implemented yet");
         }
         else
         {
-            animator.SetBool("HasBall", false);
-            isThrowing = false;
-            aimedAtChara.C_EnableHit();
+            targetPos = aimedAtChara.ShootablePoint.position;
             Dodgeball.instance.launchTo.C_GoLaunchTo(aimedAtChara.ShootablePoint.position, throwData);
-            onThrowPointReached?.Invoke();
+            DodgeballGameManager.instance.OnBallThrownAtEnemy(GetComponent<DodgeballCharacter>());
         }
+
+        selectionIndicator.SetFocus(null);
+        onThrowPointReached?.Invoke();
     }
     public void A_OnThrowEnded()
     {

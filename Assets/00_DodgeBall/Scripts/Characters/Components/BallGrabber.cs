@@ -44,6 +44,7 @@ public class BallGrabber : DodgeballCharaAction, ICharaAction
 
         isBallInGrabZone = false;
     }
+
     public void StartCatchAction()
     {
         if (ball.IsOnGround)
@@ -59,7 +60,6 @@ public class BallGrabber : DodgeballCharaAction, ICharaAction
     {
 
     }
-
     public void GrabBall()
     {
         Dodgeball.instance.goTo.C_GoTo(GetComponent<DodgeballCharacter>(), () => {

@@ -136,7 +136,7 @@ public class N_PC : MonoBehaviour,IPunObservable
                 chara.C_FakeFire();
                 break;
             case DodgeballCharaCommand.BallAction:
-                chara.C_OnBallAction();
+                chara.C_OnBallAction(true);
                 break;
             case DodgeballCharaCommand.Friendly:
                 chara.C_Friendly();

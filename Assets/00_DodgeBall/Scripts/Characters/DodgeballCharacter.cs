@@ -3,8 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 public enum DodgeballCharaCommand { MoveInput, Friendly, Enemy, BallAction, Dodge, FakeFire, Jump,
-    EnableReciption,
-    EnableHit
+    BraceForBall
 }
 
 [RequireComponent(typeof(Animator))]
@@ -15,7 +14,6 @@ public class DodgeballCharacter : MonoBehaviour
     public event Action<DodgeballCharaCommand> OnCommandActivated = null;
 
     //State
-    public bool IsEnabled => isEnabled;
     public bool HasBall => grabber.HasBall;
     public bool IsThrowing => launcher.IsThrowing;
     public bool IsMoving => mover.IsMoving;
@@ -41,7 +39,6 @@ public class DodgeballCharacter : MonoBehaviour
 
     [Header("Core")]
     [SerializeField] TeamTag team = TeamTag.A;
-    [SerializeField] bool isEnabled = false;
     [SerializeField] protected SelectionIndicator selectionIndicator = null;
 
     protected Rigidbody rb3d = null;
@@ -77,19 +74,10 @@ public class DodgeballCharacter : MonoBehaviour
         reciever = GetComponent<BallReciever>();
         hp = GetComponent<CharaHitPoints>();
 
-
-        if (selectionIndicator == null)
-            selectionIndicator = GetComponentInChildren<SelectionIndicator>();
-        if (selectionIndicator == null)
-            selectionIndicator = ResFactory.Make<SelectionIndicator>("Selection Indicator", transform);
-
         SetTeam(team);
 
         selectionIndicator.SetOwner(this);
         selectionIndicator.SetFocus(null);
-
-        if (launcher)
-            launcher.onThrowPointReached += OnThrewBall;
 
         if (grabber)
             grabber.onBallInHands += OnBallInHands;
@@ -101,15 +89,10 @@ public class DodgeballCharacter : MonoBehaviour
         TeamsManager.JoinTeam(team, this);
     }
 
-    protected void OnThrewBall()
-    {
-        selectionIndicator.SetFocus(null);
-    }
     protected void OnBallInHands()
     {
         selectionIndicator.SetNewFocus(false);
     }
-
 
     #region Input Commands
     public void C_MoveInput(Vector3 i)
@@ -141,8 +124,12 @@ public class DodgeballCharacter : MonoBehaviour
             OnCommandActivated?.Invoke(DodgeballCharaCommand.Enemy);
         }
     }
-    public void C_OnBallAction()
+    public void C_OnBallAction(bool hasStarted)
     {
+        GetComponents<DodgeballCharaAction>().ToList().ForEach(a => a.RecieveButtonInput(hasStarted));
+        if (!hasStarted)
+            return;
+
         if (!HasBall && IsBallInGrabZone)
         {
             grabber.StartCatchAction();
@@ -192,18 +179,13 @@ public class DodgeballCharacter : MonoBehaviour
     #endregion
 
     #region Gameplay Commands
-    public void C_EnableReciption()
+    public void C_BraceForContact()
     {
         reciever.StartReciptionAction();
-        OnCommandActivated?.Invoke(DodgeballCharaCommand.EnableReciption);
-    }
-    public void C_EnableHit()
-    {
-        if (IsBeingHurt)
-            return;
 
-        hp.EnableHitDetection();
-        OnCommandActivated?.Invoke(DodgeballCharaCommand.EnableHit);
+        if (!hp.IsBeingHurt && !hp.IsWaitingForHit)
+            hp.EnableHitDetection();
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.BraceForBall);
     }
     #endregion
 

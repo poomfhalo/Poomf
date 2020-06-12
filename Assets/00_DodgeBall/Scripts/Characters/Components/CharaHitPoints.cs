@@ -54,6 +54,16 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
     {
         isWaitingForHit = true;
     }
+    private void C_StartHitAction()
+    {
+        OnHpCommand?.Invoke(HPCommand.Subtract);
+
+        if (!ApplyHealthChanges())
+            return;
+
+        StartHitAction();
+    }
+
     public void StartHitAction()
     {
         currHP = currHP - 1;
@@ -74,15 +84,7 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
             scheduler.StartAction(this);
             Log.Message("HP: Health Reduced", gameObject);
         }
-    }
-    private void C_StartHitAction()
-    {
-        OnHpCommand?.Invoke(HPCommand.Subtract);
-
-        if (!ApplyHealthChanges())
-            return;
-
-        StartHitAction();
+        isWaitingForHit = false;
     }
     public void Cancel()
     {
