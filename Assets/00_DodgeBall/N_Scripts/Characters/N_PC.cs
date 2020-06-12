@@ -147,6 +147,10 @@ public class N_PC : MonoBehaviour,IPunObservable
             case DodgeballCharaCommand.MoveInput:
                 UpdateSyncedInput();
                 break;
+            case DodgeballCharaCommand.BraceForBall:
+                Debug.Log("RPC, Brace Command for cjharacter " + pv.Controller.ActorNumber);
+
+                break;
         }
     }   
 
