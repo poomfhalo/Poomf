@@ -114,6 +114,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         float currX = rb3d.position.x;
         float currZ = rb3d.position.z;
         pv.RPC("RecieveCommand", RpcTarget.Others, (int)command,currX,currZ);
+        Log.Message("Sending Command " + command);
     }
 
     [PunRPC]
@@ -124,6 +125,8 @@ public class N_PC : MonoBehaviour,IPunObservable
         UpdateNetData();
 
         DodgeballCharaCommand command = (DodgeballCharaCommand)c;
+        Log.Message("RPC :: RecieveCommand " + command);
+
         switch (command)
         {
             case DodgeballCharaCommand.Dodge:
@@ -148,8 +151,7 @@ public class N_PC : MonoBehaviour,IPunObservable
                 UpdateSyncedInput();
                 break;
             case DodgeballCharaCommand.BraceForBall:
-                Debug.Log("RPC, Brace Command for cjharacter " + pv.Controller.ActorNumber);
-
+                chara.C_BraceForContact();
                 break;
         }
     }   
