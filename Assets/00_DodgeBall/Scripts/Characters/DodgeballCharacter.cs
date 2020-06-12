@@ -39,7 +39,7 @@ public class DodgeballCharacter : MonoBehaviour
 
     [Header("Core")]
     [SerializeField] TeamTag team = TeamTag.A;
-    [SerializeField] protected SelectionIndicator selectionIndicator = null;
+    public SelectionIndicator selectionIndicator = null;
 
     protected Rigidbody rb3d = null;
     protected Animator animator = null;
