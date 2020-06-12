@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Photon.Pun;
+using System;
 
 public class N_BallReciever : MonoBehaviour
 {
@@ -16,14 +15,19 @@ public class N_BallReciever : MonoBehaviour
     {
         if (!pv.IsMine)
             return;
-
+        reciever.onRecievedButtonInput += OnRecievedButtonInput;
     }
     void OnDisable()
     {
         if (!pv.IsMine)
             return;
-
+        reciever.onRecievedButtonInput -= OnRecievedButtonInput;
+    }
+    private void OnRecievedButtonInput(bool state)
+    {
+        pv.RPC("UpdateButtonClick", RpcTarget.Others, state);
     }
 
-
+    [PunRPC]
+    private void UpdateButtonClick(bool state) => reciever.RecieveButtonInput(state);
 }

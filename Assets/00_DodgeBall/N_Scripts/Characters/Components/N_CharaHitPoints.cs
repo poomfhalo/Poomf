@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Photon;
-using System;
+﻿using UnityEngine;
 using Photon.Pun;
 
 [RequireComponent(typeof(CharaHitPoints))]
