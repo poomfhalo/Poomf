@@ -26,8 +26,9 @@ public class Log : MonoBehaviour
     public bool CanLogMessage => CanLog(LogLevel.All);
     public bool CanLogWarnings => CanLog(LogLevel.Warnings);
     public bool CanLogErrors => CanLog(LogLevel.Errors);
+    public bool CanLogL0 => CanLog(LogLevel.L0);
 
-    public enum LogLevel { All, Warnings, Errors }
+    public enum LogLevel { L0, All, Warnings, Errors }
 
     [SerializeField] LogLevel logLevel = LogLevel.All;
 
@@ -49,6 +50,14 @@ public class Log : MonoBehaviour
         }
     }
 
+    public static void LogL0(object o, UnityEngine.Object ctx = null)
+    {
+#if UNITY_EDITOR
+        if (Instance && !Instance.CanLogL0)
+            return;
+#endif
+        Debug.Log(o, ctx);
+    }
     public static void Message(object o,UnityEngine.Object ctx = null)
     {
 #if UNITY_EDITOR
