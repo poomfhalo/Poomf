@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Photon.Pun;
-using System;
 
 public class N_BallReciever : MonoBehaviour
 {
@@ -10,6 +9,7 @@ public class N_BallReciever : MonoBehaviour
     void Awake()
     {
         pv = GetComponent<PhotonView>();
+        reciever = GetComponent<BallReciever>();
     }
     void OnEnable()
     {
