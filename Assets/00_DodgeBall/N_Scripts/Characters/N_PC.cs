@@ -151,7 +151,8 @@ public class N_PC : MonoBehaviour,IPunObservable
                 UpdateSyncedInput();
                 break;
             case DodgeballCharaCommand.BraceForBall:
-                chara.C_BraceForContact();
+                Log.Message("RPC :: BraceForBall");
+                //chara.C_BraceForContact();
                 break;
         }
     }   
