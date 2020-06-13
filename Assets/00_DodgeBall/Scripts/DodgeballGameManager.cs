@@ -50,6 +50,9 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
     }
     public void OnBallHitGround()
     {
+        if (Dodgeball.instance.holder == null)
+            return;
+
         Team t = TeamsManager.GetTeam(Dodgeball.instance.holder);
         t.players.ForEach(p => p.C_ReleaseFromBrace());
         t = TeamsManager.GetNextTeam(Dodgeball.instance.holder);
