@@ -15,10 +15,12 @@ public class N_DodgeballCommander : MonoBehaviour
         n_ball = GetComponent<N_Dodgeball>();
         ball = GetComponent<Dodgeball>();
         pv = GetComponent<PhotonView>();
+
+        ball.CanApplyOnGroundHit = () => false;
     }
 
-    void OnEnable()=> ball.OnCommandActivated += SendCommand;
-    void OnDisable()=> ball.OnCommandActivated -= SendCommand;
+    void OnEnable() => ball.OnCommandActivated += SendCommand;
+    void OnDisable() => ball.OnCommandActivated -= SendCommand;
 
     private void SendCommand(DodgeballCommand command)
     {
@@ -30,8 +32,6 @@ public class N_DodgeballCommander : MonoBehaviour
             Log.Message("N_Ball() :: sending command " + command + " :: is not allowed");
             return;
         }
-
-        int sender = pv.Controller.ActorNumber;
 
         this.InvokeDelayed(lastLag * 2, () => {
             Log.Message("N_Ball().SendCommand :: " + command, ball.holder);
@@ -45,6 +45,13 @@ public class N_DodgeballCommander : MonoBehaviour
                     break;
             }
         });
+
+        switch (command)
+        {
+            case DodgeballCommand.HitGround:
+                pv.RPC("R_OnGroundHit", RpcTarget.AllViaServer);
+                break;
+        }
     }
 
     [PunRPC]
@@ -74,4 +81,13 @@ public class N_DodgeballCommander : MonoBehaviour
         BallThrowData d = DodgeballGameManager.GetThrow(lastAppliedThrow);
         ball.launchTo.GoLaunchTo(lastTargetPos, d);
     }
+    [PunRPC]
+    private void R_OnGroundHit()
+    {
+        Log.Message("N_Ball().RPC :: R_OnGroundHit");
+        ball.CanApplyOnGroundHit = () => true;
+        ball.OnGroundHit();
+        ball.CanApplyOnGroundHit = () => false;
+    }
+
 }

@@ -8,7 +8,8 @@ using GW_Lib.Utility;
 //TODO: dynamically find the gravity, depending on distance, such that, speed never exceeds a certain value?
 public class Dodgeball : Singleton<Dodgeball>
 {
-    public event Action OnHitGround = null;
+    public Func<bool> CanApplyOnGroundHit = () => true;
+    public event Action E_OnHitGround = null;
 
     public bool IsOnGround => ballState == BallState.OnGround;
     public bool IsHeld => ballState == BallState.Held;
@@ -59,10 +60,13 @@ public class Dodgeball : Singleton<Dodgeball>
         if (!field)
             return;
 
-        OnHitGround?.Invoke();
+        E_OnHitGround?.Invoke();
+
         if(ballState == BallState.Flying)
         {
             ballState = BallState.OnGround;
+            if (CanApplyOnGroundHit())
+                C_OnGroundHit();
         }
     }
     void OnTriggerExit(Collider col)
@@ -84,9 +88,21 @@ public class Dodgeball : Singleton<Dodgeball>
     {
 
     }
-
     public void RunCommand(DodgeballCommand command)
     {
         OnCommandActivated?.Invoke(command);
+    }
+    public void C_OnGroundHit()
+    {
+        RunCommand(DodgeballCommand.HitGround);
+        Debug.LogWarning("Did call wut?");
+        OnGroundHit();
+    }
+
+    public void OnGroundHit()
+    {
+        Debug.LogError("Applied");
+        if (CanApplyOnGroundHit())
+            DodgeballGameManager.instance.OnBallHitGround();
     }
 }

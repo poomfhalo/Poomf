@@ -15,11 +15,11 @@ public class DodgeballLaunchUp : DodgeballAction
     }
     void OnEnable()
     {
-        ball.OnHitGround += OnHitGround;
+        ball.E_OnHitGround += OnHitGround;
     }
     void OnDisable()
     {
-        ball.OnHitGround -= OnHitGround;
+        ball.E_OnHitGround -= OnHitGround;
     }
 
     public void C_LaunchUp(float byHeigth, float launchGravity)

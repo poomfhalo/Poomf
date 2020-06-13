@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public enum DodgeballCommand { GoToChara, LaunchUp, LaunchTo }
+public enum DodgeballCommand { GoToChara, LaunchUp, LaunchTo, HitGround }
 public abstract class DodgeballAction : MonoBehaviour, ICharaAction
 {
     public bool IsRunning => isRunning;
