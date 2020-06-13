@@ -1,5 +1,4 @@
 ﻿using System;
-using GW_Lib;
 using UnityEngine;
 
 [RequireComponent(typeof(DodgeballCharacter))]
@@ -26,6 +25,7 @@ public class BallLauncher : DodgeballCharaAction,ICharaAction
     DodgeballCharacter aimedAtChara = null;
     Mover mover = null;
     SelectionIndicator selectionIndicator => GetComponent<DodgeballCharacter>().selectionIndicator;
+
     void Awake()
     {
         chara = GetComponent<DodgeballCharacter>();

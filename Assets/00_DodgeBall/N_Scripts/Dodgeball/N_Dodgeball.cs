@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 using GW_Lib;
-using System.Linq;
-using System;
 
 [RequireComponent(typeof(Dodgeball))]
 public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
@@ -84,10 +82,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
             smoothVel = smoothVel * pDist;
         }
         rb3d.velocity = smoothVel;
-
-        //ball.SetKinematic(true);
-        //Vector3 targetPos = Vector3.Lerp(rb3d.position, netPos, catchUpSpeed * Time.fixedDeltaTime);
-        //rb3d.MovePosition(targetPos);
     }
     void OnDrawGizmos()
     {
@@ -111,9 +105,18 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     private void OnHitGround()
     {
         if (ball.ballState != Dodgeball.BallState.Flying)
-        {
             return;
-        }
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
+        Log.Message("Send OnGroundHit Relay");
+        pv.RPC("RelayBallHitGround", RpcTarget.AllViaServer);
+    }
+
+    [PunRPC]
+    private void RelayBallHitGround()
+    {
+        Log.Message("N_Ball() :: RPC :: RelayBallHitGround");
         DodgeballGameManager.instance.OnBallHitGround();
     }
 }

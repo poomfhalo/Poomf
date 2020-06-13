@@ -53,6 +53,7 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
         if (Dodgeball.instance.holder == null)
             return;
 
+        Log.Message("GameManager().OnBallHitGround");
         Team t = TeamsManager.GetTeam(Dodgeball.instance.holder);
         t.players.ForEach(p => p.C_ReleaseFromBrace());
         t = TeamsManager.GetNextTeam(Dodgeball.instance.holder);
