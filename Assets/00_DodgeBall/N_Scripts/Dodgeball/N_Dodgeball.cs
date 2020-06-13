@@ -71,7 +71,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         Vector3 posDir = (netPos - rb3d.position).normalized;
         Vector3 posVel = posDir * catchUpSpeed;
         Vector3 targetVel = netVel + posVel;
-        Vector3 smoothVel = Vector3.Slerp(rb3d.velocity, targetVel, lastLag * Time.fixedDeltaTime * catchUpSpeed);
+        Vector3 smoothVel = Vector3.Lerp(rb3d.velocity, targetVel, lastLag * Time.fixedDeltaTime * catchUpSpeed);
 
         float dist = Vector3.Distance(rb3d.position, netPos);
         if(dist<=arrivalDist)

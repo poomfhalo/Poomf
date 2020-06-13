@@ -67,6 +67,8 @@ public static class N_Extentions
     {
         DodgeballCharacter chara = null;
         chara = TeamsManager.instance.AllCharacters.Find(c =>{
+            if (c == null)
+                return false;
             PhotonView pv = c.GetComponent<PhotonView>();
             if (!c.GetComponent<PhotonView>())
                 return false;
