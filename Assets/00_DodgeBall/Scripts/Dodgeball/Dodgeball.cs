@@ -65,8 +65,7 @@ public class Dodgeball : Singleton<Dodgeball>
         if(ballState == BallState.Flying)
         {
             ballState = BallState.OnGround;
-            if (CanApplyOnGroundHit())
-                C_OnGroundHit();
+            C_OnGroundHit();
         }
     }
     void OnTriggerExit(Collider col)
