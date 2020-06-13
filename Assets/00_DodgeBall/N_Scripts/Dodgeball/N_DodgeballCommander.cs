@@ -50,7 +50,7 @@ public class N_DodgeballCommander : MonoBehaviour
     [PunRPC]
     private void R_GoToChara(int holder)
     {
-        Log.Message("RPC :: R_GoToChara()");
+        Log.Message("N_Ball().RPC :: R_GoToChara()");
         DodgeballCharacter n_holder = null;
         if (holder != -1)
         {
@@ -66,7 +66,7 @@ public class N_DodgeballCommander : MonoBehaviour
     [PunRPC]
     private void R_LaunchTo(byte lastAppliedThrow,Vector3 lastTargetPos)
     {
-        Log.Message("RPC :: R_LaunchTo()");
+        Log.Message("N_Ball().RPC :: R_LaunchTo()");
         if (ball.ballState == Dodgeball.BallState.Flying)
             return;
 
