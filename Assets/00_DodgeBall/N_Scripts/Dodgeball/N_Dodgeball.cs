@@ -7,12 +7,12 @@ using System;
 [RequireComponent(typeof(Dodgeball))]
 public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
 {
-    public bool AllowSync { set { allowSync = value; } get { return allowSync; } }
     public float lastLag { private set; get; }
 
-    [SerializeField] float catchUpSpeed = 0;
+    [SerializeField] float catchUpSpeed = 5;
+    [SerializeField] float arrivalDist = 0.35f;
+
     [Header("Read Only")]
-    [SerializeField] bool allowSync = true;
     [SerializeField] Vector3 netPos = new Vector3();
     [SerializeField] Vector3 netVel = Vector3.zero;
 
@@ -30,7 +30,8 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     }
     void Start()
     {
-        //netPos = rb3d.position;
+        if(!pv.IsMine)
+            netPos = rb3d.position;
     }
     public override void OnDisable()
     {
@@ -44,7 +45,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         {
             stream.SendNext(rb3d.position);
             stream.SendNext(rb3d.velocity);
-            //stream.SendNext((int)ball.ballState);
         }
         else if (stream.IsReading)
         {
@@ -56,7 +56,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
 
             netPos = (Vector3)stream.ReceiveNext();
             netVel = (Vector3)stream.ReceiveNext();
-            //ball.ballState = (Dodgeball.BallState)(int)stream.ReceiveNext();
         }
         lastLag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
         netPos = netPos + netVel * lastLag;
@@ -67,22 +66,33 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
             return;
         if (ball.IsHeld || ball.IsFlying)
             return;
-        if (!AllowSync)
-            return;
 
         ball.SetKinematic(false);
         Vector3 posDir = (netPos - rb3d.position).normalized;
         Vector3 posVel = posDir * catchUpSpeed;
         Vector3 targetVel = netVel + posVel;
-        rb3d.velocity = Vector3.Slerp(rb3d.velocity, targetVel, lastLag * Time.fixedDeltaTime * catchUpSpeed);
+        Vector3 smoothVel = Vector3.Slerp(rb3d.velocity, targetVel, lastLag * Time.fixedDeltaTime * catchUpSpeed);
+
+        float dist = Vector3.Distance(rb3d.position, netPos);
+        if(dist<=arrivalDist)
+        {
+            float pDist = dist / arrivalDist;
+            smoothVel = smoothVel * pDist;
+        }
+        rb3d.velocity = smoothVel;
+
         //ball.SetKinematic(true);
         //Vector3 targetPos = Vector3.Lerp(rb3d.position, netPos, catchUpSpeed * Time.fixedDeltaTime);
         //rb3d.MovePosition(targetPos);
     }
     void OnDrawGizmos()
     {
-        //Gizmos.color = Color.grey;
-        //Gizmos.DrawSphere(netPos, GetComponent<SphereCollider>().radius);
+        if (!Application.isPlaying)
+            return;
+        if (GetComponent<PhotonView>().IsMine)
+            return;
+        Gizmos.color = Color.grey;
+        Gizmos.DrawSphere(netPos, GetComponent<SphereCollider>().radius);
     }
 
     public int GetHolder()
