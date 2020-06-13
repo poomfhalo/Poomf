@@ -27,6 +27,8 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         pv = GetComponent<PhotonView>();
         ball = GetComponent<Dodgeball>();
         rb3d = GetComponent<Rigidbody>();
+        if (PhotonNetwork.IsMasterClient)
+            ball.OnHitGround += OnHitGround;
     }
     void Start()
     {
@@ -37,6 +39,8 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     {
         base.OnDisable();
         firstRead = true;
+        if(PhotonNetwork.IsMasterClient)
+            ball.OnHitGround -= OnHitGround;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -98,14 +102,18 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     public int GetHolder()
     {
         int holder = -1;
-        if (ball.GetHolder())//Only Send commands if the command caller is the local player
+        if (ball.holder != null)//Only Send commands if the command caller is the local player
         {
-            if (!ball.GetHolder().GetComponent<PhotonView>().IsMine)
-            {
-                return holder;
-            }
-            holder = ball.GetHolder().GetComponent<N_PC>().ActorID;
+            holder = ball.holder.GetComponent<N_PC>().ActorID;
         }
         return holder;
+    }
+    private void OnHitGround()
+    {
+        if (ball.ballState != Dodgeball.BallState.Flying)
+        {
+            return;
+        }
+        DodgeballGameManager.instance.OnBallHitGround();
     }
 }

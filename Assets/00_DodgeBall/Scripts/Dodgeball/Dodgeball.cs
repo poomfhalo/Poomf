@@ -13,6 +13,7 @@ public class Dodgeball : Singleton<Dodgeball>
     public bool IsOnGround => ballState == BallState.OnGround;
     public bool IsHeld => ballState == BallState.Held;
     public bool IsFlying => ballState == BallState.Flying;
+    public DodgeballCharacter holder => goTo.LastHolder;
 
     public event Action<DodgeballCommand> OnCommandActivated = null;
     public enum BallState { OnGround, Held, Flying }
@@ -20,7 +21,6 @@ public class Dodgeball : Singleton<Dodgeball>
 
     public CollisionDelegator bodyCol = null;
     [Header("Read Only")]
-    public DodgeballCharacter holder = null;
     public byte lastAppliedThrow = 0;
     public Vector3 lastTargetPos = new Vector3();
     [Header("Synced Variables")]
@@ -33,11 +33,6 @@ public class Dodgeball : Singleton<Dodgeball>
     public DodgeballGoLaunchTo launchTo { private set; get; }
     public DodgeballGoTo goTo { private set; get; }
     public DodgeballLaunchUp launchUp { private set; get; }
-
-    public DodgeballCharacter GetHolder()
-    {
-        return holder;
-    }
 
     protected override void Awake()
     {
@@ -55,7 +50,6 @@ public class Dodgeball : Singleton<Dodgeball>
     }
     void OnDestroy()
     {
-        holder = null;
         transform.DOKill();
     }
 

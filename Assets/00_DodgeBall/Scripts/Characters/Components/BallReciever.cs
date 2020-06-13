@@ -5,7 +5,7 @@ using UnityEngine;
 public class BallReciever : DodgeballCharaAction, ICharaAction
 {
     public event Action onBallGrabbed = null;
-    public Func<bool> CanDetectBall = () => true;
+    public Func<bool> ExtCanDetectBall = () => true;
     public bool IsDetecting => isDetecting;
 
     [SerializeField] TriggerDelegator ballRecieveZone = null;
@@ -31,7 +31,7 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
     {
         if (!isDetecting)
             return;
-        if (!CanDetectBall())
+        if (!ExtCanDetectBall())
             return;
 
         Bounds b = ballRecieveZone.GetCollider.bounds;
@@ -45,7 +45,7 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
 
     private void OnEntered(Collider other)
     {
-        if (!CanDetectBall())
+        if (!ExtCanDetectBall())
             return;
 
         Dodgeball ball = other.GetComponent<Dodgeball>();
@@ -57,7 +57,7 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
     }
     private void OnExitted(Collider other)
     {
-        if (!CanDetectBall())
+        if (!ExtCanDetectBall())
             return;
 
         Dodgeball ball = other.GetComponent<Dodgeball>();
@@ -100,7 +100,7 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
     {
         if(isBallIn && isDetecting && isButtonClicked)
         {
-            GetComponent<DodgeballCharacter>().C_ReleaseFromBrace();
+            DodgeballGameManager.instance.OnBallCaught(GetComponent<DodgeballCharacter>());
             GetComponent<BallGrabber>().GrabBall();
             DisableDetection();
             isButtonClicked = false;

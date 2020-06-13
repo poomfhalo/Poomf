@@ -5,11 +5,14 @@ using UnityEngine;
 
 public class DodgeballGoTo : DodgeballAction
 {
-    [SerializeField] float grabDur = 0.1f;
-    [SerializeField] float heldPosCheckerDur = 0.025f;
-
     public override DodgeballCommand Command => DodgeballCommand.GoToChara;
     public override string actionName => "Goiing To Chara";
+    public DodgeballCharacter LastHolder => lastHolder;
+
+    [SerializeField] float grabDur = 0.1f;
+    [SerializeField] float heldPosCheckerDur = 0.025f;
+    [Header("Read Only")]
+    [SerializeField] DodgeballCharacter lastHolder = null;
 
     void OnDisable()
     {
@@ -18,7 +21,7 @@ public class DodgeballGoTo : DodgeballAction
 
     public void C_GoTo(DodgeballCharacter chara, Action onCompleted)
     {
-        ball.holder = chara;
+        lastHolder = chara;
         ball.RunCommand(Command);
 
         if (!ApplyActionWithCommand())

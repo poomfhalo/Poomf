@@ -62,9 +62,14 @@ public class TeamsManager : Singleton<TeamsManager>
     public static Team GetNextTeam(DodgeballCharacter chara)
     {
         Team team = GetTeam(chara);
-        int i = instance.teams.IndexOf(team);
+        team = GetNextTeam(team);
+        return team;
+    }
+    public static Team GetNextTeam(Team t)
+    {
+        int i = instance.teams.IndexOf(t);
         i = (i + 1) % instance.teams.Count;
-        team = instance.teams[i];
+        Team team = instance.teams[i];
         return team;
     }
     public static Team GetTeam(DodgeballCharacter chara)

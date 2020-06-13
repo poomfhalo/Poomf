@@ -13,19 +13,25 @@ public class N_BallReciever : MonoBehaviour
     }
     void OnEnable()
     {
-        if (!pv.IsMine)
-            return;
-
-        reciever.onRecievedButtonInput += OnRecievedButtonInput;
-        reciever.onBallGrabbed += OnBallGrabbed;
+        if (pv.IsMine)
+        {
+            reciever.onRecievedButtonInput += OnRecievedButtonInput;
+        }
+        if (PhotonNetwork.IsMasterClient)
+        {
+            reciever.onBallGrabbed += OnBallGrabbed;
+        }
     }
     void OnDisable()
     {
-        if (!pv.IsMine)
-            return;
-
-        reciever.onRecievedButtonInput -= OnRecievedButtonInput;
-        reciever.onBallGrabbed -= OnBallGrabbed;
+        if (pv.IsMine)
+        {
+            reciever.onRecievedButtonInput -= OnRecievedButtonInput;
+        }
+        if (PhotonNetwork.IsMasterClient)
+        {
+            reciever.onBallGrabbed -= OnBallGrabbed;
+        }
     }
 
     private void OnRecievedButtonInput(bool state)

@@ -31,15 +31,29 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
     public void StartBallLaunch()
     {
         Dodgeball.instance.gameObject.SetActive(true);
-        this.InvokeDelayed(timeBeforeBallLaunch, () => {
+        this.InvokeDelayed(timeBeforeBallLaunch, () =>
+        {
             Dodgeball.instance.launchUp.C_LaunchUp(ballLaunchHeigth, launchGravity);
             ballLauncher.SetActive(false);
         });
     }
+
     public void OnBallThrownAtEnemy(DodgeballCharacter by)
     {
         Team team = TeamsManager.GetNextTeam(by);
         team.players.ForEach(p => p.C_BraceForContact());
+    }
+    public void OnBallCaught(DodgeballCharacter by)
+    {
+        Team team = TeamsManager.GetTeam(by);
+        team.players.ForEach(p => p.C_ReleaseFromBrace());
+    }
+    public void OnBallHitGround()
+    {
+        Team t = TeamsManager.GetTeam(Dodgeball.instance.holder);
+        t.players.ForEach(p => p.C_ReleaseFromBrace());
+        t = TeamsManager.GetNextTeam(Dodgeball.instance.holder);
+        t.players.ForEach(p => p.C_ReleaseFromBrace());
     }
 
     public static SpawnPoint GetSpawnPosition(TeamTag team)
@@ -61,7 +75,7 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
     }
     public static BallThrowData GetThrow(byte id)
     {
-        if(instance.throws == null||instance.throws.Length == 0)
+        if (instance.throws == null || instance.throws.Length == 0)
         {
             instance.throws = Resources.LoadAll<BallThrowData>("");
         }

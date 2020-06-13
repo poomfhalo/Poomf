@@ -34,7 +34,7 @@ public class N_DodgeballCommander : MonoBehaviour
         int sender = pv.Controller.ActorNumber;
 
         this.InvokeDelayed(lastLag * 2, () => {
-            Log.Message("N_Ball().SendCommand :: " + command, ball.GetHolder());
+            Log.Message("N_Ball().SendCommand :: " + command, ball.holder);
             switch (command)
             {
                 case DodgeballCommand.GoToChara:
