@@ -114,18 +114,33 @@ public class N_PC : MonoBehaviour,IPunObservable
         float currX = rb3d.position.x;
         float currZ = rb3d.position.z;
         pv.RPC("RecieveCommand", RpcTarget.Others, (int)command,currX,currZ);
-        Log.LogL0("Sending Command " + command);
+
+        if (command == DodgeballCharaCommand.BraceForBall || command == DodgeballCharaCommand.ReleaseFromBrace)
+        {
+            Log.Message("N_PC().SendCommand :: " + command);
+        }
+        else
+        {
+            Log.LogL0("N_PC().SendCommand :: " + command);
+        }
     }
 
     [PunRPC]
-    private void RecieveCommand(int c,float currX,float currZ)
+    private void RecieveCommand(int c, float currX, float currZ)
     {
         netPos.x = currX;
         netPos.z = currZ;
         UpdateNetData();
 
         DodgeballCharaCommand command = (DodgeballCharaCommand)c;
-        Log.LogL0("RPC :: RecieveCommand " + command);
+        if (command == DodgeballCharaCommand.BraceForBall || command == DodgeballCharaCommand.ReleaseFromBrace)
+        {
+            Log.Message("N_PC().RPC :: Recieved Command " + command);
+        }
+        else
+        {
+            Log.LogL0("N_PC().RPC :: RecieveCommand " + command);
+        }
 
         switch (command)
         {
