@@ -760,9 +760,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recievedInput: {x: 0, y: 0, z: 0}
   isButtonClicked: 0
-  dodgesCount: 2
+  dodgesAnimCount: 2
   playRndDodge: 1
   dodgeToPlay: 0
+  dist: 5
+  speed: 18
+  ease: 2
   isDodging: 0
 --- !u!114 &6963099543513805065
 MonoBehaviour:

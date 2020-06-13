@@ -94,14 +94,14 @@ public class Dodgeball : Singleton<Dodgeball>
     public void C_OnGroundHit()
     {
         RunCommand(DodgeballCommand.HitGround);
-        Debug.LogWarning("Did call wut?");
         OnGroundHit();
     }
 
     public void OnGroundHit()
     {
-        Debug.LogError("Applied");
         if (CanApplyOnGroundHit())
+        {
             DodgeballGameManager.instance.OnBallHitGround();
+        }
     }
 }

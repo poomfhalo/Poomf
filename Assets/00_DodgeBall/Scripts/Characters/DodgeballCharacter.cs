@@ -105,6 +105,8 @@ public class DodgeballCharacter : MonoBehaviour
             return;
         if (IsThrowing)
             return;
+        if (IsDodging)
+            return;
 
         mover.StartMoveByInput(i, cam.transform);
         OnCommandActivated?.Invoke(DodgeballCharaCommand.MoveInput);
@@ -184,7 +186,7 @@ public class DodgeballCharacter : MonoBehaviour
     #region Gameplay Commands
     public void C_BraceForContact()
     {
-        if (!reciever.IsDetecting)
+        if (reciever && !reciever.IsDetecting)
             reciever.EnableDetection();
 
         if (!hp.IsBeingHurt && !hp.IsWaitingForHit)
@@ -195,7 +197,7 @@ public class DodgeballCharacter : MonoBehaviour
     {
         if(hp.IsWaitingForHit)
             hp.DisableHitDetection();
-        if(reciever.IsDetecting)
+        if(reciever && reciever.IsDetecting)
             reciever.DisableDetection();
 
         OnCommandActivated?.Invoke(DodgeballCharaCommand.ReleaseFromBrace);
