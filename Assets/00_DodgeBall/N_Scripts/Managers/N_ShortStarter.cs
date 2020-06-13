@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 
 /// <summary>
 /// A simple script, responsible, for managing, connecting, players, and waiting, untill
@@ -10,6 +11,7 @@ using Photon.Realtime;
 public class N_ShortStarter : MonoBehaviourPunCallbacks
 {
     [SerializeField] bool autoStart = true;
+    [SerializeField] TextMeshProUGUI isMasterText = null;
 
     void Start()
     {
@@ -57,5 +59,13 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
     private void StartGame()
     {
         GetComponent<N_GameManager>().Initialize();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            isMasterText.text = "Is Master";
+        }
+        else
+        {
+            isMasterText.text = "Is Client";
+        }
     }
 }
