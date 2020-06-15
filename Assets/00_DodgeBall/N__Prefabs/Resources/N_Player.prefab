@@ -93,10 +93,50 @@ PrefabInstance:
       propertyPath: maxHP
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 6963099543513805063, guid: c395b7056ca0ebe79951bbb94ce6667d,
+        type: 3}
+      propertyPath: dist
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6963099543513805180, guid: c395b7056ca0ebe79951bbb94ce6667d,
         type: 3}
       propertyPath: m_Name
       value: N_Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6963099543513805181, guid: c395b7056ca0ebe79951bbb94ce6667d,
+        type: 3}
+      propertyPath: inputSensitivity
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6963099543513805181, guid: c395b7056ca0ebe79951bbb94ce6667d,
+        type: 3}
+      propertyPath: accel
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6963099543513805181, guid: c395b7056ca0ebe79951bbb94ce6667d,
+        type: 3}
+      propertyPath: maxSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6963099543513805181, guid: c395b7056ca0ebe79951bbb94ce6667d,
+        type: 3}
+      propertyPath: turningSpeed
+      value: 1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 6963099543513805181, guid: c395b7056ca0ebe79951bbb94ce6667d,
+        type: 3}
+      propertyPath: deAccel
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6963099543513805181, guid: c395b7056ca0ebe79951bbb94ce6667d,
+        type: 3}
+      propertyPath: dampingSpeed
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6963099543513805181, guid: c395b7056ca0ebe79951bbb94ce6667d,
+        type: 3}
+      propertyPath: stoppingSpeed
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6963099543513805183, guid: c395b7056ca0ebe79951bbb94ce6667d,
         type: 3}
