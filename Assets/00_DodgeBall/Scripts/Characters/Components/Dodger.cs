@@ -15,8 +15,6 @@ public class Dodger : DodgeballCharaAction, ICharaAction
             //t = x/v
             float time = 0;
             time = anim.length / speed;
-
-            Debug.Log("time " + time);
             return time;
         }
     }
@@ -40,7 +38,6 @@ public class Dodger : DodgeballCharaAction, ICharaAction
     ActionsScheduler scheduler = null;
     Rigidbody rb3d = null;
     Tweener activeTween = null;
-    float co = 0;
 
     void Start()
     {
@@ -68,7 +65,6 @@ public class Dodger : DodgeballCharaAction, ICharaAction
 
         void OnUpdate()
         {
-            Debug.Log("Lerpers : " + lerper);
             Vector3 smoothPos = Vector3.Lerp(startPos, targetPos, lerper);
             rb3d.MovePosition(smoothPos);
         }
@@ -77,22 +73,14 @@ public class Dodger : DodgeballCharaAction, ICharaAction
 
         }
     }
-    void Update()
-    {
-        if (!IsDodging)
-            co = 0;
-        co = co + Time.deltaTime;
-    }
 
     public void Cancel()
     {
-        Debug.Log("Canceled");
         activeTween.Kill();
     }
     public void A_OnDodgeCompleted()
     {
         isDodging = false;
-        Debug.Log(co);
         if (recievedInput != Vector3.zero)
         {
             GetComponent<DodgeballCharacter>().C_MoveInput(recievedInput);
