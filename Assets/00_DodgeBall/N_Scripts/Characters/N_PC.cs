@@ -187,6 +187,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     {
         lastCommand = DodgeballCharaCommand.Dodge;
         rb3d.MoveRotation(Quaternion.Euler(new Vector3(0, facing, 0)));
+        Debug.Log(facing);
         netPos = chara.C_Dodge();
     }
     //Helper Functions
