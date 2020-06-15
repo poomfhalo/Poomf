@@ -174,8 +174,6 @@ public class N_PC : MonoBehaviour,IPunObservable
                 chara.C_Jump();
                 break;
             case DodgeballCharaCommand.MoveInput:
-                if (lastCommand == DodgeballCharaCommand.Dodge)
-                    transform.position = netPos;
                 UpdateSyncedInput();
                 break;
             case DodgeballCharaCommand.BraceForBall:
@@ -183,14 +181,16 @@ public class N_PC : MonoBehaviour,IPunObservable
                 break;
         }
 
-
         lastCommand = command;
     }   
     [PunRPC]
-    private void RecieveDodgeCommand(float a)
+    private void RecieveDodgeCommand(float angle,float x,float z)
     {
         lastCommand = DodgeballCharaCommand.Dodge;
-        transform.eulerAngles = Vector3.up * a;
+
+        transform.position = new Vector3(x, transform.position.y, z);
+        transform.eulerAngles = Vector3.up * angle;
+
         netPos = chara.C_Dodge();
     }
     //Helper Functions
