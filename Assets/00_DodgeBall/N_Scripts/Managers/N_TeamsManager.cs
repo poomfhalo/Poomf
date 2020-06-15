@@ -94,6 +94,10 @@ public class N_TeamsManager : N_Singleton<N_TeamsManager>
     public static N_PC GetPlayer(int actorNumber)
     {
         DodgeballCharacter chara = N_Extentions.GetCharacter(actorNumber);
-        return chara.GetComponent<N_PC>();
+        if (chara)
+        {
+            return chara.GetComponent<N_PC>();
+        }
+        return null;
     }
 }

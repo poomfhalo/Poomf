@@ -72,6 +72,11 @@ public class TeamsManager : Singleton<TeamsManager>
         Team team = instance.teams[i];
         return team;
     }
+    public static Team GetTeam(TeamTag teamTag)
+    {
+        Team team = instance.teams.Single(t => t.teamTag == teamTag);
+        return team;
+    }
     public static Team GetTeam(DodgeballCharacter chara)
     {
         Team team = instance.teams.Single(t => t.players.Contains(chara));

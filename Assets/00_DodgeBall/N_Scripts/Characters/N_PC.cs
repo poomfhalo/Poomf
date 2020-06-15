@@ -175,6 +175,8 @@ public class N_PC : MonoBehaviour,IPunObservable
                 chara.C_Jump();
                 break;
             case DodgeballCharaCommand.MoveInput:
+                if (lastCommand == DodgeballCharaCommand.Dodge)
+                    transform.position = netPos;
                 UpdateSyncedInput();
                 break;
             case DodgeballCharaCommand.BraceForBall:

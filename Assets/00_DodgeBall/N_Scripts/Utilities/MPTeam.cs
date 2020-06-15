@@ -21,4 +21,8 @@ public class MPTeam
         }
         data[(int)t] = actors;
     }
+    public void CleanUp()
+    {
+        actors.RemoveAll(a => N_TeamsManager.GetPlayer(a) == null);
+    }
 }
