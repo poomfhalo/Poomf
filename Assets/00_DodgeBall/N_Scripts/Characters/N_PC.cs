@@ -207,6 +207,5 @@ public class N_PC : MonoBehaviour,IPunObservable
         Gizmos.color = c;
 
         Gizmos.DrawSphere(netPos, autoMoveThreshold);
-        Debug.Log("WTF");
     }
 }
