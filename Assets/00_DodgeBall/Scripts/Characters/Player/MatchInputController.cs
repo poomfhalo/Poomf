@@ -8,7 +8,7 @@ public class MatchInputController : MonoBehaviour
     public static event Action<InputActionPhase> OnBallAction = null;
     public static event Action OnFriendly = null;
     public static event Action OnEnemy = null;
-    public static event Action OnDodge = null;
+    public static event Func<Vector3> OnDodge = null;
     public static event Action OnFakeFire = null;
     public static event Action OnJump = null;
 

@@ -46,7 +46,7 @@ public class Dodger : DodgeballCharaAction, ICharaAction
         rb3d = GetComponent<Rigidbody>();
     }
 
-    public void StartDodgeAction()
+    public Vector3 StartDodgeAction()
     {
         if (playRndDodge)
         {
@@ -72,6 +72,7 @@ public class Dodger : DodgeballCharaAction, ICharaAction
         {
 
         }
+        return targetPos;
     }
 
     public void Cancel()

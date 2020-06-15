@@ -25,6 +25,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     [SerializeField] Vector3 netPos = new Vector3();
     [SerializeField] Vector3 netDisp = new Vector3();
     [SerializeField] Vector3 netDir = new Vector3();
+    [SerializeField] DodgeballCharaCommand lastCommand = DodgeballCharaCommand.MoveInput;
     bool firstRead = true;
 
     protected virtual void Start()
@@ -113,7 +114,15 @@ public class N_PC : MonoBehaviour,IPunObservable
     {
         float currX = rb3d.position.x;
         float currZ = rb3d.position.z;
-        pv.RPC("RecieveCommand", RpcTarget.Others, (int)command,currX,currZ);
+
+        if(command == DodgeballCharaCommand.Dodge)
+        {
+            pv.RPC("RecieveDodgeCommand", RpcTarget.Others, transform.eulerAngles.y);
+        }
+        else
+        {
+            pv.RPC("RecieveCommand", RpcTarget.Others, (int)command, currX, currZ);
+        }
 
         if (command == DodgeballCharaCommand.BraceForBall || command == DodgeballCharaCommand.ReleaseFromBrace)
         {
@@ -133,6 +142,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         UpdateNetData();
 
         DodgeballCharaCommand command = (DodgeballCharaCommand)c;
+        lastCommand = command;
         if (command == DodgeballCharaCommand.BraceForBall || command == DodgeballCharaCommand.ReleaseFromBrace)
         {
             Log.Message("N_PC().RPC :: Recieved Command " + command);
@@ -144,9 +154,6 @@ public class N_PC : MonoBehaviour,IPunObservable
 
         switch (command)
         {
-            case DodgeballCharaCommand.Dodge:
-                chara.C_Dodge();
-                break;
             case DodgeballCharaCommand.Enemy:
                 chara.C_Enemy();
                 break;
@@ -170,7 +177,13 @@ public class N_PC : MonoBehaviour,IPunObservable
                 break;
         }
     }   
-
+    [PunRPC]
+    private void RecieveDodgeCommand(float facing)
+    {
+        lastCommand = DodgeballCharaCommand.Dodge;
+        rb3d.MoveRotation(Quaternion.Euler(new Vector3(0, facing, 0)));
+        netPos = chara.C_Dodge();
+    }
     //Helper Functions
     private void UpdateNetData()
     {
@@ -195,6 +208,8 @@ public class N_PC : MonoBehaviour,IPunObservable
         if (pv.IsMine)
             return;
         if (netDist < autoMoveThreshold)
+            return;
+        if (lastCommand == DodgeballCharaCommand.Dodge)
             return;
 
         chara.C_MoveInput(netPos);
