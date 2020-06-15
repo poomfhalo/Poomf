@@ -122,7 +122,8 @@ public class N_PC : MonoBehaviour,IPunObservable
 
         if(command == DodgeballCharaCommand.Dodge)
         {
-            pv.RPC("RecieveDodgeCommand", RpcTarget.Others, transform.eulerAngles.y);
+            Vector3 p = transform.position;
+            pv.RPC("RecieveDodgeCommand", RpcTarget.Others, transform.eulerAngles.y, p.x, p.z);
         }
         else
         {
