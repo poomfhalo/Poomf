@@ -96,6 +96,8 @@ public class N_PC : MonoBehaviour,IPunObservable
                 firstRead = false;
                 return;
             }
+            if (lastCommand == DodgeballCharaCommand.Dodge)
+                return;
 
             netPos.x = (float)stream.ReceiveNext();
             netPos.z = (float)stream.ReceiveNext();
