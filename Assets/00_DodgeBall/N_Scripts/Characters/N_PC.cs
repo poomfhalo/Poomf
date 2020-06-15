@@ -122,7 +122,8 @@ public class N_PC : MonoBehaviour,IPunObservable
 
         if(command == DodgeballCharaCommand.Dodge)
         {
-            pv.RPC("RecieveDodgeCommand", RpcTarget.Others, transform.eulerAngles.y);
+            Quaternion q = transform.rotation;
+            pv.RPC("RecieveDodgeCommand", RpcTarget.Others, q.x, q.y, q.z, q.w);
         }
         else
         {
@@ -183,11 +184,10 @@ public class N_PC : MonoBehaviour,IPunObservable
         }
     }   
     [PunRPC]
-    private void RecieveDodgeCommand(float facing)
+    private void RecieveDodgeCommand(float x,float y, float z, float w)
     {
         lastCommand = DodgeballCharaCommand.Dodge;
-        rb3d.MoveRotation(Quaternion.Euler(new Vector3(0, facing, 0)));
-        Debug.Log(facing);
+        transform.rotation = new Quaternion(x, y, z, w);
         netPos = chara.C_Dodge();
     }
     //Helper Functions
