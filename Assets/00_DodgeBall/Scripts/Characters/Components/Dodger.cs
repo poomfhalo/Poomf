@@ -38,12 +38,14 @@ public class Dodger : DodgeballCharaAction, ICharaAction
     ActionsScheduler scheduler = null;
     Rigidbody rb3d = null;
     Tweener activeTween = null;
+    DodgeballCharacter chara = null;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         scheduler = GetComponent<ActionsScheduler>();
         rb3d = GetComponent<Rigidbody>();
+        chara = GetComponent<DodgeballCharacter>();
     }
 
     public Vector3 StartDodgeAction()
@@ -82,10 +84,7 @@ public class Dodger : DodgeballCharaAction, ICharaAction
     public void A_OnDodgeCompleted()
     {
         isDodging = false;
-        if (recievedInput != Vector3.zero)
-        {
-            GetComponent<DodgeballCharacter>().C_MoveInput(recievedInput);
-        }
+        chara.C_MoveInput(recievedInput);
         Cancel();
     }
 }
