@@ -83,6 +83,9 @@ public class N_PC : MonoBehaviour,IPunObservable
     {
         if (stream.IsWriting)
         {
+            if (lastCommand == DodgeballCharaCommand.Dodge)
+                return;
+
             stream.SendNext(rb3d.position.x);
             stream.SendNext(rb3d.position.z);
         }
