@@ -2,6 +2,7 @@
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
+using GW_Lib;
 
 /// <summary>
 /// A simple script, responsible, for managing, connecting, players, and waiting, untill
@@ -56,23 +57,26 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        TeamTag t = N_TeamsManager.GetTeam(otherPlayer.ActorNumber);
-        //DodgeballCharacter chara = N_TeamsManager.GetPlayer(otherPlayer.ActorNumber).GetComponent<DodgeballCharacter>();
-        Team team = TeamsManager.GetTeam(t);
-        team.CleanUp();
-        bool isTeamAEmpty = team.IsEmpty;
-        team = TeamsManager.GetNextTeam(team);
-        team.CleanUp();
-        bool isTeamBEmpty = team.IsEmpty;
+        this.InvokeDelayed(0.1f, () => {
+            TeamTag t = N_TeamsManager.GetTeam(otherPlayer.ActorNumber);
+            //DodgeballCharacter chara = N_TeamsManager.GetPlayer(otherPlayer.ActorNumber).GetComponent<DodgeballCharacter>();
+            Team team = TeamsManager.GetTeam(t);
+            team.CleanUp();
+            bool isTeamAEmpty = team.IsEmpty;
+            team = TeamsManager.GetNextTeam(team);
+            team.CleanUp();
+            bool isTeamBEmpty = team.IsEmpty;
 
-        MPTeam mpT = N_TeamsManager.GetMPTeam(otherPlayer.ActorNumber);
-        mpT.CleanUp();
+            MPTeam mpT = N_TeamsManager.GetMPTeam(otherPlayer.ActorNumber);
+            mpT.CleanUp();
 
-        if(isTeamAEmpty || isTeamBEmpty)
-        {
-            Log.Warning("Game Is over, one of the teams is empty");
-            PhotonNetwork.LoadLevel("MP Launcher");
-        }
+            if (isTeamAEmpty || isTeamBEmpty)
+            {
+                Log.Warning("Game Is over, one of the teams is empty");
+                PhotonNetwork.LeaveRoom();
+                PhotonNetwork.LoadLevel("MP Launcher");
+            }
+        });
     }
 
 
