@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 using GW_Lib;
+using Smooth;
 
 [RequireComponent(typeof(Dodgeball))]
 public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
@@ -18,6 +19,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     PhotonView pv = null;
     Dodgeball ball = null;
     bool firstRead = true;
+    SmoothSyncPUN2 syncer = null;
 
     public override void OnEnable()
     {
@@ -25,6 +27,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         pv = GetComponent<PhotonView>();
         ball = GetComponent<Dodgeball>();
         rb3d = GetComponent<Rigidbody>();
+        syncer = GetComponent<SmoothSyncPUN2>();
     }
     void Start()
     {
@@ -60,11 +63,21 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     }
     void FixedUpdate()
     {
-        if (photonView.IsMine)
-            return;
+        //if (photonView.IsMine)
+        //return;
         if (ball.IsHeld || ball.IsFlying)
+        {
+            if (syncer.enabled)
+            {
+                syncer.enabled = false;
+            }
             return;
+        }
 
+        if(syncer.enabled == false)
+            syncer.enabled = true;
+
+        return;
         ball.SetKinematic(false);
         Vector3 posDir = (netPos - rb3d.position).normalized;
         Vector3 posVel = posDir * catchUpSpeed;
