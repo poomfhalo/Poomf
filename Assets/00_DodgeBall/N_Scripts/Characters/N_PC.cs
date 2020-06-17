@@ -225,8 +225,6 @@ public class N_PC : MonoBehaviour,IPunObservable
         if (netDist < autoMoveThreshold)
             return;
         if (lastCommand == DodgeballCharaCommand.Dodge)
-            return;
-        if (lastCommand == DodgeballCharaCommand.Dodge)
         {
             lastCommand = DodgeballCharaCommand.MoveInput;
             transform.position = netPos;
