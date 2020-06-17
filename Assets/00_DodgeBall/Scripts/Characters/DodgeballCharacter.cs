@@ -99,7 +99,6 @@ public class DodgeballCharacter : MonoBehaviour
     #region Input Commands
     public void C_MoveInput(Vector3 i)
     {
-        Debug.Log("COMON");
         GetComponents<DodgeballCharaAction>().ToList().ForEach(a => { a.RecieveInput(i); });
 
         if (IsJumping)
