@@ -182,11 +182,14 @@ public class N_PC : MonoBehaviour,IPunObservable
                     if (switching)
                         return;
                     switching = true;
+                    lastCommand = DodgeballCharaCommand.MoveInput;
+                    transform.position = netPos;
+                    //GetComponent<Mover>().Warp(netPos);
+                    Log.Warning("Snapped Up, Dodge Net Position", gameObject);
+                    switching = false;
+
                     this.InvokeDelayed(5, () => {
-                        lastCommand = DodgeballCharaCommand.MoveInput;
-                        GetComponent<Mover>().Warp(netPos);
-                        Log.Warning("Snapped Up, Dodge Net Position", gameObject);
-                        switching = false;
+
                     });
                     return;
                 }
