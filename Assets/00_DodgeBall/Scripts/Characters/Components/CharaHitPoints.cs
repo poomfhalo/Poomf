@@ -69,6 +69,9 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
 
     public void StartHitAction()
     {
+        if(!isWaitingForHit)
+            return;
+
         currHP = currHP - 1;
         OnHPUpdated?.Invoke();
         this.SetKinematic(true);
