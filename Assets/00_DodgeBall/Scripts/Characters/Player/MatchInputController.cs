@@ -4,13 +4,13 @@ using UnityEngine.InputSystem;
 
 public class MatchInputController : MonoBehaviour
 {
-    public static event Action<Vector3> OnMoveInput = null;
-    public static event Action<InputActionPhase> OnBallAction = null;
-    public static event Action OnFriendly = null;
-    public static event Action OnEnemy = null;
-    public static event Action OnDodge = null;
-    public static event Action OnFakeFire = null;
-    public static event Action OnJump = null;
+    public event Action<Vector3> OnMoveInput = null;
+    public event Action<InputActionPhase> OnBallAction = null;
+    public event Action OnFriendly = null;
+    public event Action OnEnemy = null;
+    public event Action OnDodge = null;
+    public event Action OnFakeFire = null;
+    public event Action OnJump = null;
 
     public bool IsEnabled { set; get; } = true;
 

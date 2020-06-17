@@ -44,12 +44,12 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
             pc = N_Extentions.GetCharacter(GetComponent<PhotonView>().Controller.ActorNumber).gameObject;
             team = TeamsManager.GetTeam(pc.GetComponent<DodgeballCharacter>());
         }
-        //if (team == null)
-        //    return;
+        if (team == null)
+            return;
 
-        //Camera cam = Camera.main;
-        //var p = FindObjectsOfType<TaggedSpawnPoint>().ToList().Find(s => s.HasTag("MainCamera") && s.BelongsTo(team.teamTag));
-        //cam.transform.position = p.position;
-        //cam.transform.rotation = p.rotation;
+        Camera cam = Camera.main;
+        var p = FindObjectsOfType<TaggedSpawnPoint>().ToList().Find(s => s.HasTag("MainCamera") && s.BelongsTo(team.teamTag));
+        cam.transform.position = p.position;
+        cam.transform.rotation = p.rotation;
     }
 }

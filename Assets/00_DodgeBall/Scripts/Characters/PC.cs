@@ -3,10 +3,12 @@
 [RequireComponent(typeof(DodgeballCharacter))]
 public class PC : MonoBehaviour
 {
+    MatchInputController input = null;
     DodgeballCharacter chara = null;
     void OnEnable()
     {
         chara = GetComponent<DodgeballCharacter>();
+        input = GetComponent<MatchInputController>();
         ConnectInput();
     }
     void OnDisable()
@@ -16,22 +18,22 @@ public class PC : MonoBehaviour
 
     private void DisconnectInput()
     {
-        MatchInputController.OnMoveInput -= chara.C_MoveInput;
-        MatchInputController.OnEnemy -= chara.C_Enemy;
-        MatchInputController.OnFriendly -= chara.C_Friendly;
-        MatchInputController.OnBallAction -= chara.C_OnBallAction;
-        MatchInputController.OnDodge -= chara.C_Dodge;
-        MatchInputController.OnFakeFire -= chara.C_FakeFire;
-        MatchInputController.OnJump -= chara.C_Jump;
+        input.OnMoveInput -= chara.C_MoveInput;
+        input.OnEnemy -= chara.C_Enemy;
+        input.OnFriendly -= chara.C_Friendly;
+        input.OnBallAction -= chara.C_OnBallAction;
+        input.OnDodge -= chara.C_Dodge;
+        input.OnFakeFire -= chara.C_FakeFire;
+        input.OnJump -= chara.C_Jump;
     }
     private void ConnectInput()
     {
-        MatchInputController.OnMoveInput += chara.C_MoveInput;
-        MatchInputController.OnEnemy += chara.C_Enemy;
-        MatchInputController.OnFriendly += chara.C_Friendly;
-        MatchInputController.OnBallAction += chara.C_OnBallAction;
-        MatchInputController.OnDodge += chara.C_Dodge;
-        MatchInputController.OnFakeFire += chara.C_FakeFire;
-        MatchInputController.OnJump += chara.C_Jump;
+        input.OnMoveInput += chara.C_MoveInput;
+        input.OnEnemy += chara.C_Enemy;
+        input.OnFriendly += chara.C_Friendly;
+        input.OnBallAction += chara.C_OnBallAction;
+        input.OnDodge += chara.C_Dodge;
+        input.OnFakeFire += chara.C_FakeFire;
+        input.OnJump += chara.C_Jump;
     }
 }
