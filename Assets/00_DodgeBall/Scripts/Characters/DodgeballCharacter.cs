@@ -147,20 +147,19 @@ public class DodgeballCharacter : MonoBehaviour
             OnCommandActivated?.Invoke(DodgeballCharaCommand.BallAction);
         }
     }
-    public Vector3 C_Dodge()
+    public void C_Dodge()
     {
         if (HasBall)
-            return rb3d.position;
+            return;
         if (IsThrowing)
-            return rb3d.position;
+            return;
         if (IsDodging)
-            return rb3d.position;
+            return;
         if (IsJumping)
-            return rb3d.position;
+            return;
 
-        Vector3 p = dodger.StartDodgeAction();
+        dodger.StartDodgeAction();
         OnCommandActivated?.Invoke(DodgeballCharaCommand.Dodge);
-        return p;
     }
     public void C_FakeFire()
     {

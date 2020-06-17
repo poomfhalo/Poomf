@@ -20,7 +20,6 @@ public class N_PC : MonoBehaviour,IPunObservable
     PhotonView pv = null;
 
     [Header("Read Only")]
-    [SerializeField] float lastLag = 0;
     [SerializeField] float netDist = 0;
     [SerializeField] Vector3 netPos = new Vector3();
     [SerializeField] Vector3 netDisp = new Vector3();
@@ -28,7 +27,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     [SerializeField] DodgeballCharaCommand lastCommand = DodgeballCharaCommand.MoveInput;
     bool firstRead = true;
 
-    protected virtual void Start()
+    void OnEnable()
     {
         pv = GetComponent<PhotonView>();
         pc = GetComponent<PC>();
@@ -36,10 +35,6 @@ public class N_PC : MonoBehaviour,IPunObservable
         {
             pc.enabled = false;
         }
-    }
-    void OnEnable()
-    {
-        pv = GetComponent<PhotonView>();
         rb3d = GetComponent<Rigidbody>();
         chara = GetComponent<DodgeballCharacter>();
         if (GetComponent<PhotonView>().IsMine)
@@ -94,6 +89,8 @@ public class N_PC : MonoBehaviour,IPunObservable
             if (firstRead)
             {
                 firstRead = false;
+                stream.ReceiveNext();
+                stream.ReceiveNext();
                 return;
             }
             if (lastCommand == DodgeballCharaCommand.Dodge)
@@ -106,7 +103,6 @@ public class N_PC : MonoBehaviour,IPunObservable
             TrySnapToNetPos();
             UpdateSyncedInput();
         }
-        lastLag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
     }
 
     void FixedUpdate()
@@ -122,8 +118,12 @@ public class N_PC : MonoBehaviour,IPunObservable
 
         if(command == DodgeballCharaCommand.Dodge)
         {
-            Vector3 p = transform.position;
-            pv.RPC("RecieveDodgeCommand", RpcTarget.Others, transform.eulerAngles.y, p.x, p.z);
+            Dodger d = GetComponent<Dodger>();
+
+            Vector3 startPos = transform.position;
+            Vector3 expectedPos = d.GetExpectedPosition();
+
+            pv.RPC("RecieveDodgeCommand", RpcTarget.Others, startPos.x, startPos.z, expectedPos.x, expectedPos.z);
         }
         else
         {
@@ -175,8 +175,6 @@ public class N_PC : MonoBehaviour,IPunObservable
                 chara.C_Jump();
                 break;
             case DodgeballCharaCommand.MoveInput:
-                if (lastCommand == DodgeballCharaCommand.Dodge)
-                    transform.position = netPos;
                 UpdateSyncedInput();
                 break;
             case DodgeballCharaCommand.BraceForBall:
@@ -187,14 +185,19 @@ public class N_PC : MonoBehaviour,IPunObservable
         lastCommand = command;
     }   
     [PunRPC]
-    private void RecieveDodgeCommand(float angle,float x,float z)
+    private void RecieveDodgeCommand(float startX,float startZ,float expectedX,float expectedZ)
     {
         lastCommand = DodgeballCharaCommand.Dodge;
 
-        transform.position = new Vector3(x, transform.position.y, z);
-        transform.eulerAngles = Vector3.up * angle;
+        transform.position = new Vector3(startX, transform.position.y, startZ);
+        netPos = new Vector3(expectedX, transform.position.y, expectedZ);
 
-        netPos = chara.C_Dodge();
+        Vector3 dir = netPos - transform.position;
+        dir.y = 0;
+        dir.Normalize();
+        transform.rotation = Quaternion.LookRotation(dir);
+
+        chara.C_Dodge();
     }
     //Helper Functions
     private void UpdateNetData()
@@ -223,6 +226,13 @@ public class N_PC : MonoBehaviour,IPunObservable
             return;
         if (lastCommand == DodgeballCharaCommand.Dodge)
             return;
+        if (lastCommand == DodgeballCharaCommand.Dodge)
+        {
+            lastCommand = DodgeballCharaCommand.MoveInput;
+            transform.position = netPos;
+            Log.Warning("Snapped Up, Dodge Net Position", gameObject);
+            return;
+        }
 
         chara.C_MoveInput(netPos);
     }
