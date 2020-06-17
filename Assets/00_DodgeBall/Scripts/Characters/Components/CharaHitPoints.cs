@@ -43,6 +43,8 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
     {
         Dodgeball ball = other.GetComponent<Dodgeball>();
 
+        Log.Warning("Collided with ball and " + IsWaitingForHit);
+
         if (!ball)
             return;
         if (!IsWaitingForHit)
@@ -55,17 +57,20 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
 
     public void EnableHitDetection()
     {
+        Log.Warning("Enabled Hit Detection");
         isWaitingForHit = true;
     }
     private void C_StartHitAction()
     {
-        OnHpCommand?.Invoke(HPCommand.Subtract);
-        if (!isWaitingForHit)
+        if (!IsWaitingForHit)
             return;
+
+        OnHpCommand?.Invoke(HPCommand.Subtract);
+        isWaitingForHit = false;
+
         if (!ApplyHealthChanges())
             return;
 
-        isWaitingForHit = false;
         StartHitAction();
     }
 
