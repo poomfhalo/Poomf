@@ -175,6 +175,13 @@ public class N_PC : MonoBehaviour,IPunObservable
                 chara.C_Jump();
                 break;
             case DodgeballCharaCommand.MoveInput:
+                if (lastCommand == DodgeballCharaCommand.Dodge)
+                {
+                    lastCommand = DodgeballCharaCommand.MoveInput;
+                    transform.position = netPos;
+                    Log.Warning("Snapped Up, Dodge Net Position", gameObject);
+                    return;
+                }
                 UpdateSyncedInput();
                 break;
             case DodgeballCharaCommand.BraceForBall:
@@ -225,12 +232,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         if (netDist < autoMoveThreshold)
             return;
         if (lastCommand == DodgeballCharaCommand.Dodge)
-        {
-            lastCommand = DodgeballCharaCommand.MoveInput;
-            transform.position = netPos;
-            Log.Warning("Snapped Up, Dodge Net Position", gameObject);
             return;
-        }
 
         chara.C_MoveInput(netPos);
     }
