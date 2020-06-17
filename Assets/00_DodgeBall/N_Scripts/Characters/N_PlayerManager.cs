@@ -38,11 +38,17 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
 
     private void OnTeamsAreSynced()
     {
+        Team team = null;
         if (pc == null)
+        {
             pc = N_Extentions.GetCharacter(GetComponent<PhotonView>().Controller.ActorNumber).gameObject;
+            team = TeamsManager.GetTeam(pc.GetComponent<DodgeballCharacter>());
+            pc.GetComponent<DodgeballCharacter>().SetTeam(team.teamTag);
+        }
+        if (team == null)
+            return;
 
         Camera cam = Camera.main;
-        Team team = TeamsManager.GetTeam(pc.GetComponent<DodgeballCharacter>());
         var p = FindObjectsOfType<TaggedSpawnPoint>().ToList().Find(s => s.HasTag("MainCamera") && s.BelongsTo(team.teamTag));
         cam.transform.position = p.position;
         cam.transform.rotation = p.rotation;
