@@ -28,7 +28,6 @@ public class MatchInputController : MonoBehaviour
     {
         if (!IsEnabled)
             return;
-
         Vector3 v3Input = ctx.ReadValue<Vector2>();
         v3Input.z = v3Input.y;
         v3Input.y = 0;
