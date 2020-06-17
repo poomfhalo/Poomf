@@ -1,16 +1,3 @@
-
-//---------------------- ”√ŒÀŒ  GAMEDEVELOPER'¿  ----------------------//
-
-[RU]
-›“Œ“ ¿——≈“ ¡€À — ¿◊¿Õ — —¿…“¿ - unity3ddd.ru (¬Ò∏ ‰Îˇ unity3d)
-
-[EN]
-THIS ASSET WAS DOWNLOADED FROM THE UNITY3DDD.RU (ALL FOR UNITY3D)
-
-//----------------------------------------------------------------------------//
-
-
-
 Dynamic Bone apply physics to character's bones or joints.
 With simple setup, your character's hair, cloth, breasts or any part will move realistically.
 
@@ -62,6 +49,9 @@ Dynamic Bone component description:
 - Inert
   How much character's position change is ignored in physics simulation.
 
+- Friction
+  How much the bones slowed down when collide.
+
 - Radius
   Each bone can be a sphere to collide with colliders. Radius describe sphere's size.
 
@@ -94,6 +84,7 @@ Dynamic Bone component description:
 - Distant Disable, Reference Object, Distance To Object
   Disable physics simulation automatically if character is far from camera or player.
   If there is no reference object, default main camera is used.
+
 
 Dynamic Bone Collider component description:
 
@@ -146,3 +137,5 @@ Version History
 1.2.0 Add tool tips.
       Add plane collider.
       Add function to update parameters at runtime.
+1.2.1 Add friction parameter.
+      Update UNITY_5 to compatible with newer version.

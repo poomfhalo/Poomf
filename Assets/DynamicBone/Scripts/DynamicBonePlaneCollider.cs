@@ -1,16 +1,4 @@
-﻿
-/*/---------------------- УГОЛОК GAMEDEVELOPER'А  ----------------------//
-
-[RU]
-ЭТОТ АССЕТ БЫЛ СКАЧАН С САЙТА - unity3ddd.ru (Всё для unity3d)
-
-[EN]
-THIS ASSET WAS DOWNLOADED FROM THE UNITY3DDD.RU (ALL FOR UNITY3D)
-
-//----------------------------------------------------------------------------/*/
-
-
-using UnityEngine;
+﻿using UnityEngine;
 
 [AddComponentMenu("Dynamic Bone/Dynamic Bone Plane Collider")]
 public class DynamicBonePlaneCollider : DynamicBoneColliderBase
@@ -19,7 +7,7 @@ public class DynamicBonePlaneCollider : DynamicBoneColliderBase
     {
     }
 
-    public override void Collide(ref Vector3 particlePosition, float particleRadius)
+    public override bool Collide(ref Vector3 particlePosition, float particleRadius)
     {
         Vector3 normal = Vector3.up;
         switch (m_Direction)
@@ -42,13 +30,20 @@ public class DynamicBonePlaneCollider : DynamicBoneColliderBase
         if (m_Bound == Bound.Outside)
         {
             if (d < 0)
+            {
                 particlePosition -= normal * d;
+                return true;
+            }
         }
         else
         {
             if (d > 0)
+            {
                 particlePosition -= normal * d;
+                return true;
+            }
         }
+        return false;
     }
 
     void OnDrawGizmosSelected()
