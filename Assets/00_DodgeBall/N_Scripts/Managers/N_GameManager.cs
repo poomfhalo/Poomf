@@ -15,19 +15,17 @@ public enum N_Prefab { PlayerManager,Player }
 /// 4.after all are created, we syncronize N_TeamsManager with TeamsManager on all clients
 /// 5.Triggers N_OnTeamsAreSynced
 /// </summary>
-public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback
+public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunObservable
 {
+    public float LastLag { private set; get; }
+
     #region Properties
     public GameObject localPlayer = null;
-   
     public const byte N_OnCreatedPC = 0;
     public const byte N_OnTeamsAreSynced = 1;
-
     public static event Action OnTeamsAreSynced = null;
-
     public List<LoadablePrefab> Prefabs => prefabs;
     [SerializeField] List<LoadablePrefab> prefabs = new List<LoadablePrefab> { new LoadablePrefab(N_Prefab.Player, "N_PlayerManager") };
-
     #endregion
 
     #region UnityFunctions
@@ -144,5 +142,9 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback
     private void PrepareForGame()
     {
         DodgeballGameManager.instance.StartBallLaunch();
+    }
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        LastLag = (float)(PhotonNetwork.Time - info.SentServerTime);
     }
 }

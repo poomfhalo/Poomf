@@ -8,7 +8,7 @@ public class N_DodgeballCommander : MonoBehaviour
     N_Dodgeball n_ball = null;
     Dodgeball ball = null;
     PhotonView pv = null;
-    float lastLag => n_ball.lastLag;
+    float lastLag => N_GameManager.instance.LastLag;
 
     void Awake()
     {
