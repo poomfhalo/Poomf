@@ -3,6 +3,7 @@
 public class AIController : MonoBehaviour
 {
     [SerializeField] Transform moveTarget = null;
+    [SerializeField] bool useWarp = false;
     [Header("Read Only")]
     [SerializeField] float lastDist = 0;
     DodgeballCharacter chara = null;
@@ -21,6 +22,13 @@ public class AIController : MonoBehaviour
         Vector3 disp = moveTarget.position - rb3d.position;
         disp.y = 0;
         lastDist = disp.magnitude;
-        chara.C_MoveInput(moveTarget.position);
+        if(useWarp)
+        {
+            GetComponent<Mover>().Warp(moveTarget.position);
+        }
+        else
+        {
+            chara.C_MoveInput(moveTarget.position);
+        }
     }
 }

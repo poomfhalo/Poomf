@@ -43,7 +43,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
 
     public float GetGravity => cf.force.y;
 
-    public enum MovementType { ByInput,ToPoint }
+    public enum MovementType { ByInput, ToPoint }
     public MovementType movementMode = MovementType.ByInput;
     [SerializeField] float accel = 10;
     public float maxSpeed = 3;
@@ -56,7 +56,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
     [Tooltip("speed of character, before he starts slowing down")]
     [SerializeField] float dampingSpeed = 0.1f;
     [Tooltip("value of which speed is divide by, when we are slowing down (should be higher than 1)")]
-    [Range(1.01f,10f)]
+    [Range(1.01f, 10f)]
     [SerializeField] float speedDamper = 1.5f;
     [Tooltip("speed of character before he snaps to zero")]
     [SerializeField] float stoppingSpeed = 0.01f;
@@ -156,7 +156,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
             return;
         SetMoveDir();
         SetVel();
-        TurnToDir(lastNonZeroVel,turningSpeed);
+        TurnToDir(lastNonZeroVel, turningSpeed);
     }
 
     public void StartMoveByInput(Vector3 newInput, Transform withRespectTo)
@@ -179,27 +179,37 @@ public class Mover : DodgeballCharaAction, ICharaAction
         float startCancelSpeed = speed;
 
         float f = 0;
-        DOTween.To(() => f, (newF) => f = newF, 1, cancelationTime).SetEase(Ease.InOutSine).OnUpdate(() => {
+        DOTween.To(() => f, (newF) => f = newF, 1, cancelationTime).SetEase(Ease.InOutSine).OnUpdate(() =>
+        {
             XZVel = Vector3.Slerp(cancelStartVel, Vector3.zero, f);
             speed = Mathf.Lerp(startCancelSpeed, 0, f);
             animator.SetFloat("Speed", speed);
-        }).OnComplete(() => {
+        }).OnComplete(() =>
+        {
             XZVel = Vector3.zero;
             speed = 0;
             animator.SetFloat("Speed", speed);
             onCompleted?.Invoke();
         });
     }
-
+    public void Warp(Vector3 warpPos)
+    {
+        transform.position = warpPos;
+        speed = 0;
+        animator.SetFloat("Speed", speed);
+        XZVel = Vector3.zero;
+        recievedInput = Vector3.zero;
+        ReadFacingValues();
+    }
     public void TurnToPoint(Vector3 pos, float turnSpeed)
     {
-        TurnToDir(pos - rb3d.position,turnSpeed);
+        TurnToDir(pos - rb3d.position, turnSpeed);
     }
     public void TurnToPoint(Vector3 pos)
     {
         TurnToDir(pos - rb3d.position, turningSpeed);
     }
-    private void TurnToDir(Vector3 facingDir,float turnSpeed)
+    private void TurnToDir(Vector3 facingDir, float turnSpeed)
     {
         if (turnSpeed < 1)
             turnSpeed = this.turningSpeed;
@@ -220,7 +230,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
         }
 
         speed = vel.magnitude;
-        if(speed>dampingSpeed)
+        if (speed > dampingSpeed)
         {
             lastNonZeroVel = vel;
             vel = Vector3.ClampMagnitude(vel, maxSpeed);
@@ -231,22 +241,22 @@ public class Mover : DodgeballCharaAction, ICharaAction
     {
         if (dir != Vector3.zero)
         {
-            vel = vel + dir* accel * Time.fixedDeltaTime;
+            vel = vel + dir * accel * Time.fixedDeltaTime;
         }
         else
         {
             if (speed > dampingSpeed)
             {
-                vel = vel + -vel.normalized* deAccel * Time.fixedDeltaTime;
+                vel = vel + -vel.normalized * deAccel * Time.fixedDeltaTime;
             }
-            if (speed<dampingSpeed && speed> stoppingSpeed)
+            if (speed < dampingSpeed && speed > stoppingSpeed)
             {
                 vel = vel / speedDamper;
             }
             else if (speed <= stoppingSpeed && IsMoving)
             {
                 vel = Vector3.zero;
-                if(isGoingToStop)
+                if (isGoingToStop)
                     Cancel();
             }
         }

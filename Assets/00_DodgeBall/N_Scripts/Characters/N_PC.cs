@@ -178,7 +178,7 @@ public class N_PC : MonoBehaviour,IPunObservable
                 if (lastCommand == DodgeballCharaCommand.Dodge)
                 {
                     lastCommand = DodgeballCharaCommand.MoveInput;
-                    transform.position = netPos;
+                    GetComponent<Mover>().Warp(netPos);
                     Log.Warning("Snapped Up, Dodge Net Position", gameObject);
                     return;
                 }
@@ -204,7 +204,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         dir.Normalize();
         transform.rotation = Quaternion.LookRotation(dir);
 
-        GetComponent<Dodger>().StartDodgeAction(netPos, () => chara.C_MoveInput(Vector3.zero));
+        GetComponent<Dodger>().StartDodgeAction(netPos, null);
     }
     //Helper Functions
     private void UpdateNetData()
