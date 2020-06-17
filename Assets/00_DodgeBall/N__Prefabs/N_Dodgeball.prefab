@@ -30,9 +30,8 @@ MonoBehaviour:
   Synchronization: 2
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 7364748680064816816}
   - {fileID: 6368748824568193236}
-  viewIdField: 0
+  viewIdField: 8
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &6368748824568193236
@@ -96,10 +95,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f79e826eb37fc7ea8a7120c45d91f22e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  catchUpSpeed: 10
-  arrivalDist: 0.35
-  netPos: {x: 0, y: 0, z: 0}
-  netVel: {x: 0, y: 0, z: 0}
 --- !u!1001 &6825843737520874604
 PrefabInstance:
   m_ObjectHideFlags: 0
