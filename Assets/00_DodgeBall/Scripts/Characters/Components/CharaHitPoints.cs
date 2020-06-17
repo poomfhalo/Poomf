@@ -1,4 +1,5 @@
 ﻿using System;
+using GW_Lib;
 using GW_Lib.Utility;
 using UnityEngine;
 
@@ -25,11 +26,13 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
 
     Animator animator = null;
     ActionsScheduler scheduler = null;
+    Rigidbody rb3d = null;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         scheduler = GetComponent<ActionsScheduler>();
+        rb3d = GetComponent<Rigidbody>();
 
         currHP = maxHP;
         hurtZone.onTriggerEnter.AddListener(OnObjEntered);
@@ -68,7 +71,7 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
     {
         currHP = currHP - 1;
         OnHPUpdated?.Invoke();
-
+        this.SetKinematic(true);
         if (currHP <= 0)
         {
             OnZeroHP?.Invoke();
@@ -94,6 +97,7 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
     {
         isBeingHurt = false;
         isWaitingForHit = false;
+        this.SetKinematic(false);
     }
 
     public void DisableHitDetection()
