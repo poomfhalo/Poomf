@@ -42,11 +42,9 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
     private void OnObjEntered(Collider other)
     {
         Dodgeball ball = other.GetComponent<Dodgeball>();
-        if(!other.isTrigger)
+
+        if(!other.isTrigger)//Since the ball has 2 colliders, we only want to account for the trigger.
             return;
-
-        Log.Warning("Collided with ball and " + IsWaitingForHit);
-
         if (!ball)
             return;
         if (!IsWaitingForHit)
@@ -59,7 +57,6 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
 
     public void EnableHitDetection()
     {
-        Log.Warning("Enabled Hit Detection");
         isWaitingForHit = true;
     }
     private void C_StartHitAction()
