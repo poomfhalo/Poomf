@@ -48,7 +48,7 @@ public class N_TeamsManager : N_Singleton<N_TeamsManager>
         GetMPTeam(team).actors.Add(actorNumber);
     }
 
-    [PunRPC]
+    [PunRPC]//Called From N_GameManager
     private void RecieveTeamsData(Dictionary<int, int[]> teamsData)
     {
         foreach (var v in teamsData)
@@ -57,7 +57,7 @@ public class N_TeamsManager : N_Singleton<N_TeamsManager>
             mpTeams.Add(team);
         }
     }
-    [PunRPC]
+    [PunRPC]//Called, by raising an event N_OnCreatedPC, once all PCS have been created
     private void SyncWithTeamsManager()
     {
         foreach (var t in mpTeams)

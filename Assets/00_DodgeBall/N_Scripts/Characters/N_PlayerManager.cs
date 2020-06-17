@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using Photon.Pun;
 using UnityEngine;
 
@@ -28,7 +29,7 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
     IEnumerator SpawnPC()
     {
         yield return 0;
-        pc = N_Extentions.N_MakeObj(N_Prefab.Player, Vector3.zero,Quaternion.identity);
+        pc = N_Extentions.N_MakeObj(N_Prefab.Player, Vector3.zero, Quaternion.identity);
         pc.GetComponent<PhotonView>().RPC("OnCreated", RpcTarget.All, GetComponent<PhotonView>().ViewID);
         yield return new WaitForSeconds(0.1f);
         Debug.Log(photonView.Controller + " Created a PC ", pc);
@@ -39,5 +40,11 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
     {
         if (pc == null)
             pc = N_Extentions.GetCharacter(GetComponent<PhotonView>().Controller.ActorNumber).gameObject;
+
+        Camera cam = Camera.main;
+        Team team = TeamsManager.GetTeam(pc.GetComponent<DodgeballCharacter>());
+        var p = FindObjectsOfType<TaggedSpawnPoint>().ToList().Find(s => s.HasTag("MainCamera") && s.BelongsTo(team.teamTag));
+        cam.transform.position = p.position;
+        cam.transform.rotation = p.rotation;
     }
 }

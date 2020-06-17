@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 using System.Linq;
+using GW_Lib;
 
 public class N_PC : MonoBehaviour,IPunObservable
 {
@@ -52,6 +53,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         if (pv.IsMine)
             chara.OnCommandActivated -= SendCommand;
     }
+    bool switching = false;
 
     [PunRPC]//Called In N_PlayerManager
     private void OnCreated(int creatorViewID)
@@ -177,9 +179,15 @@ public class N_PC : MonoBehaviour,IPunObservable
             case DodgeballCharaCommand.MoveInput:
                 if (lastCommand == DodgeballCharaCommand.Dodge)
                 {
-                    lastCommand = DodgeballCharaCommand.MoveInput;
-                    GetComponent<Mover>().Warp(netPos);
-                    Log.Warning("Snapped Up, Dodge Net Position", gameObject);
+                    if (switching)
+                        return;
+                    switching = true;
+                    this.InvokeDelayed(5, () => {
+                        lastCommand = DodgeballCharaCommand.MoveInput;
+                        GetComponent<Mover>().Warp(netPos);
+                        Log.Warning("Snapped Up, Dodge Net Position", gameObject);
+                        switching = false;
+                    });
                     return;
                 }
                 UpdateSyncedInput();
