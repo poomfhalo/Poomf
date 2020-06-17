@@ -42,6 +42,8 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
     private void OnObjEntered(Collider other)
     {
         Dodgeball ball = other.GetComponent<Dodgeball>();
+        if(!other.isTrigger)
+            return;
 
         Log.Warning("Collided with ball and " + IsWaitingForHit);
 
