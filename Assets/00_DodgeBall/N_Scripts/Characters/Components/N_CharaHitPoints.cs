@@ -21,6 +21,7 @@ public class N_CharaHitPoints : MonoBehaviour
     }
     private void OnHpCommand(HPCommand command)
     {
+        Log.Message("Sending Health Command " + command, gameObject);
         switch (command)
         {
             case HPCommand.Subtract:
@@ -34,7 +35,6 @@ public class N_CharaHitPoints : MonoBehaviour
     {
         Log.Message("N_CharaHitPoints().RPC :: R_StartHitAction");
         hp.ApplyHealthChanges = () => true;
-        hp.EnableHitDetection();
         hp.StartHitAction();
         hp.ApplyHealthChanges = () => false;
     }
