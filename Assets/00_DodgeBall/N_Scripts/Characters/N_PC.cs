@@ -204,7 +204,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         dir.Normalize();
         transform.rotation = Quaternion.LookRotation(dir);
 
-        chara.C_Dodge();
+        GetComponent<Dodger>().StartDodgeAction(netPos, () => chara.C_MoveInput(Vector3.zero));
     }
     //Helper Functions
     private void UpdateNetData()

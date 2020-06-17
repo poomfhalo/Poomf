@@ -50,6 +50,10 @@ public class Dodger : DodgeballCharaAction, ICharaAction
 
     public void StartDodgeAction()
     {
+        StartDodgeAction(GetExpectedPosition(), null);
+    }
+    public void StartDodgeAction(Vector3 targetPos,Action onComplete)
+    {
         if (playRndDodge)
         {
             dodgeToPlay = UnityEngine.Random.Range(0, anims.Length);
@@ -60,7 +64,6 @@ public class Dodger : DodgeballCharaAction, ICharaAction
         isDodging = true;
 
         Vector3 startPos = rb3d.position;
-        Vector3 targetPos = GetExpectedPosition();
         float time = anims[dodgeToPlay].GetTime();
         float lerper = 0;
         activeTween = DOTween.To(() => lerper, f => lerper = f, 1, time).SetEase(ease).OnUpdate(OnUpdate).OnComplete(OnComplete);
@@ -72,15 +75,15 @@ public class Dodger : DodgeballCharaAction, ICharaAction
         }
         void OnComplete()
         {
-
+            onComplete?.Invoke();
         }
     }
+
     public Vector3 GetExpectedPosition()
     {
         Vector3 expectedPos = rb3d.position + transform.forward * dist;
         return expectedPos;
     }
-
     public void Cancel()
     {
         activeTween.Kill();
@@ -91,4 +94,6 @@ public class Dodger : DodgeballCharaAction, ICharaAction
         chara.C_MoveInput(recievedInput);
         Cancel();
     }
+
+
 }
