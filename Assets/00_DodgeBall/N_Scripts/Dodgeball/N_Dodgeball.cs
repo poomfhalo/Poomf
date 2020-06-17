@@ -52,6 +52,8 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
             if (firstRead)
             {
                 firstRead = false;
+                stream.ReceiveNext();
+                stream.ReceiveNext();
                 return;
             }
 
