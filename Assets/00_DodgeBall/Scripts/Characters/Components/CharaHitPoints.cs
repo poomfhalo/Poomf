@@ -71,6 +71,8 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
     {
         if(!isWaitingForHit)
             return;
+        if (!ApplyHealthChanges())
+            return;
 
         currHP = currHP - 1;
         OnHPUpdated?.Invoke();
