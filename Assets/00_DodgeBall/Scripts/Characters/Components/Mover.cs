@@ -11,33 +11,33 @@ public class Mover : DodgeballCharaAction, ICharaAction
     {
         get
         {
-            Vector3 yVel = vel;
+            Vector3 yVel = rb3d.velocity;
             yVel.x = yVel.z = 0;
             return yVel;
         }
         set
         {
-            Vector3 oldVel = vel;
+            Vector3 oldVel = rb3d.velocity;
             Vector3 newVel = value;
             newVel.x = oldVel.x;
             newVel.z = oldVel.z;
-            vel = newVel;
+            rb3d.velocity = newVel;
         }
     }
     private Vector3 XZVel
     {
         get
         {
-            Vector3 xzVel = vel;
+            Vector3 xzVel = rb3d.velocity;
             xzVel.y = 0;
             return xzVel;
         }
         set
         {
-            Vector3 oldVel = vel;
+            Vector3 oldVel = rb3d.velocity;
             Vector3 newVel = value;
             newVel.y = oldVel.y;
-            vel = newVel;
+            rb3d.velocity = newVel;
         }
     }
 
@@ -154,19 +154,9 @@ public class Mover : DodgeballCharaAction, ICharaAction
 
         if (!IsMoving)
             return;
-
         SetMoveDir();
         SetVel();
         TurnToDir(lastNonZeroVel, turningSpeed);
-
-        if(rb3d.isKinematic)
-        {
-            rb3d.MovePosition(rb3d.position + vel * Time.fixedDeltaTime);
-        }
-        else
-        {
-            rb3d.velocity = vel;
-        }
     }
 
     public void StartMoveByInput(Vector3 newInput, Transform withRespectTo)
@@ -201,7 +191,6 @@ public class Mover : DodgeballCharaAction, ICharaAction
             animator.SetFloat("Speed", speed);
             onCompleted?.Invoke();
         });
-
     }
     public void Warp(Vector3 warpPos)
     {
