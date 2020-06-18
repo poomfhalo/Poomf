@@ -53,7 +53,6 @@ public class N_PC : MonoBehaviour,IPunObservable
         if (pv.IsMine)
             chara.OnCommandActivated -= SendCommand;
     }
-    bool switching = false;
 
     [PunRPC]//Called In N_PlayerManager
     private void OnCreated(int creatorViewID)
@@ -179,18 +178,11 @@ public class N_PC : MonoBehaviour,IPunObservable
             case DodgeballCharaCommand.MoveInput:
                 if (lastCommand == DodgeballCharaCommand.Dodge)
                 {
-                    if (switching)
-                        return;
-                    switching = true;
                     lastCommand = DodgeballCharaCommand.MoveInput;
-                    //transform.position = netPos;
                     GetComponent<Mover>().Warp(netPos);
+                    //So character does not attempt to move back and forth, at the targeted point
+                    chara.C_MoveInput(netPos);
                     Log.Warning("Snapped Up, Dodge Net Position", gameObject);
-                    switching = false;
-
-                    this.InvokeDelayed(5, () => {
-
-                    });
                     return;
                 }
                 UpdateSyncedInput();
