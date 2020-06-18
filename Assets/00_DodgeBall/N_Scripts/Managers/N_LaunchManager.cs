@@ -20,6 +20,8 @@ public class N_LaunchManager : MonoBehaviourPunCallbacks
     [Header("Lobby")]
     [SerializeField] GameObject lobbyPanel = null;
     [SerializeField] Button joiningButton = null;
+    [Header("Wait Screen")]
+    [SerializeField] GameObject waitScreen = null;
 
     void Start()
     {
@@ -54,6 +56,7 @@ public class N_LaunchManager : MonoBehaviourPunCallbacks
         Debug.Log(PhotonNetwork.NickName + " have joined room " + PhotonNetwork.CurrentRoom.Name);
         lobbyPanel.SetActive(false);
         Debug.Log("Wait For Second Player");
+        waitScreen.SetActive(true);
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
