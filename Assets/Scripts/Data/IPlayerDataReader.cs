@@ -1,4 +1,7 @@
-﻿public interface IPlayerDataReader
+﻿namespace Poomf.Data
 {
-    void Initialize(PlayerData i_playerData);
+    public interface IPlayerDataReader
+    {
+        void Initialize(PlayerData i_playerData);
+    }
 }

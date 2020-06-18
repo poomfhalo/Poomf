@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MenuItemBase : MonoBehaviour
+namespace Poomf.UI
 {
-    [SerializeField] private Button defaultMenuButton = null;
-
-    public Button GetDefaultButton()
+    public class MenuItemBase : MonoBehaviour
     {
-        if (null == defaultMenuButton)
-            Debug.LogError("MenuItemBase::GetDefaultButton -> Default button was not assigned.");
+        [SerializeField] private Button defaultMenuButton = null;
 
-        return defaultMenuButton;
+        public Button GetDefaultButton()
+        {
+            if (null == defaultMenuButton)
+                Debug.LogError("MenuItemBase::GetDefaultButton -> Default button was not assigned.");
+
+            return defaultMenuButton;
+        }
     }
 }

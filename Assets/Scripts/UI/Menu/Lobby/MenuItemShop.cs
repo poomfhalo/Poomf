@@ -2,24 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MenuItemShop : MenuItemBase
+namespace Poomf.UI
 {
-    [SerializeField] private MenuNavigator mainmenuNavigator = null;
-
-    private void OnEnable()
+    public class MenuItemShop : MenuItemBase
     {
-        if (null == mainmenuNavigator) return;
-        mainmenuNavigator.enabled = false;
-    }
+        [SerializeField] private MenuNavigator mainmenuNavigator = null;
 
-    private void OnDisable()
-    {
-        if (null == mainmenuNavigator) return;
-        mainmenuNavigator.enabled = true;
-    }
+        private void OnEnable()
+        {
+            if (null == mainmenuNavigator) return;
+            mainmenuNavigator.enabled = false;
+        }
 
-    public void Back()
-    {
-        gameObject.SetActive(false);
+        private void OnDisable()
+        {
+            if (null == mainmenuNavigator) return;
+            mainmenuNavigator.enabled = true;
+        }
+
+        public void Back()
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

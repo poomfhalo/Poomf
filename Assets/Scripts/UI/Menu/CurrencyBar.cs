@@ -2,24 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Poomf.Data;
 
-public class CurrencyBar : MonoBehaviour, IPlayerDataReader
+namespace Poomf.UI
 {
-    [SerializeField] private Text i_coinsText = null;
-    [SerializeField] private Text i_gemsText = null;
-
-    public void Initialize(PlayerData i_playerData)
+    public class CurrencyBar : MonoBehaviour, IPlayerDataReader
     {
-        if (null == i_playerData)
+        [SerializeField] private Text i_coinsText = null;
+        [SerializeField] private Text i_gemsText = null;
+
+        public void Initialize(PlayerData i_playerData)
         {
-            Debug.LogError("CurrencyBar::Initialize -> Player data is null.");
-            return;
+            if (null == i_playerData)
+            {
+                Debug.LogError("CurrencyBar::Initialize -> Player data is null.");
+                return;
+            }
+
+            if (null != i_coinsText)
+                i_coinsText.text = i_playerData.Coins.ToString();
+
+            if (null != i_gemsText)
+                i_gemsText.text = i_playerData.Gems.ToString();
         }
-
-        if (null != i_coinsText)
-            i_coinsText.text = i_playerData.coins.ToString();
-
-        if (null != i_gemsText)
-            i_gemsText.text = i_playerData.gems.ToString();
     }
 }

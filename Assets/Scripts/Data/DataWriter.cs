@@ -2,29 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DataWriter : MonoBehaviour
+namespace Poomf.Data
 {
-    [Header("TESTING")]
-    [SerializeField] private int coinsCount = 0;
-    [SerializeField] private int gemsCount = 0;
-
-    [Header("Player Data")]
-    [SerializeField] private PlayerData playerData = null;
-
-    public delegate void DataDelegate();
-    public DataDelegate OnDataUpdated = null;
-
-    private void Start()
+    public class DataWriter : MonoBehaviour
     {
-        loadData();
-    }
+        [Header("TESTING")]
+        [SerializeField] private int coinsCount = 0;
+        [SerializeField] private int gemsCount = 0;
 
-    private void loadData()
-    {
-        playerData.coins = coinsCount;
-        playerData.gems = gemsCount;
+        [Header("Player Data")]
+        [SerializeField] private PlayerData playerData = null;
 
-        if (null != OnDataUpdated)
-            OnDataUpdated();
+        public delegate void DataDelegate();
+        public DataDelegate OnDataUpdated = null;
+
+        private void Start()
+        {
+            loadData();
+        }
+
+        private void loadData()
+        {
+            playerData.AddCoins(coinsCount);
+            playerData.AddGems(gemsCount);
+
+            if (null != OnDataUpdated)
+                OnDataUpdated();
+        }
     }
 }

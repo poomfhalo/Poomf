@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MenuItemLobby : MenuItemBase
+namespace Poomf.UI
 {
+    public class MenuItemLobby : MenuItemBase
+    {
+    }
 }
