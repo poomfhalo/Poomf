@@ -5,7 +5,6 @@ using GW_Lib.Utility;
 
 //TODO: based on Dodgeball speed, we increase size of body colliders of characters up to 4, so that, the dodge ball
 //does not get missed by smaller colliders, when its going too fast.
-//TODO: dynamically find the gravity, depending on distance, such that, speed never exceeds a certain value?
 public class Dodgeball : Singleton<Dodgeball>
 {
     public Func<bool> CanApplyOnGroundHit = () => true;
@@ -79,28 +78,28 @@ public class Dodgeball : Singleton<Dodgeball>
 
     void OnTriggerEnter(Collider col)
     {
-        Field field = col.GetComponent<Field>();
-        if (!field)
-            return;
-
-        E_OnHitGround?.Invoke();
-
-        if(ballState == BallState.Flying)
-        {
-            ballState = BallState.OnGround;
-            C_OnGroundHit();
-        }
-    }
-    void OnTriggerExit(Collider col)
-    {
         //Field field = col.GetComponent<Field>();
         //if (!field)
         //    return;
 
-        //if (ballState == BallState.OnGround)
+        //E_OnHitGround?.Invoke();
+
+        //if(ballState == BallState.Flying)
         //{
-        //    ballState = BallState.Flying;
+        //    ballState = BallState.OnGround;
+        //    C_OnGroundHit();
         //}
+    }
+    void OnTriggerExit(Collider col)
+    {
+        Field field = col.GetComponent<Field>();
+        if (!field)
+            return;
+
+        if (ballState == BallState.OnGround)
+        {
+            ballState = BallState.Flying;
+        }
     }
     private void OnBodyEntered(Collision col)
     {
