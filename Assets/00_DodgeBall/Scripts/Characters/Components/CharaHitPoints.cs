@@ -52,14 +52,14 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
         if (isBeingHurt)
             return;
 
-        C_StartHitAction();
+        C_StartHitAction(other);
     }
 
     public void EnableHitDetection()
     {
         isWaitingForHit = true;
     }
-    private void C_StartHitAction()
+    private void C_StartHitAction(Collider other)
     {
         if (!IsWaitingForHit)
             return;

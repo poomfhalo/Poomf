@@ -34,6 +34,7 @@ GameObject:
   - component: {fileID: 5475323293589320073}
   - component: {fileID: 7237304765413138185}
   - component: {fileID: 8135899822388260389}
+  - component: {fileID: 303846191332746217}
   - component: {fileID: 7279175448926025499}
   m_Layer: 29
   m_Name: Dodgeball
@@ -112,10 +113,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPersistant: 0
   bodyCol: {fileID: 57221110444787069}
-  holder: {fileID: 0}
   lastAppliedThrow: 0
   lastTargetPos: {x: 0, y: 0, z: 0}
-  ballState: 2
+  m_ballState: 2
 --- !u!114 &5475323293589320073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,6 +145,7 @@ MonoBehaviour:
   isRunning: 0
   grabDur: 0.1
   heldPosCheckerDur: 0.025
+  lastHolder: {fileID: 0}
 --- !u!114 &8135899822388260389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,6 +159,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isRunning: 0
+--- !u!114 &303846191332746217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57221109919460844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80f5fcf1216d57bbba308fc634f72d69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isRunning: 0
+  castDist: 10
+  contactZone: {fileID: 57221109919460847}
+  isReflecting: 0
+  gotValidHit: 0
 --- !u!114 &7279175448926025499
 MonoBehaviour:
   m_ObjectHideFlags: 0

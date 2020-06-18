@@ -6,12 +6,21 @@ public class DodgeballGoLaunchTo : DodgeballAction
 {
     [Tooltip("Time, before ball can collide again, with physics colliders after being thrown")]
     [SerializeField] float leavingHandsTime = 0.1f;
+    [Header("Read Only")]
+    [SerializeField] float tweenerVal = 0;
 
     public override DodgeballCommand Command => DodgeballCommand.LaunchTo;
     public override string actionName => "Thrown To";
 
     Tweener activeTweener = null;
 
+    void OnTriggerEnter(Collider col)
+    {
+        if(IsRunning && col.GetComponent<DodgeballCharacter>())
+        {
+            print(col.name);
+        }
+    }
     public void C_GoLaunchTo(Vector3 targetPos, BallThrowData d)
     {
         ball.lastTargetPos = targetPos;

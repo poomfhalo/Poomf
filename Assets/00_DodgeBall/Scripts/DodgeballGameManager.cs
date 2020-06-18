@@ -16,6 +16,9 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
     [SerializeField] string build = "Build : 0.0001";
     [SerializeField] TextMeshProUGUI buildText = null;
 
+    [Header("Read Only")]
+    [SerializeField] List<Dodgeball> balls = new List<Dodgeball>();
+
     BallThrowData[] throws = new BallThrowData[0];
 
     void Start()
@@ -88,5 +91,32 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
                 return t;
         }
         return null;
+    }
+
+    public static Dodgeball GetClosestBall(Transform closestTo)
+    {
+        List<Dodgeball> balls = instance.balls;
+        float minDist = float.MaxValue;
+        Dodgeball closestBall = null;
+        foreach (var b in balls)
+        {
+            float d = Vector3.Distance(closestTo.position, closestBall.position);
+            if(d<=minDist)
+            {
+                minDist = d;
+                closestBall = b;
+            }
+        }
+        return closestBall;
+    }
+    public static void AddBall(Dodgeball b)
+    {
+        if (!instance.balls.Contains(b))
+            instance.balls.Add(b);
+    }
+    public static void RemoveBall(Dodgeball b)
+    {
+        if (instance && instance.balls.Contains(b))
+            instance.balls.Remove(b);
     }
 }

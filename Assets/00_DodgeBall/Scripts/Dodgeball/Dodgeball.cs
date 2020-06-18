@@ -21,7 +21,7 @@ public class Dodgeball : Singleton<Dodgeball>
         }
         set
         {
-            ballState = value;
+            m_ballState = value;
             TrailRenderer tr = GetComponentInChildren<TrailRenderer>();
             switch (ballState)
             {
@@ -71,24 +71,31 @@ public class Dodgeball : Singleton<Dodgeball>
         bodyCol.onCollisionEnter.AddListener(OnBodyEntered);
         bodyCol.onCollisionEnter.AddListener(OnBodyExitted);
     }
+    void OnEnable()
+    {
+        DodgeballGameManager.AddBall(this);
+    }
+    void OnDisable()
+    {
+        DodgeballGameManager.RemoveBall(this);
+    }
     void OnDestroy()
     {
         transform.DOKill();
     }
-
     void OnTriggerEnter(Collider col)
     {
-        //Field field = col.GetComponent<Field>();
-        //if (!field)
-        //    return;
+        Field field = col.GetComponent<Field>();
+        if (!field)
+            return;
 
-        //E_OnHitGround?.Invoke();
+        E_OnHitGround?.Invoke();
 
-        //if(ballState == BallState.Flying)
-        //{
-        //    ballState = BallState.OnGround;
-        //    C_OnGroundHit();
-        //}
+        if (ballState == BallState.Flying)
+        {
+            ballState = BallState.OnGround;
+            C_OnGroundHit();
+        }
     }
     void OnTriggerExit(Collider col)
     {
