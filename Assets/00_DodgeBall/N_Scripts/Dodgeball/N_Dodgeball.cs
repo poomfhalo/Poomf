@@ -5,7 +5,6 @@ using Smooth;
 [RequireComponent(typeof(Dodgeball))]
 public class N_Dodgeball : N_Singleton<N_Dodgeball>
 {
-    Rigidbody rb3d = null;
     PhotonView pv = null;
     Dodgeball ball = null;
     SmoothSyncPUN2 syncer = null;
@@ -15,7 +14,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
         base.OnEnable();
         pv = GetComponent<PhotonView>();
         ball = GetComponent<Dodgeball>();
-        rb3d = GetComponent<Rigidbody>();
         syncer = GetComponent<SmoothSyncPUN2>();
     }
 
