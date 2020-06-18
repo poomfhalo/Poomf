@@ -29,7 +29,6 @@ public class DodgeballGoLaunchTo : DodgeballAction
     {
         if (activeTweener != null)
             return;
-        GetComponentInChildren<TrailRenderer>().enabled = true;
         isRunning = true;
         scheduler.StartAction(this);
         ball.SetKinematic(true);

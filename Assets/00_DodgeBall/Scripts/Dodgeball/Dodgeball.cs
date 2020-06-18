@@ -14,6 +14,30 @@ public class Dodgeball : Singleton<Dodgeball>
     public bool IsOnGround => ballState == BallState.OnGround;
     public bool IsHeld => ballState == BallState.Held;
     public bool IsFlying => ballState == BallState.Flying;
+    public BallState ballState
+    {
+        get
+        {
+            return m_ballState;
+        }
+        set
+        {
+            ballState = value;
+            TrailRenderer tr = GetComponentInChildren<TrailRenderer>();
+            switch (ballState)
+            {
+                case BallState.Flying:
+                    tr.enabled = true;
+                    break;
+                case BallState.Held:
+                    tr.enabled = false;
+                    break;
+                case BallState.OnGround:
+                    tr.enabled = false;
+                    break;
+            }
+        }
+    }
     public DodgeballCharacter holder => goTo.LastHolder;
 
     public event Action<DodgeballCommand> OnCommandActivated = null;
@@ -24,8 +48,7 @@ public class Dodgeball : Singleton<Dodgeball>
     [Header("Read Only")]
     public byte lastAppliedThrow = 0;
     public Vector3 lastTargetPos = new Vector3();
-    [Header("Synced Variables")]
-    public BallState ballState = BallState.Flying;
+    [SerializeField] BallState m_ballState = BallState.Flying;
 
     Rigidbody rb3d = null;
     ConstantForce cf = null;

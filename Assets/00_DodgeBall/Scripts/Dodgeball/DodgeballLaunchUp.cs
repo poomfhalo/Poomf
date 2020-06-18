@@ -33,7 +33,6 @@ public class DodgeballLaunchUp : DodgeballAction
     }
     public void LaunchUp(float byHeigth, float launchGravity)
     {
-        GetComponentInChildren<TrailRenderer>().enabled = true;
         cf.force = Vector3.up * launchGravity;
         this.SetKinematic(false);
         float yVel = Extentions.GetJumpVelocity(byHeigth, cf.force.y);

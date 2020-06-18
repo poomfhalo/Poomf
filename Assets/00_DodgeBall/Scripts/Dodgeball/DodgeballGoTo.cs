@@ -57,7 +57,6 @@ public class DodgeballGoTo : DodgeballAction
             ball.transform.SetParent(chara.BallGrabPoint);
             Cancel();
             ball.transform.DOLocalMove(Vector3.zero, heldPosCheckerDur).SetEase(Ease.InOutSine);
-            GetComponentInChildren<TrailRenderer>().enabled = false;
         }
     }
     public override void Cancel()
