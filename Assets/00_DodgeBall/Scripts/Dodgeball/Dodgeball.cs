@@ -102,6 +102,7 @@ public class Dodgeball : Singleton<Dodgeball>
         if (CanApplyOnGroundHit())
         {
             DodgeballGameManager.instance.OnBallHitGround();
+            GetComponentInChildren<TrailRenderer>().enabled = false;
         }
     }
 }
