@@ -40,6 +40,7 @@ public class N_LaunchManager : MonoBehaviourPunCallbacks
         base.OnConnectedToMaster();
         print("I " + PhotonNetwork.NickName + " have Connected To Master");
         lobbyPanel.SetActive(true);
+        enterGamePanel.SetActive(false);
         intermediatePanel.SetActive(false);
     }
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -58,8 +59,10 @@ public class N_LaunchManager : MonoBehaviourPunCallbacks
     {
         Debug.Log(newPlayer.NickName + " Have Joined Total Count :: " + PhotonNetwork.CurrentRoom.PlayerCount);
 
-        if(PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
+        {
             PhotonNetwork.LoadLevel(levelIndex);
+        }
     }
 
 
