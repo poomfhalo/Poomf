@@ -21,12 +21,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
         pv = GetComponent<PhotonView>();
         ball = GetComponent<Dodgeball>();
         syncer = GetComponent<SmoothSyncPUN2>();
-        GetComponent<DodgeballLaunchUp>().OnLaunchedUp += OnLaunchedUp;
-    }
-    public override void OnDisable()
-    {
-        base.OnDisable();
-        GetComponent<DodgeballLaunchUp>().OnLaunchedUp -= OnLaunchedUp;
     }
     protected override void OnDestroy()
     {
@@ -57,16 +51,9 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
         }
         return holder;
     }
-
-    private void OnLaunchedUp()
-    {
-        //syncer.enabled = false;
-    }
     private void OnGameInitialized()
     {
-        if (!PhotonNetwork.IsMasterClient)
-        {
-            GetComponent<DodgeballLaunchUp>().ApplyActionWithCommand = () => false;
-        }
+        Debug.LogWarning("Game initialized");
+        GetComponent<DodgeballLaunchUp>().ApplyActionWithCommand = () => PhotonNetwork.IsMasterClient;
     }
 }
