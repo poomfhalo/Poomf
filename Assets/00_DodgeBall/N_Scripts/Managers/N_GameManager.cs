@@ -24,6 +24,7 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     public const byte N_OnCreatedPC = 0;
     public const byte N_OnTeamsAreSynced = 1;
     public static event Action OnTeamsAreSynced = null;
+    public static event Action OnGameInitialized = null;
     public List<LoadablePrefab> Prefabs => prefabs;
     [SerializeField] List<LoadablePrefab> prefabs = new List<LoadablePrefab> { new LoadablePrefab(N_Prefab.Player, "N_PlayerManager") };
     #endregion
@@ -42,6 +43,7 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
         base.Awake();
         N_Extentions.prefabs = prefabs;
         OnTeamsAreSynced = null;
+        OnGameInitialized = null;
     }
     public override void OnEnable()
     {
@@ -57,6 +59,7 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     {
         base.OnDestroy();
         OnTeamsAreSynced = null;
+        OnGameInitialized = null;
     }
     #endregion
 
@@ -64,6 +67,8 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     {
         if(!localPlayer)
             localPlayer = N_Extentions.N_MakeObj(N_Prefab.PlayerManager, Vector3.zero, Quaternion.identity);
+
+        OnGameInitialized?.Invoke();
 
         if (!PhotonNetwork.IsMasterClient)
             return;
