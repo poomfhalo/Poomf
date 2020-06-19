@@ -28,10 +28,10 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
     {
         if (ball.IsHeld || ball.IsFlying)
         {
-            if (syncer.enabled)
-            {
-                syncer.enabled = false;
-            }
+            //if (syncer.enabled)
+            //{
+            //    syncer.enabled = false;
+            //}
             return;
         }
 
@@ -53,6 +53,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
         {
             GetComponent<DodgeballLaunchUp>().ApplyActionWithCommand = () => false;
             this.SetKinematic(true);
+            syncer.enabled = true;
         }
     }
 }
