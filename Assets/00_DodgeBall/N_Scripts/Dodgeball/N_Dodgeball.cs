@@ -10,22 +10,21 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
     Dodgeball ball = null;
     SmoothSyncPUN2 syncer = null;
 
-    protected override void Awake()
-    {
-        base.Awake();
-        N_GameManager.OnGameInitialized += OnGameInitialized;
-    }
     public override void OnEnable()
     {
         base.OnEnable();
         pv = GetComponent<PhotonView>();
         ball = GetComponent<Dodgeball>();
         syncer = GetComponent<SmoothSyncPUN2>();
+
+        N_GameManager.OnGameInitialized += OnGameInitialized;
+        Debug.Log("Connected to game initalized");
     }
     protected override void OnDestroy()
     {
         base.OnDestroy();
         N_GameManager.OnGameInitialized -= OnGameInitialized;
+        Debug.Log("disconnected to game initalized");
     }
 
     void FixedUpdate()
@@ -53,8 +52,10 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
     }
     private void OnGameInitialized()
     {
+        Debug.LogWarning("WTFFFFFFF");
         if(!PhotonNetwork.IsMasterClient)
         {
+            Debug.Log("okay, this, should have happened here?");
             GetComponent<DodgeballLaunchUp>().ApplyActionWithCommand = () => false;
             this.SetKinematic(true);
         }
