@@ -164,15 +164,6 @@ public class Mover : DodgeballCharaAction, ICharaAction
             onCompleted?.Invoke();
         });
     }
-    public void Warp(Vector3 warpPos)
-    {
-        transform.position = warpPos;
-        speed = 0;
-        animator.SetFloat("Speed", speed);
-        xzVel = Vector3.zero;
-        recievedInput = Vector3.zero;
-        ReadFacingValues();
-    }
     public void TurnToPoint(Vector3 pos, float turnSpeed)
     {
         TurnToDir(pos - rb3d.position, turnSpeed);

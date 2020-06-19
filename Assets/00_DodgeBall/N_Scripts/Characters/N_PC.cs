@@ -8,6 +8,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     public int CreatorViewID => creatorViewID;
     public int ActorID => pv.Controller.ActorNumber;
     [SerializeField] int creatorViewID = 0;
+    [SerializeField] float afterDodgeMovementBlock = 0.1f;
 
     [Header("Move Smoothing Settings")]
     [Tooltip("if this distance between current position and networked position is higher than this, we snap to correct XZ place")]
@@ -27,6 +28,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     [SerializeField] Vector3 netDir = new Vector3();
     [SerializeField] DodgeballCharaCommand lastCommand = DodgeballCharaCommand.MoveInput;
     bool firstRead = true;
+    bool canCallMovement = true;
 
     void OnEnable()
     {
@@ -179,10 +181,12 @@ public class N_PC : MonoBehaviour,IPunObservable
                 if (lastCommand == DodgeballCharaCommand.Dodge)
                 {
                     lastCommand = DodgeballCharaCommand.MoveInput;
-                    GetComponent<Mover>().Warp(netPos);
+                    //GetComponent<Mover>().Warp(netPos);
+                    transform.position = netPos;
                     //So character does not attempt to move back and forth, at the targeted point
                     chara.C_MoveInput(netPos);
                     Log.Warning("Snapped Up, Dodge Net Position", gameObject);
+                    this.InvokeDelayed(afterDodgeMovementBlock, () => canCallMovement = true);
                     return;
                 }
                 UpdateSyncedInput();
@@ -198,6 +202,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     private void RecieveDodgeCommand(float startX,float startZ,float expectedX,float expectedZ)
     {
         lastCommand = DodgeballCharaCommand.Dodge;
+        canCallMovement = false;
 
         transform.position = new Vector3(startX, transform.position.y, startZ);
         netPos = new Vector3(expectedX, transform.position.y, expectedZ);
@@ -235,6 +240,8 @@ public class N_PC : MonoBehaviour,IPunObservable
         if (netDist < autoMoveThreshold)
             return;
         if (lastCommand == DodgeballCharaCommand.Dodge)
+            return;
+        if (!canCallMovement)
             return;
 
         chara.C_MoveInput(netPos);

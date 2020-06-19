@@ -24,7 +24,8 @@ public class AIController : MonoBehaviour
         lastDist = disp.magnitude;
         if(useWarp)
         {
-            GetComponent<Mover>().Warp(moveTarget.position);
+            //GetComponent<Mover>().Warp(moveTarget.position);
+            transform.position = moveTarget.position;
         }
         else
         {
