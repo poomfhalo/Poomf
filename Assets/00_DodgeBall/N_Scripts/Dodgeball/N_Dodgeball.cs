@@ -15,6 +15,12 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
         pv = GetComponent<PhotonView>();
         ball = GetComponent<Dodgeball>();
         syncer = GetComponent<SmoothSyncPUN2>();
+        GetComponent<DodgeballLaunchUp>().OnLaunchedUp += OnLaunchedUp;
+    }
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        GetComponent<DodgeballLaunchUp>().OnLaunchedUp -= OnLaunchedUp;
     }
 
     void FixedUpdate()
@@ -39,5 +45,10 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
             holder = ball.holder.GetComponent<N_PC>().ActorID;
         }
         return holder;
+    }
+
+    private void OnLaunchedUp()
+    {
+        syncer.enabled = false;
     }
 }
