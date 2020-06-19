@@ -42,8 +42,6 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     {
         base.Awake();
         N_Extentions.prefabs = prefabs;
-        OnTeamsAreSynced = null;
-        OnGameInitialized = null;
     }
     public override void OnEnable()
     {
