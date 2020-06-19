@@ -43,6 +43,7 @@ public class Jumper : DodgeballCharaAction, ICharaAction
         {
             Vector3 yDisp = Vector3.zero;
             yDisp = hit.point - rb3d.position;
+            yDisp.z = yDisp.x = 0;
             if (yDisp.magnitude <= yStopping)
             {
                 return Vector3.zero;
