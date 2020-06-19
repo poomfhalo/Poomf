@@ -16,9 +16,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
         pv = GetComponent<PhotonView>();
         ball = GetComponent<Dodgeball>();
         syncer = GetComponent<SmoothSyncPUN2>();
-
-        N_GameManager.OnGameInitialized += OnGameInitialized;
-        Debug.Log("Connected to game initalized");
     }
     protected override void OnDestroy()
     {
@@ -27,6 +24,11 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
         Debug.Log("disconnected to game initalized");
     }
 
+    void Start()
+    {
+        N_GameManager.OnGameInitialized += OnGameInitialized;
+        Debug.Log("Connected to game initalized");
+    }
     void FixedUpdate()
     {
         if (ball.IsHeld || ball.IsFlying)
