@@ -49,12 +49,10 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
     }
     public void SetUpBallNetworking()
     {
-        Debug.LogWarning("WTFFFFFFF");
         if (!PhotonNetwork.IsMasterClient)
         {
-            Debug.Log("okay, this, should have happened here?");
             GetComponent<DodgeballLaunchUp>().ApplyActionWithCommand = () => false;
-            N_GameManager.instance.SetKinematic(true);
+            this.SetKinematic(true);
         }
     }
 }
