@@ -1,4 +1,5 @@
-﻿using GW_Lib;
+﻿using System;
+using GW_Lib;
 using UnityEngine;
 
 public class DodgeballLaunchUp : DodgeballAction
@@ -6,6 +7,7 @@ public class DodgeballLaunchUp : DodgeballAction
     public override DodgeballCommand Command => DodgeballCommand.LaunchUp;
     public override string actionName => "Launch Up";
 
+    public event Action OnLaunchedUp = null;
     ConstantForce cf = null;
 
     protected override void Awake()
@@ -38,6 +40,7 @@ public class DodgeballLaunchUp : DodgeballAction
         this.SetKinematic(false);
         float yVel = Extentions.GetJumpVelocity(byHeigth, cf.force.y);
         rb3d.velocity = Vector3.up * yVel;
+        OnLaunchedUp?.Invoke();
     }
 
     private void OnHitGround()
