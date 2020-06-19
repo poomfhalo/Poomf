@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 using Smooth;
-using System;
+using GW_Lib;
 
 [RequireComponent(typeof(Dodgeball))]
 public class N_Dodgeball : N_Singleton<N_Dodgeball>
@@ -53,7 +53,10 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
     }
     private void OnGameInitialized()
     {
-        Debug.LogWarning("Game initialized");
-        GetComponent<DodgeballLaunchUp>().ApplyActionWithCommand = () => PhotonNetwork.IsMasterClient;
+        if(!PhotonNetwork.IsMasterClient)
+        {
+            GetComponent<DodgeballLaunchUp>().ApplyActionWithCommand = () => false;
+            this.SetKinematic(true);
+        }
     }
 }
