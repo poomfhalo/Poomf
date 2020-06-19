@@ -126,7 +126,6 @@ public class Mover : DodgeballCharaAction, ICharaAction
     {
         Vector3 xzDisp = xzVel * Time.fixedDeltaTime;
         Vector3 yDisp = GetYDisp();
-        Debug.Log("Y Disp " + yDisp);
         rb3d.MovePosition(rb3d.position + xzDisp + yDisp);
     }
     public void StartMoveByInput(Vector3 newInput, Transform withRespectTo)
@@ -225,7 +224,6 @@ public class Mover : DodgeballCharaAction, ICharaAction
     }
     private void SetVelByPoint()
     {
-        Debug.Log(recievedInput);
         if (distToLastPos > slowingDist)
         {
             xzVel = xzVel + dir * accel * Time.fixedDeltaTime;
