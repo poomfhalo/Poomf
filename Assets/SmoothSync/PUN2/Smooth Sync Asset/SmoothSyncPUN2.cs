@@ -1936,7 +1936,6 @@ namespace Smooth
         {
             if (!enabled)
             {
-                Debug.Log("being called?WTF");
                 return;
             }
 
