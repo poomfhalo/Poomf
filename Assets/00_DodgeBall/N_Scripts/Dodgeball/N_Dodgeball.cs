@@ -49,6 +49,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
 
     private void OnLaunchedUp()
     {
-        syncer.enabled = false;
+        //syncer.enabled = false;
     }
 }

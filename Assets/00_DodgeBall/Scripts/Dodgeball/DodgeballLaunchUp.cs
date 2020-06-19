@@ -32,7 +32,6 @@ public class DodgeballLaunchUp : DodgeballAction
         if (!ApplyActionWithCommand())
             return;
 
-        Debug.Log("Called Launch Up");
         LaunchUp(byHeigth,launchGravity);
     }
     public void LaunchUp(float byHeigth, float launchGravity)
