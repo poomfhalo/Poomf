@@ -1,5 +1,4 @@
 ﻿using System;
-using GW_Lib;
 using GW_Lib.Utility;
 using UnityEngine;
 
@@ -80,7 +79,6 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
 
         currHP = currHP - 1;
         OnHPUpdated?.Invoke();
-        this.SetKinematic(true);
         if (currHP <= 0)
         {
             OnZeroHP?.Invoke();
@@ -105,7 +103,6 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
     {
         isBeingHurt = false;
         isWaitingForHit = false;
-        this.SetKinematic(false);
     }
 
     public void DisableHitDetection()
