@@ -1934,6 +1934,12 @@ namespace Smooth
         float lastTimeAttemptedToSend = 0.0f;
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
+            if (!enabled)
+            {
+                Debug.Log("being called?WTF");
+                return;
+            }
+
             // When sending data.
             if (stream.IsWriting)
             {
