@@ -10,11 +10,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
     Dodgeball ball = null;
     SmoothSyncPUN2 syncer = null;
 
-    protected override void Awake()
-    {
-        base.Awake();
-        N_GameManager.OnTeamsAreSynced += OnTeamsAreSynced;
-    }
     public override void OnEnable()
     {
         base.OnEnable();
@@ -22,11 +17,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
         ball = GetComponent<Dodgeball>();
         syncer = GetComponent<SmoothSyncPUN2>();
 
-    }
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-        N_GameManager.OnTeamsAreSynced -= OnTeamsAreSynced;
     }
 
     void FixedUpdate()
@@ -52,14 +42,15 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
         }
         return holder;
     }
-    private void OnTeamsAreSynced()
+    public override void OnJoinedRoom()
     {
+        base.OnJoinedRoom();
         Debug.LogWarning("WTFFFFFFF");
-        if(!PhotonNetwork.IsMasterClient)
+        if (!PhotonNetwork.IsMasterClient)
         {
             Debug.Log("okay, this, should have happened here?");
             GetComponent<DodgeballLaunchUp>().ApplyActionWithCommand = () => false;
-            this.SetKinematic(true);
+            N_GameManager.instance.SetKinematic(true);
         }
     }
 }
