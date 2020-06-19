@@ -18,6 +18,18 @@ MonoBehaviour:
   onCollisionExit:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3697698984310588697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57221109536736246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad0f3cc6134cd77f98ce1d3bd737ecf4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &57221109919460844
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,6 +142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isRunning: 0
   leavingHandsTime: 0.1
+  tweenerVal: 0
 --- !u!114 &7237304765413138185
 MonoBehaviour:
   m_ObjectHideFlags: 0

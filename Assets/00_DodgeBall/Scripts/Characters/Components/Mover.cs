@@ -5,49 +5,12 @@ using UnityEngine;
 [RequireComponent(typeof(ActionsScheduler))]
 public class Mover : DodgeballCharaAction, ICharaAction
 {
-    //Note: Y vel is directly changed by gravity
-    //this script, only modifies the XZVel for the characters.
-    public Vector3 YVel
-    {
-        get
-        {
-            Vector3 yVel = rb3d.velocity;
-            yVel.x = yVel.z = 0;
-            return yVel;
-        }
-        set
-        {
-            Vector3 oldVel = rb3d.velocity;
-            Vector3 newVel = value;
-            newVel.x = oldVel.x;
-            newVel.z = oldVel.z;
-            rb3d.velocity = newVel;
-        }
-    }
-    private Vector3 XZVel
-    {
-        get
-        {
-            Vector3 xzVel = rb3d.velocity;
-            xzVel.y = 0;
-            return xzVel;
-        }
-        set
-        {
-            Vector3 oldVel = rb3d.velocity;
-            Vector3 newVel = value;
-            newVel.y = oldVel.y;
-            rb3d.velocity = newVel;
-        }
-    }
-
-    public float GetGravity => cf.force.y;
-
     public enum MovementType { ByInput, ToPoint }
     public MovementType movementMode = MovementType.ByInput;
+    public Func<Vector3> GetYDisp = () => Vector3.zero;
+
     [SerializeField] float accel = 10;
     public float maxSpeed = 3;
-    [SerializeField] float gravity = -20;
     public bool IsMoving = false;
 
     [Header("Slowing Down")]
@@ -77,7 +40,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
 
     [Header("Read Only")]
     [SerializeField] float speed = 0;
-    [SerializeField] Vector3 vel = Vector3.zero;
+    [SerializeField] Vector3 xzVel = Vector3.zero;
     [SerializeField] Vector3 lastNonZeroVel = Vector3.zero;
     [SerializeField] float minInputTimeCounter = 0;
     [SerializeField] int movabilityDir = 0;
@@ -89,7 +52,6 @@ public class Mover : DodgeballCharaAction, ICharaAction
     Animator animator = null;
     Rigidbody rb3d = null;
     ActionsScheduler scheduler = null;
-    ConstantForce cf = null;
 
     public string actionName => "Move Action";
     Vector3 right = new Vector3(), fwd = new Vector3();
@@ -100,10 +62,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
     {
         animator = GetComponent<Animator>();
         rb3d = GetComponent<Rigidbody>();
-        rb3d.useGravity = false;
         scheduler = GetComponent<ActionsScheduler>();
-        cf = GetComponent<ConstantForce>();
-        cf.force = Vector3.up * gravity;
 
         ReadFacingValues();
     }
@@ -153,12 +112,23 @@ public class Mover : DodgeballCharaAction, ICharaAction
         }
 
         if (!IsMoving)
+        {
+            ApplyVel();
             return;
+        }
+
         SetMoveDir();
         SetVel();
         TurnToDir(lastNonZeroVel, turningSpeed);
+        ApplyVel();
     }
+    private void ApplyVel()
+    {
+        Vector3 xzDisp = xzVel * Time.fixedDeltaTime;
+        Vector3 yDisp = GetYDisp();
 
+        rb3d.MovePosition(rb3d.position + xzDisp + yDisp);
+    }
     public void StartMoveByInput(Vector3 newInput, Transform withRespectTo)
     {
         scheduler.StartAction(this);
@@ -167,26 +137,28 @@ public class Mover : DodgeballCharaAction, ICharaAction
     public void Cancel()
     {
         IsMoving = false;
-        vel = Vector3.zero;
+        xzVel = Vector3.zero;
         speed = 0;
-        XZVel = vel;
+        ApplyVel();
         animator.SetFloat("Speed", speed);
     }
     public void SmoothStop(Action onCompleted)
     {
         IsMoving = false;
-        Vector3 cancelStartVel = vel;
+        Vector3 cancelStartVel = xzVel;
         float startCancelSpeed = speed;
 
         float f = 0;
         DOTween.To(() => f, (newF) => f = newF, 1, cancelationTime).SetEase(Ease.InOutSine).OnUpdate(() =>
         {
-            XZVel = Vector3.Slerp(cancelStartVel, Vector3.zero, f);
+            xzVel = Vector3.Slerp(cancelStartVel, Vector3.zero, f);
+            ApplyVel();
             speed = Mathf.Lerp(startCancelSpeed, 0, f);
             animator.SetFloat("Speed", speed);
         }).OnComplete(() =>
         {
-            XZVel = Vector3.zero;
+            xzVel = Vector3.zero;
+            ApplyVel();
             speed = 0;
             animator.SetFloat("Speed", speed);
             onCompleted?.Invoke();
@@ -197,7 +169,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
         transform.position = warpPos;
         speed = 0;
         animator.SetFloat("Speed", speed);
-        XZVel = Vector3.zero;
+        xzVel = Vector3.zero;
         recievedInput = Vector3.zero;
         ReadFacingValues();
     }
@@ -229,33 +201,32 @@ public class Mover : DodgeballCharaAction, ICharaAction
                 break;
         }
 
-        speed = vel.magnitude;
+        speed = xzVel.magnitude;
         if (speed > dampingSpeed)
         {
-            lastNonZeroVel = vel;
-            vel = Vector3.ClampMagnitude(vel, maxSpeed);
+            lastNonZeroVel = xzVel;
+            xzVel = Vector3.ClampMagnitude(xzVel, maxSpeed);
         }
-        XZVel = vel;
     }
     private void SetVelByInput()
     {
         if (dir != Vector3.zero)
         {
-            vel = vel + dir * accel * Time.fixedDeltaTime;
+            xzVel = xzVel + dir * accel * Time.fixedDeltaTime;
         }
         else
         {
             if (speed > dampingSpeed)
             {
-                vel = vel + -vel.normalized * deAccel * Time.fixedDeltaTime;
+                xzVel = xzVel + -xzVel.normalized * deAccel * Time.fixedDeltaTime;
             }
             if (speed < dampingSpeed && speed > stoppingSpeed)
             {
-                vel = vel / speedDamper;
+                xzVel = xzVel / speedDamper;
             }
             else if (speed <= stoppingSpeed && IsMoving)
             {
-                vel = Vector3.zero;
+                xzVel = Vector3.zero;
                 if (isGoingToStop)
                     Cancel();
             }
@@ -265,16 +236,16 @@ public class Mover : DodgeballCharaAction, ICharaAction
     {
         if (distToLastPos > slowingDist)
         {
-            vel = vel + dir * accel * Time.fixedDeltaTime;
+            xzVel = xzVel + dir * accel * Time.fixedDeltaTime;
         }
         else if (distToLastPos < slowingDist && distToLastPos > stoppingDist)
         {
             float distFactor = distToLastPos / slowingDist;
-            vel = dir * distFactor * maxSpeed;
+            xzVel = dir * distFactor * maxSpeed;
         }
         else if (distToLastPos < stoppingDist)
         {
-            vel = Vector3.zero;
+            xzVel = Vector3.zero;
             Cancel();
         }
     }
