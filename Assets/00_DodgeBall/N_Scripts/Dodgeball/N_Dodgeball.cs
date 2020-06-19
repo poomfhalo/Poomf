@@ -20,14 +20,12 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
     protected override void OnDestroy()
     {
         base.OnDestroy();
-        N_GameManager.OnGameInitialized -= OnGameInitialized;
-        Debug.Log("disconnected to game initalized");
+        N_GameManager.OnTeamsAreSynced -= OnTeamsAreSynced;
     }
 
     void Start()
     {
-        N_GameManager.OnGameInitialized += OnGameInitialized;
-        Debug.Log("Connected to game initalized");
+        N_GameManager.OnTeamsAreSynced += OnTeamsAreSynced;
     }
     void FixedUpdate()
     {
@@ -52,7 +50,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
         }
         return holder;
     }
-    private void OnGameInitialized()
+    private void OnTeamsAreSynced()
     {
         Debug.LogWarning("WTFFFFFFF");
         if(!PhotonNetwork.IsMasterClient)
