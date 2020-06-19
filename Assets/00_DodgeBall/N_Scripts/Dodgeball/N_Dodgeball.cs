@@ -10,12 +10,18 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
     Dodgeball ball = null;
     SmoothSyncPUN2 syncer = null;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        N_GameManager.OnTeamsAreSynced += OnTeamsAreSynced;
+    }
     public override void OnEnable()
     {
         base.OnEnable();
         pv = GetComponent<PhotonView>();
         ball = GetComponent<Dodgeball>();
         syncer = GetComponent<SmoothSyncPUN2>();
+
     }
     protected override void OnDestroy()
     {
@@ -23,10 +29,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
         N_GameManager.OnTeamsAreSynced -= OnTeamsAreSynced;
     }
 
-    void Start()
-    {
-        N_GameManager.OnTeamsAreSynced += OnTeamsAreSynced;
-    }
     void FixedUpdate()
     {
         if (ball.IsHeld || ball.IsFlying)
