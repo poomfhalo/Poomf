@@ -5,7 +5,7 @@ using UnityEngine;
 public class BallReciever : DodgeballCharaAction, ICharaAction
 {
     public bool IsDetecting => isDetecting;
-    public Func<bool> ExtCanRecieveBall = () => true;
+
     public event Action onBallGrabbed = null;
 
     [SerializeField] TriggerDelegator ballRecieveZone = null;
@@ -13,6 +13,7 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
     [Header("Read Only")]
     [SerializeField] bool isBallIn = false;
     [SerializeField] bool isDetecting = false;
+    public bool extCanRecieveBall = true;
 
     public string actionName => "Recieve Ball";
 
@@ -61,7 +62,7 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
     }
     public void TryGrabBall()
     {
-        if(ExtCanRecieveBall() && isBallIn && isButtonClicked && isDetecting)
+        if(extCanRecieveBall && isBallIn && isButtonClicked && isDetecting)
         {
             DodgeballGameManager.instance.OnBallCaught(GetComponent<DodgeballCharacter>());
             GetComponent<BallGrabber>().GrabBall();
