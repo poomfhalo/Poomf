@@ -703,19 +703,19 @@ MonoBehaviour:
   recievedInput: {x: 0, y: 0, z: 0}
   isButtonClicked: 0
   movementMode: 0
-  accel: 45
-  maxSpeed: 7
+  accel: 90
+  maxSpeed: 10
   IsMoving: 0
-  deAccel: 35
-  dampingSpeed: 0.5
+  deAccel: 50
+  dampingSpeed: 0.1
   speedDamper: 1.5
-  stoppingSpeed: 0.1
+  stoppingSpeed: 0.5
   cancelationTime: 0.35
   slowingDist: 0.5
   stoppingDist: 0.06
-  turningSpeed: 470
+  turningSpeed: 1080
   minInputTime: 0.02
-  inputSensitivity: 5
+  inputSensitivity: 10
   minMoveInput: 0.1
   usesInputDelay: 1
   speed: 0

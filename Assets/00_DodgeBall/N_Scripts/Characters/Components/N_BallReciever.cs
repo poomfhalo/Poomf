@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 
-public class N_BallReciever : MonoBehaviour
+public class N_BallReciever : MonoBehaviour,IPunObservable
 {
     PhotonView pv = null;
     BallReciever reciever = null;
@@ -10,10 +10,14 @@ public class N_BallReciever : MonoBehaviour
     {
         pv = GetComponent<PhotonView>();
         reciever = GetComponent<BallReciever>();
+        if(!PhotonNetwork.IsMasterClient)
+        {
+            reciever.ExtCanDetectBall = () => false;
+        }
     }
     void OnEnable()
     {
-        if (pv.IsMine)
+        if (pv.IsMine && !PhotonNetwork.IsMasterClient)
         {
             reciever.onRecievedButtonInput += OnRecievedButtonInput;
         }
@@ -24,7 +28,7 @@ public class N_BallReciever : MonoBehaviour
     }
     void OnDisable()
     {
-        if (pv.IsMine)
+        if (pv.IsMine && !PhotonNetwork.IsMasterClient)
         {
             reciever.onRecievedButtonInput -= OnRecievedButtonInput;
         }
@@ -36,7 +40,7 @@ public class N_BallReciever : MonoBehaviour
 
     private void OnRecievedButtonInput(bool state)
     {
-        pv.RPC("UpdateButtonClick", RpcTarget.Others, state);
+        pv.RPC("UpdateButtonClick", PhotonNetwork.MasterClient, state);
     }
     private void OnBallGrabbed()
     {
@@ -46,5 +50,22 @@ public class N_BallReciever : MonoBehaviour
     [PunRPC]
     private void UpdateButtonClick(bool state) => reciever.RecieveButtonInput(state);
     [PunRPC]
-    private void R_UpdateBallState() => reciever.TryGrabBall();
+    private void R_UpdateBallState()
+    {
+        Debug.LogWarning("Grabbed on Master, Calling To Grab, on Client");
+        reciever.TryGrabBall();
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if(stream.IsWriting)
+        {
+            stream.SendNext(reciever.isButtonClicked);
+        }
+        else if(stream.IsReading)
+        {
+            bool pressState = (bool)stream.ReceiveNext();
+            UpdateButtonClick(pressState);
+        }
+    }
 }

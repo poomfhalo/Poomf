@@ -6,13 +6,11 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
 {
     public event Action onBallGrabbed = null;
     public Func<bool> ExtCanDetectBall = () => true;
-    public bool IsDetecting => isDetecting;
 
     [SerializeField] TriggerDelegator ballRecieveZone = null;
 
     [Header("Read Only")]
     [SerializeField] bool isBallIn = false;
-    [SerializeField] bool isDetecting = false;
 
     public string actionName => "Recieve Ball";
 
@@ -27,13 +25,10 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
         ballRecieveZone.onTriggerEnter.RemoveListener(OnEntered);
         ballRecieveZone.onTriggerExit.RemoveListener(OnExitted);
     }
+
+    #region BallDetection
     void Update()
     {
-        if (!isDetecting)
-            return;
-        if (!ExtCanDetectBall())
-            return;
-
         Bounds b = ballRecieveZone.GetCollider.bounds;
         Collider[] overlaps = Physics.OverlapBox(b.center, b.extents);
         foreach (var col in overlaps)
@@ -42,69 +37,51 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
                 SetIsBallIn(true);
         }
     }
-
     private void OnEntered(Collider other)
     {
-        if (!ExtCanDetectBall())
-            return;
-
-        Dodgeball ball = other.GetComponent<Dodgeball>();
-
-        if (!ball)
+        if (!other.GetComponent<Dodgeball>())
             return;
 
         SetIsBallIn(true);
     }
     private void OnExitted(Collider other)
     {
-        if (!ExtCanDetectBall())
-            return;
-
-        Dodgeball ball = other.GetComponent<Dodgeball>();
-
-        if (!ball)
+        if (!other.GetComponent<Dodgeball>())
             return;
 
         SetIsBallIn(false);
     }
+    #endregion
+
     private void OnHPUpdated()
     {
-        DisableDetection();
+
     }
 
-    public void EnableDetection()
-    {
-        isDetecting = true;
-    }
-    public void DisableDetection()
-    {
-        isDetecting = false;
-    }
     public void Cancel()
     {
 
     }
-
-    private void SetIsBallIn(bool state)
-    {
-        if(isBallIn != state)
-        {
-            isBallIn = state;
-            if(state)
-            {
-                TryGrabBall();
-            }
-        }
-    }
     public void TryGrabBall()
     {
-        if(isBallIn && isDetecting && isButtonClicked)
+        if(isBallIn && isButtonClicked)
         {
             DodgeballGameManager.instance.OnBallCaught(GetComponent<DodgeballCharacter>());
             GetComponent<BallGrabber>().GrabBall();
-            DisableDetection();
             isButtonClicked = false;
             onBallGrabbed?.Invoke();
+        }
+    }
+
+    private void SetIsBallIn(bool state)
+    {
+        if (isBallIn != state)
+        {
+            isBallIn = state;
+            if (state)
+            {
+                TryGrabBall();
+            }
         }
     }
 }
