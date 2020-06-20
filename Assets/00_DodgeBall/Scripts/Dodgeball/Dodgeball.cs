@@ -47,7 +47,6 @@ public class Dodgeball : Singleton<Dodgeball>
                     delayedGroundedCoro = this.InvokeDelayed(timeToGrounded, () => {
                         tr.enabled = false;
                         E_OnGroundedAfterTime?.Invoke();
-                        Log.Message("OnGrounded After Time");
                     });
                     break;
             }

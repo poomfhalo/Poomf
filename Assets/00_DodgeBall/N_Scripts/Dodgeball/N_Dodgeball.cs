@@ -4,7 +4,7 @@ using Smooth;
 using System.Collections;
 
 [RequireComponent(typeof(Dodgeball))]
-public class N_Dodgeball : N_Singleton<N_Dodgeball>,IPunObservable
+public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
 {
     PhotonView pv = null;
     Dodgeball ball = null;
@@ -16,6 +16,8 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>,IPunObservable
         pv = GetComponent<PhotonView>();
         ball = GetComponent<Dodgeball>();
         syncer = GetComponent<SmoothSyncPUN2>();
+
+        GetComponent<DodgeballLaunchUp>().onLaunchedUp += OnLaunchedUp;
         ball.E_OnGroundedAfterTime += OnGrounded;
 
         StartCoroutine(NetworkSetup());
@@ -23,6 +25,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>,IPunObservable
     public override void OnDisable()
     {
         base.OnDisable();
+        GetComponent<DodgeballLaunchUp>().onLaunchedUp -= OnLaunchedUp;
         ball.E_OnGroundedAfterTime -= OnGrounded;
     }
     void FixedUpdate()
@@ -36,18 +39,13 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>,IPunObservable
             return;
         }
     }
-    private void OnGrounded()
-    {
-        syncer.enabled = true;
-        Debug.Log("Called? WUT?");
-    }
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if(stream.IsWriting)
+        if (stream.IsWriting)
         {
             stream.SendNext(ball.ballState);
         }
-        else if(stream.IsReading)
+        else if (stream.IsReading)
         {
             int s = (int)stream.ReceiveNext();
             Dodgeball.BallState state = (Dodgeball.BallState)s;
@@ -62,5 +60,14 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>,IPunObservable
             yield return 0;
         }
         ball.CanApplyOnGroundHit = () => PhotonNetwork.IsMasterClient;
+    }
+
+    private void OnLaunchedUp()
+    {
+        syncer.enabled = false;
+    }
+    private void OnGrounded()
+    {
+        syncer.enabled = true;
     }
 }
