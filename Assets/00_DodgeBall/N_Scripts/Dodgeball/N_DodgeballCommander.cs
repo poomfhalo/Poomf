@@ -16,8 +16,6 @@ public class N_DodgeballCommander : MonoBehaviour
         n_ball = GetComponent<N_Dodgeball>();
         ball = GetComponent<Dodgeball>();
         pv = GetComponent<PhotonView>();
-
-        StartCoroutine(NetworkSetup());
     }
     void OnEnable() => ball.OnCommandActivated += SendCommand;
     void OnDisable() => ball.OnCommandActivated -= SendCommand;
@@ -90,12 +88,7 @@ public class N_DodgeballCommander : MonoBehaviour
         ball.CanApplyOnGroundHit = () => false;
     }
 
-    private IEnumerator NetworkSetup()
-    {
-        while (!PhotonNetwork.IsConnected)
-        {
-            yield return 0;
-        }
-        ball.CanApplyOnGroundHit = () => PhotonNetwork.IsMasterClient;
-    }
+
+
+
 }

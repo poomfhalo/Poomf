@@ -34,7 +34,9 @@ public class Dodgeball : Singleton<Dodgeball>
                 case BallState.Flying:
                     if (timedGroundedCoro != null)
                     {
+                        Debug.LogWarning("XXXX");
                         StopCoroutine(timedGroundedCoro);
+                        timedGroundedCoro = null;
                     }
                     tr.enabled = true;
                     break;
@@ -42,13 +44,16 @@ public class Dodgeball : Singleton<Dodgeball>
                     if(timedGroundedCoro != null)
                     {
                         StopCoroutine(timedGroundedCoro);
+                        timedGroundedCoro = null;
                     }
                     tr.enabled = false;
                     break;
                 case BallState.OnGround:
                     if(timedGroundedCoro != null)
                     {
+                        Debug.LogWarning("stopped, old timed event thing?");
                         StopCoroutine(timedGroundedCoro);
+                        timedGroundedCoro = null;
                     }
                     timedGroundedCoro = this.InvokeDelayed(timeToGrounded, () => {
                         tr.enabled = false;
