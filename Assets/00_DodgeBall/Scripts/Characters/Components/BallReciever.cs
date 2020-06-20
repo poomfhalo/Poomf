@@ -55,7 +55,10 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
         SetIsBallIn(false);
     }
     #endregion
-
+    void FixedUpdate()
+    {
+        TryGrabBall();
+    }
     public void Cancel()
     {
 
