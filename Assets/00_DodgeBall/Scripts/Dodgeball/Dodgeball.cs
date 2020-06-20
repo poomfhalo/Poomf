@@ -32,21 +32,25 @@ public class Dodgeball : Singleton<Dodgeball>
             switch (ballState)
             {
                 case BallState.Flying:
-                    if (trailRendererDisabler != null)
+                    if (timedGroundedCoro != null)
                     {
-                        StopCoroutine(trailRendererDisabler);
+                        StopCoroutine(timedGroundedCoro);
                     }
                     tr.enabled = true;
                     break;
                 case BallState.Held:
-                    if(trailRendererDisabler != null)
+                    if(timedGroundedCoro != null)
                     {
-                        StopCoroutine(trailRendererDisabler);
+                        StopCoroutine(timedGroundedCoro);
                     }
                     tr.enabled = false;
                     break;
                 case BallState.OnGround:
-                    trailRendererDisabler = this.InvokeDelayed(timeToGrounded, () => {
+                    if(timedGroundedCoro != null)
+                    {
+                        StopCoroutine(timedGroundedCoro);
+                    }
+                    timedGroundedCoro = this.InvokeDelayed(timeToGrounded, () => {
                         tr.enabled = false;
                         E_OnGroundedAfterTime?.Invoke();
                         Log.Message("OnGrounded After Time");
@@ -69,7 +73,7 @@ public class Dodgeball : Singleton<Dodgeball>
     public Vector3 lastTargetPos = new Vector3();
     [SerializeField] BallState m_ballState = BallState.Flying;
 
-    Coroutine trailRendererDisabler = null;
+    Coroutine timedGroundedCoro = null;
     Rigidbody rb3d = null;
     ConstantForce cf = null;
     Vector3 startGravity = Vector3.zero;
@@ -103,6 +107,9 @@ public class Dodgeball : Singleton<Dodgeball>
     }
     void OnTriggerEnter(Collider col)
     {
+        if (!CanApplyOnGroundHit())
+            return;
+
         Field field = col.GetComponent<Field>();
         if (!field)
             return;
@@ -115,6 +122,9 @@ public class Dodgeball : Singleton<Dodgeball>
     }
     void OnTriggerExit(Collider col)
     {
+        if (!CanApplyOnGroundHit())
+            return;
+
         Field field = col.GetComponent<Field>();
         if (!field)
             return;
@@ -139,6 +149,7 @@ public class Dodgeball : Singleton<Dodgeball>
     {
         if (CanApplyOnGroundHit())
         {
+            ballState = BallState.OnGround;
             DodgeballGameManager.instance.OnBallHitGround();
         }
     }

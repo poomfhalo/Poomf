@@ -1,4 +1,5 @@
-﻿using GW_Lib;
+﻿using System.Collections;
+using GW_Lib;
 using Photon.Pun;
 using UnityEngine;
 
@@ -16,9 +17,8 @@ public class N_DodgeballCommander : MonoBehaviour
         ball = GetComponent<Dodgeball>();
         pv = GetComponent<PhotonView>();
 
-        ball.CanApplyOnGroundHit = () => false;
+        StartCoroutine(NetworkSetup());
     }
-
     void OnEnable() => ball.OnCommandActivated += SendCommand;
     void OnDisable() => ball.OnCommandActivated -= SendCommand;
 
@@ -49,7 +49,7 @@ public class N_DodgeballCommander : MonoBehaviour
         switch (command)
         {
             case DodgeballCommand.HitGround:
-                pv.RPC("R_OnGroundHit", RpcTarget.AllViaServer);
+                pv.RPC("R_OnGroundHit", RpcTarget.Others);
                 break;
         }
     }
@@ -90,4 +90,12 @@ public class N_DodgeballCommander : MonoBehaviour
         ball.CanApplyOnGroundHit = () => false;
     }
 
+    private IEnumerator NetworkSetup()
+    {
+        while (!PhotonNetwork.IsConnected)
+        {
+            yield return 0;
+        }
+        ball.CanApplyOnGroundHit = () => PhotonNetwork.IsMasterClient;
+    }
 }

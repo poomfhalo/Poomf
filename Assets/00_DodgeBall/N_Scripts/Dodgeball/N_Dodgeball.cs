@@ -43,5 +43,9 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
         }
         return holder;
     }
-    private void OnGrounded() => syncer.enabled = true;
+    private void OnGrounded()
+    {
+        syncer.enabled = true;
+        Debug.Log("Called? WUT?");
+    }
 }
