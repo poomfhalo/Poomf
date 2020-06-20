@@ -53,7 +53,7 @@ public class N_BallReciever : MonoBehaviour,IPunObservable
     private void R_UpdateBallState()
     {
         Debug.LogWarning("Grabbed on Master, Calling To Grab, on Client");
-        reciever.TryGrabBall();
+        reciever.RecieveBall();
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

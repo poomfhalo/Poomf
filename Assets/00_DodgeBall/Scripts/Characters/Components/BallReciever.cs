@@ -57,21 +57,25 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
     #endregion
     void FixedUpdate()
     {
-        TryGrabBall();
+        C_RecieveBall();
     }
     public void Cancel()
     {
 
     }
-    public void TryGrabBall()
+    public void C_RecieveBall()
     {
         if(extCanRecieveBall && isBallIn && isButtonClicked && isDetecting)
         {
-            DodgeballGameManager.instance.OnBallCaught(GetComponent<DodgeballCharacter>());
-            GetComponent<BallGrabber>().GrabBall();
-            isButtonClicked = false;
-            onBallGrabbed?.Invoke();
+            RecieveBall();
         }
+    }
+    public void RecieveBall()
+    {
+        DodgeballGameManager.instance.OnBallCaught(GetComponent<DodgeballCharacter>());
+        GetComponent<BallGrabber>().GrabBall();
+        isButtonClicked = false;
+        onBallGrabbed?.Invoke();
     }
     public void EnableDetection() => isDetecting = true;
     public void DisableDetection() => isDetecting = false;
@@ -83,7 +87,7 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
             isBallIn = state;
             if (state)
             {
-                TryGrabBall();
+                C_RecieveBall();
             }
         }
     }
