@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 using Smooth;
-using GW_Lib;
 
 [RequireComponent(typeof(Dodgeball))]
 public class N_Dodgeball : N_Singleton<N_Dodgeball>
@@ -16,12 +15,12 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
         pv = GetComponent<PhotonView>();
         ball = GetComponent<Dodgeball>();
         syncer = GetComponent<SmoothSyncPUN2>();
-        GetComponent<DodgeballLaunchUp>().OnLaunchedUp += SetUpBallNetworking;
+        ball.E_OnGroundedAfterTime += OnGrounded;
     }
     public override void OnDisable()
     {
         base.OnDisable();
-        GetComponent<DodgeballLaunchUp>().OnLaunchedUp -= SetUpBallNetworking;
+        ball.E_OnGroundedAfterTime -= OnGrounded;
     }
 
     void FixedUpdate()
@@ -34,9 +33,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
             }
             return;
         }
-
-        if(syncer.enabled == false)
-            syncer.enabled = true;
     }
     public int GetHolder()
     {
@@ -47,14 +43,5 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
         }
         return holder;
     }
-    public void SetUpBallNetworking()
-    {
-        if (!PhotonNetwork.IsMasterClient)
-        {
-            //GetComponent<DodgeballLaunchUp>().ApplyActionWithCommand = () => false;
-            //this.SetKinematic(true);
-            //syncer.enabled = true;
-            syncer.enabled = false;
-        }
-    }
+    private void OnGrounded() => syncer.enabled = true;
 }

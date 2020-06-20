@@ -9,7 +9,7 @@ using GW_Lib;
 public class Dodgeball : Singleton<Dodgeball>
 {
     public Func<bool> CanApplyOnGroundHit = () => true;
-    public event Action E_OnHitGround = null;
+    public event Action E_OnGroundedAfterTime = null;
 
     public bool IsOnGround => ballState == BallState.OnGround;
     public bool IsHeld => ballState == BallState.Held;
@@ -46,7 +46,11 @@ public class Dodgeball : Singleton<Dodgeball>
                     tr.enabled = false;
                     break;
                 case BallState.OnGround:
-                    trailRendererDisabler = this.InvokeDelayed(timeBeforeDisablingTrailRenderer, () => tr.enabled = false);
+                    trailRendererDisabler = this.InvokeDelayed(timeToGrounded, () => {
+                        tr.enabled = false;
+                        E_OnGroundedAfterTime?.Invoke();
+                        Log.Message("OnGrounded After Time");
+                    });
                     break;
             }
         }
@@ -58,7 +62,7 @@ public class Dodgeball : Singleton<Dodgeball>
     public Vector3 position { get { return rb3d.position; } set { rb3d.MovePosition(value); } }
 
     public CollisionDelegator bodyCol = null;
-    [SerializeField] float timeBeforeDisablingTrailRenderer = 0.1f;
+    [SerializeField] float timeToGrounded = 0.1f;
 
     [Header("Read Only")]
     public byte lastAppliedThrow = 0;
@@ -103,8 +107,6 @@ public class Dodgeball : Singleton<Dodgeball>
         if (!field)
             return;
 
-        E_OnHitGround?.Invoke();
-
         if (ballState == BallState.Flying)
         {
             ballState = BallState.OnGround;
@@ -138,7 +140,6 @@ public class Dodgeball : Singleton<Dodgeball>
         if (CanApplyOnGroundHit())
         {
             DodgeballGameManager.instance.OnBallHitGround();
-            GetComponentInChildren<TrailRenderer>().enabled = false;
         }
     }
 }

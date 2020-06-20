@@ -7,7 +7,6 @@ public class DodgeballLaunchUp : DodgeballAction
     public override DodgeballCommand Command => DodgeballCommand.LaunchUp;
     public override string actionName => "Launch Up";
 
-    public event Action OnLaunchedUp = null;
     ConstantForce cf = null;
 
     protected override void Awake()
@@ -15,15 +14,7 @@ public class DodgeballLaunchUp : DodgeballAction
         base.Awake();
         cf = GetComponent<ConstantForce>();
     }
-    void OnEnable()
-    {
-        ball.E_OnHitGround += OnHitGround;
-    }
-    void OnDisable()
-    {
-        ball.E_OnHitGround -= OnHitGround;
-    }
-
+    
     public void C_LaunchUp(float byHeigth, float launchGravity)
     {
         isRunning = true;
@@ -39,14 +30,5 @@ public class DodgeballLaunchUp : DodgeballAction
         this.SetKinematic(false);
         float yVel = Extentions.GetJumpVelocity(byHeigth, cf.force.y);
         rb3d.velocity = Vector3.up * yVel;
-        OnLaunchedUp?.Invoke();
-    }
-
-    private void OnHitGround()
-    {
-        if (isRunning)
-        {
-            Cancel();
-        }
     }
 }
