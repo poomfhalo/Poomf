@@ -76,6 +76,7 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
         GetComponent<BallGrabber>().GrabBall();
         isButtonClicked = false;
         onBallGrabbed?.Invoke();
+        DisableDetection();
     }
     public void EnableDetection() => isDetecting = true;
     public void DisableDetection() => isDetecting = false;
