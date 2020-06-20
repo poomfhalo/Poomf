@@ -68,7 +68,7 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
         List<SpawnPoint> spawnPoints = playerSpawnPoints.FindAll(p => p.CheckTeam(team));
         SpawnPoint s = null;
 
-        int maxTries = 60;
+        int maxTries = 120;
         do
         {
             int i = UnityEngine.Random.Range(0, spawnPoints.Count);
