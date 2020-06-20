@@ -112,7 +112,8 @@ namespace GW_Lib
             {
                 return;
             }
-            caller.StopCoroutine(c); c = null;
+            caller.StopCoroutine(c); 
+            c = null;
         }
         public static void BeginCoro(this MonoBehaviour caller, ref Coroutine c, IEnumerator call, bool clearOld = true)
         {

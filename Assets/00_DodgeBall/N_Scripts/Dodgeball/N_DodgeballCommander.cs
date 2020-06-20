@@ -36,7 +36,7 @@ public class N_DodgeballCommander : MonoBehaviour
             switch (command)
             {
                 case DodgeballCommand.GoToChara:
-                    pv.RPC("R_GoToChara", RpcTarget.Others, n_ball.GetHolder());
+                    pv.RPC("R_GoToChara", RpcTarget.Others, GetHolder());
                     break;
                 case DodgeballCommand.LaunchTo:
                     pv.RPC("R_LaunchTo", RpcTarget.Others, ball.lastAppliedThrow, ball.lastTargetPos);
@@ -88,7 +88,14 @@ public class N_DodgeballCommander : MonoBehaviour
         ball.CanApplyOnGroundHit = () => false;
     }
 
-
-
-
+    //Helper Functions
+    public int GetHolder()
+    {
+        int holder = -1;
+        if (ball.holder != null)//Only Send commands if the command caller is the local player
+        {
+            holder = ball.holder.GetComponent<N_PC>().ActorID;
+        }
+        return holder;
+    }
 }

@@ -36,15 +36,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>,IPunObservable
             return;
         }
     }
-    public int GetHolder()
-    {
-        int holder = -1;
-        if (ball.holder != null)//Only Send commands if the command caller is the local player
-        {
-            holder = ball.holder.GetComponent<N_PC>().ActorID;
-        }
-        return holder;
-    }
     private void OnGrounded()
     {
         syncer.enabled = true;

@@ -27,35 +27,24 @@ public class Dodgeball : Singleton<Dodgeball>
         }
         set
         {
+            if (m_ballState == value)
+                return;
+
             m_ballState = value;
             TrailRenderer tr = GetComponentInChildren<TrailRenderer>();
             switch (ballState)
             {
                 case BallState.Flying:
-                    if (timedGroundedCoro != null)
-                    {
-                        Debug.LogWarning("XXXX");
-                        StopCoroutine(timedGroundedCoro);
-                        timedGroundedCoro = null;
-                    }
+                    this.KillCoro(ref delayedGroundedCoro);
                     tr.enabled = true;
                     break;
                 case BallState.Held:
-                    if(timedGroundedCoro != null)
-                    {
-                        StopCoroutine(timedGroundedCoro);
-                        timedGroundedCoro = null;
-                    }
+                    this.KillCoro(ref delayedGroundedCoro);
                     tr.enabled = false;
                     break;
                 case BallState.OnGround:
-                    if(timedGroundedCoro != null)
-                    {
-                        Debug.LogWarning("stopped, old timed event thing?");
-                        StopCoroutine(timedGroundedCoro);
-                        timedGroundedCoro = null;
-                    }
-                    timedGroundedCoro = this.InvokeDelayed(timeToGrounded, () => {
+                    this.KillCoro(ref delayedGroundedCoro);
+                    delayedGroundedCoro = this.InvokeDelayed(timeToGrounded, () => {
                         tr.enabled = false;
                         E_OnGroundedAfterTime?.Invoke();
                         Log.Message("OnGrounded After Time");
@@ -78,7 +67,7 @@ public class Dodgeball : Singleton<Dodgeball>
     public Vector3 lastTargetPos = new Vector3();
     [SerializeField] BallState m_ballState = BallState.Flying;
 
-    Coroutine timedGroundedCoro = null;
+    Coroutine delayedGroundedCoro = null;
     Rigidbody rb3d = null;
     ConstantForce cf = null;
     Vector3 startGravity = Vector3.zero;
@@ -98,18 +87,10 @@ public class Dodgeball : Singleton<Dodgeball>
         bodyCol.onCollisionEnter.AddListener(OnBodyEntered);
         bodyCol.onCollisionEnter.AddListener(OnBodyExitted);
     }
-    void OnEnable()
-    {
-        DodgeballGameManager.AddBall(this);
-    }
-    void OnDisable()
-    {
-        DodgeballGameManager.RemoveBall(this);
-    }
-    void OnDestroy()
-    {
-        transform.DOKill();
-    }
+    void OnEnable() => DodgeballGameManager.AddBall(this);
+    void OnDisable() => DodgeballGameManager.RemoveBall(this);
+    void OnDestroy() => transform.DOKill();
+    
     void OnTriggerEnter(Collider col)
     {
         if (!CanApplyOnGroundHit())
@@ -139,17 +120,16 @@ public class Dodgeball : Singleton<Dodgeball>
             ballState = BallState.Flying;
         }
     }
+
     private void OnBodyEntered(Collision col){ }
     private void OnBodyExitted(Collision col){ }
-
     public void RunCommand(DodgeballCommand command) => OnCommandActivated?.Invoke(command);
 
-    public void C_OnGroundHit()
+    private void C_OnGroundHit()
     {
         RunCommand(DodgeballCommand.HitGround);
         OnGroundHit();
     }
-
     public void OnGroundHit()
     {
         if (CanApplyOnGroundHit())
