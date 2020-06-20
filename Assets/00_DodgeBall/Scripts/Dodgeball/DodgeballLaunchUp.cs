@@ -27,7 +27,6 @@ public class DodgeballLaunchUp : DodgeballAction
     }
     private void LaunchUp(float byHeigth, float launchGravity)
     {
-        Debug.LogWarning("called Launch Up");
         onLaunchedUp?.Invoke();
         cf.force = Vector3.up * launchGravity;
         this.SetKinematic(false);
