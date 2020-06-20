@@ -188,8 +188,8 @@ public class DodgeballCharacter : MonoBehaviour
     #region Gameplay Commands
     public void C_BraceForContact()
     {
-        //if (reciever && !reciever.IsDetecting)
-            //reciever.EnableDetection();
+        if (reciever && !reciever.IsDetecting)
+            reciever.EnableDetection();
 
         if (!hp.IsBeingHurt && !hp.IsWaitingForHit)
             hp.EnableHitDetection();
@@ -199,8 +199,8 @@ public class DodgeballCharacter : MonoBehaviour
     {
         if(hp.IsWaitingForHit)
             hp.DisableHitDetection();
-        //if(reciever && reciever.IsDetecting)
-            //reciever.DisableDetection();
+        if(reciever && reciever.IsDetecting)
+            reciever.DisableDetection();
 
         OnCommandActivated?.Invoke(DodgeballCharaCommand.ReleaseFromBrace);
     }

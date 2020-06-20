@@ -12,7 +12,7 @@ public class N_BallReciever : MonoBehaviour,IPunObservable
         reciever = GetComponent<BallReciever>();
         if(!PhotonNetwork.IsMasterClient)
         {
-            reciever.ExtCanDetectBall = () => false;
+            reciever.ExtCanRecieveBall = () => false;
         }
     }
     void OnEnable()

@@ -4,19 +4,21 @@ using UnityEngine;
 
 public class BallReciever : DodgeballCharaAction, ICharaAction
 {
+    public bool IsDetecting => isDetecting;
+    public Func<bool> ExtCanRecieveBall = () => true;
     public event Action onBallGrabbed = null;
-    public Func<bool> ExtCanDetectBall = () => true;
 
     [SerializeField] TriggerDelegator ballRecieveZone = null;
 
     [Header("Read Only")]
     [SerializeField] bool isBallIn = false;
+    [SerializeField] bool isDetecting = false;
 
     public string actionName => "Recieve Ball";
 
     void OnEnable()
     {
-        GetComponent<CharaHitPoints>().OnHPUpdated += OnHPUpdated;
+        GetComponent<CharaHitPoints>().OnHPUpdated += DisableDetection;
         ballRecieveZone.onTriggerEnter.AddListener(OnEntered);
         ballRecieveZone.onTriggerExit.AddListener(OnExitted);
     }
@@ -53,18 +55,13 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
     }
     #endregion
 
-    private void OnHPUpdated()
-    {
-
-    }
-
     public void Cancel()
     {
 
     }
     public void TryGrabBall()
     {
-        if(isBallIn && isButtonClicked)
+        if(ExtCanRecieveBall() && isBallIn && isButtonClicked && isDetecting)
         {
             DodgeballGameManager.instance.OnBallCaught(GetComponent<DodgeballCharacter>());
             GetComponent<BallGrabber>().GrabBall();
@@ -72,6 +69,8 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
             onBallGrabbed?.Invoke();
         }
     }
+    public void EnableDetection() => isDetecting = true;
+    public void DisableDetection() => isDetecting = false;
 
     private void SetIsBallIn(bool state)
     {
