@@ -435,8 +435,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5042325130360323653}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.65, z: 0}
-  m_LocalScale: {x: 4, y: 3, z: 4}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children: []
   m_Father: {fileID: 6963099543513805183}
   m_RootOrder: 2
@@ -982,7 +982,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recievedInput: {x: 0, y: 0, z: 0}
-  isButtonClicked: 0
   movementMode: 0
   accel: 90
   maxSpeed: 10
@@ -1019,7 +1018,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recievedInput: {x: 0, y: 0, z: 0}
-  isButtonClicked: 0
   throwFacingSpeed: 200
   heigth: 0.3
   gravity: 15
@@ -1039,7 +1037,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recievedInput: {x: 0, y: 0, z: 0}
-  isButtonClicked: 0
   playRndDodge: 1
   dodgeToPlay: 0
   dist: 7
@@ -1063,7 +1060,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recievedInput: {x: 0, y: 0, z: 0}
-  isButtonClicked: 0
   gravity: -40
   jumpHeigth: 2
   timeBeforeReapplyGravity: 0.1
@@ -1086,7 +1082,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recievedInput: {x: 0, y: 0, z: 0}
-  isButtonClicked: 0
   ballGrabbingZone: {fileID: 6963099543659376354}
   isBallInGrabZone: 0
   activityName: Grab Ball
@@ -1104,9 +1099,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recievedInput: {x: 0, y: 0, z: 0}
-  isButtonClicked: 0
   ballRecieveZone: {fileID: 9203289622195823782}
   isBallIn: 0
+  isDetecting: 0
+  extCanRecieveBall: 1
+  isButtonClicked: 0
 --- !u!114 &5682459526312892566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1120,7 +1117,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recievedInput: {x: 0, y: 0, z: 0}
-  isButtonClicked: 0
   maxHP: 2
   hurtAnimsCount: 2
   hurtZone: {fileID: 3251347654130741779}

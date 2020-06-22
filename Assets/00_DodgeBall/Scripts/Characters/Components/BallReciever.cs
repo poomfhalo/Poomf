@@ -37,8 +37,12 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
         foreach (var col in overlaps)
         {
             if (col.GetComponent<Dodgeball>())
+            {
                 SetIsBallIn(true);
+                return;
+            }
         }
+        SetIsBallIn(false);
     }
     private void OnEntered(Collider other)
     {
