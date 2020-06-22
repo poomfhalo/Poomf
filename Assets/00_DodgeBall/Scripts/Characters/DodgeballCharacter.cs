@@ -131,10 +131,14 @@ public class DodgeballCharacter : MonoBehaviour
     public void C_OnBallAction(InputActionPhase phase)
     {
         bool isDown = phase == InputActionPhase.Started || phase == InputActionPhase.Performed;
-        GetComponents<DodgeballCharaAction>().ToList().ForEach(a => a.RecieveButtonInput(isDown));
+        GetComponent<BallReciever>().RecieveButtonInput(isDown);
+
         if (phase != InputActionPhase.Started)
             return;
 
+        if (reciever.IsDetecting)
+            return;//Recieving is handled 
+        
         if (!HasBall && IsBallInGrabZone)
         {
             grabber.StartCatchAction();

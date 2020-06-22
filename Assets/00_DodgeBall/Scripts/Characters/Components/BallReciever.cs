@@ -65,7 +65,7 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
     }
     public void C_RecieveBall()
     {
-        if(extCanRecieveBall && isBallIn && isButtonClicked && isDetecting)
+        if(extCanRecieveBall && IsDetecting && isBallIn && isButtonClicked)
         {
             RecieveBall();
         }
@@ -74,6 +74,7 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
     {
         DodgeballGameManager.instance.OnBallCaught(GetComponent<DodgeballCharacter>());
         GetComponent<BallGrabber>().GrabBall();
+        DisableDetection();
         isButtonClicked = false;
         onBallGrabbed?.Invoke();
     }
@@ -91,4 +92,14 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
             }
         }
     }
+
+    #region RecieveButtonClick
+    public event Action<bool> onRecievedButtonInput = null;
+    public bool isButtonClicked = false;
+    public void RecieveButtonInput(bool i)
+    {
+        isButtonClicked = i;
+        onRecievedButtonInput?.Invoke(i);
+    }
+    #endregion
 }

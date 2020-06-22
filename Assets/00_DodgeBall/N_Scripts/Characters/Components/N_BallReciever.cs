@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 
-public class N_BallReciever : MonoBehaviour,IPunObservable
+//Responsible for delegating, whether we have the button held or not.
+//responsible for delegating, reciption call to local player.
+public class N_BallReciever : MonoBehaviour
 {
     PhotonView pv = null;
     BallReciever reciever = null;
@@ -10,10 +12,7 @@ public class N_BallReciever : MonoBehaviour,IPunObservable
     {
         pv = GetComponent<PhotonView>();
         reciever = GetComponent<BallReciever>();
-        if(!PhotonNetwork.IsMasterClient)
-        {
-            reciever.extCanRecieveBall = false;
-        }
+        reciever.extCanRecieveBall = PhotonNetwork.IsMasterClient;
     }
     void OnEnable()
     {
@@ -52,20 +51,7 @@ public class N_BallReciever : MonoBehaviour,IPunObservable
     [PunRPC]
     private void R_UpdateBallState()
     {
-        Debug.LogWarning("Grabbed on Master, Calling To Grab, on Client");
+        Debug.LogWarning("Recieved on Master, Calling To Recieved, on Client");
         reciever.RecieveBall();
-    }
-
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if(stream.IsWriting)
-        {
-            stream.SendNext(reciever.isButtonClicked);
-        }
-        else if(stream.IsReading)
-        {
-            bool pressState = (bool)stream.ReceiveNext();
-            UpdateButtonClick(pressState);
-        }
     }
 }
