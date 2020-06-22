@@ -82,7 +82,6 @@ public class BallLauncher : DodgeballCharaAction,ICharaAction
     }
 
     public void A_OnFakeThrowEnded() => isThrowing = false;
-    
     public void A_OnThrowPointReached()
     {
         Dodgeball.instance.transform.SetParent(null);
@@ -99,7 +98,9 @@ public class BallLauncher : DodgeballCharaAction,ICharaAction
         else
         {
             targetPos = aimedAtChara.ShootablePoint.position;
-            Dodgeball.instance.launchTo.C_GoLaunchTo(aimedAtChara.ShootablePoint.position, throwData);
+            Vector3 dir = (targetPos - transform.position).normalized;
+            targetPos = targetPos + dir * throwData.ofShootDist;
+            Dodgeball.instance.launchTo.C_GoLaunchTo(targetPos, throwData);
             DodgeballGameManager.instance.OnBallThrownAtEnemy(GetComponent<DodgeballCharacter>());
         }
 

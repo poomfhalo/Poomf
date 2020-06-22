@@ -1,13 +1,21 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using GW_Lib;
+using UnityEngine;
 
 public class DodgeballReflection : DodgeballAction
 {
     [Header("Reflection Detection")]
-    [SerializeField] float castDist = 0.2f;
+    [SerializeField] float castDist = 10;
     [SerializeField] SphereCollider contactZone = null;
+    [SerializeField] float reflectionDist = 0.65f;
+    [SerializeField] bool autoActivate = false;
+
+    [Header("Reflection Data")]
+    [SerializeField] int maxTries = 60;
+
     [Header("Read Only")]
     [SerializeField] bool isReflecting = false;
-    [SerializeField] bool gotValidHit = false;
 
     public override string actionName => "Reflection";
     public override DodgeballCommand Command => DodgeballCommand.Reflection;
@@ -17,28 +25,43 @@ public class DodgeballReflection : DodgeballAction
     RaycastHit lastValidHit = new RaycastHit();
     bool didHit => lastValidHit.collider != null;
 
-    public void StartReflectionAction()
+    void Start()
     {
-        isReflecting = true;
-        lastPos = transform.position;
-        TryReflect();
+        if(autoActivate)
+        {
+            GetComponent<Dodgeball>().OnCommandActivated += (cmd) => {
+                switch (cmd)
+                {
+                    case DodgeballCommand.LaunchTo:
+                        StartReflectionAction();
+                        break;
+                }
+            };
+        }
     }
-
     void Update()
     {
-        UpdateValidHit();
+        if (GetComponent<Dodgeball>().IsOnGround)
+            isReflecting = false;
+        if (!isReflecting)
+            return;
 
         if (isReflecting)
-        {
             TryReflect();
-        }
+
         if (didHit)
         {
             Debug.DrawRay(lastValidHit.point, lastValidHit.normal * castDist, Color.yellow);
-            Vector3 reflected = Vector3.Reflect(travelDir, lastValidHit.normal);
-            Debug.DrawRay(lastValidHit.point, reflected, Color.red);
+            Debug.DrawRay(lastValidHit.point, GetReflected(), Color.red);
         }
         lastPos = transform.position;
+    }
+
+    public void StartReflectionAction()
+    {
+        lastPos = transform.position;
+        isReflecting = true;
+        TryReflect();
     }
 
     private void TryReflect()
@@ -46,14 +69,28 @@ public class DodgeballReflection : DodgeballAction
         bool didReflect = false;
         if(UpdateValidHit())
         {
-
+            float dist = Vector3.Distance(lastValidHit.point, transform.position);
+            if(dist<=reflectionDist)
+            {
+                int currTries = maxTries;
+                do
+                {
+                    currTries = currTries - 1;
+                    Ray ray = new Ray(transform.position, Vector3.down);
+                    List<RaycastHit> hits = Physics.RaycastAll(ray, 30).ToList();
+                    RaycastHit floorHit = hits.Find(h => h.collider.GetComponent<Field>());
+                    float a = UnityEngine.Random.Range(0, 360) * Mathf.Deg2Rad;
+                    float x = Mathf.Cos(a);
+                    float z = Mathf.Sin(a);
+                    Vector3 dir = new Vector3(x, 0, z);
+                } while (currTries>0);
+            }
         }
         if (didReflect)
         {
             ball.RunCommand(Command);
         }
     }
-
     private bool UpdateValidHit()
     {
         lastValidHit = new RaycastHit();
@@ -73,7 +110,12 @@ public class DodgeballReflection : DodgeballAction
         }
         return false;
     }
-
+    private Vector3 GetReflected()
+    {
+        if (!didHit)
+            return Vector3.zero;
+        return Vector3.Reflect(travelDir, lastValidHit.normal);
+    }
     public override void Cancel()
     {
 
