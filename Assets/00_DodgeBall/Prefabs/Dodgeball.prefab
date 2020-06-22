@@ -125,6 +125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPersistant: 0
   bodyCol: {fileID: 57221110444787069}
+  timeToGrounded: 0.1
   lastAppliedThrow: 0
   lastTargetPos: {x: 0, y: 0, z: 0}
   m_ballState: 2
@@ -233,11 +234,6 @@ PrefabInstance:
     - target: {fileID: 7308918417230321050, guid: 987689bb65ebb9946b56cd0d83298db5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7308918417230321050, guid: 987689bb65ebb9946b56cd0d83298db5,
-        type: 3}
-      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7308918417230321050, guid: 987689bb65ebb9946b56cd0d83298db5,
