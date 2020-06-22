@@ -8,6 +8,7 @@ public class BallThrowData : ScriptableObject
     [Tooltip("Usable in GetSpeedOfDist")]
     [SerializeField] float speed = 10;
     public Ease ease = Ease.InOutSine;
+    [Tooltip("Extra Distance, the ball will travel, after reaching the point")]
     public float ofShootDist = 0.2f;
 
     public float GetTimeOfDist(float dist)
