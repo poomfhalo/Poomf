@@ -16,22 +16,19 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
     public bool extCanRecieveBall = true;
 
     public string actionName => "Recieve Ball";
+    CharaHitPoints hp => GetComponent<CharaHitPoints>();
 
-    void OnEnable()
-    {
-        GetComponent<CharaHitPoints>().OnHPUpdated += DisableDetection;
-        ballRecieveZone.onTriggerEnter.AddListener(OnEntered);
-        ballRecieveZone.onTriggerExit.AddListener(OnExitted);
-    }
-    void OnDisable()
-    {
-        ballRecieveZone.onTriggerEnter.RemoveListener(OnEntered);
-        ballRecieveZone.onTriggerExit.RemoveListener(OnExitted);
-    }
+    void OnEnable() => hp.OnHPUpdated += DisableDetection;
+    void OnDisable() => hp.OnHPUpdated -= DisableDetection;
 
     #region BallDetection
     void Update()
     {
+        if(!IsDetecting)
+        {
+            SetIsBallIn(false);
+            return;
+        }
         Bounds b = ballRecieveZone.GetCollider.bounds;
         Collider[] overlaps = Physics.OverlapBox(b.center, b.extents);
         foreach (var col in overlaps)
@@ -44,29 +41,13 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
         }
         SetIsBallIn(false);
     }
-    private void OnEntered(Collider other)
-    {
-        if (!other.GetComponent<Dodgeball>())
-            return;
-
-        SetIsBallIn(true);
-    }
-    private void OnExitted(Collider other)
-    {
-        if (!other.GetComponent<Dodgeball>())
-            return;
-
-        SetIsBallIn(false);
-    }
     #endregion
     void FixedUpdate()
     {
         C_RecieveBall();
     }
-    public void Cancel()
-    {
+    public void Cancel() { }
 
-    }
     public void C_RecieveBall()
     {
         if(extCanRecieveBall && IsDetecting && isBallIn && isButtonClicked)
@@ -87,14 +68,9 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
 
     private void SetIsBallIn(bool state)
     {
-        if (isBallIn != state)
-        {
-            isBallIn = state;
-            if (state)
-            {
-                C_RecieveBall();
-            }
-        }
+        isBallIn = state;
+        if(isBallIn)
+            C_RecieveBall();
     }
 
     #region RecieveButtonClick
