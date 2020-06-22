@@ -135,7 +135,7 @@ public class DodgeballCharacter : MonoBehaviour
         if (phase != InputActionPhase.Started)
             return;
 
-        if (!HasBall && IsBallInGrabZone)
+        if (!reciever.IsDetecting && !HasBall && IsBallInGrabZone)
         {
             grabber.StartCatchAction();
             OnCommandActivated?.Invoke(DodgeballCharaCommand.BallAction);
