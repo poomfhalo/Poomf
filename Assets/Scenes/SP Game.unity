@@ -434,6 +434,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5782958380349734841, guid: eadd1616fa10fae31af875c0fa1f7f8d,
+        type: 3}
+      propertyPath: maxHP
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eadd1616fa10fae31af875c0fa1f7f8d, type: 3}
 --- !u!1 &817969047
@@ -559,6 +564,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5782958380349734841, guid: eadd1616fa10fae31af875c0fa1f7f8d,
+        type: 3}
+      propertyPath: maxHP
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eadd1616fa10fae31af875c0fa1f7f8d, type: 3}
@@ -1026,7 +1036,42 @@ PrefabInstance:
     - target: {fileID: 303846191332746217, guid: 3d80c75df7c98542c9e7d1832ad9730d,
         type: 3}
       propertyPath: autoActivate
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 303846191332746217, guid: 3d80c75df7c98542c9e7d1832ad9730d,
+        type: 3}
+      propertyPath: reflectionSmoother.rMin
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 303846191332746217, guid: 3d80c75df7c98542c9e7d1832ad9730d,
+        type: 3}
+      propertyPath: reflectionSmoother.rMax
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 303846191332746217, guid: 3d80c75df7c98542c9e7d1832ad9730d,
+        type: 3}
+      propertyPath: reflectionDist.rMin
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 303846191332746217, guid: 3d80c75df7c98542c9e7d1832ad9730d,
+        type: 3}
+      propertyPath: reflectionDist.rMax
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 303846191332746217, guid: 3d80c75df7c98542c9e7d1832ad9730d,
+        type: 3}
+      propertyPath: reflectionDist.absMax
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 303846191332746217, guid: 3d80c75df7c98542c9e7d1832ad9730d,
+        type: 3}
+      propertyPath: reflectionSpeedDivider.rMax
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 303846191332746217, guid: 3d80c75df7c98542c9e7d1832ad9730d,
+        type: 3}
+      propertyPath: reflectionSpeedDivider.rMin
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d80c75df7c98542c9e7d1832ad9730d, type: 3}
@@ -1176,6 +1221,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5782958380349734841, guid: eadd1616fa10fae31af875c0fa1f7f8d,
+        type: 3}
+      propertyPath: maxHP
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eadd1616fa10fae31af875c0fa1f7f8d, type: 3}

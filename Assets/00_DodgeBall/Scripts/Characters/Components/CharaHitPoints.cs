@@ -1,4 +1,5 @@
 ﻿using System;
+using GW_Lib;
 using GW_Lib.Utility;
 using UnityEngine;
 
@@ -16,6 +17,7 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
     [SerializeField] int maxHP = 2;
     [SerializeField] int hurtAnimsCount = 2;
     [SerializeField] TriggerDelegator hurtZone = null;
+    [SerializeField] float minTimeBetweenHurts = 1;
     public Func<bool> ApplyHealthChanges = () => true;
 
     [Header("Read Only")]
@@ -51,14 +53,14 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
         if (isBeingHurt)
             return;
 
-        C_StartHitAction(other);
+        C_StartHitAction();
     }
 
     public void EnableHitDetection()
     {
         isWaitingForHit = true;
     }
-    private void C_StartHitAction(Collider other)
+    public void C_StartHitAction()
     {
         if (!IsWaitingForHit)
             return;
@@ -101,7 +103,7 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
     }
     public void A_OnHitEnded()
     {
-        isBeingHurt = false;
+        this.InvokeDelayed(minTimeBetweenHurts, () => isBeingHurt = false);
         isWaitingForHit = false;
     }
 

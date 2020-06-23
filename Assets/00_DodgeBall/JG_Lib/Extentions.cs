@@ -197,12 +197,13 @@ namespace GW_Lib
             return posToSample;
         }
 
-        public static GameObject LogSphere(Vector3 pos, Color c)
+        public static GameObject LogSphere(Vector3 pos, Color c,float scale = 1)
         {
             GameObject s = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             s.GetComponent<Collider>().enabled = false;
             s.GetComponent<Renderer>().material.color = c;
             s.transform.position = pos;
+            s.transform.localScale = Vector3.one * scale;
             return s;
         }
 
