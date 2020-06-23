@@ -186,10 +186,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isRunning: 0
-  castDist: 10
-  contactZone: {fileID: 57221109919460847}
-  reflectionDist: 1
   autoActivate: 0
+  castDist: 10
+  reflectionFramesPrediction: 3
+  useSafestPrediction: 0
+  maxTries: 60
+  collisionDirThreshold: -0.75
+  reflectionDist:
+    absMin: 0.5
+    absMax: 6
+    rMin: 2.5
+    rMax: 6
+  reflectionSpeedDivider:
+    absMin: 1.1
+    absMax: 6
+    rMin: 4
+    rMax: 5
   isReflecting: 0
 --- !u!114 &7279175448926025499
 MonoBehaviour:

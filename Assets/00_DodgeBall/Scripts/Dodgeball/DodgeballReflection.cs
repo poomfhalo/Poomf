@@ -15,18 +15,21 @@ public class DodgeballReflection : DodgeballAction
     [Tooltip("if true, we will use the longest delta time for the prediction duration, " +
     	"if false we will use the average")]
     [SerializeField] bool useSafestPrediction = false;
+    [Tooltip("How many times the script tries to find a proper collision point before using the backup point\n" +
+        "back up point is usually in direct opposite position")]
+    [SerializeField] int maxTries = 60;
 
     [Header("Reflection Data")]
-    [SerializeField] int maxTries = 60;
     [Tooltip("-1 means the ball must be exactly in opposite direction of hit character\n" +
     	"0 means perpindicular to hit character is the maximum direction of reflection\n" +
     	"1 means the ball have a chance to be reflected at all 360 angles\n" +
     	"everything else, is in between, depending on value")]
     [Range(-1, 1)]
     [SerializeField] float collisionDirThreshold = -0.75f;
+    [Tooltip("How far the reflection point is")]
     [SerializeField] MinMaxRange reflectionDist = new MinMaxRange(0.5f, 3, 0.8f, 2.5f);
+    [Tooltip("the number that the speed of the ball gets divided by")]
     [SerializeField] MinMaxRange reflectionSpeedDivider = new MinMaxRange(1.1f, 6, 4.5f, 6f);
-
 
     [Header("Read Only")]
     [SerializeField] bool isReflecting = false;
