@@ -1161,6 +1161,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4657718388477959988, guid: c395b7056ca0ebe79951bbb94ce6667d,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: a6e74fc4ba7407146b63f3f6f8a83078, type: 2}
     - target: {fileID: 6963099543513805180, guid: c395b7056ca0ebe79951bbb94ce6667d,
         type: 3}
       propertyPath: m_Name
@@ -1896,7 +1901,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 0de6f7c1efbe59749959636ba3d61484, type: 3}
       propertyPath: _posBuffer.y
-      value: 11.4
+      value: 9.19
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 0de6f7c1efbe59749959636ba3d61484, type: 3}
       propertyPath: _posBuffer.z
@@ -1924,7 +1929,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 0de6f7c1efbe59749959636ba3d61484, type: 3}
       propertyPath: _childAmount
-      value: 45
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 0de6f7c1efbe59749959636ba3d61484, type: 3}
       propertyPath: _minScale
