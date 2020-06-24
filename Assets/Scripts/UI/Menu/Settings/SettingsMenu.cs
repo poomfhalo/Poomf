@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SettingsMenu : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] private SliderControlledSetting sfxUISettings;
     // Contains the UI elements relative to the Music volume settings
     [SerializeField] private SliderControlledSetting musicUISettings;
+    // Contains the UI elements of video settings
+    [SerializeField] private VideoSettingsUI videoSettingsUI;
     // The asset that manages the audio settings
     [SerializeField] private AudioManager audioManager;
     // The asset that manages the video settings
@@ -29,8 +32,15 @@ public class SettingsMenu : MonoBehaviour
     private void Start()
     {
         // Initialize the audio UI with the saved audio settings
+        audioManager.Initialize();
+        audioManager.isCurrent = true;
         sfxUISettings.Initialize(audioManager.GetSFXVolume());
         musicUISettings.Initialize(audioManager.GetMusicVolume());
+
+        // Initialize Video UI
+        videoManager.Initialize();
+        videoManager.isCurrent = true;
+        videoSettingsUI.Initialize(videoManager.IsFullscreen(), videoManager.GetQualityIndex());
 
         // Check if it's the first run here
     }
