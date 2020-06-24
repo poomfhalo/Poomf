@@ -1161,6 +1161,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4657718388477959988, guid: c395b7056ca0ebe79951bbb94ce6667d,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: a6e74fc4ba7407146b63f3f6f8a83078, type: 2}
     - target: {fileID: 6963099543513805180, guid: c395b7056ca0ebe79951bbb94ce6667d,
         type: 3}
       propertyPath: m_Name
@@ -1896,7 +1901,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 0de6f7c1efbe59749959636ba3d61484, type: 3}
       propertyPath: _posBuffer.y
-      value: 11.4
+      value: 9.19
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 0de6f7c1efbe59749959636ba3d61484, type: 3}
       propertyPath: _posBuffer.z
@@ -1924,7 +1929,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 0de6f7c1efbe59749959636ba3d61484, type: 3}
       propertyPath: _childAmount
-      value: 45
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 0de6f7c1efbe59749959636ba3d61484, type: 3}
       propertyPath: _minScale
@@ -3048,6 +3053,7 @@ GameObject:
   - component: {fileID: 1914053858}
   - component: {fileID: 1914053857}
   - component: {fileID: 1914053856}
+  - component: {fileID: 1914053860}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3137,6 +3143,45 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 19.085001, y: -179.449, z: 0.004}
+--- !u!114 &1914053860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1914053855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a879e317c20b0d41a9a56f1a97f4cf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ApplyMethod: 0
+  SampleCount: 3
+  PerPixelNormals: 1
+  Intensity: 1
+  Tint: {r: 0.46052867, g: 0.745283, b: 0.60667664, a: 1}
+  Radius: 2
+  PowerExponent: 1.31
+  Bias: 0.224
+  Thickness: 1
+  Downsample: 1
+  CacheAware: 1
+  FadeEnabled: 0
+  FadeStart: 100
+  FadeLength: 50
+  FadeToIntensity: 0
+  FadeToTint: {r: 0, g: 0, b: 0, a: 1}
+  FadeToRadius: 2
+  FadeToPowerExponent: 1
+  FadeToThickness: 1
+  BlurEnabled: 1
+  BlurRadius: 3
+  BlurPasses: 1
+  BlurSharpness: 15
+  FilterEnabled: 1
+  FilterDownsample: 1
+  FilterBlending: 0.8
+  FilterResponse: 0.5
 --- !u!1001 &1922619332
 PrefabInstance:
   m_ObjectHideFlags: 0
