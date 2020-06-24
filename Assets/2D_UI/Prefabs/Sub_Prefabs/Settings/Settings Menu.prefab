@@ -1540,7 +1540,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Option A
+  m_Text: High
 --- !u!1 &2282775328167424009
 GameObject:
   m_ObjectHideFlags: 0
@@ -2268,6 +2268,7 @@ GameObject:
   - component: {fileID: 8704105496797757040}
   - component: {fileID: 378949525942637093}
   - component: {fileID: 2952619017603391499}
+  - component: {fileID: 4623304668329919635}
   m_Layer: 5
   m_Name: Video Settings
   m_TagString: Untagged
@@ -2360,6 +2361,21 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
+--- !u!114 &4623304668329919635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3188605434301977832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81de80977eb057044b5c75325a193d32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fullscreenToggle: {fileID: 5503433052726642929}
+  qualityDropdown: {fileID: 2643873034486917073}
+  resolutionDropdown: {fileID: 2677082466478738037}
 --- !u!1 &3484184425751335209
 GameObject:
   m_ObjectHideFlags: 0
@@ -3663,14 +3679,14 @@ MonoBehaviour:
   m_CaptionImage: {fileID: 0}
   m_ItemText: {fileID: 2082481981672542605}
   m_ItemImage: {fileID: 0}
-  m_Value: 0
+  m_Value: 2
   m_Options:
     m_Options:
-    - m_Text: Option A
+    - m_Text: Low
       m_Image: {fileID: 0}
-    - m_Text: Option B
+    - m_Text: Medium
       m_Image: {fileID: 0}
-    - m_Text: Option C
+    - m_Text: High
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
