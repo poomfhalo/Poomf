@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using GW_Lib;
+﻿using GW_Lib;
 using Photon.Pun;
 using UnityEngine;
 
@@ -39,7 +38,7 @@ public class N_DodgeballCommander : MonoBehaviour
                     pv.RPC("R_GoToChara", RpcTarget.Others, GetHolder());
                     break;
                 case DodgeballCommand.LaunchTo:
-                    pv.RPC("R_LaunchTo", RpcTarget.Others, ball.lastAppliedThrow, ball.lastTargetPos);
+                    pv.RPC("R_LaunchTo", RpcTarget.Others, ball.launchTo.lastAppliedThrow, ball.launchTo.lastTargetPos);
                     break;
             }
         });
@@ -48,6 +47,14 @@ public class N_DodgeballCommander : MonoBehaviour
         {
             case DodgeballCommand.HitGround:
                 pv.RPC("R_OnGroundHit", RpcTarget.Others);
+                break;
+            case DodgeballCommand.Reflection:
+                DodgeballReflection reflection = ball.reflection;
+                Vector3 reflectionVel = reflection.lastReflectionVel;
+                Vector3 reflectionStartPoint = reflection.lastReflectionStartPoint;
+                Vector3 reflectionTarget = reflection.lastReflectionTarget;
+
+                pv.RPC("R_Reflection", RpcTarget.Others, reflectionVel, reflectionStartPoint, reflectionTarget);
                 break;
         }
     }
@@ -83,9 +90,14 @@ public class N_DodgeballCommander : MonoBehaviour
     private void R_OnGroundHit()
     {
         Log.Message("N_Ball().RPC :: R_OnGroundHit");
-        ball.CanApplyOnGroundHit = () => true;
         ball.OnGroundHit();
-        ball.CanApplyOnGroundHit = () => false;
+    }
+    [PunRPC]
+    private void R_Reflection(Vector3 reflectionVel, Vector3 reflectionStartPoint, Vector3 reflectionPoint)
+    {
+        DodgeballReflection reflection = ball.reflection;
+        reflection.Reflect(reflectionVel, reflectionStartPoint, reflectionPoint);
+        Log.Message("RPC_R_Reflection");
     }
 
     //Helper Functions

@@ -8,23 +8,17 @@ public class DodgeballGoLaunchTo : DodgeballAction
     [SerializeField] float leavingHandsTime = 0.1f;
     [Header("Read Only")]
     [SerializeField] float tweenerVal = 0;
+    public Vector3 lastTargetPos = new Vector3();
+    public byte lastAppliedThrow = 0;
 
     public override DodgeballCommand Command => DodgeballCommand.LaunchTo;
     public override string actionName => "Thrown To";
-
     Tweener activeTweener = null;
 
-    void OnTriggerEnter(Collider col)
-    {
-        if(IsRunning && col.GetComponent<DodgeballCharacter>())
-        {
-            print(col.name);
-        }
-    }
     public void C_GoLaunchTo(Vector3 targetPos, BallThrowData d)
     {
-        ball.lastTargetPos = targetPos;
-        ball.lastAppliedThrow = d.id;
+        lastTargetPos = targetPos;
+        lastAppliedThrow = d.id;
         ball.RunCommand(Command);
 
         if (!ApplyActionWithCommand())
@@ -70,5 +64,6 @@ public class DodgeballGoLaunchTo : DodgeballAction
         }
         this.SetKinematic(false);
         ball.bodyCol.GetCollider.enabled = true;
+        isRunning = false;
     }
 }

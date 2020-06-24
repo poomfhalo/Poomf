@@ -32,7 +32,10 @@ public class DodgeballReflection : DodgeballAction
     [SerializeField] MinMaxRange reflectionSpeedDivider = new MinMaxRange(1.1f, 6, 4.5f, 6f);
 
     [Header("Read Only")]
-    [SerializeField] bool isReflecting = false;
+    public bool extReflectionTest = true;
+    public Vector3 lastReflectionVel = new Vector3();
+    public Vector3 lastReflectionTarget = new Vector3();
+    public Vector3 lastReflectionStartPoint = new Vector3();
 
     public override string actionName => "Reflection";
     public override DodgeballCommand Command => DodgeballCommand.Reflection;
@@ -81,15 +84,14 @@ public class DodgeballReflection : DodgeballAction
     void Update()
     {
         UpdateExpectionDT();
-        if (!isReflecting)
+        if (!IsRunning)
             return;
-        if (isReflecting)
-            TryReflect();
+        if (IsRunning)
+            C_Reflect();
 
         if (didHit)
         {
             Debug.DrawRay(lastValidHit.point, lastValidHit.normal * castDist, Color.yellow);
-            Debug.DrawRay(lastValidHit.point, GetReflected(), Color.red);
         }
         lastPos = transform.position;
     }
@@ -97,30 +99,46 @@ public class DodgeballReflection : DodgeballAction
     public void StartReflectionAction()
     {
         lastPos = transform.position;
-        isReflecting = true;
-        TryReflect();
+        isRunning = true;
+        C_Reflect();
+    }
+    public void Reflect(Vector3 vel,Vector3 startPoint, Vector3 endPoint)
+    {
+        transform.position = startPoint;
+        rb3d.velocity = lastReflectionVel;
+        Extentions.LogSphere(endPoint, Color.green, 0.35f);
+        scheduler.StartAction(this);
+        CharaHitPoints hp = lastValidHit.collider.GetComponent<CharaHitPoints>();
+        hp.C_StartHitAction();
     }
 
-    private void TryReflect()
+    private void C_Reflect()
     {
-        bool didReflect = false;
+        if (!extReflectionTest)
+            return;
         if (UpdateValidHit())
         {
             //Debug.Log(lastValidHit.collider.name);
             float dist = Vector3.Distance(lastValidHit.point, transform.position);
             if (dist <= expectedTravelDist)
             {
-                didReflect = TryGetCollisionPoint(out Vector3 colPoint);
-                Vector3 reflectionDir = (colPoint - rb3d.position).normalized;
-                rb3d.velocity = reflectionDir * travelSpeed / reflectionSpeedDivider.GetValue();
-                isReflecting = false;
+                SetReflectionData();
+                isRunning = false;
 
-                scheduler.StartAction(this);
-                CharaHitPoints hp = lastValidHit.collider.GetComponent<CharaHitPoints>();
-                hp.C_StartHitAction();
                 ball.RunCommand(Command);
+                Reflect(lastReflectionVel, lastReflectionStartPoint, lastReflectionTarget);
             }
         }
+    }
+    private void SetReflectionData()
+    {
+        TryGetCollisionPoint(out Vector3 colPoint);
+        Vector3 reflectionDir = (colPoint - rb3d.position).normalized;
+        Vector3 vel = reflectionDir * travelSpeed / reflectionSpeedDivider.GetValue();
+
+        lastReflectionVel = vel;
+        lastReflectionTarget = colPoint;
+        lastReflectionStartPoint = transform.position;
     }
 
     private bool TryGetCollisionPoint(out Vector3 collisionPoint)
@@ -143,7 +161,6 @@ public class DodgeballReflection : DodgeballAction
             if (dot < collisionDirThreshold)
             {
                 collisionPoint = rndPoint;
-                Extentions.LogSphere(rndPoint, Color.green, 0.35f);
                 return true;
 
             }
@@ -176,12 +193,6 @@ public class DodgeballReflection : DodgeballAction
         }
         return false;
     }
-    private Vector3 GetReflected()
-    {
-        if (!didHit)
-            return Vector3.zero;
-        return Vector3.Reflect(travelDir, lastValidHit.normal);
-    }
     private void UpdateExpectionDT()
     {
         float currDt = Time.deltaTime;
@@ -201,6 +212,6 @@ public class DodgeballReflection : DodgeballAction
     }
     public override void Cancel()
     {
-
+        isRunning = false;
     }
 }

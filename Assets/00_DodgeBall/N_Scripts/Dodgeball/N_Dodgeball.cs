@@ -3,30 +3,25 @@ using Photon.Pun;
 using Smooth;
 using System.Collections;
 
+//Responsible for enabling/Disabling Syncer, and syncronizing the BallState.
 [RequireComponent(typeof(Dodgeball))]
 public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
 {
-    PhotonView pv = null;
     Dodgeball ball = null;
     SmoothSyncPUN2 syncer = null;
 
     public override void OnEnable()
     {
         base.OnEnable();
-        pv = GetComponent<PhotonView>();
         ball = GetComponent<Dodgeball>();
         syncer = GetComponent<SmoothSyncPUN2>();
 
-        GetComponent<DodgeballLaunchUp>().onLaunchedUp += OnLaunchedUp;
-        ball.E_OnGroundedAfterTime += OnGrounded;
-
         StartCoroutine(NetworkSetup());
     }
-    public override void OnDisable()
+    void Start()
     {
-        base.OnDisable();
-        GetComponent<DodgeballLaunchUp>().onLaunchedUp -= OnLaunchedUp;
-        ball.E_OnGroundedAfterTime -= OnGrounded;
+        GetComponent<DodgeballLaunchUp>().onLaunchedUp += () => syncer.enabled = false;
+        ball.E_OnGroundedAfterTime += () => syncer.enabled = true;
     }
     void FixedUpdate()
     {
@@ -59,15 +54,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         {
             yield return 0;
         }
-        ball.CanApplyOnGroundHit = () => PhotonNetwork.IsMasterClient;
-    }
-
-    private void OnLaunchedUp()
-    {
-        syncer.enabled = false;
-    }
-    private void OnGrounded()
-    {
-        syncer.enabled = true;
+        ball.CanDetectGroundByTrig = () => PhotonNetwork.IsMasterClient;
+        ball.reflection.extReflectionTest = PhotonNetwork.IsMasterClient;
     }
 }

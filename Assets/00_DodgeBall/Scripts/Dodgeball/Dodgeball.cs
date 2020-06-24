@@ -8,7 +8,7 @@ using GW_Lib;
 //does not get missed by smaller colliders, when its going too fast.
 public class Dodgeball : Singleton<Dodgeball>
 {
-    public Func<bool> CanApplyOnGroundHit = () => true;
+    public Func<bool> CanDetectGroundByTrig = () => true;
     public event Action E_OnGroundedAfterTime = null;
 
     public bool IsOnGround => ballState == BallState.OnGround;
@@ -18,6 +18,7 @@ public class Dodgeball : Singleton<Dodgeball>
     public DodgeballGoLaunchTo launchTo { private set; get; }
     public DodgeballGoTo goTo { private set; get; }
     public DodgeballLaunchUp launchUp { private set; get; }
+    public DodgeballReflection reflection { private set; get; }
 
     public BallState ballState
     {
@@ -62,8 +63,6 @@ public class Dodgeball : Singleton<Dodgeball>
     [SerializeField] float timeToGrounded = 0.1f;
 
     [Header("Read Only")]
-    public byte lastAppliedThrow = 0;
-    public Vector3 lastTargetPos = new Vector3();
     [SerializeField] BallState m_ballState = BallState.Flying;
 
     Coroutine delayedGroundedCoro = null;
@@ -80,6 +79,7 @@ public class Dodgeball : Singleton<Dodgeball>
         launchTo = GetComponent<DodgeballGoLaunchTo>();
         goTo = GetComponent<DodgeballGoTo>();
         launchUp = GetComponent<DodgeballLaunchUp>();
+        reflection = GetComponent<DodgeballReflection>();
 
         startGravity = cf.force;
         rb3d.useGravity = false;
@@ -92,7 +92,7 @@ public class Dodgeball : Singleton<Dodgeball>
     
     void OnTriggerEnter(Collider col)
     {
-        if (!CanApplyOnGroundHit())
+        if (!CanDetectGroundByTrig())
             return;
 
         Field field = col.GetComponent<Field>();
@@ -107,7 +107,7 @@ public class Dodgeball : Singleton<Dodgeball>
     }
     void OnTriggerExit(Collider col)
     {
-        if (!CanApplyOnGroundHit())
+        if (!CanDetectGroundByTrig())
             return;
 
         Field field = col.GetComponent<Field>();
@@ -127,14 +127,14 @@ public class Dodgeball : Singleton<Dodgeball>
     private void C_OnGroundHit()
     {
         RunCommand(DodgeballCommand.HitGround);
-        OnGroundHit();
+        if (CanDetectGroundByTrig())
+        {
+            OnGroundHit();
+        }
     }
     public void OnGroundHit()
     {
-        if (CanApplyOnGroundHit())
-        {
-            ballState = BallState.OnGround;
-            DodgeballGameManager.instance.OnBallHitGround();
-        }
+        ballState = BallState.OnGround;
+        DodgeballGameManager.instance.OnBallHitGround();
     }
 }
