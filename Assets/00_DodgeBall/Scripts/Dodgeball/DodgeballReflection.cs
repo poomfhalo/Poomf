@@ -105,13 +105,27 @@ public class DodgeballReflection : DodgeballAction
     }
     public void Reflect(Vector3 vel,Vector3 startPoint, Vector3 endPoint,GameObject contactWith)
     {
-        //TODO: Fix hit Chara
         scheduler.StartAction(this);
         transform.position = startPoint;
-        rb3d.velocity = lastReflectionVel;
+        rb3d.velocity = vel;
         Extentions.LogSphere(endPoint, Color.green, 0.35f);
         CharaHitPoints hp = contactWith.GetComponent<CharaHitPoints>();
         hp.C_StartHitAction();
+
+        Debug.LogError("Okay, so what we have is this being called with ?" + vel);
+        Debug.Log(rb3d.isKinematic);
+        Coroutine c = StartCoroutine(Printer());
+
+        this.InvokeDelayed(2,()=>StopCoroutine(c));
+    }
+    private System.Collections.IEnumerator Printer()
+    {
+        while (true)
+        {
+            yield return 0;
+            print(rb3d.isKinematic);
+            print(rb3d.velocity);
+        }
     }
 
     private void C_Reflect()
