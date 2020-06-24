@@ -67,15 +67,14 @@ public class DodgeballReflection : DodgeballAction
 
     void Start()
     {
-        if(autoActivate)
+        if(autoActivate && extReflectionTest)
         {
             GetComponent<Dodgeball>().OnCommandActivated += (cmd) => {
                 switch (cmd)
                 {
                     case DodgeballCommand.LaunchTo:
                         Debug.Log("Started Reflection Action");
-                        if (extReflectionTest)
-                            StartReflectionAction();
+                        StartReflectionAction();
                         break;
                 }
             };
