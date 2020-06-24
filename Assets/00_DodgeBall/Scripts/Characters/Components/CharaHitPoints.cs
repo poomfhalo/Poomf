@@ -95,6 +95,10 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
             animator.SetTrigger("Hurt");
             scheduler.StartAction(this);
             Log.Message("HP: Health Reduced", gameObject);
+            if(animator.runtimeAnimatorController == null)
+            {
+                this.InvokeDelayed(0.1f, A_OnHitEnded);
+            }
         }
     }
     public void Cancel()
@@ -103,7 +107,9 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
     }
     public void A_OnHitEnded()
     {
-        this.InvokeDelayed(minTimeBetweenHurts, () => isBeingHurt = false);
+        this.InvokeDelayed(minTimeBetweenHurts, () => {
+            isBeingHurt = false;
+        });
         isWaitingForHit = false;
     }
 

@@ -104,10 +104,10 @@ public class DodgeballReflection : DodgeballAction
     }
     public void Reflect(Vector3 vel,Vector3 startPoint, Vector3 endPoint)
     {
+        scheduler.StartAction(this);
         transform.position = startPoint;
         rb3d.velocity = lastReflectionVel;
         Extentions.LogSphere(endPoint, Color.green, 0.35f);
-        scheduler.StartAction(this);
         CharaHitPoints hp = lastValidHit.collider.GetComponent<CharaHitPoints>();
         hp.C_StartHitAction();
     }
