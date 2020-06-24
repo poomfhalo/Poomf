@@ -1,9 +1,12 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using GW_Lib;
 using UnityEngine;
 
 public class DodgeballGoLaunchTo : DodgeballAction
 {
+    public event Action onLaunchedTo = null;
+
     public override DodgeballCommand Command => DodgeballCommand.LaunchTo;
     public override string actionName => "Thrown To";
 
@@ -33,6 +36,7 @@ public class DodgeballGoLaunchTo : DodgeballAction
     {
         if (activeTweener != null)
             return;
+        onLaunchedTo?.Invoke();
         isRunning = true;
         scheduler.StartAction(this);
         ball.SetKinematic(true);

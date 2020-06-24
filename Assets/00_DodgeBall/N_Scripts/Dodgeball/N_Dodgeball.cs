@@ -20,20 +20,12 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     }
     void Start()
     {
-        GetComponent<DodgeballLaunchUp>().onLaunchedUp += () => syncer.enabled = false;
+        ball.launchUp.onLaunchedUp += () => syncer.enabled = false;
         ball.E_OnGroundedAfterTime += () => syncer.enabled = true;
+        ball.launchTo.onLaunchedTo += () => syncer.enabled = false;
+        ball.reflection.onReflected += () => syncer.enabled = true;
     }
-    void FixedUpdate()
-    {
-        if (ball.IsHeld || ball.IsFlying)
-        {
-            if (syncer.enabled)
-            {
-                syncer.enabled = false;
-            }
-            return;
-        }
-    }
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)

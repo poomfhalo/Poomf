@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW_Lib;
 using GW_Lib.Utility;
@@ -6,6 +7,7 @@ using UnityEngine;
 
 public class DodgeballReflection : DodgeballAction
 {
+    public event Action onReflected = null;
     [Header("Reflection Detection")]
     [SerializeField] bool autoActivate = false;
     [SerializeField] float castDist = 10;
@@ -109,23 +111,10 @@ public class DodgeballReflection : DodgeballAction
         transform.position = startPoint;
         rb3d.velocity = vel;
         Extentions.LogSphere(endPoint, Color.green, 0.35f);
+
         CharaHitPoints hp = contactWith.GetComponent<CharaHitPoints>();
         hp.C_StartHitAction();
-
-        Debug.LogError("Okay, so what we have is this being called with ?" + vel);
-        Debug.Log(rb3d.isKinematic);
-        Coroutine c = StartCoroutine(Printer());
-
-        this.InvokeDelayed(2,()=>StopCoroutine(c));
-    }
-    private System.Collections.IEnumerator Printer()
-    {
-        while (true)
-        {
-            yield return 0;
-            print(rb3d.isKinematic);
-            print(rb3d.velocity);
-        }
+        onReflected?.Invoke();
     }
 
     private void C_Reflect()
