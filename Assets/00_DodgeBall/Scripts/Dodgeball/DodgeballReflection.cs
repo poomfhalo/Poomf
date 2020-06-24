@@ -74,7 +74,8 @@ public class DodgeballReflection : DodgeballAction
                 {
                     case DodgeballCommand.LaunchTo:
                         Debug.Log("Started Reflection Action");
-                        StartReflectionAction();
+                        if (extReflectionTest)
+                            StartReflectionAction();
                         break;
                 }
             };
