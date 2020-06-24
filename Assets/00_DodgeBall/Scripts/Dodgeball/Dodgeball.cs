@@ -8,7 +8,7 @@ using GW_Lib;
 //does not get missed by smaller colliders, when its going too fast.
 public class Dodgeball : Singleton<Dodgeball>
 {
-    public Func<bool> CanDetectGroundByTrig = () => true;
+    public Func<bool> ExtCanDetectGroundByTrig = () => true;
     public event Action E_OnGroundedAfterTime = null;
 
     public bool IsOnGround => ballState == BallState.OnGround;
@@ -92,7 +92,7 @@ public class Dodgeball : Singleton<Dodgeball>
     
     void OnTriggerEnter(Collider col)
     {
-        if (!CanDetectGroundByTrig())
+        if (!ExtCanDetectGroundByTrig())
             return;
 
         Field field = col.GetComponent<Field>();
@@ -107,7 +107,7 @@ public class Dodgeball : Singleton<Dodgeball>
     }
     void OnTriggerExit(Collider col)
     {
-        if (!CanDetectGroundByTrig())
+        if (!ExtCanDetectGroundByTrig())
             return;
 
         Field field = col.GetComponent<Field>();
@@ -127,7 +127,7 @@ public class Dodgeball : Singleton<Dodgeball>
     private void C_OnGroundHit()
     {
         RunCommand(DodgeballCommand.HitGround);
-        if (CanDetectGroundByTrig())
+        if (ExtCanDetectGroundByTrig())
         {
             OnGroundHit();
         }

@@ -46,7 +46,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         {
             yield return 0;
         }
-        ball.CanDetectGroundByTrig = () => PhotonNetwork.IsMasterClient;
+        ball.ExtCanDetectGroundByTrig = () => PhotonNetwork.IsMasterClient;
         ball.reflection.extReflectionTest = PhotonNetwork.IsMasterClient;
     }
 }

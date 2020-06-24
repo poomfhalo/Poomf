@@ -126,8 +126,6 @@ MonoBehaviour:
   isPersistant: 0
   bodyCol: {fileID: 57221110444787069}
   timeToGrounded: 0.2
-  lastAppliedThrow: 0
-  lastTargetPos: {x: 0, y: 0, z: 0}
   m_ballState: 2
 --- !u!114 &5475323293589320073
 MonoBehaviour:
@@ -144,6 +142,8 @@ MonoBehaviour:
   isRunning: 0
   leavingHandsTime: 0.1
   tweenerVal: 0
+  lastTargetPos: {x: 0, y: 0, z: 0}
+  lastAppliedThrow: 0
 --- !u!114 &7237304765413138185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,13 +196,17 @@ MonoBehaviour:
     absMin: 0.5
     absMax: 6
     rMin: 2.5
-    rMax: 6
+    rMax: 4.5
   reflectionSpeedDivider:
     absMin: 1.1
     absMax: 6
-    rMin: 4
-    rMax: 5
-  isReflecting: 0
+    rMin: 4.5
+    rMax: 5.5
+  extReflectionTest: 1
+  lastReflectionVel: {x: 0, y: 0, z: 0}
+  lastReflectionTarget: {x: 0, y: 0, z: 0}
+  lastReflectionStartPoint: {x: 0, y: 0, z: 0}
+  lastContact: {fileID: 0}
 --- !u!114 &7279175448926025499
 MonoBehaviour:
   m_ObjectHideFlags: 0
