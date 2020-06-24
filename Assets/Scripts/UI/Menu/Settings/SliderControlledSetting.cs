@@ -13,21 +13,29 @@ public class SliderControlledSetting : MonoBehaviour
     // Used when setting the text value, multiplies the text value by a multiplier to display the desired range
     [SerializeField] private float multiplier;
 
+
     #region Setters/Getters
     public Slider SliderComponent { get { return sliderComponent; } }
     public Text TextValue { get { return textValue; } }
     public float Multiplier { get { return multiplier; } set { multiplier = value; } }
     #endregion
 
-    // Start is called before the first frame update
-    void Start()
+    public void Initialize(float sliderValue)
     {
-
+        sliderComponent.value = sliderValue;
+        textValue.text = (sliderValue * multiplier).ToString();
     }
 
-    // Update is called once per frame
-    void Update()
+    // called when the slider value is changed
+    public void UpdateTextValue(float sliderValue)
     {
+        textValue.text = (sliderValue * multiplier).ToString();
+    }
 
+    // Called when we want to set the slider to a certain value. Changes the text value as well
+    public void SetValue(float value)
+    {
+        sliderComponent.value = value;
+        UpdateTextValue(value);
     }
 }
