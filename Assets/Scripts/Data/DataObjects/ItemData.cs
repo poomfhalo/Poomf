@@ -16,23 +16,28 @@ namespace Poomf.Data
 
         [HideInInspector] [SerializeField] private int itemID = -1;
 
-        public string ItemName { get { return ItemName; } }
-        public int Price { get { return Price; } }
+        public string ItemName { get { return itemName; } }
+        public int PriceCoins { get { return coinsPrice; } }
+        public int PriceGems { get { return gemsPrice; } }
         public CurrencyType CurrencyType { get { return currencyType; } }
         public ItemCategory ItemCategory { get { return itemCategory; } }
+        public Sprite ItemSprite { get { return itemSprite; } }
         public int ItemID { get { return itemID; } }
 
-        public bool SetItemID(int i_itemID)
+        public bool SetItemID(int i_itemID, bool i_debug = false)
         {
             if (-1 != itemID)
             {
-                Debug.LogWarning("ItemData::SetItemID -> This item already has a unique ID: " + itemID);
+                if (true == i_debug)
+                    Debug.LogWarning("ItemData::SetItemID -> This item already has a unique ID: " + itemID);
+
                 return false;
             }
 
             itemID = i_itemID;
 
-            Debug.Log("ItemData::SetItemID -> A unique ID was assigned to this item: " + itemID);
+            if (true == i_debug)
+                Debug.Log("ItemData::SetItemID -> A unique ID was assigned to this item: " + itemID);
 
             return true;
         }

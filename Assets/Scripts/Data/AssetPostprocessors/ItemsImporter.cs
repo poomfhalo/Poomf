@@ -7,14 +7,22 @@ namespace Poomf.Data
 {
     public class ItemsImporter : AssetPostprocessor
     {
+        private static bool debug = false;
         private delegate void UniqueIDDelegate(ItemsUniqueIDManager i_uniqueIDManager, ItemData i_itemData);
         private const string ItemsUniqueIDManagerPath = "Assets/Scripts/Data/ScriptableObject_Instances/ItemsUniqueIDManager.asset";
+
+        private enum DebugLevel
+        {
+            LOG = 0,
+            WARNING = 1,
+            ERROR = 2
+        }
 
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
             foreach (string str in importedAssets)
             {
-                Debug.Log("Reimported Asset: " + str);
+                debugLog("Reimported Asset: " + str);
                 manageItemID(setUniqueID, str);
             }
 
@@ -41,7 +49,7 @@ namespace Poomf.Data
                 }
                 else
                 {
-                    Debug.LogWarning("Data is null.");
+                    debugLog("Data is null.", DebugLevel.WARNING);
                 }
             }
         }
@@ -50,7 +58,7 @@ namespace Poomf.Data
         {
             int uniqueID = i_uniqueIDManager.GetUniqueID();
 
-            if (false == i_itemData.SetItemID(uniqueID))
+            if (false == i_itemData.SetItemID(uniqueID, debug))
             {
                 i_uniqueIDManager.RemoveUniqueID(uniqueID);
             }
@@ -68,6 +76,24 @@ namespace Poomf.Data
 
             EditorUtility.SetDirty(i_uniqueIDManager);
             AssetDatabase.SaveAssets();
+        }
+
+        private static void debugLog(string i_log, DebugLevel i_debugLevel = DebugLevel.LOG)
+        {
+            if (false == debug) return;
+
+            switch (i_debugLevel)
+            {
+                case DebugLevel.LOG:
+                    Debug.Log(i_log);
+                    break;
+                case DebugLevel.WARNING:
+                    Debug.LogWarning(i_log);
+                    break;
+                case DebugLevel.ERROR:
+                    Debug.LogError(i_log);
+                    break;
+            }
         }
     }
 }
