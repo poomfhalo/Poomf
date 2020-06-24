@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class DodgeballGoLaunchTo : DodgeballAction
 {
+    public override DodgeballCommand Command => DodgeballCommand.LaunchTo;
+    public override string actionName => "Thrown To";
+
     [Tooltip("Time, before ball can collide again, with physics colliders after being thrown")]
     [SerializeField] float leavingHandsTime = 0.1f;
     [Header("Read Only")]
@@ -11,8 +14,6 @@ public class DodgeballGoLaunchTo : DodgeballAction
     public Vector3 lastTargetPos = new Vector3();
     public byte lastAppliedThrow = 0;
 
-    public override DodgeballCommand Command => DodgeballCommand.LaunchTo;
-    public override string actionName => "Thrown To";
     Tweener activeTweener = null;
 
     public void C_GoLaunchTo(Vector3 targetPos, BallThrowData d)

@@ -36,6 +36,7 @@ public class DodgeballReflection : DodgeballAction
     public Vector3 lastReflectionVel = new Vector3();
     public Vector3 lastReflectionTarget = new Vector3();
     public Vector3 lastReflectionStartPoint = new Vector3();
+    public GameObject lastContact = null;
 
     public override string actionName => "Reflection";
     public override DodgeballCommand Command => DodgeballCommand.Reflection;
@@ -102,13 +103,14 @@ public class DodgeballReflection : DodgeballAction
         isRunning = true;
         C_Reflect();
     }
-    public void Reflect(Vector3 vel,Vector3 startPoint, Vector3 endPoint)
+    public void Reflect(Vector3 vel,Vector3 startPoint, Vector3 endPoint,GameObject contactWith)
     {
+        //TODO: Fix hit Chara
         scheduler.StartAction(this);
         transform.position = startPoint;
         rb3d.velocity = lastReflectionVel;
         Extentions.LogSphere(endPoint, Color.green, 0.35f);
-        CharaHitPoints hp = lastValidHit.collider.GetComponent<CharaHitPoints>();
+        CharaHitPoints hp = contactWith.GetComponent<CharaHitPoints>();
         hp.C_StartHitAction();
     }
 
@@ -126,7 +128,7 @@ public class DodgeballReflection : DodgeballAction
                 isRunning = false;
 
                 ball.RunCommand(Command);
-                Reflect(lastReflectionVel, lastReflectionStartPoint, lastReflectionTarget);
+                Reflect(lastReflectionVel, lastReflectionStartPoint, lastReflectionTarget,lastContact);
             }
         }
     }
@@ -139,6 +141,7 @@ public class DodgeballReflection : DodgeballAction
         lastReflectionVel = vel;
         lastReflectionTarget = colPoint;
         lastReflectionStartPoint = transform.position;
+        lastContact = lastValidHit.collider.gameObject;
     }
 
     private bool TryGetCollisionPoint(out Vector3 collisionPoint)

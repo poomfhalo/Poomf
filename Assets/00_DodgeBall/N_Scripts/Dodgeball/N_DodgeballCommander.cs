@@ -53,8 +53,8 @@ public class N_DodgeballCommander : MonoBehaviour
                 Vector3 reflectionVel = reflection.lastReflectionVel;
                 Vector3 reflectionStartPoint = reflection.lastReflectionStartPoint;
                 Vector3 reflectionTarget = reflection.lastReflectionTarget;
-
-                pv.RPC("R_Reflection", RpcTarget.Others, reflectionVel, reflectionStartPoint, reflectionTarget);
+                int lastContact = reflection.lastContact.GetComponent<PhotonView>().Controller.ActorNumber;
+                pv.RPC("R_Reflection", RpcTarget.Others, reflectionVel, reflectionStartPoint, reflectionTarget, lastContact);
                 break;
         }
     }
@@ -93,10 +93,11 @@ public class N_DodgeballCommander : MonoBehaviour
         ball.OnGroundHit();
     }
     [PunRPC]
-    private void R_Reflection(Vector3 reflectionVel, Vector3 reflectionStartPoint, Vector3 reflectionPoint)
+    private void R_Reflection(Vector3 reflectionVel, Vector3 reflectionStartPoint, Vector3 reflectionPoint,int lastContact)
     {
         DodgeballReflection reflection = ball.reflection;
-        reflection.Reflect(reflectionVel, reflectionStartPoint, reflectionPoint);
+        GameObject gLastContact = N_Extentions.GetCharacter(lastContact).gameObject;
+        reflection.Reflect(reflectionVel, reflectionStartPoint, reflectionPoint,gLastContact);
         Log.Message("RPC_R_Reflection");
     }
 
