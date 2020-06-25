@@ -38,17 +38,23 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
 
     private void OnTeamsAreSynced()
     {
-        Team team = null;
         if (pc == null)
         {
             pc = N_Extentions.GetCharacter(GetComponent<PhotonView>().Controller.ActorNumber).gameObject;
-            team = TeamsManager.GetTeam(pc.GetComponent<DodgeballCharacter>());
         }
-        if (team == null)
+        if (!photonView.IsMine)
             return;
+        Team team = TeamsManager.GetTeam(pc.GetComponent<DodgeballCharacter>());
+        if(team == null)
+        {
+            Log.Error("Failed To Find Team For " + name);
+            return;
+        }
 
         Camera cam = Camera.main;
+        Debug.LogWarning(name + " Team : " + team.teamTag);
         var p = FindObjectsOfType<TaggedSpawnPoint>().ToList().Find(s => s.HasTag("MainCamera") && s.BelongsTo(team.teamTag));
+        Debug.LogWarning(p.name);
         cam.transform.position = p.position;
         cam.transform.rotation = p.rotation;
     }
