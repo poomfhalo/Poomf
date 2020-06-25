@@ -1,6 +1,9 @@
 ﻿public enum Quality
 {
+    VeryLow,
     Low,
     Medium,
-    High
+    High,
+    VeryHigh,
+    Ultra
 }

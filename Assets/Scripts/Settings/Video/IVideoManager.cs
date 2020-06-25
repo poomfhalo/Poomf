@@ -7,6 +7,7 @@ public interface IVideoManager : IVideoProvider, ISettingsManager
 {
     void SetFullscreen(bool fullscreen);
     void SetQuality(Quality qualityIndex);
+    void SetResolution(int index);
     // Updates all settings at once
     void UpdateAllSettings(IVideoProvider settings);
 }

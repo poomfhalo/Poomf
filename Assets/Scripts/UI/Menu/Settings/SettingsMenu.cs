@@ -32,19 +32,19 @@ public class SettingsMenu : MonoBehaviour
     private void Start()
     {
         // Initialize the audio UI with the saved audio settings
-        audioManager.Initialize();
         audioManager.isCurrent = true;
+        audioManager.Initialize();
         sfxUISettings.Initialize(audioManager.GetSFXVolume());
         musicUISettings.Initialize(audioManager.GetMusicVolume());
 
         // Initialize Video UI
-        videoManager.Initialize();
         videoManager.isCurrent = true;
-        videoSettingsUI.Initialize(videoManager.IsFullscreen(), videoManager.GetQualityIndex());
+        videoManager.Initialize();
+        videoSettingsUI.Initialize(videoManager.IsFullscreen(), videoManager.GetQualityIndex(), videoManager.GetResolutionIndex());
 
         // Check if it's the first run here
     }
-
+    #region General
     // Called when the settings button is pressed
     public void OnSettingsButtonPressed()
     {
@@ -66,36 +66,6 @@ public class SettingsMenu : MonoBehaviour
         tempVideoSettings.UpdateAllSettings(videoManager);
         // Make sure the settings changed flags are not raised
         ResetFlags();
-    }
-
-    // Called when the SFX slider changes, the changes won't be saved unless the Apply button is pressed
-    public void OnSfxSliderChanged(float value)
-    {
-        if (tempAudioSettings == null)
-        {
-            // This means that the slider changed without being in the settings menu (When the game first runs for example)
-            return;
-        }
-        // Change the UI text
-        sfxUISettings.UpdateTextValue(value);
-        // Save the new value in the temp audio settings
-        tempAudioSettings.SetSFXVolume(value);
-        audioSettingsChanged = true;
-    }
-
-    // Called when the Music slider changes, the changes won't be saved unless the Apply button is pressed
-    public void OnMusicSliderChanged(float value)
-    {
-        if (tempAudioSettings == null)
-        {
-            // This means that the slider changed without being in the settings menu (When the game first runs for example)
-            return;
-        }
-        // Change the UI text
-        musicUISettings.UpdateTextValue(value);
-        // Save the new value in the temp audio settings
-        tempAudioSettings.SetMusicVolume(value);
-        audioSettingsChanged = true;
     }
 
     // Called when the user hits apply
@@ -151,7 +121,7 @@ public class SettingsMenu : MonoBehaviour
         if (videoSettingsChanged)
         {
             // Revert the video settings UI changes
-
+            videoSettingsUI.UpdateAllUI(videoManager.IsFullscreen(), videoManager.GetQualityIndex(), videoManager.GetResolutionIndex());
         }
 
         // Close the prompt window
@@ -174,4 +144,70 @@ public class SettingsMenu : MonoBehaviour
         audioSettingsChanged = false;
         videoSettingsChanged = false;
     }
+    #endregion
+
+    #region Audio
+    // Called when the SFX slider changes, the changes won't be saved unless the Apply button is pressed
+    public void OnSfxSliderChanged(float value)
+    {
+        if (tempAudioSettings == null)
+        {
+            // This means that the slider changed without being in the settings menu (When the game first runs for example)
+            return;
+        }
+        // Change the UI text
+        sfxUISettings.UpdateTextValue(value);
+        // Save the new value in the temp audio settings
+        tempAudioSettings.SetSFXVolume(value);
+        audioSettingsChanged = true;
+    }
+
+    // Called when the Music slider changes, the changes won't be saved unless the Apply button is pressed
+    public void OnMusicSliderChanged(float value)
+    {
+        if (tempAudioSettings == null)
+        {
+            // This means that the slider changed without being in the settings menu (When the game first runs for example)
+            return;
+        }
+        // Change the UI text
+        musicUISettings.UpdateTextValue(value);
+        // Save the new value in the temp audio settings
+        tempAudioSettings.SetMusicVolume(value);
+        audioSettingsChanged = true;
+    }
+    #endregion
+
+    #region Video
+    public void OnResolutionSelected(int index)
+    {
+        if (tempVideoSettings == null)
+        {
+            // This means that the selection changed without being in the settings menu (When the game first runs for example)
+            return;
+        }
+        tempVideoSettings.SetResolution(index);
+        videoSettingsChanged = true;
+    }
+    public void OnFullscreenToggled(bool fullscreen)
+    {
+        if (tempVideoSettings == null)
+        {
+            // This means that the toggle changed without being in the settings menu (When the game first runs for example)
+            return;
+        }
+        tempVideoSettings.SetFullscreen(fullscreen);
+        videoSettingsChanged = true;
+    }
+    public void OnQualitySelected(int index)
+    {
+        if (tempVideoSettings == null)
+        {
+            // This means that the selection changed without being in the settings menu (When the game first runs for example)
+            return;
+        }
+        tempVideoSettings.SetQuality((Quality)index);
+        videoSettingsChanged = true;
+    }
+    #endregion
 }

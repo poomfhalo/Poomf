@@ -6,17 +6,38 @@ using UnityEngine;
 public class VideoManager : ScriptableObject, IVideoManager
 {
     [SerializeField] private bool isFullscreen = false;
-    [SerializeField] private Quality quality = Quality.Medium;
+    [SerializeField] private Quality quality = Quality.High;
 
+    [SerializeField, HideInInspector] private int resolutionIndex = -1;
     [SerializeField, HideInInspector] private VideoManager defaultSettings;
 
     // Used to tell if this is the current used settings or not
     public bool isCurrent { set; get; } = false;
 
+    // List of current available resolutions
+    private Resolution[] resolutions;
+    private void OnEnable()
+    {
+        Initialize();
+    }
+
     #region ISettingsManager
     public void Initialize()
     {
+        resolutions = Screen.resolutions;
         defaultSettings = Resources.Load("Settings/Video/Default Video Settings") as VideoManager;
+        SetFullscreen(isFullscreen);
+        SetQuality(quality);
+        if (resolutionIndex == -1)
+        {
+            // First time! just set it to the max resolution
+            resolutionIndex = resolutions.Length - 1;
+        }
+        else
+        {
+            // Update the current resolution
+            SetResolution(resolutionIndex);
+        }
     }
     public void ResetToDefault()
     {
@@ -37,10 +58,21 @@ public class VideoManager : ScriptableObject, IVideoManager
         if (isCurrent)
             QualitySettings.SetQualityLevel((int)qualityIndex);
     }
+    public void SetResolution(int resolution)
+    {
+        resolutionIndex = resolution;
+        if (isCurrent)
+        {
+            // The new resolution
+            Resolution newRes = resolutions[resolution];
+            Screen.SetResolution(newRes.width, newRes.height, isFullscreen);
+        }
+    }
     public void UpdateAllSettings(IVideoProvider settings)
     {
         SetFullscreen(settings.IsFullscreen());
         SetQuality(settings.GetQualityIndex());
+        SetResolution(settings.GetResolutionIndex());
     }
     #endregion
 
@@ -52,6 +84,10 @@ public class VideoManager : ScriptableObject, IVideoManager
     public Quality GetQualityIndex()
     {
         return quality;
+    }
+    public int GetResolutionIndex()
+    {
+        return resolutionIndex;
     }
     #endregion
 }

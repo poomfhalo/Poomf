@@ -7,4 +7,5 @@ public interface IVideoProvider
 {
     bool IsFullscreen();
     Quality GetQualityIndex();
+    int GetResolutionIndex();
 }

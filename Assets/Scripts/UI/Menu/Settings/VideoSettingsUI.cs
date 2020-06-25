@@ -9,10 +9,34 @@ public class VideoSettingsUI : MonoBehaviour
     [SerializeField] private Dropdown qualityDropdown;
     [SerializeField] private Dropdown resolutionDropdown;
 
-    public void Initialize(bool fullscreen, Quality qualityIndex)
+    // List of all available resolutions
+    Resolution[] resolutions;
+
+    public void Initialize(bool fullscreen, Quality quality, int resolution)
     {
-        fullscreenToggle.isOn = fullscreen;
-        qualityDropdown.value = (int)qualityIndex;
+        if (resolutionDropdown.options.Count == 0)
+        {
+            // Add the available resolutions to the dropdown menu
+            resolutions = Screen.resolutions;
+            // Prepare the strings needed for adding options into the dropdown menu
+            List<string> resolutionsStrings = new List<string>();
+            for (int i = 0; i < resolutions.Length; i++)
+            {
+                resolutionsStrings.Add(resolutions[i].width + " x " + resolutions[i].height + " " + resolutions[i].refreshRate + "Hz");
+            }
+
+            // Finally, add the options
+            resolutionDropdown.AddOptions(resolutionsStrings);
+        }
+        UpdateAllUI(fullscreen, quality, resolution);
+    }
+
+    // Updates all UI elements at once
+    public void UpdateAllUI(bool fullscreen, Quality quality, int resolution)
+    {
+        UpdateFullscreenToggle(fullscreen);
+        UpdateQualityDropdownSelection(quality);
+        UpdateResolutionDropdownSelection(resolution);
     }
 
     public void UpdateFullscreenToggle(bool value)
@@ -23,5 +47,10 @@ public class VideoSettingsUI : MonoBehaviour
     public void UpdateQualityDropdownSelection(Quality index)
     {
         qualityDropdown.value = (int)index;
+    }
+
+    public void UpdateResolutionDropdownSelection(int index)
+    {
+        resolutionDropdown.value = index;
     }
 }
