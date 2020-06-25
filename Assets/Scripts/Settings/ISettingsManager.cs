@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface ISettingsManager
 {
-    void Initialize();
+    void Initialize(IGeneralSettingsProvider settingsProvider);
     void ResetToDefault();
 }
