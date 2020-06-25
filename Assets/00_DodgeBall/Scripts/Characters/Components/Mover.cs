@@ -1,6 +1,5 @@
 ﻿using System;
 using DG.Tweening;
-using GW_Lib;
 using UnityEngine;
 
 [RequireComponent(typeof(ActionsScheduler))]
@@ -128,6 +127,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
         Vector3 xzDisp = xzVel * Time.fixedDeltaTime;
         Vector3 yDisp = GetYDisp();
         rb3d.MovePosition(rb3d.position + xzDisp + yDisp);
+        rb3d.velocity = Vector3.zero;
     }
     public void StartMoveByInput(Vector3 newInput, Transform withRespectTo)
     {

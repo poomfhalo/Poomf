@@ -27,7 +27,6 @@ public class DodgeballLaunchUp : DodgeballAction
     private void LaunchUp(float byHeigth, float launchGravity)
     {
         onLaunchedUp?.Invoke();
-        Debug.Log("Doing LaunchUp");
         cf.force = Vector3.up * launchGravity;
         this.SetKinematic(false);
         float yVel = Extentions.GetJumpVelocity(byHeigth, cf.force.y);
