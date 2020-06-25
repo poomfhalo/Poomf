@@ -52,9 +52,7 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
         }
 
         Camera cam = Camera.main;
-        Debug.LogWarning(name + " Team : " + team.teamTag);
         var p = FindObjectsOfType<TaggedSpawnPoint>().ToList().Find(s => s.HasTag("MainCamera") && s.BelongsTo(team.teamTag));
-        Debug.LogWarning(p.name);
         cam.transform.position = p.position;
         cam.transform.rotation = p.rotation;
     }
