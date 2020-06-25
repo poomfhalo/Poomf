@@ -20,7 +20,10 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     }
     void Start()
     {
-        ball.launchUp.onLaunchedUp += () => syncer.enabled = false;
+        ball.launchUp.onLaunchedUp += () =>{
+            syncer.enabled = false;
+            Debug.Log("Disabnled Syncser");
+        };
         ball.E_OnGroundedAfterTime += () => syncer.enabled = true;
         ball.launchTo.onLaunchedTo += () => syncer.enabled = false;
         ball.reflection.onReflected += () => syncer.enabled = true;

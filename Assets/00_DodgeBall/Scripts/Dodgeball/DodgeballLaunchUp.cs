@@ -22,12 +22,12 @@ public class DodgeballLaunchUp : DodgeballAction
         ball.RunCommand(Command);
         if (!ApplyActionWithCommand())
             return;
-
         LaunchUp(byHeigth,launchGravity);
     }
     private void LaunchUp(float byHeigth, float launchGravity)
     {
         onLaunchedUp?.Invoke();
+        Debug.Log("Doing LaunchUp");
         cf.force = Vector3.up * launchGravity;
         this.SetKinematic(false);
         float yVel = Extentions.GetJumpVelocity(byHeigth, cf.force.y);
