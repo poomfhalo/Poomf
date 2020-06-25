@@ -9,18 +9,18 @@ public class VideoSettingsUI : MonoBehaviour
     [SerializeField] private Dropdown qualityDropdown;
     [SerializeField] private Dropdown resolutionDropdown;
 
-    // List of all available resolutions
-    Resolution[] resolutions;
+    // An array containing the available resolutions, received from the settings menu on startup
+    private List<Resolution> resolutions;
 
-    public void Initialize(bool fullscreen, Quality quality, int resolution)
+    public void Initialize(IGeneralSettingsProvider settingsProvider)
     {
         if (resolutionDropdown.options.Count == 0)
         {
             // Add the available resolutions to the dropdown menu
-            resolutions = Screen.resolutions;
+            resolutions = settingsProvider.GetResolutionsList();
             // Prepare the strings needed for adding options into the dropdown menu
             List<string> resolutionsStrings = new List<string>();
-            for (int i = 0; i < resolutions.Length; i++)
+            for (int i = 0; i < resolutions.Count; i++)
             {
                 resolutionsStrings.Add(resolutions[i].width + " x " + resolutions[i].height + " " + resolutions[i].refreshRate + "Hz");
             }
@@ -28,7 +28,8 @@ public class VideoSettingsUI : MonoBehaviour
             // Finally, add the options
             resolutionDropdown.AddOptions(resolutionsStrings);
         }
-        UpdateAllUI(fullscreen, quality, resolution);
+        IVideoProvider videoSettings = settingsProvider.GetVideoSettings();
+        UpdateAllUI(videoSettings.IsFullscreen(), videoSettings.GetQualityIndex(), videoSettings.GetResolutionIndex());
     }
 
     // Updates all UI elements at once

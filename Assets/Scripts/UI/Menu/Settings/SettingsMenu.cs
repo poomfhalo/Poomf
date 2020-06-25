@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-public class SettingsMenu : MonoBehaviour
+public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
 {
+    [Header("UI")]
     // The UI panel that contains the game's settings
     [SerializeField] private GameObject settingsUIMenu;
     // UI panel that asks the user if they want to exit without saving
@@ -15,10 +16,21 @@ public class SettingsMenu : MonoBehaviour
     [SerializeField] private SliderControlledSetting musicUISettings;
     // Contains the UI elements of video settings
     [SerializeField] private VideoSettingsUI videoSettingsUI;
+    [Header("Settings")]
     // The asset that manages the audio settings
     [SerializeField] private AudioManager audioManager;
     // The asset that manages the video settings
     [SerializeField] private VideoManager videoManager;
+    // Any resolution that's less than this resolution will be omitted
+    // In other words, this is the minimum supported resolution
+    // X: width, Y: height
+    [SerializeField] private Vector2 resolutionThreshold;
+    [Header("Assets", order = 0)]
+    [Header("Audio", order = 1)]
+    [SerializeField] private AudioMixer currentMixer;
+    [Header("Default Settings")]
+    [SerializeField] private AudioManager defaultAudioSettings;
+    [SerializeField] private VideoManager defaultVideoSettings;
 
     // Used to store audio settings before hitting the Apply button
     private AudioManager tempAudioSettings;
@@ -28,19 +40,35 @@ public class SettingsMenu : MonoBehaviour
     private bool audioSettingsChanged = false;
     // A flag used to check if the user changed any video settings or not
     private bool videoSettingsChanged = false;
+    // A list of available resolutions
+    private List<Resolution> resolutions = new List<Resolution>();
 
     private void Start()
     {
+        // Get the supported resolutions, omit any ones that are less than the threshold
+        Resolution[] allResolutions = Screen.resolutions;
+        for (int i = 0; i < allResolutions.Length; i++)
+        {
+            if (allResolutions[i].width < resolutionThreshold.x || allResolutions[i].height < resolutionThreshold.y)
+            {
+                // Dont add it, it's below the threshold
+                continue;
+            }
+            else
+            {
+                resolutions.Add(allResolutions[i]);
+            }
+        }
         // Initialize the audio UI with the saved audio settings
         audioManager.isCurrent = true;
-        audioManager.Initialize();
+        audioManager.Initialize(this);
         sfxUISettings.Initialize(audioManager.GetSFXVolume());
         musicUISettings.Initialize(audioManager.GetMusicVolume());
 
         // Initialize Video UI
         videoManager.isCurrent = true;
-        videoManager.Initialize();
-        videoSettingsUI.Initialize(videoManager.IsFullscreen(), videoManager.GetQualityIndex(), videoManager.GetResolutionIndex());
+        videoManager.Initialize(this);
+        videoSettingsUI.Initialize(this);
 
         // Check if it's the first run here
     }
@@ -138,6 +166,11 @@ public class SettingsMenu : MonoBehaviour
         Destroy(tempAudioSettings);
         Destroy(tempVideoSettings);
     }
+
+    public void OnExitButtonPressed()
+    {
+        Application.Quit();
+    }
     // Resets the "settings have changed" flags
     void ResetFlags()
     {
@@ -209,5 +242,33 @@ public class SettingsMenu : MonoBehaviour
         tempVideoSettings.SetQuality((Quality)index);
         videoSettingsChanged = true;
     }
+    #endregion
+
+    #region IGeneralSettingsProvider
+    public List<Resolution> GetResolutionsList()
+    {
+        return resolutions.GetCopy();
+    }
+    public IVideoProvider GetVideoSettings()
+    {
+        return videoManager as IVideoProvider;
+    }
+    public IVideoProvider GetDefaultVideoSettings()
+    {
+        return defaultVideoSettings as IVideoProvider;
+    }
+    public IAudioProvider GetAudioSettings()
+    {
+        return audioManager as IAudioProvider;
+    }
+    public IAudioProvider GetDefaultAudioSettings()
+    {
+        return defaultAudioSettings as IAudioProvider;
+    }
+    public AudioMixer GetCurrentAudioMixer()
+    {
+        return currentMixer;
+    }
+
     #endregion
 }

@@ -13,7 +13,7 @@ public class AudioManager : ScriptableObject, IAudioManager
 
     // The audio mixer that controls different audio types' settings
     [SerializeField, HideInInspector] private AudioMixer audioMixer;
-    [SerializeField, HideInInspector] private AudioManager defaultSettings;
+    [SerializeField, HideInInspector] private IAudioProvider defaultSettings;
 
     // Used to tell if this is the currently used settings or not
     public bool isCurrent { set; get; } = false;
@@ -22,18 +22,14 @@ public class AudioManager : ScriptableObject, IAudioManager
     private float sfxVolumedB;
     private float musicVolumedB;
 
-    private void OnEnable()
-    {
-        Initialize();
-    }
-
     #region ISettingsManager
-    public void Initialize()
+
+    public void Initialize(IGeneralSettingsProvider settingsProvider)
     {
+        audioMixer = settingsProvider.GetCurrentAudioMixer();
+        defaultSettings = settingsProvider.GetDefaultAudioSettings();
         SetSFXVolume(sfxVolume);
         SetMusicVolume(musicVolume);
-        audioMixer = Resources.Load("Settings/Audio/AudioMixers/Default") as AudioMixer;
-        defaultSettings = Resources.Load("Settings/Audio/Default Audio Settings") as AudioManager;
     }
     public void ResetToDefault()
     {
@@ -100,26 +96,6 @@ public class AudioManager : ScriptableObject, IAudioManager
     }
     #endregion
 
-    // TODO: implement in a general helper class
-    // Used to map a value in the range [start1 - end1] to the corresponding value
-    // In the range [start2 - end2]
-    float Map(float start1, float end1, float start2, float end2, float value)
-    {
-        if (value < start1 || value > end1)
-        {
-            // The supplied value is out of range
-            Debug.LogWarning("Out of range value supplied in Map function.");
-            return value;
-        }
-        else if (start1 == end1 || start2 == end2)
-        {
-            // Prevent division by 0
-            Debug.LogWarning("Invalid range supplied in Map function.");
-            return value;
-        }
-        return start2 + (((value - start1) * (end2 - start2)) / (end1 - start1));
-    }
-
     // Returns a volume value that can be used with audio mixers [-80dB, 0dB]. Volume should be between 0 and 1
     // Returns a value between [-30dB,0dB]. Using [-80dB,0dB] made the volume drop too rapidly, where it
     // gets too quiet around -30dB, so we use a smaller range instead, and mute it if the volume is 0, which 
@@ -139,7 +115,7 @@ public class AudioManager : ScriptableObject, IAudioManager
         }
         else
         {
-            return Map(0, 1, -30, 0, volume);
+            return Utility.Map(0, 1, -30, 0, volume);
         }
     }
 }
