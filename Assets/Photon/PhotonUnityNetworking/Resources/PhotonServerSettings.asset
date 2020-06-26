@@ -30,7 +30,32 @@ MonoBehaviour:
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
-  RpcList: []
+  RpcList:
+  - ClickRpc
+  - DestroyRpc
+  - DestroySpaceship
+  - Fire
+  - RespawnSpaceship
+  - Fill
+  - Free
+  - OnCreated
+  - PrepareForGame
+  - R_GoToChara
+  - R_LaunchTo
+  - R_OnGroundHit
+  - R_Reflection
+  - R_StartHitAction
+  - R_UpdateBallState
+  - RecieveCommand
+  - RecieveDodgeCommand
+  - RecieveFeetPush
+  - RecieveTeamsData
+  - RpcClearBuffer
+  - RpcNonServerOwnedTeleportFromServer
+  - RpcTeleport
+  - StartGame
+  - SyncWithTeamsManager
+  - UpdateButtonClick
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0
