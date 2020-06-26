@@ -28,7 +28,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>,IPunObservable
                     break;
                 case Dodgeball.BallState.Held:
                     syncer.enabled = false;
-                    transform.localPosition = Vector3.zero;
                     break;
             }
         };
@@ -42,6 +41,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>,IPunObservable
         ball.goTo.onGoto += () =>{
             syncer.enabled = false;
         };
+
         ball.launchUp.onLaunchedUp += () => {
             syncer.enabled = false;
         };
@@ -67,6 +67,12 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>,IPunObservable
             int s = (int)stream.ReceiveNext();
             Dodgeball.BallState state = (Dodgeball.BallState)s;
             ball.ballState = state;
+            switch (state)
+            {
+                case Dodgeball.BallState.Held:
+                    transform.localPosition = Vector3.zero;
+                    break;
+            }
         }
     }
 }
