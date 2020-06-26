@@ -132,7 +132,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         else if (command == DodgeballCharaCommand.PushBall)
         {
             CharaFeet feet = GetComponentInChildren<CharaFeet>();
-            pv.RPC("RecieveFeetPush", RpcTarget.Others, feet.lastPushUsed,currX,currZ);
+            //pv.RPC("RecieveFeetPush", RpcTarget.Others, feet.lastPushUsed,currX,currZ);
         }
         else
         {
