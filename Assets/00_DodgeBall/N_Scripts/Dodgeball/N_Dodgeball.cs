@@ -21,7 +21,17 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
     void Start()
     {
         ball.E_OnStateUpdated += (s) => {
-            photonView.RPC("UpdateState", RpcTarget.AllViaServer, (int)s);
+            Log.Warning("new state is " + s);
+            switch (s)
+            {
+                case Dodgeball.BallState.OnGround:
+                    syncer.enabled = true;
+                    break;
+                case Dodgeball.BallState.Held:
+                    syncer.enabled = false;
+                    break;
+            }
+            //photonView.RPC("UpdateState", RpcTarget.AllViaServer, (int)s);
         };
         ball.reflection.onReflected += () => {
             syncer.enabled = true;
@@ -42,15 +52,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
     private void UpdateState(int s)
     {
         GetComponent<Dodgeball>().ballState = (Dodgeball.BallState)s;
-        switch ((Dodgeball.BallState)s)
-        {
-            case Dodgeball.BallState.OnGround:
-                syncer.enabled = true;
-                break;
-            case Dodgeball.BallState.Held:
-                syncer.enabled = false;
-                break;
-        }
+
     }
 
     private IEnumerator NetworkSetup()
