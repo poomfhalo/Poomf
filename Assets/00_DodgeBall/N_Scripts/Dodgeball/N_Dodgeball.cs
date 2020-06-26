@@ -5,7 +5,7 @@ using System.Collections;
 
 //Responsible for enabling/Disabling Syncer, and syncronizing the BallState.
 [RequireComponent(typeof(Dodgeball))]
-public class N_Dodgeball : N_Singleton<N_Dodgeball>
+public class N_Dodgeball : N_Singleton<N_Dodgeball>,IPunObservable
 {
     Dodgeball ball = null;
     SmoothSyncPUN2 syncer = null;
@@ -31,7 +31,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
                     syncer.enabled = false;
                     break;
             }
-            photonView.RPC("UpdateState", RpcTarget.Others, (int)s);
         };
         ball.reflection.onReflected += () => {
             syncer.enabled = true;
@@ -47,13 +46,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
             syncer.enabled = false;
         };
     }
-
-    [PunRPC]
-    private void UpdateState(int s)
-    {
-        GetComponent<Dodgeball>().ballState = (Dodgeball.BallState)s;
-    }
-
     private IEnumerator NetworkSetup()
     {
         while (!PhotonNetwork.IsConnected)
@@ -62,5 +54,19 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
         }
         ball.ExtCanDetectGroundByTrig = () => PhotonNetwork.IsMasterClient;
         ball.reflection.extReflectionTest = PhotonNetwork.IsMasterClient;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(ball.ballState);
+        }
+        else if (stream.IsReading)
+        {
+            int s = (int)stream.ReceiveNext();
+            Dodgeball.BallState state = (Dodgeball.BallState)s;
+            ball.ballState = state;
+        }
     }
 }
