@@ -28,6 +28,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>,IPunObservable
                     break;
                 case Dodgeball.BallState.Held:
                     syncer.enabled = false;
+                    transform.localPosition = Vector3.zero;
                     break;
             }
         };
