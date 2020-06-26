@@ -20,9 +20,18 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     }
     void Start()
     {
-        ball.E_OnGroundedAfterTime += () => {
-            Log.Warning("Enabled Syncer, from grounded");
-            syncer.enabled = true;
+        ball.E_OnStateUpdated += (s) => {
+            switch (s)
+            {
+                case Dodgeball.BallState.OnGround:
+                    syncer.enabled = true;
+                    Log.Warning("Enabled Syncer, from grounded");
+                    break;
+                case Dodgeball.BallState.Held:
+                    syncer.enabled = false;
+                    Log.Warning("Disabled Syncer, from being held");
+                    break;
+            }
         };
         ball.reflection.onReflected += () => {
             Log.Warning("Enabled Syncer, from reflected");

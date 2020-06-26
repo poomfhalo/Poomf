@@ -9,7 +9,7 @@ using GW_Lib;
 public class Dodgeball : Singleton<Dodgeball>
 {
     public Func<bool> ExtCanDetectGroundByTrig = () => true;
-    public event Action E_OnGroundedAfterTime = null;
+    public event Action<BallState> E_OnStateUpdated = null;
 
     public bool IsOnGround => ballState == BallState.OnGround;
     public bool IsHeld => ballState == BallState.Held;
@@ -38,10 +38,12 @@ public class Dodgeball : Singleton<Dodgeball>
                 case BallState.Flying:
                     this.KillCoro(ref delayedGroundedCoro);
                     tr.enabled = true;
+                    E_OnStateUpdated?.Invoke(BallState.Flying);
                     break;
                 case BallState.Held:
                     this.KillCoro(ref delayedGroundedCoro);
                     tr.enabled = false;
+                    E_OnStateUpdated?.Invoke(BallState.Held);
                     Log.Warning("Okay, called held");
                     break;
                 case BallState.OnGround:
@@ -50,7 +52,7 @@ public class Dodgeball : Singleton<Dodgeball>
                     delayedGroundedCoro = this.InvokeDelayed(timeToGrounded, () => {
                         tr.enabled = false;
                         Log.Warning("Called On Grounded");
-                        E_OnGroundedAfterTime?.Invoke();
+                        E_OnStateUpdated?.Invoke(BallState.OnGround);
                     });
                     break;
             }
