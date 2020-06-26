@@ -25,27 +25,27 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>,IPunObservable
             switch (s)
             {
                 case Dodgeball.BallState.OnGround:
-                    syncer.enabled = true;
+                    //syncer.enabled = true;
                     break;
                 case Dodgeball.BallState.Held:
-                    syncer.enabled = false;
+                    //syncer.enabled = false;
                     this.InvokeDelayed(0.1f, () => transform.localPosition = Vector3.zero);
                     break;
             }
         };
         ball.reflection.onReflected += () => {
-            syncer.enabled = true;
+            //syncer.enabled = true;
         };
 
         ball.launchTo.onLaunchedTo += () => {
-            syncer.enabled = false;
+            //syncer.enabled = false;
         };
         ball.goTo.onGoto += () =>{
-            syncer.enabled = false;
+            //syncer.enabled = false;
         };
 
         ball.launchUp.onLaunchedUp += () => {
-            syncer.enabled = false;
+            //syncer.enabled = false;
         };
     }
     private IEnumerator NetworkSetup()
