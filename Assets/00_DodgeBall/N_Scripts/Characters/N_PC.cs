@@ -48,6 +48,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         else
         {
             chara.GetComponent<Mover>().movementMode = Mover.MovementType.ToPoint;
+            chara.GetComponentInChildren<CharaFeet>().extCanPush = false;
         }
     }
     void OnDisable()
@@ -128,6 +129,11 @@ public class N_PC : MonoBehaviour,IPunObservable
 
             pv.RPC("RecieveDodgeCommand", RpcTarget.Others, startPos.x, startPos.z, expectedPos.x, expectedPos.z);
         }
+        else if (command == DodgeballCharaCommand.PushBall)
+        {
+            CharaFeet feet = GetComponentInChildren<CharaFeet>();
+            pv.RPC("RecieveFeetPush", RpcTarget.Others, feet.lastPushUsed,currX,currZ);
+        }
         else
         {
             pv.RPC("RecieveCommand", RpcTarget.Others, (int)command, currX, currZ);
@@ -181,7 +187,6 @@ public class N_PC : MonoBehaviour,IPunObservable
                 if (lastCommand == DodgeballCharaCommand.Dodge)
                 {
                     lastCommand = DodgeballCharaCommand.MoveInput;
-                    //GetComponent<Mover>().Warp(netPos);
                     transform.position = netPos;
                     //So character does not attempt to move back and forth, at the targeted point
                     chara.C_MoveInput(netPos);
@@ -213,6 +218,18 @@ public class N_PC : MonoBehaviour,IPunObservable
         transform.rotation = Quaternion.LookRotation(dir);
 
         GetComponent<Dodger>().StartDodgeAction(netPos, null);
+    }
+    [PunRPC]
+    private void RecieveFeetPush(Vector3 lastUsedForce,float x, float z)
+    {
+        netPos.x = x;
+        netPos.z = z;
+        if (Dodgeball.instance.ballState != Dodgeball.BallState.OnGround)
+            return;
+
+        CharaFeet feet = GetComponentInChildren<CharaFeet>();
+        feet.ApplyPush(Dodgeball.instance, lastUsedForce);
+        Log.Warning("Pushed Ball By Feet");
     }
     //Helper Functions
     private void UpdateNetData()

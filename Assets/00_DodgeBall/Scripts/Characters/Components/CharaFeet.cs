@@ -1,14 +1,21 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class CharaFeet : MonoBehaviour
 {
     [SerializeField] float force = 5;
     [SerializeField] float timeBetweenPushes = 0.06f;
 
+    [Header("Read Only")]
+    public bool extCanPush = true;
+    public Vector3 lastPushUsed = Vector3.zero;
+
     Vector3 lastPos = new Vector3();
     Rigidbody rb3d = null;
     Vector3 travelDir = Vector3.zero;
     float counter = 0;
+    DodgeballCharacter owner = null;
+
     void Start()
     {
         rb3d = GetComponent<Rigidbody>();
@@ -25,14 +32,28 @@ public class CharaFeet : MonoBehaviour
     }
     private void OnTriggerStay(Collider col)
     {
-        Rigidbody ballRB = col.GetComponent<Rigidbody>();
-        if (ballRB)
-        {
-            if (counter < 1)
-                return;
+        if (counter < 1)
+            return;
 
-            ballRB.AddForce(travelDir * force, ForceMode.Impulse);
-            counter = 0;
+        counter = 0;
+
+        Vector3 forceV = travelDir * force;
+
+        if (extCanPush)
+        {
+            lastPushUsed = forceV;
+            owner.C_PushBall();
+            ApplyPush(col.GetComponent<Dodgeball>(), forceV);
         }
+    }
+
+    public void SetUp(DodgeballCharacter owner)
+    {
+        this.owner = owner;
+    }
+    public void ApplyPush(Dodgeball ball,Vector3 force)
+    {
+        Rigidbody ballRB = ball.GetComponent<Rigidbody>();
+        ballRB.AddForce(force, ForceMode.Impulse);
     }
 }

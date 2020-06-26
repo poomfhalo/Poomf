@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 
 public enum DodgeballCharaCommand { MoveInput, Friendly, Enemy, BallAction, Dodge, FakeFire, Jump,
     BraceForBall,
-    ReleaseFromBrace
+    ReleaseFromBrace,
+    PushBall
 }
 
 [RequireComponent(typeof(Animator))]
@@ -54,6 +55,7 @@ public class DodgeballCharacter : MonoBehaviour
     protected Jumper jumper = null;
     protected BallReciever reciever = null;
     protected CharaHitPoints hp = null;
+    protected CharaFeet feet = null;
 
     protected virtual void Reset()
     {
@@ -75,12 +77,15 @@ public class DodgeballCharacter : MonoBehaviour
         jumper = GetComponent<Jumper>();
         reciever = GetComponent<BallReciever>();
         hp = GetComponent<CharaHitPoints>();
+        feet = GetComponentInChildren<CharaFeet>();
 
         SetTeam(team);
 
         selectionIndicator.SetOwner(this);
         selectionIndicator.SetFocus(null);
 
+        if(feet)
+            feet.SetUp(this);
         if (grabber)
             grabber.onBallInHands += OnBallInHands;
     }
@@ -207,6 +212,10 @@ public class DodgeballCharacter : MonoBehaviour
             reciever.DisableDetection();
 
         OnCommandActivated?.Invoke(DodgeballCharaCommand.ReleaseFromBrace);
+    }
+    public void C_PushBall()
+    {
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.PushBall);
     }
     #endregion
 }
