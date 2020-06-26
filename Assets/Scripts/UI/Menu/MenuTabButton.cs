@@ -4,46 +4,49 @@ using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class MenuTabButton : MonoBehaviour, ISelectHandler
+namespace Poomf.UI
 {
-    public delegate void ButtonSelectionDelegate(int i_menuIndex);
-    public ButtonSelectionDelegate OnMenuButtonSelect = null;
-
-    private Button myButton = null;
-    private int menuIndex = 0;
-    private bool initialized = false;
-
-    public void Initialize(int i_menuIndex)
+    public class MenuTabButton : MonoBehaviour, ISelectHandler
     {
-        if (true == initialized) return;
+        public delegate void ButtonSelectionDelegate(int i_menuIndex);
+        public ButtonSelectionDelegate OnMenuButtonSelect = null;
 
-        myButton = GetComponent<Button>();
-        menuIndex = i_menuIndex;
+        private Button myButton = null;
+        private int menuIndex = 0;
+        private bool initialized = false;
 
-        initialized = true;
-    }
+        public void Initialize(int i_menuIndex)
+        {
+            if (true == initialized) return;
 
-    public void Select()
-    {
-        if (false == initialized || null == myButton)
-            return;
+            myButton = GetComponent<Button>();
+            menuIndex = i_menuIndex;
 
-        myButton.Select();
-    }
+            initialized = true;
+        }
 
-    public void OnSelect(BaseEventData eventData)
-    {
-        if (false == initialized || null == myButton)
-            return;
+        public void Select()
+        {
+            if (false == initialized || null == myButton)
+                return;
 
-        if (null != OnMenuButtonSelect)
-            OnMenuButtonSelect(menuIndex);
-    }
+            myButton.Select();
+        }
 
-    public void ResetButton()
-    {
-        OnMenuButtonSelect = null;
-        menuIndex = 0;
-        initialized = false;
+        public void OnSelect(BaseEventData eventData)
+        {
+            if (false == initialized || null == myButton)
+                return;
+
+            if (null != OnMenuButtonSelect)
+                OnMenuButtonSelect(menuIndex);
+        }
+
+        public void ResetButton()
+        {
+            OnMenuButtonSelect = null;
+            menuIndex = 0;
+            initialized = false;
+        }
     }
 }

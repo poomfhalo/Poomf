@@ -42,12 +42,17 @@ MonoBehaviour:
   - R_GoToChara
   - R_LaunchTo
   - R_OnGroundHit
+<<<<<<< HEAD
+=======
+  - R_Reflection
+>>>>>>> 0ba063a2c5290c73429bc69468e0442d03c8c2fd
   - R_StartHitAction
   - R_UpdateBallState
   - RecieveCommand
   - RecieveDodgeCommand
   - RecieveTeamsData
   - RespawnSpaceship
+<<<<<<< HEAD
   - RpcClearBuffer
   - RpcNonServerOwnedTeleportFromServer
   - RpcTeleport
@@ -60,3 +65,11 @@ MonoBehaviour:
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
+=======
+  - StartGame
+  - SyncWithTeamsManager
+  - UpdateButtonClick
+  DisableAutoOpenWizard: 1
+  ShowSettings: 0
+  DevRegionSetOnce: 0
+>>>>>>> 0ba063a2c5290c73429bc69468e0442d03c8c2fd

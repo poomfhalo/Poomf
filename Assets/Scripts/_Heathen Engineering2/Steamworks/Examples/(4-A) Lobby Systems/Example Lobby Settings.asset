@@ -1,0 +1,130 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7449ba0ff99e3c64e9bd1ec4854965eb, type: 3}
+  m_Name: Example Lobby Settings
+  m_EditorClassIdentifier: 
+  MaxDistanceFilter: 3
+  LobbyName: Loden DarkStar
+  MaxMemberCount:
+    Mode: 2
+    ConstantValue: 4
+    Variable: {fileID: 11400000, guid: 48201cb31cdcc12499832fee4f8c705c, type: 2}
+  MemberDataKeys:
+  - test_game_key
+  LobbyOwner:
+    UserData: {fileID: 0}
+    Metadata:
+      Records: []
+  Members: []
+  Metadata:
+    Records: []
+  Manager: {fileID: 0}
+  OnGameLobbyJoinRequest:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: HeathenEngineering.SteamTools.UnityGameLobbyJoinRequestedEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnLobbyMatchList:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: HeathenEngineering.SteamTools.UnityLobbyHunterListEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnLobbyCreated:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: HeathenEngineering.SteamTools.UnityLobbyCreatedEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnOwnershipChange:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: HeathenEngineering.SteamTools.LobbyMemberEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnMemberJoined:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: HeathenEngineering.SteamTools.LobbyMemberEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnMemberLeft:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: HeathenEngineering.SteamTools.LobbyMemberEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnMemberDataChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: HeathenEngineering.SteamTools.LobbyMemberEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnLobbyEnter:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: HeathenEngineering.SteamTools.UnityLobbyEnterEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnLobbyExit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnLobbyDataChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnGameServerSet:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnLobbyChatUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: HeathenEngineering.SteamTools.UnityLobbyChatUpdateEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  QuickMatchFailed:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  SearchStarted:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnChatMessageReceived:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: HeathenEngineering.SteamTools.LobbyChatMessageEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ChatMemberStateChangeEntered:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: HeathenEngineering.SteamTools.LobbyMemberEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  ChatMemberStateChangeLeft:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: HeathenEngineering.SteamTools.UnityPersonaEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ChatMemberStateChangeDisconnected:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: HeathenEngineering.SteamTools.UnityPersonaEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ChatMemberStateChangeKicked:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: HeathenEngineering.SteamTools.UnityPersonaEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  ChatMemberStateChangeBanned:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: HeathenEngineering.SteamTools.UnityPersonaEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null

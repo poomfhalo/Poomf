@@ -1,167 +1,236 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
-public class MenuNavigator : MonoBehaviour
+namespace Poomf.UI
 {
-    [SerializeField] private Transform menuTabsButtonsTransform = null;
-    [SerializeField] private Transform menusRootTransform = null;
-    [SerializeField] private MenuTabButton defaultMenuButton = null;
-
-    private MenuTabButton[] menuTabsButtons = null;
-    private GameObject[] menus = null;
-    private int? currentActiveMenuIndex = null;
-
-    private void Start()
+    public class MenuNavigator : MonoBehaviour
     {
-        initialize();
-    }
+        [SerializeField] private Transform menuTabsButtonsTransform = null;
+        [SerializeField] private Transform[] menuItems = null;
+        [SerializeField] private MenuTabButton defaultMenuButton = null;
 
-    private void OnDestroy()
-    {
-        reset();
-    }
+        private PlayerInput playerInput = null;
+        private MenuTabButton[] menuTabsButtons = null;
+        private int? currentActiveMenuIndex = null;
+        private bool initialized = false;
 
-    private void initialize()
-    {
-        if (false == initializeButtons() ||
-            false == initializeMenus() ||
-            false == bindButtonsToMenus() ||
-            false == launchDefaultMenu())
+        #region UNITY
+        private void Awake()
         {
-            Debug.LogError("MenuNavigator::initialize -> Initialization failed.");
-            return;
-        }
-    }
-
-    private bool initializeButtons()
-    {
-        if (null == menuTabsButtonsTransform)
-        {
-            Debug.LogError("MenuNavigator::initializeButtons -> menuTabsButtonsTransform was not assigned.");
-            return false;
+            // playerInput = new PlayerInput();
         }
 
-        menuTabsButtons = menuTabsButtonsTransform.GetComponentsInChildren<MenuTabButton>();
-
-        if (0 == menuTabsButtons.Length)
+        private void OnEnable()
         {
-            Debug.LogError("MenuNavigator::initializeButtons -> No buttons were found.");
-            return false;
+            if (false == initialized) return;
+            // playerInput.UI.Enable();
+            launchDefaultMenu();
         }
 
-        return true;
-    }
-
-    private bool initializeMenus()
-    {
-        if (null == menusRootTransform)
+        private void OnDisable()
         {
-            Debug.LogError("MenuNavigator::initializeMenus -> menusRootTransform was not assigned.");
-            return false;
+            // playerInput.UI.Disable();
         }
 
-        int menusCount = menusRootTransform.childCount;
-
-        if (0 == menusCount)
+        private void Start()
         {
-            Debug.LogError("MenuNavigator::initializeMenus -> No menus were found.");
-            return false;
+            initialize();
         }
 
-        menus = new GameObject[menusCount];
-
-        for (int i = 0; i < menusCount; i++)
+        private void OnDestroy()
         {
-            menus[i] = menusRootTransform.GetChild(i).gameObject;
+            reset();
         }
-
-        return true;
-    }
-
-    private bool bindButtonsToMenus()
-    {
-        int buttonsCount = menuTabsButtons.Length;
-        int menusCount = menus.Length;
-
-        if (buttonsCount != menusCount)
+        /*
+        private void Update()
         {
-            Debug.LogWarning("MenuNavigator::bindButtonsToMenus -> buttonsCount and menusCount are not equal.");
+            processPlayerInput();
         }
+        */
+        #endregion
 
-        int count = buttonsCount;
-
-        if (menusCount < buttonsCount)
-            count = menusCount;
-
-        for (int i = 0; i < count; i++)
+        #region PRIVATE
+        private void initialize()
         {
-            bindButtonToMenu(menuTabsButtons[i], i);
-        }
-
-        return true;
-    }
-
-    private bool launchDefaultMenu()
-    {
-        if (null == defaultMenuButton)
-        {
-            Debug.LogError("MenuNavigator::launchDefaultMenu -> defaultMenuButton was not assigned.");
-            return false;
-        }
-
-        defaultMenuButton.Select();
-
-        return true;
-    }
-
-    private void bindButtonToMenu(MenuTabButton i_button, int i_menuIndex)
-    {
-        i_button.Initialize(i_menuIndex);
-        i_button.OnMenuButtonSelect += onButtonSelected;
-    }
-
-    private void activateMenuElement(int i_menuIndex)
-    {
-        if (null != currentActiveMenuIndex)
-        {
-            if (i_menuIndex == currentActiveMenuIndex)
+            if (false == initializeButtons() ||
+                false == initializeMenus() ||
+                false == bindButtonsToMenus() ||
+                false == launchDefaultMenu() ||
+                false == bindPlayerInput())
+            {
+                Debug.LogError("MenuNavigator::initialize -> Initialization failed.");
                 return;
+            }
+
+            initialized = true;
         }
-        else
+
+        private bool initializeButtons()
         {
-            currentActiveMenuIndex = i_menuIndex;
+            if (null == menuTabsButtonsTransform)
+            {
+                Debug.LogError("MenuNavigator::initializeButtons -> menuTabsButtonsTransform was not assigned.");
+                return false;
+            }
+
+            menuTabsButtons = menuTabsButtonsTransform.GetComponentsInChildren<MenuTabButton>();
+
+            if (0 == menuTabsButtons.Length)
+            {
+                Debug.LogError("MenuNavigator::initializeButtons -> No buttons were found.");
+                return false;
+            }
+
+            return true;
         }
 
-        if (true == menus[currentActiveMenuIndex.Value].activeInHierarchy)
+        private bool initializeMenus()
         {
-            menus[currentActiveMenuIndex.Value].SetActive(false);
+            if (null == menuItems)
+            {
+                Debug.LogError("MenuNavigator::initializeMenus -> menuItems was not assigned.");
+                return false;
+            }
+
+            if (0 == menuItems.Length)
+            {
+                Debug.LogError("MenuNavigator::initializeMenus -> No menus were found.");
+                return false;
+            }
+
+            return true;
         }
 
-        if (false == menus[i_menuIndex].activeInHierarchy)
+        private bool bindButtonsToMenus()
         {
-            menus[i_menuIndex].SetActive(true);
-            currentActiveMenuIndex = i_menuIndex;
+            int buttonsCount = menuTabsButtons.Length;
+            int menusCount = menuItems.Length;
+
+            if (buttonsCount != menusCount)
+            {
+                Debug.LogWarning("MenuNavigator::bindButtonsToMenus -> buttonsCount and menusCount are not equal. Buttons count: " + buttonsCount + " Menus count: " + menusCount);
+            }
+
+            int count = buttonsCount;
+
+            if (menusCount < buttonsCount)
+                count = menusCount;
+
+            for (int i = 0; i < count; i++)
+            {
+                bindButtonToMenu(menuTabsButtons[i], i);
+            }
+
+            return true;
         }
-    }
 
-    private void onButtonSelected(int i_menuIndex)
-    {
-        activateMenuElement(i_menuIndex);
-    }
-
-    private void reset()
-    {
-        resetButtons();
-    }
-
-    private void resetButtons()
-    {
-        if (null == menuTabsButtons) return;
-
-        for (int i = 0; i < menuTabsButtons.Length; i++)
+        private bool launchDefaultMenu()
         {
-            menuTabsButtons[i].ResetButton();
+            if (null == defaultMenuButton)
+            {
+                Debug.LogError("MenuNavigator::launchDefaultMenu -> defaultMenuButton was not assigned.");
+                return false;
+            }
+
+            defaultMenuButton.Select();
+
+            return true;
         }
+
+        private bool bindPlayerInput()
+        {
+            /*
+            if (null == playerInput)
+            {
+                Debug.LogError("MenuNavigator::bindPlayerInput -> player input was not assigned.");
+                return false;
+            }
+            */
+
+            return true;
+        }
+
+        private void bindButtonToMenu(MenuTabButton i_button, int i_menuIndex)
+        {
+            i_button.Initialize(i_menuIndex);
+            i_button.OnMenuButtonSelect += onButtonSelected;
+        }
+
+        private void activateMenuElement(int i_menuIndex)
+        {
+            if (null != currentActiveMenuIndex)
+            {
+                if (i_menuIndex == currentActiveMenuIndex)
+                    return;
+            }
+            else
+            {
+                currentActiveMenuIndex = i_menuIndex;
+            }
+
+            if (true == menuItems[currentActiveMenuIndex.Value].gameObject.activeInHierarchy)
+            {
+                menuItems[currentActiveMenuIndex.Value].gameObject.SetActive(false);
+            }
+
+            if (false == menuItems[i_menuIndex].gameObject.activeInHierarchy)
+            {
+                menuItems[i_menuIndex].gameObject.SetActive(true);
+                currentActiveMenuIndex = i_menuIndex;
+            }
+        }
+
+        private void onButtonSelected(int i_menuIndex)
+        {
+            activateMenuElement(i_menuIndex);
+        }
+
+        private void reset()
+        {
+            resetButtons();
+        }
+
+        private void resetButtons()
+        {
+            if (null == menuTabsButtons) return;
+
+            for (int i = 0; i < menuTabsButtons.Length; i++)
+            {
+                menuTabsButtons[i].ResetButton();
+            }
+        }
+        /*
+        private void processPlayerInput()
+        {
+            if (false == initialized) return;
+
+            checkIfAnyBtnIsSelected();
+        }
+        */
+        private void checkIfAnyBtnIsSelected()
+        {
+            GameObject selectedButtonObj = EventSystem.current.currentSelectedGameObject;
+
+            if (null != selectedButtonObj)
+            {
+                if (null != selectedButtonObj.GetComponent<Button>()) return;
+            }
+            // TODO: Replace with new input system
+            /*
+            if (Input.GetAxis("Vertical") > 0.1f ||
+                Input.GetAxis("Vertical") < 0.1f ||
+                Input.GetAxis("Horizontal") > 0.1f ||
+                Input.GetAxis("Horizontal") < 0.1f)
+            {
+                if (null != currentActiveMenuIndex)
+                {
+
+                }
+            }
+            */
+        }
+        #endregion
     }
 }
