@@ -243,7 +243,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     {
         Vector3 currPos = rb3d.position;
         currPos.y = 0;
-        netDist = Vector3.Distance(rb3d.position, netPos);
+        netDist = Vector3.Distance(currPos, netPos);
 
         if (netDist > snapXZDist)
         {
