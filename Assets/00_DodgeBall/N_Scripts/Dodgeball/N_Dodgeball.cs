@@ -69,6 +69,12 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>,IPunObservable
             int s = (int)stream.ReceiveNext();
             Dodgeball.BallState state = (Dodgeball.BallState)s;
             ball.ballState = state;
+            switch (state)
+            {
+                case Dodgeball.BallState.Held:
+                    transform.localPosition = Vector3.zero;
+                    break;
+            }
         }
     }
 }
