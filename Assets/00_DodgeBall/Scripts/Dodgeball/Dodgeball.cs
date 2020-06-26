@@ -30,7 +30,7 @@ public class Dodgeball : Singleton<Dodgeball>
         {
             if (m_ballState == value)
             {
-                Log.Warning("Trying to set new state to " + value + " but its already assigned");
+                //Log.Warning("Trying to set new state to " + value + " but its already assigned");
                 return;
             }
 
