@@ -1,17 +1,31 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public enum DodgeballCharaCommand { MoveInput, Friendly, Enemy, BallAction, Dodge, FakeFire, Jump,
+    BraceForBall,
+    ReleaseFromBrace,
+    PushBall
+}
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody))]
-public abstract class DodgeballCharacter : MonoBehaviour
+public class DodgeballCharacter : MonoBehaviour
 {
+    //Events
+    public event Action<DodgeballCharaCommand> OnCommandActivated = null;
+
     //State
-    public bool IsEnabled => isEnabled;
-    public bool HasBall => hasBall;
+    public bool HasBall => grabber.HasBall;
     public bool IsThrowing => launcher.IsThrowing;
     public bool IsMoving => mover.IsMoving;
     public bool IsDodging => dodger.IsDodging;
-    public bool IsBallInGrabZone => catcher.IsBallInGrabZone;
+    public bool IsBallInGrabZone => grabber.IsBallInGrabZone;
     public bool IsJumping => jumper.IsJumping;
+    public bool IsBeingHurt => hp.IsBeingHurt;
+    public bool IsWaitingForHit => hp.IsWaitingForHit;
+    public string charaName => name;
 
     //Body Parts
     public Transform BallGrabPoint => ballGrabPoint;
@@ -27,13 +41,8 @@ public abstract class DodgeballCharacter : MonoBehaviour
     [SerializeField] Transform ballGrabPoint = null;
 
     [Header("Core")]
-    public string charaName = "";
     [SerializeField] TeamTag team = TeamTag.A;
-    [SerializeField] bool isEnabled = false;
-    [SerializeField] protected SelectionIndicator selectionIndicator = null;
-
-    [Header("Read Only")]
-    [SerializeField] bool hasBall = false;
+    public SelectionIndicator selectionIndicator = null;
 
     protected Rigidbody rb3d = null;
     protected Animator animator = null;
@@ -42,22 +51,21 @@ public abstract class DodgeballCharacter : MonoBehaviour
     protected Mover mover = null;
     protected BallLauncher launcher = null;
     protected Dodger dodger = null;
-    protected BallCatcher catcher = null;
+    protected BallGrabber grabber = null;
     protected Jumper jumper = null;
+    protected BallReciever reciever = null;
+    protected CharaHitPoints hp = null;
+    protected CharaFeet feet = null;
 
     protected virtual void Reset()
     {
         if (!GetComponent<CapsuleCollider>())
             gameObject.AddComponent<CapsuleCollider>();
-        charaName = name;
         selectionIndicator = GetComponentInChildren<SelectionIndicator>();
     }
+
     protected virtual void Awake()
     {
-        if(string.IsNullOrEmpty( charaName) || string.IsNullOrWhiteSpace(charaName))
-        {
-            charaName = name;
-        }
         rb3d = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         cam = Camera.main;
@@ -65,24 +73,21 @@ public abstract class DodgeballCharacter : MonoBehaviour
         launcher = GetComponent<BallLauncher>();
         mover = GetComponent<Mover>();
         dodger = GetComponent<Dodger>();
-        catcher = GetComponent<BallCatcher>();
+        grabber = GetComponent<BallGrabber>();
         jumper = GetComponent<Jumper>();
-
-        if (selectionIndicator == null)
-            selectionIndicator = GetComponentInChildren<SelectionIndicator>();
-        if (selectionIndicator == null)
-            selectionIndicator = ResFactory.Make<SelectionIndicator>("Selection Indicator", transform);
+        reciever = GetComponent<BallReciever>();
+        hp = GetComponent<CharaHitPoints>();
+        feet = GetComponentInChildren<CharaFeet>();
 
         SetTeam(team);
 
         selectionIndicator.SetOwner(this);
         selectionIndicator.SetFocus(null);
 
-        if(launcher)
-            launcher.onThrowPointReached += OnThrewBall;
-
-        if (catcher)
-            catcher.onBallInHands += OnBallInHands;
+        if(feet)
+            feet.SetUp(this);
+        if (grabber)
+            grabber.onBallInHands += OnBallInHands;
     }
 
     public void SetTeam(TeamTag team)
@@ -91,19 +96,126 @@ public abstract class DodgeballCharacter : MonoBehaviour
         TeamsManager.JoinTeam(team, this);
     }
 
-    public virtual void InitCharacter()//To be used for multiplayer?
+    protected void OnBallInHands()
     {
-
-    }
-
-    protected void OnThrewBall()
-    {
-        hasBall = false;
-        selectionIndicator.SetFocus(null);
-    }
-    private void OnBallInHands()
-    {
-        hasBall = true;
         selectionIndicator.SetNewFocus(false);
     }
+
+    #region Input Commands
+    public void C_MoveInput(Vector3 i)
+    {
+        GetComponents<DodgeballCharaAction>().ToList().ForEach(a => { a.RecieveInput(i); });
+
+        if (IsJumping)
+            return;
+        if (IsThrowing)
+            return;
+        if (IsDodging)
+            return;
+
+        mover.StartMoveByInput(i, cam.transform);
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.MoveInput);
+    }
+
+    public void C_Friendly()
+    {
+        if (HasBall)
+        {
+            selectionIndicator.SetNewFocus(true);
+            OnCommandActivated?.Invoke(DodgeballCharaCommand.Friendly);
+        }
+    }
+    public void C_Enemy()
+    {
+        if (HasBall)
+        {
+            selectionIndicator.SetNewFocus(false);
+            OnCommandActivated?.Invoke(DodgeballCharaCommand.Enemy);
+        }
+    }
+    public void C_OnBallAction(InputActionPhase phase)
+    {
+        bool isDown = phase == InputActionPhase.Started || phase == InputActionPhase.Performed;
+        GetComponent<BallReciever>().RecieveButtonInput(isDown);
+
+        if (phase != InputActionPhase.Started)
+            return;
+
+        if (reciever.IsDetecting)
+            return;//Recieving is handled 
+        
+        if (!HasBall && IsBallInGrabZone)
+        {
+            grabber.StartCatchAction();
+            OnCommandActivated?.Invoke(DodgeballCharaCommand.BallAction);
+        }
+
+        if (HasBall && !IsThrowing)
+        {
+            launcher.StartThrowAction(selectionIndicator.ActiveSelection);
+            OnCommandActivated?.Invoke(DodgeballCharaCommand.BallAction);
+        }
+    }
+    public void C_Dodge()
+    {
+        if (HasBall)
+            return;
+        if (IsThrowing)
+            return;
+        if (IsDodging)
+            return;
+        if (IsJumping)
+            return;
+
+        dodger.StartDodgeAction();
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.Dodge);
+    }
+    public void C_FakeFire()
+    {
+        if (!HasBall)
+            return;
+        if (IsThrowing)
+            return;
+        launcher.StartFakeThrow(selectionIndicator.ActiveSelection);
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.FakeFire);
+    }
+    public void C_Jump()
+    {
+        if (HasBall)
+            return;
+        if (IsThrowing)
+            return;
+        if (IsDodging)
+            return;
+        if (IsJumping)
+            return;
+        jumper.StartJumpAction();
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.Jump);
+    }
+    #endregion
+
+    #region Gameplay Commands
+    public void C_BraceForContact()
+    {
+        if (reciever && !reciever.IsDetecting)
+            reciever.EnableDetection();
+
+        if (!hp.IsBeingHurt && !hp.IsWaitingForHit)
+            hp.EnableHitDetection();
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.BraceForBall);
+    }
+    public void C_ReleaseFromBrace()
+    {
+        if(hp.IsWaitingForHit)
+            hp.DisableHitDetection();
+        if(reciever && reciever.IsDetecting)
+            reciever.DisableDetection();
+
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.ReleaseFromBrace);
+    }
+    public void C_PushBall()
+    {
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.PushBall);
+    }
+    #endregion
 }

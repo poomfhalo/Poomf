@@ -1,26 +1,23 @@
 ﻿using System;
-using GW_Lib.Utility;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MatchInputController : Singleton<MatchInputController>
+public class MatchInputController : MonoBehaviour
 {
-    public static event Action<Vector3> OnMoveInput = null;
-    public static event Action OnFire = null;
-    public static event Action OnCatch = null;
-    public static event Action OnFriendly = null;
-    public static event Action OnEnemy = null;
-    public static event Action OnDodge = null;
-    public static event Action OnFakeFire = null;
-    public static event Action OnJump = null;
+    public event Action<Vector3> OnMoveInput = null;
+    public event Action<InputActionPhase> OnBallAction = null;
+    public event Action OnFriendly = null;
+    public event Action OnEnemy = null;
+    public event Action OnDodge = null;
+    public event Action OnFakeFire = null;
+    public event Action OnJump = null;
 
-    public static bool IsEnabled { set; get; } = true;
+    public bool IsEnabled { set; get; } = true;
 
     void OnDestroy()
     {
         OnMoveInput = null;
-        OnFire = null;
-        OnCatch = null;
+        OnBallAction = null;
         OnFriendly = null;
         OnEnemy = null;
         OnDodge = null;
@@ -31,25 +28,17 @@ public class MatchInputController : Singleton<MatchInputController>
     {
         if (!IsEnabled)
             return;
-
         Vector3 v3Input = ctx.ReadValue<Vector2>();
         v3Input.z = v3Input.y;
         v3Input.y = 0;
         OnMoveInput?.Invoke(v3Input);
     }
-    public void I_OnFire(InputAction.CallbackContext ctx)
+    public void I_OnBallAction(InputAction.CallbackContext ctx)
     {
-        if (!ButtonDownTest(ctx))
+        if(!IsEnabled)
             return;
 
-        OnFire?.Invoke();
-    }
-    public void I_OnCatch(InputAction.CallbackContext ctx)
-    {
-        if (!ButtonDownTest(ctx))
-            return;
-
-        OnCatch?.Invoke();
+        OnBallAction?.Invoke(ctx.phase);
     }
     public void I_OnFriendly(InputAction.CallbackContext ctx)
     {

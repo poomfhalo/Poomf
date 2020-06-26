@@ -85,13 +85,35 @@ namespace GW_Lib
 
     public static class Extentions
     {
+        public static void SetKinematic(this MonoBehaviour caller,bool toState)
+        {
+            Rigidbody rb3d = caller.GetComponent<Rigidbody>();
+            if (rb3d == null)
+                return;
+            if (rb3d.isKinematic == toState)
+                return;
+
+            rb3d.collisionDetectionMode = CollisionDetectionMode.Discrete;
+            rb3d.isKinematic = toState;
+            caller.InvokeDelayed(new WaitForEndOfFrame(), () => {
+                if (toState)
+                {
+                    rb3d.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+                }
+                else
+                {
+                    rb3d.collisionDetectionMode = CollisionDetectionMode.Continuous;
+                }
+            });
+        }
         public static void KillCoro(this MonoBehaviour caller, ref Coroutine c)
         {
             if (caller == null || c == null)
             {
                 return;
             }
-            caller.StopCoroutine(c); c = null;
+            caller.StopCoroutine(c); 
+            c = null;
         }
         public static void BeginCoro(this MonoBehaviour caller, ref Coroutine c, IEnumerator call, bool clearOld = true)
         {
@@ -175,12 +197,13 @@ namespace GW_Lib
             return posToSample;
         }
 
-        public static GameObject LogSphere(Vector3 pos, Color c)
+        public static GameObject LogSphere(Vector3 pos, Color c,float scale = 1)
         {
             GameObject s = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             s.GetComponent<Collider>().enabled = false;
             s.GetComponent<Renderer>().material.color = c;
             s.transform.position = pos;
+            s.transform.localScale = Vector3.one * scale;
             return s;
         }
 

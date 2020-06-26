@@ -13,19 +13,19 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: 51bb29dc-94ea-4f57-a8a0-f65b749d6bc8
+    AppIdRealtime: 26f8f86b-0a4b-47d9-9f88-4174ea877b93
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
-    FixedRegion: 
+    FixedRegion: eu
     Server: 
     Port: 0
     Protocol: 0
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: 
+  DevRegion: eu
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -34,8 +34,9 @@ MonoBehaviour:
   - ClickRpc
   - DestroyRpc
   - DestroySpaceship
-  - Fill
   - Fire
+  - RespawnSpaceship
+  - Fill
   - Free
   - OnCreated
   - PrepareForGame
@@ -47,11 +48,14 @@ MonoBehaviour:
   - R_UpdateBallState
   - RecieveCommand
   - RecieveDodgeCommand
+  - RecieveFeetPush
   - RecieveTeamsData
-  - RespawnSpaceship
+  - RpcClearBuffer
+  - RpcNonServerOwnedTeleportFromServer
+  - RpcTeleport
   - StartGame
   - SyncWithTeamsManager
   - UpdateButtonClick
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
   DevRegionSetOnce: 0

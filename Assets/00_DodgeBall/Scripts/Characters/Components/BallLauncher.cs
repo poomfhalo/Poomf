@@ -1,22 +1,19 @@
 ﻿using System;
-using GW_Lib;
 using UnityEngine;
 
 [RequireComponent(typeof(DodgeballCharacter))]
-public class BallLauncher : MonoBehaviour,ICharaAction
+public class BallLauncher : DodgeballCharaAction,ICharaAction
 {
     public event Action onThrowPointReached = null;
-    public event Action onFakeThrowEnded = null;
-
     public bool IsThrowing => isThrowing;
     public string actionName => activityName;
-
+    [Tooltip("If the value is less than 1 then we will use the Mover turn speed, noting that, if its too low, character may not" +
+    "\nface the target, by the end of the animation, but the ball, will still travel towards the target")]
     [SerializeField] float throwFacingSpeed = 200;
-    [Header("Throw Data")]
+
     [SerializeField] float heigth = 10;
     [SerializeField] float gravity = 5;
-    [Tooltip("If the value is less than 1 then we will use the Mover turn speed, noting that, if its too low, character may not" +
-        "\nface the target, by the end of the animation, but the ball, will still travel towards the target")]
+    [SerializeField] BallThrowData throwData = null;
 
     [Header("Read Only")]
     [SerializeField] bool isThrowing = false;
@@ -27,7 +24,7 @@ public class BallLauncher : MonoBehaviour,ICharaAction
     ActionsScheduler scheduler = null;
     DodgeballCharacter aimedAtChara = null;
     Mover mover = null;
-    Vector3 lastInput = new Vector3();
+    SelectionIndicator selectionIndicator => GetComponent<DodgeballCharacter>().selectionIndicator;
 
     void Awake()
     {
@@ -84,38 +81,37 @@ public class BallLauncher : MonoBehaviour,ICharaAction
             a.Invoke();
     }
 
-    public void A_OnFakeThrowEnded()
-    {
-        isThrowing = false;
-        onFakeThrowEnded?.Invoke();
-    }
+    public void A_OnFakeThrowEnded() => isThrowing = false;
     public void A_OnThrowPointReached()
     {
         Dodgeball.instance.transform.SetParent(null);
+        animator.SetBool("HasBall", false);
+        isThrowing = false;
+
+        Vector3 targetPos = new Vector3();
         if (TeamsManager.AreFriendlies(aimedAtChara, chara))
         {
+            //Call, recieving ball or sth here?
+            targetPos = aimedAtChara.RecievablePoint.position;
             Debug.LogWarning("Passing To Friendlies has not been implemented yet");
         }
         else
         {
-            animator.SetBool("HasBall", false);
-            onThrowPointReached?.Invoke();
-            isThrowing = false;
-
-            Vector3 vel = Extentions.GetLaunchVelocity(Dodgeball.instance.position,
-                                                        aimedAtChara.ShootablePoint.position, heigth, -gravity);
-            //float f =Extentions.GetTravelTime(chara.BallGrabPoint.position, toChara.ShootablePoint.position, vel, Vector3.zero);
-            //this.InvokeDelayed(f, () => { Debug.Log("Finished?"); Debug.Break(); });
-            Dodgeball.GoLaunchTo(aimedAtChara, vel, Vector3.down * gravity, null);
+            targetPos = aimedAtChara.ShootablePoint.position;
+            Vector3 dir = (targetPos - transform.position).normalized;
+            targetPos = targetPos + dir * throwData.ofShootDist;
+            Dodgeball.instance.launchTo.C_GoLaunchTo(targetPos, throwData);
+            DodgeballGameManager.instance.OnBallThrownAtEnemy(GetComponent<DodgeballCharacter>());
         }
-    }
-    public void UpdateInput(Vector3 i)
-    {
-        this.lastInput = i;
+
+        selectionIndicator.SetFocus(null);
+        onThrowPointReached?.Invoke();
     }
     public void A_OnThrowEnded()
     {
         mover.ReadFacingValues();
-        mover.UpdateInput(lastInput);
+        if (recievedInput == Vector3.zero)
+            return;
+        mover.ApplyInput(recievedInput);
     }
 }

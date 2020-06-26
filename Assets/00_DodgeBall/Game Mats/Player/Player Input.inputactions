@@ -22,17 +22,9 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Fire",
+                    "name": "BallAction",
                     "type": "Button",
                     "id": "a5f729c3-62b6-43ae-90ff-79f27f186a37",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "Catch",
-                    "type": "Button",
-                    "id": "4f5cbacf-e170-4220-ae58-af9fe104dece",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -251,7 +243,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Fire",
+                    "action": "BallAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -262,7 +254,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Touch",
-                    "action": "Fire",
+                    "action": "BallAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -273,7 +265,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Joystick",
-                    "action": "Fire",
+                    "action": "BallAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -284,7 +276,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "XR",
-                    "action": "Fire",
+                    "action": "BallAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -295,7 +287,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Fire",
+                    "action": "BallAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -306,18 +298,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Fire",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0f5d186b-d526-4de3-8338-87a324ea33a0",
-                    "path": "<Keyboard>/r",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Catch",
+                    "action": "BallAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

@@ -1,104 +1,39 @@
-﻿using System;
-using GW_Lib.Utility;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class PC : DodgeballCharacter
+[RequireComponent(typeof(DodgeballCharacter))]
+public class PC : MonoBehaviour
 {
+    MatchInputController input = null;
+    DodgeballCharacter chara = null;
     void OnEnable()
     {
-        MatchInputController.OnMoveInput += OnMoveInput;
-        MatchInputController.OnCatch += OnCatch;
-        MatchInputController.OnEnemy += OnEnemy;
-        MatchInputController.OnFriendly += OnFriendly;
-        MatchInputController.OnFire += OnFire;
-        MatchInputController.OnDodge+= OnDodge;
-        MatchInputController.OnFakeFire += OnFakeFire;
-        MatchInputController.OnJump += OnJump;
+        chara = GetComponent<DodgeballCharacter>();
+        input = GetComponent<MatchInputController>();
+        ConnectInput();
     }
     void OnDisable()
     {
-        MatchInputController.OnMoveInput -= OnMoveInput;
-        MatchInputController.OnCatch -= OnCatch;
-        MatchInputController.OnEnemy -= OnEnemy;
-        MatchInputController.OnFriendly -= OnFriendly;
-        MatchInputController.OnFire -= OnFire;
-        MatchInputController.OnDodge -= OnDodge;
-        MatchInputController.OnFakeFire -= OnFakeFire;
-        MatchInputController.OnJump -= OnJump;
+        DisconnectInput();
     }
 
-    private void OnMoveInput(Vector3 i)
+    private void ConnectInput()
     {
-        if (jumper.IsJumping)
-        {
-            jumper.UpdateInput(i);
-            return;
-        }
-        mover.StartMoveByInput(i, cam.transform);
+        input.OnMoveInput += chara.C_MoveInput;
+        input.OnEnemy += chara.C_Enemy;
+        input.OnFriendly += chara.C_Friendly;
+        input.OnBallAction += chara.C_OnBallAction;
+        input.OnDodge += chara.C_Dodge;
+        input.OnFakeFire += chara.C_FakeFire;
+        input.OnJump += chara.C_Jump;
     }
-    private void OnCatch()
+    private void DisconnectInput()
     {
-        if (HasBall)
-            return;
-        if (!IsBallInGrabZone)
-            return;
-
-        catcher.StartCatchAction();
-    }
-    private void OnFriendly()
-    {
-        if(HasBall)
-        {
-            selectionIndicator.SetNewFocus(true);
-        }
-    }
-    private void OnEnemy()
-    {
-        if (HasBall)
-        {
-            selectionIndicator.SetNewFocus(false);
-        }
-    }
-    private void OnFire()
-    {
-        if (IsThrowing)
-            return;
-        if (!HasBall)
-            return;
-        launcher.UpdateInput(mover.input);
-        launcher.StartThrowAction(selectionIndicator.ActiveSelection);
-    }
-    private void OnDodge()
-    {
-        if (HasBall)
-            return;
-        if (IsThrowing)
-            return;
-        if (IsDodging)
-            return;
-
-        dodger.StartDodgeAction();
-    }
-    private void OnFakeFire()
-    {
-        if (!HasBall)
-            return;
-        if (IsThrowing)
-            return;
-        launcher.UpdateInput(mover.input);
-        launcher.StartFakeThrow(selectionIndicator.ActiveSelection);
-    }
-    private void OnJump()
-    {
-        if (HasBall)
-            return;
-        if (IsThrowing)
-            return;
-        if (IsDodging)
-            return;
-        if (IsJumping)
-            return;
-        jumper.StartJumpAction();
-
+        input.OnMoveInput -= chara.C_MoveInput;
+        input.OnEnemy -= chara.C_Enemy;
+        input.OnFriendly -= chara.C_Friendly;
+        input.OnBallAction -= chara.C_OnBallAction;
+        input.OnDodge -= chara.C_Dodge;
+        input.OnFakeFire -= chara.C_FakeFire;
+        input.OnJump -= chara.C_Jump;
     }
 }
