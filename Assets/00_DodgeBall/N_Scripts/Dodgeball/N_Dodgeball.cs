@@ -27,6 +27,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         ball.E_OnGroundedAfterTime += () => syncer.enabled = true;
         ball.launchTo.onLaunchedTo += () => syncer.enabled = false;
         ball.reflection.onReflected += () => syncer.enabled = true;
+        ball.goTo.onGoto += () => syncer.enabled = false;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

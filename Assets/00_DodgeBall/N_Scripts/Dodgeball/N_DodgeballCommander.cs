@@ -21,7 +21,7 @@ public class N_DodgeballCommander : MonoBehaviour
 
     private void SendCommand(DodgeballCommand command)
     {
-        if (!PhotonNetwork.IsMasterClient)
+        if (!pv.IsMine)
             return;
 
         if (command == DodgeballCommand.LaunchUp)

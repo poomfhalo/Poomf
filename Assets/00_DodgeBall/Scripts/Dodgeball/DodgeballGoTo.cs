@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class DodgeballGoTo : DodgeballAction
 {
+    public event Action onGoto = null;
     public override DodgeballCommand Command => DodgeballCommand.GoToChara;
     public override string actionName => "Goiing To Chara";
     public DodgeballCharacter LastHolder => lastHolder;
@@ -31,6 +32,7 @@ public class DodgeballGoTo : DodgeballAction
     }
     public void GoTo(DodgeballCharacter chara, Action onCompleted)
     {
+        onGoto?.Invoke();
         ball.ballState = Dodgeball.BallState.Held;
         isRunning = true;
         scheduler.StartAction(this);
