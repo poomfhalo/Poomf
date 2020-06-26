@@ -743,7 +743,13 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'Bip002 L Finger01'\n\tTransform 'Bip002 R Finger32'\n\tTransform
+    'Bip002 R Toe0'\n\tTransform 'Bip002 R Finger01'\n\tTransform 'Bip002 L Finger32'\n\tTransform
+    'Bip002 L Calf'\n\tTransform 'Bip002 L Foot'\n\tTransform 'Bip002 Head'\n\tTransform
+    'Bip002 R Finger12'\n\tTransform 'Bip002'\n\tand more ...\n\tFrom animation clip
+    'dodge'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -1366,7 +1372,7 @@ PrefabInstance:
     - target: {fileID: 2241329814999137111, guid: ad1680e76f370cf168f43dc2ddb59ffd,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2512465449577340919, guid: ad1680e76f370cf168f43dc2ddb59ffd,
         type: 3}
@@ -1378,12 +1384,32 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4243485789309434474, guid: ad1680e76f370cf168f43dc2ddb59ffd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4303865818573907839, guid: ad1680e76f370cf168f43dc2ddb59ffd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5389014394154190484, guid: ad1680e76f370cf168f43dc2ddb59ffd,
         type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5593006848404010689, guid: ad1680e76f370cf168f43dc2ddb59ffd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6635357958793245774, guid: ad1680e76f370cf168f43dc2ddb59ffd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7105762760716533695, guid: ad1680e76f370cf168f43dc2ddb59ffd,
         type: 3}
       propertyPath: m_IsActive
       value: 0
