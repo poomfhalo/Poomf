@@ -44,14 +44,11 @@ public class Dodgeball : Singleton<Dodgeball>
                     this.KillCoro(ref delayedGroundedCoro);
                     tr.enabled = false;
                     E_OnStateUpdated?.Invoke(BallState.Held);
-                    Log.Warning("Okay, called held");
                     break;
                 case BallState.OnGround:
                     this.KillCoro(ref delayedGroundedCoro);
-                    Log.Warning("Started on grounded call");
                     delayedGroundedCoro = this.InvokeDelayed(timeToGrounded, () => {
                         tr.enabled = false;
-                        Log.Warning("Called On Grounded");
                         E_OnStateUpdated?.Invoke(BallState.OnGround);
                     });
                     break;

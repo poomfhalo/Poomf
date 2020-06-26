@@ -5,7 +5,7 @@ using System.Collections;
 
 //Responsible for enabling/Disabling Syncer, and syncronizing the BallState.
 [RequireComponent(typeof(Dodgeball))]
-public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
+public class N_Dodgeball : N_Singleton<N_Dodgeball>
 {
     Dodgeball ball = null;
     SmoothSyncPUN2 syncer = null;
@@ -21,49 +21,35 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     void Start()
     {
         ball.E_OnStateUpdated += (s) => {
-            switch (s)
-            {
-                case Dodgeball.BallState.OnGround:
-                    syncer.enabled = true;
-                    Log.Warning("Enabled Syncer, from grounded");
-                    break;
-                case Dodgeball.BallState.Held:
-                    syncer.enabled = false;
-                    Log.Warning("Disabled Syncer, from being held");
-                    break;
-            }
+            photonView.RPC("UpdateState", RpcTarget.AllViaServer, (int)s);
         };
         ball.reflection.onReflected += () => {
-            Log.Warning("Enabled Syncer, from reflected");
             syncer.enabled = true;
         };
 
         ball.launchTo.onLaunchedTo += () => {
-            Log.Warning("disabled Syncer, from onLaunchedTo");
             syncer.enabled = false;
         };
         ball.goTo.onGoto += () =>{
-            Log.Warning("disabled Syncer, from onGoTo");
             syncer.enabled = false;
-            GetComponent<Dodgeball>().ballState = Dodgeball.BallState.Held;
         };
         ball.launchUp.onLaunchedUp += () => {
-            Log.Warning("disabled Syncer, from onLaunchedUp");
             syncer.enabled = false;
         };
     }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    [PunRPC]
+    private void UpdateState(int s)
     {
-        if (stream.IsWriting)
+        GetComponent<Dodgeball>().ballState = (Dodgeball.BallState)s;
+        switch ((Dodgeball.BallState)s)
         {
-            stream.SendNext(ball.ballState);
-        }
-        else if (stream.IsReading)
-        {
-            int s = (int)stream.ReceiveNext();
-            Dodgeball.BallState state = (Dodgeball.BallState)s;
-            ball.ballState = state;
+            case Dodgeball.BallState.OnGround:
+                syncer.enabled = true;
+                break;
+            case Dodgeball.BallState.Held:
+                syncer.enabled = false;
+                break;
         }
     }
 
