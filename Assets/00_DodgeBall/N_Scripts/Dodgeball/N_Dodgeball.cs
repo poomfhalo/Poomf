@@ -20,14 +20,27 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
     }
     void Start()
     {
-        ball.launchUp.onLaunchedUp += () =>{
-            syncer.enabled = false;
-            Debug.Log("Disabnled Syncser");
+        ball.E_OnGroundedAfterTime += () => {
+            Log.Warning("Enabled Syncer, from grounded");
+            syncer.enabled = true;
         };
-        ball.E_OnGroundedAfterTime += () => syncer.enabled = true;
-        ball.launchTo.onLaunchedTo += () => syncer.enabled = false;
-        ball.reflection.onReflected += () => syncer.enabled = true;
-        ball.goTo.onGoto += () => syncer.enabled = false;
+        ball.reflection.onReflected += () => {
+            Log.Warning("Enabled Syncer, from reflected");
+            syncer.enabled = true;
+        };
+
+        ball.launchTo.onLaunchedTo += () => {
+            Log.Warning("disabled Syncer, from onLaunchedTo");
+            syncer.enabled = false;
+        };
+        ball.goTo.onGoto += () =>{
+            Log.Warning("disabled Syncer, from onGoTo");
+            syncer.enabled = false;
+        };
+        ball.launchUp.onLaunchedUp += () => {
+            Log.Warning("disabled Syncer, from onLaunchedUp");
+            syncer.enabled = false;
+        };
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
