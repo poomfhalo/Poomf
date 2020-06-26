@@ -10,15 +10,17 @@ namespace Poomf.UI
         [SerializeField] private Text itemName = null;
         [SerializeField] private Text itemPriceCoins = null;
         [SerializeField] private Text itemPriceGems = null;
+        [SerializeField] private Text itemStatus = null;
         [SerializeField] private Image itemImage = null;
 
-        public void InitializeItem(string i_itemName, int? i_itemCoinsPrice, int? i_itemGemsPrice, Sprite itemSprite)
+        public void InitializeItem(string i_itemName, int? i_itemCoinsPrice, int? i_itemGemsPrice, Sprite itemSprite, string i_itemStatus)
         {
             if (null != itemName)
                 itemName.text = i_itemName;
 
             setupPrice(itemPriceCoins, i_itemCoinsPrice);
             setupPrice(itemPriceGems, i_itemGemsPrice);
+            setupStatus(i_itemStatus);
 
             if (null != itemImage)
                 itemImage.sprite = itemSprite;
@@ -38,6 +40,14 @@ namespace Poomf.UI
                     i_priceText.gameObject.SetActive(false);
                 }
             }
+        }
+
+        private void setupStatus(string i_itemStatus)
+        {
+            if (null == itemStatus) return;
+
+            itemStatus.text = i_itemStatus;
+            itemStatus.gameObject.SetActive(!string.IsNullOrEmpty(i_itemStatus));
         }
     }
 }

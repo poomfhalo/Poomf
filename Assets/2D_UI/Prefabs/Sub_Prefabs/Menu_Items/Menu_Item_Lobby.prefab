@@ -1630,14 +1630,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6124444341524134948}
-  - component: {fileID: 1176365828009229487}
+  - component: {fileID: 1349507776940827120}
   m_Layer: 5
   m_Name: Menu_Item_Lobby
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6124444341524134948
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1665,7 +1665,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1176365828009229487
+--- !u!114 &1349507776940827120
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1674,7 +1674,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6124444341524134951}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a542dbada59fb24418e17f4c7eec13a6, type: 3}
+  m_Script: {fileID: 11500000, guid: e362e895d88740649b97fea6217ce300, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   defaultMenuButton: {fileID: 0}

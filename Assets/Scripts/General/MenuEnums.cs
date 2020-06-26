@@ -19,3 +19,18 @@ public enum ItemRarity
     RARE = 3,
     LEGENDARY = 4
 }
+
+public enum ItemSet
+{
+    SCHOOL = 0,
+    STREET = 1,
+    WESTERN = 2,
+    SERVICE = 3,
+    PAJANIMALS = 4,
+    FANCY = 5,
+    HALLOWEEN = 6,
+    SUPPORTER = 7,
+    ANIME = 8,
+    ROBOT = 9,
+    CHRISTMAS = 10
+}

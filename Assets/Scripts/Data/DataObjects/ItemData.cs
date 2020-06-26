@@ -13,6 +13,7 @@ namespace Poomf.Data
         [SerializeField] private CurrencyType currencyType = CurrencyType.COINS;
         [SerializeField] private ItemCategory itemCategory = ItemCategory.HEAD;
         [SerializeField] private ItemRarity itemRarity = ItemRarity.COMMON;
+        [SerializeField] private ItemSet itemSet = ItemSet.SCHOOL;
 
         [HideInInspector] [SerializeField] private int itemID = -1;
 
@@ -21,6 +22,8 @@ namespace Poomf.Data
         public int PriceGems { get { return gemsPrice; } }
         public CurrencyType CurrencyType { get { return currencyType; } }
         public ItemCategory ItemCategory { get { return itemCategory; } }
+        public ItemRarity ItemRarity { get { return itemRarity; } }
+        public ItemSet ItemSet { get { return itemSet; } }
         public Sprite ItemSprite { get { return itemSprite; } }
         public int ItemID { get { return itemID; } }
 

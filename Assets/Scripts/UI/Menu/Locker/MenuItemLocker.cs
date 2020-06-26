@@ -5,36 +5,21 @@ using Poomf.Data;
 
 namespace Poomf.UI
 {
-    public class MenuItemShop : MenuItemBase
+    public class MenuItemLocker : MenuItemBase
     {
-        [SerializeField] private MenuNavigator mainmenuNavigator = null;
-        [SerializeField] private Transform storeContent = null;
-        [SerializeField] private GameObject storeItemPrefab = null;
+        [SerializeField] Transform storeContent = null;
+        [SerializeField] GameObject lockerItemPrefab = null;
         // TODO : For testing, to be removed.
         [SerializeField] private ItemData[] testItemData = null;
 
-        private bool initialized = false;
+        bool initialized = false;
 
-        private void OnEnable()
+        void OnEnable()
         {
             initialize();
-
-            if (null == mainmenuNavigator) return;
-            mainmenuNavigator.enabled = false;
         }
 
-        private void OnDisable()
-        {
-            if (null == mainmenuNavigator) return;
-            mainmenuNavigator.enabled = true;
-        }
-
-        public void Back()
-        {
-            gameObject.SetActive(false);
-        }
-
-        private void initialize()
+        void initialize()
         {
             if (true == initialized) return;
 
@@ -44,13 +29,13 @@ namespace Poomf.UI
 
         private void populateStoreItems()
         {
-            if (null == storeItemPrefab || null == testItemData || 0 == testItemData.Length) return;
+            if (null == lockerItemPrefab || null == testItemData || 0 == testItemData.Length) return;
 
             int itemsCount = testItemData.Length;
 
             for (int i = 0; i < itemsCount; i++)
             {
-                GameObject newItem = Instantiate(storeItemPrefab);
+                GameObject newItem = Instantiate(lockerItemPrefab);
                 InventoryItem item = newItem.GetComponent<InventoryItem>();
                 if (null == item) return;
                 ItemData itemData = testItemData[i];
@@ -72,7 +57,7 @@ namespace Poomf.UI
                     priceGems = itemData.PriceGems;
                 }
 
-                item.InitializeItem(testItemData[i].ItemName, priceCoins, priceGems, itemData.ItemSprite, null);
+                item.InitializeItem(testItemData[i].ItemName, null, null, itemData.ItemSprite, "OWNED");
                 newItem.transform.SetParent(storeContent, false);
             }
         }
