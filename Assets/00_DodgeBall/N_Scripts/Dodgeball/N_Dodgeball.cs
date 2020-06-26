@@ -2,6 +2,7 @@
 using Photon.Pun;
 using Smooth;
 using System.Collections;
+using GW_Lib;
 
 //Responsible for enabling/Disabling Syncer, and syncronizing the BallState.
 [RequireComponent(typeof(Dodgeball))]
@@ -28,6 +29,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>,IPunObservable
                     break;
                 case Dodgeball.BallState.Held:
                     syncer.enabled = false;
+                    this.InvokeDelayed(0.1f, () => transform.localPosition = Vector3.zero);
                     break;
             }
         };
@@ -67,12 +69,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>,IPunObservable
             int s = (int)stream.ReceiveNext();
             Dodgeball.BallState state = (Dodgeball.BallState)s;
             ball.ballState = state;
-            switch (state)
-            {
-                case Dodgeball.BallState.Held:
-                    transform.localPosition = Vector3.zero;
-                    break;
-            }
         }
     }
 }
