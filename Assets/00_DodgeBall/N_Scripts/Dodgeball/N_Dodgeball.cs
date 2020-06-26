@@ -21,7 +21,6 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>,IPunObservable
     void Start()
     {
         ball.E_OnStateUpdated += (s) => {
-            Log.Warning("new state is " + s);
             switch (s)
             {
                 case Dodgeball.BallState.OnGround:
