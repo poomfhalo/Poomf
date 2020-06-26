@@ -36,6 +36,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>, IPunObservable
         ball.goTo.onGoto += () =>{
             Log.Warning("disabled Syncer, from onGoTo");
             syncer.enabled = false;
+            GetComponent<Dodgeball>().ballState = Dodgeball.BallState.Held;
         };
         ball.launchUp.onLaunchedUp += () => {
             Log.Warning("disabled Syncer, from onLaunchedUp");
