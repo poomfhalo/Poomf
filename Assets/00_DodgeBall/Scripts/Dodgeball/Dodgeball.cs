@@ -29,7 +29,10 @@ public class Dodgeball : Singleton<Dodgeball>
         set
         {
             if (m_ballState == value)
+            {
+                Log.Warning("Trying to set new state to " + value + " but its already assigned");
                 return;
+            }
 
             m_ballState = value;
             TrailRenderer tr = GetComponentInChildren<TrailRenderer>();
