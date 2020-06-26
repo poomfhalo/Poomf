@@ -31,7 +31,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>
                     syncer.enabled = false;
                     break;
             }
-            photonView.RPC("UpdateState", RpcTarget.AllViaServer, (int)s);
+            photonView.RPC("UpdateState", RpcTarget.Others, (int)s);
         };
         ball.reflection.onReflected += () => {
             syncer.enabled = true;
