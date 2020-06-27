@@ -31,7 +31,7 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
     }
     void Update()
     {
-        if (ball.reflection.IsRunning)
+        if (ball.reflection.IsRunning && ball.reflection.extReflectionTest)
         {
             Debug.LogWarning("Reflection Is running and I Am The Master :: " + pv.IsMine);
         }
