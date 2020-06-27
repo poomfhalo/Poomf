@@ -132,7 +132,7 @@ public class DodgeballReflection : DodgeballAction
             if (dist <= expectedTravelDist)
             {
                 SetReflectionData();
-                isRunning = false;
+                Cancel();
 
                 ball.RunCommand(Command);
                 Reflect(lastReflectionVel, lastReflectionStartPoint, lastReflectionTarget,lastContact);

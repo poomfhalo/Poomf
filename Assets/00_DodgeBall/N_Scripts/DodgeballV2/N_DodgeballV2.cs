@@ -18,7 +18,13 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
         ball.E_OnCommandActivated += OnCommandActivated;
         ball.E_OnStateUpdated += OnStateUpdated;
     }
-
+    void Update()
+    {
+        if(ball.reflection.IsRunning)
+        {
+            Debug.Log("Reflection Is running and I Am The Master :: " + pv.IsMine);
+        }
+    }
     private void OnCommandActivated(DodgeballCommand cmd)
     {
 
