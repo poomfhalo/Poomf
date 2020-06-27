@@ -78,6 +78,9 @@ public class DodgeballReflection : DodgeballAction
                         Debug.Log("Started Reflection Action");
                         StartReflectionAction();
                         break;
+                    case DodgeballCommand.HitGround:
+                        Cancel();
+                        break;
                 }
             };
         }
