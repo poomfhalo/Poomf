@@ -16,8 +16,8 @@ public class N_DodgeballCommander : MonoBehaviour
         ball = GetComponent<Dodgeball>();
         pv = GetComponent<PhotonView>();
     }
-    void OnEnable() => ball.OnCommandActivated += SendCommand;
-    void OnDisable() => ball.OnCommandActivated -= SendCommand;
+    void OnEnable() => ball.E_OnCommandActivated += SendCommand;
+    void OnDisable() => ball.E_OnCommandActivated -= SendCommand;
 
     private void SendCommand(DodgeballCommand command)
     {

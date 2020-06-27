@@ -107,6 +107,10 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
     }
     public void A_OnHitEnded()
     {
+        //TODO: Implement check, for when, we "disable" characters, in game, instead of turning off game obj
+        if (!gameObject.activeSelf)
+            return;
+
         this.InvokeDelayed(minTimeBetweenHurts, () => {
             isBeingHurt = false;
         });

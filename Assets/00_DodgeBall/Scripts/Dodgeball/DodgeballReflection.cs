@@ -71,7 +71,7 @@ public class DodgeballReflection : DodgeballAction
     {
         if(autoActivate && extReflectionTest)
         {
-            GetComponent<Dodgeball>().OnCommandActivated += (cmd) => {
+            GetComponent<Dodgeball>().E_OnCommandActivated += (cmd) => {
                 switch (cmd)
                 {
                     case DodgeballCommand.LaunchTo:
@@ -87,6 +87,7 @@ public class DodgeballReflection : DodgeballAction
     void Update()
     {
         UpdateExpectionDT();
+
         if (!IsRunning)
             return;
         if (IsRunning)

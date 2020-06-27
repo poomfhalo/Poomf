@@ -149,7 +149,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
         float startCancelSpeed = speed;
 
         float f = 0;
-        DOTween.To(() => f, (newF) => f = newF, 1, cancelationTime).SetEase(Ease.InOutSine).OnUpdate(() =>
+        DOTween.To(() => f, (newF) => f = newF, 1, cancelationTime).SetEase(Ease.Linear).OnUpdate(() =>
         {
             xzVel = Vector3.Slerp(cancelStartVel, Vector3.zero, f);
             ApplyVel();

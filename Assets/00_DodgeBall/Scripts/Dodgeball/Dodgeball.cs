@@ -35,23 +35,19 @@ public class Dodgeball : Singleton<Dodgeball>
             }
 
             m_ballState = value;
-            TrailRenderer tr = GetComponentInChildren<TrailRenderer>();
             switch (ballState)
             {
                 case BallState.Flying:
                     this.KillCoro(ref delayedGroundedCoro);
-                    tr.enabled = true;
                     E_OnStateUpdated?.Invoke(BallState.Flying);
                     break;
                 case BallState.Held:
                     this.KillCoro(ref delayedGroundedCoro);
-                    tr.enabled = false;
                     E_OnStateUpdated?.Invoke(BallState.Held);
                     break;
                 case BallState.OnGround:
                     this.KillCoro(ref delayedGroundedCoro);
                     delayedGroundedCoro = this.InvokeDelayed(timeToGrounded, () => {
-                        tr.enabled = false;
                         E_OnStateUpdated?.Invoke(BallState.OnGround);
                     });
                     break;
@@ -60,7 +56,7 @@ public class Dodgeball : Singleton<Dodgeball>
     }
     public DodgeballCharacter holder => goTo.LastHolder;
 
-    public event Action<DodgeballCommand> OnCommandActivated = null;
+    public event Action<DodgeballCommand> E_OnCommandActivated = null;
     public enum BallState { OnGround, Held, Flying }
     public Vector3 position { get { return rb3d.position; } set { rb3d.MovePosition(value); } }
 
@@ -127,7 +123,7 @@ public class Dodgeball : Singleton<Dodgeball>
 
     private void OnBodyEntered(Collision col){ }
     private void OnBodyExitted(Collision col){ }
-    public void RunCommand(DodgeballCommand command) => OnCommandActivated?.Invoke(command);
+    public void RunCommand(DodgeballCommand command) => E_OnCommandActivated?.Invoke(command);
 
     private void C_OnGroundHit()
     {

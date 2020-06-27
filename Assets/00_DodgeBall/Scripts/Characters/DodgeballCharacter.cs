@@ -142,7 +142,7 @@ public class DodgeballCharacter : MonoBehaviour
             return;
 
         if (reciever.IsDetecting)
-            return;//Recieving is handled 
+            return;//Recieving is handled in its own update
         
         if (!HasBall && IsBallInGrabZone)
         {

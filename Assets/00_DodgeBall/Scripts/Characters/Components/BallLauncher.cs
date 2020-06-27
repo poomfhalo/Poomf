@@ -55,7 +55,7 @@ public class BallLauncher : DodgeballCharaAction,ICharaAction
         Action a = () =>{
             animator.SetTrigger("Throw");
             activityName = "Throw Action";
-            scheduler.StartAction(this,false);
+            scheduler.StartAction(this, true);
         };
         if (mover.IsMoving)
             mover.SmoothStop(a);
