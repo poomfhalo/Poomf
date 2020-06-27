@@ -11,8 +11,7 @@ public class SettingsAnimatedScreen : AUIAnimatedScreen
     // The min scale that the screen shrinks to if it's animating out, or grows from if it's animating in
     [SerializeField] private Vector3 shrinkScale;
 
-    // The base duration of different tween animations
-    private float animDuration = 1f;
+    
     // Bottom left corner of the screen
     private Vector3 cornerPoint;
     // The original position
@@ -25,9 +24,9 @@ public class SettingsAnimatedScreen : AUIAnimatedScreen
         cornerPoint = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 1));
         basePosition = transform.position;
         // Settings window is initially disabled
-        gameObject.SetActive(false);
+        gameObject.SetActive(initialState);
     }
-    public override IEnumerator AnimateIn()
+    public override IEnumerator AnimateIn(AnimationProperties properties = null)
     {
         if (gameObject.activeSelf)
         {
@@ -59,7 +58,7 @@ public class SettingsAnimatedScreen : AUIAnimatedScreen
             }
         }
     }
-    public override IEnumerator AnimateOut()
+    public override IEnumerator AnimateOut(AnimationProperties properties = null)
     {
         if (!gameObject.activeSelf)
         {

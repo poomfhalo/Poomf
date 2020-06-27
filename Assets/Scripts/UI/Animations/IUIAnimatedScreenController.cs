@@ -7,6 +7,7 @@ using UnityEngine;
 /// </summary>
 public interface IUIAnimatedScreenController
 {
-    IEnumerator AnimateIn();
-    IEnumerator AnimateOut();
+    // Animate the screen in or out with optional parameters describing their animation
+    IEnumerator AnimateIn(AnimationProperties properties = null);
+    IEnumerator AnimateOut(AnimationProperties properties = null);
 }
