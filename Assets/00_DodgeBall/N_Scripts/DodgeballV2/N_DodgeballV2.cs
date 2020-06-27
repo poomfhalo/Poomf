@@ -17,10 +17,11 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
 
         ball.E_OnCommandActivated += OnCommandActivated;
         ball.E_OnStateUpdated += OnStateUpdated;
+        ball.reflection.extReflectionTest = pv.IsMine;
     }
     void Update()
     {
-        if(ball.reflection.IsRunning)
+        if (ball.reflection.IsRunning)
         {
             Debug.LogWarning("Reflection Is running and I Am The Master :: " + pv.IsMine);
         }
@@ -36,11 +37,11 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if(stream.IsWriting)
+        if (stream.IsWriting)
         {
 
         }
-        else if(stream.IsReading)
+        else if (stream.IsReading)
         {
 
         }
