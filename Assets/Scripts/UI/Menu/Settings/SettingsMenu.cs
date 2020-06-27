@@ -5,9 +5,8 @@ using UnityEngine.Audio;
 
 public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
 {
+    [SerializeField] private MenuAnimationsController animationsController;
     [Header("UI")]
-    // The UI panel that contains the game's settings
-    [SerializeField] private GameObject settingsUIMenu;
     // UI panel that asks the user if they want to exit without saving
     [SerializeField] private GameObject closeWithoutSavingUI;
     // Contains the UI elements relative to the Audio volume settings
@@ -76,13 +75,14 @@ public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
     // Called when the settings button is pressed
     public void OnSettingsButtonPressed()
     {
-        if (settingsUIMenu.activeSelf)
+        if (tempAudioSettings != null || tempVideoSettings != null)
         {
             // This means that the settings UI is already open, don't do anything
+            Debug.LogWarning("Settings button pressed although the menu was already open.");
             return;
         }
         // Show the UI menu
-        settingsUIMenu.SetActive(true);
+        animationsController.ShowScreen(ScreensIDs.SettingsMenuID);
         // Create temp assets to store temp settings
         tempAudioSettings = ScriptableObject.CreateInstance("AudioManager") as AudioManager;
         tempVideoSettings = ScriptableObject.CreateInstance("VideoManager") as VideoManager;
@@ -161,7 +161,7 @@ public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
     public void CloseSettingsWindow()
     {
         // Hide the settings window
-        settingsUIMenu.SetActive(false);
+        animationsController.HideScreen(ScreensIDs.SettingsMenuID);
         // Unload the temp settings assets
         Destroy(tempAudioSettings);
         Destroy(tempVideoSettings);
