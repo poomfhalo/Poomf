@@ -33,7 +33,7 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
     {
         if (ball.reflection.IsRunning && ball.reflection.extReflectionTest)
         {
-            Debug.LogWarning("Reflection Is running and I Am The Master :: " + pv.IsMine);
+            //Debug.LogWarning("Reflection Is running and I Am The Master :: " + pv.IsMine);
         }
     }
     private void OnCommandActivated(DodgeballCommand cmd)
