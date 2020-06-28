@@ -10,6 +10,7 @@ public class SettingsAnimatedScreen : AUIAnimatedScreen
     [SerializeField] private UITransitionEffect fadeEffect;
     // The min scale that the screen shrinks to if it's animating out, or grows from if it's animating in
     [SerializeField] private Vector3 shrinkScale;
+    [Tooltip("The speed at which the menu fades/appears.")]
     [SerializeField] private float fadeSpeed = 1f;
 
 

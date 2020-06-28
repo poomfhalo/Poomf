@@ -6,7 +6,7 @@ public abstract class AUIAnimatedScreen : MonoBehaviour, IUIAnimatedScreenContro
 {
     // The animations controller that's taking care of this screen
     [SerializeField] private MenuAnimationsController animationsController;
-    // The base duration of different animations
+    [Tooltip("The base duration that each animation phase takes. Lower = faster animations.")]
     [SerializeField] protected float animDuration = 1f;
     [Tooltip("Is this screen initially enabled (true) or disabled (false)?")]
     [SerializeField] private bool initialState = false;
