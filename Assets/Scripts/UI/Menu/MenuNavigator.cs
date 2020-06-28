@@ -16,6 +16,9 @@ namespace Poomf.UI
         private MenuTabButton[] menuTabsButtons = null;
         private int? currentActiveMenuIndex = null;
         private bool initialized = false;
+        // Holds the index of the screen that's yet to be shown, so that if it's not yet visible because of
+        // animations, users can't show other screens
+        private int screenToBeShown = -1;
 
         #region UNITY
         private void Awake()
@@ -201,7 +204,10 @@ namespace Poomf.UI
             if (false == menuItems[i_menuIndex].gameObject.activeInHierarchy)
             {
                 if (menuItems[i_menuIndex].IsAnimated)
+                {
                     mainAnimController.ShowScreen(menuItems[i_menuIndex].AnimationsController.ScreenID, selectedMenuAP);
+                    screenToBeShown = i_menuIndex;
+                }
                 else
                     menuItems[i_menuIndex].gameObject.SetActive(true);
                 currentActiveMenuIndex = i_menuIndex;
@@ -210,6 +216,11 @@ namespace Poomf.UI
 
         private void onButtonSelected(int i_menuIndex)
         {
+            if (IsTransitionPending())
+            {
+                // A menu transition is still in effect and users pressed buttons in quick succession! Don't do anything
+                return;
+            }
             activateMenuElement(i_menuIndex);
         }
 
@@ -256,6 +267,23 @@ namespace Poomf.UI
                 }
             }
             */
+        }
+
+        /// <summary>
+        /// Is a screen transition still in effect? Use this to make sure users don't 
+        /// Bug out menus by pressing buttons in quick succession
+        /// </summary>
+        /// <returns>
+        /// True: A menu transition is still in effect
+        /// </returns>
+        private bool IsTransitionPending()
+        {
+            if (screenToBeShown != -1)
+                if (!menuItems[screenToBeShown].gameObject.activeSelf)
+                {
+                    return true;
+                }
+            return false;
         }
         #endregion
     }
