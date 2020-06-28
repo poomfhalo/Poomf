@@ -8,14 +8,12 @@ namespace Poomf.UI
     public class MenuNavigator : MonoBehaviour
     {
         [SerializeField] private Transform menuTabsButtonsTransform = null;
-        [SerializeField] private Transform[] menuItems = null;
+        [SerializeField] private MenuItemBase[] menuItems = null;
         [SerializeField] private MenuTabButton defaultMenuButton = null;
 
         private MenuAnimationsController mainAnimController;
         private PlayerInput playerInput = null;
         private MenuTabButton[] menuTabsButtons = null;
-        // Caches the UI animation controllers of the menu items
-        private AUIAnimatedScreen[] menuAnimControllers;
         private int? currentActiveMenuIndex = null;
         private bool initialized = false;
 
@@ -23,6 +21,7 @@ namespace Poomf.UI
         private void Awake()
         {
             // playerInput = new PlayerInput();
+            mainAnimController = GetComponent<MenuAnimationsController>();
         }
 
         private void OnEnable()
@@ -59,7 +58,6 @@ namespace Poomf.UI
         {
             if (false == initializeButtons() ||
                 false == initializeMenus() ||
-                false == initializeAnimControllers() ||
                 false == bindButtonsToMenus() ||
                 false == launchDefaultMenu() ||
                 false == bindPlayerInput()
@@ -156,28 +154,6 @@ namespace Poomf.UI
 
             return true;
         }
-        private bool initializeAnimControllers()
-        {
-            mainAnimController = GetComponent<MenuAnimationsController>();
-            if (null == mainAnimController)
-            {
-                //Debug.LogError("MenuNavigator::initializeAnimeControllers -> The menu base has no animations controller script.");
-                //return false;
-            }
-            menuAnimControllers = new AUIAnimatedScreen[menuItems.Length];
-            for (int i = 0; i < menuAnimControllers.Length; i++)
-            {
-                AUIAnimatedScreen controller = menuItems[i].GetComponent<AUIAnimatedScreen>();
-                if (null == controller)
-                {
-                    //Debug.LogError("MenuNavigator::initializeAnimeControllers -> a menu has no animation controller!");
-                    //return false;
-                }
-                else
-                    menuAnimControllers[i] = controller;
-            }
-            return true;
-        }
         private void bindButtonToMenu(MenuTabButton i_button, int i_menuIndex)
         {
             i_button.Initialize(i_menuIndex);
@@ -216,19 +192,18 @@ namespace Poomf.UI
 
             if (true == menuItems[currentActiveMenuIndex.Value].gameObject.activeInHierarchy)
             {
-                // the if condition will be removed when the shop UI is fixed
-                if (null == mainAnimController)
-                    menuItems[currentActiveMenuIndex.Value].gameObject.SetActive(false);
+                if (menuItems[currentActiveMenuIndex.Value].IsAnimated)
+                    mainAnimController.HideScreen(menuItems[currentActiveMenuIndex.Value].AnimationsController.ScreenID, currentMenuAP);
                 else
-                    mainAnimController.HideScreen(menuAnimControllers[currentActiveMenuIndex.Value].ScreenID, currentMenuAP);
+                    menuItems[currentActiveMenuIndex.Value].gameObject.SetActive(false);
             }
 
             if (false == menuItems[i_menuIndex].gameObject.activeInHierarchy)
             {
-                if (null == mainAnimController)
-                    menuItems[i_menuIndex].gameObject.SetActive(true);
+                if (menuItems[i_menuIndex].IsAnimated)
+                    mainAnimController.ShowScreen(menuItems[i_menuIndex].AnimationsController.ScreenID, selectedMenuAP);
                 else
-                    mainAnimController.ShowScreen(menuAnimControllers[i_menuIndex].ScreenID, selectedMenuAP);
+                    menuItems[i_menuIndex].gameObject.SetActive(true);
                 currentActiveMenuIndex = i_menuIndex;
             }
         }

@@ -9,15 +9,25 @@ public abstract class AUIAnimatedScreen : MonoBehaviour, IUIAnimatedScreenContro
     // The base duration of different animations
     [SerializeField] protected float animDuration = 1f;
     [Tooltip("Is this screen initially enabled (true) or disabled (false)?")]
-    [SerializeField] protected bool initialState = false;
-    public string ScreenID { get; protected set; } = "notset";
+    [SerializeField] private bool initialState = false;
+    public string ScreenID { get; set; } = "notset";
 
     private void Awake()
     {
         Initialize();
-        animationsController.RegisterScreen(ScreenID, this);
+        Register();
     }
 
+    // Adds this screen to the animations controller's list.
+    public void Register()
+    {
+        if (ScreenID != "notset")
+            animationsController.RegisterScreen(ScreenID, this);
+    }
+    public void ApplyInitialState()
+    {
+        gameObject.SetActive(initialState);
+    }
     protected abstract void Initialize();
 
     public abstract IEnumerator AnimateIn(AnimationProperties properties = null);
