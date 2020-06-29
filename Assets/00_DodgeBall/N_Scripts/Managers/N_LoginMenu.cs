@@ -4,15 +4,16 @@ using TMPro;
 using Poomf.UI;
 using Photon.Pun;
 
-public class N_LoginMenu : MenuItemBase
+public class N_LoginMenu : MonoBehaviour
 {
     [SerializeField] TMP_InputField nickName = null;
     [SerializeField] Button login = null;
+    [SerializeField] MenuAnimationsController animController = null;
 
     void Start()
     {
         login.onClick.AddListener(OnLoginPressed);
-        StartCoroutine(GetComponent<N_LoginMenuAnims>().AnimateIn());
+        animController.ShowScreen(animController.LoginAnimatedScreen);
     }
 
     private void OnLoginPressed()
@@ -21,6 +22,6 @@ public class N_LoginMenu : MenuItemBase
             return;
 
         PhotonNetwork.NickName = nickName.text;
-        StartCoroutine(GetComponent<N_LoginMenuAnims>().AnimateOut());
+        animController.HideScreen(animController.LoginAnimatedScreen);
     }
 }

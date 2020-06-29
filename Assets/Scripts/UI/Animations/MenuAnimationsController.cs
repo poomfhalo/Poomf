@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class MenuAnimationsController : MonoBehaviour, IUIAnimationsController
 {
-    //private Dictionary<string, IUIAnimatedScreenController> screens = new Dictionary<string, IUIAnimatedScreenController>();
     [SerializeField] private AUIAnimatedScreen settingsAnimatedScreen;
+    [SerializeField] private AUIAnimatedScreen loginAnimatedScreen;
     // The queue that holds the pending animations
     private Queue<IEnumerator> animationsQueue = new Queue<IEnumerator>();
     // The currently running coroutine
@@ -15,12 +15,14 @@ public class MenuAnimationsController : MonoBehaviour, IUIAnimationsController
 
     #region Setters/Getters
     public AUIAnimatedScreen SettingsAnimatedScreen { get { return settingsAnimatedScreen; } private set { settingsAnimatedScreen = value; } }
+    public AUIAnimatedScreen LoginAnimatedScreen { get { return loginAnimatedScreen; } private set { loginAnimatedScreen = value; } }
     #endregion
 
     private void Awake()
     {
         // Initialize the global screens
         settingsAnimatedScreen.Initialize();
+        loginAnimatedScreen.Initialize();
     }
     private void Start()
     {
