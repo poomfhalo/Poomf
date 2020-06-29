@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class SliderControlledSetting : MonoBehaviour
 {
     // The slider thats's used to control this setting
-    [SerializeField] private Slider sliderComponent;
+    [SerializeField] private Slider sliderComponent = null;
     // The text value corresponding to this setting (could be null)
-    [SerializeField] private Text textValue;
+    [SerializeField] private Text textValue = null;
     // Used when setting the text value, multiplies the text value by a multiplier to display the desired range
     [SerializeField] private float multiplier;
 

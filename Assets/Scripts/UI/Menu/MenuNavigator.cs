@@ -7,24 +7,20 @@ namespace Poomf.UI
 {
     public class MenuNavigator : MonoBehaviour
     {
+        [SerializeField] private MenuAnimationsController mainAnimController = null;
         [SerializeField] private Transform menuTabsButtonsTransform = null;
         [SerializeField] private MenuItemBase[] menuItems = null;
         [SerializeField] private MenuTabButton defaultMenuButton = null;
 
-        private MenuAnimationsController mainAnimController;
         private PlayerInput playerInput = null;
         private MenuTabButton[] menuTabsButtons = null;
         private int? currentActiveMenuIndex = null;
         private bool initialized = false;
-        // Holds the index of the screen that's yet to be shown, so that if it's not yet visible because of
-        // animations, users can't show other screens
-        private int screenToBeShown = -1;
 
         #region UNITY
         private void Awake()
         {
             // playerInput = new PlayerInput();
-            mainAnimController = GetComponent<MenuAnimationsController>();
         }
 
         private void OnEnable()
@@ -193,10 +189,21 @@ namespace Poomf.UI
                 currentActiveMenuIndex = i_menuIndex;
             }
 
+            // The second condition prevents this block from running the very first time this function is called
+            if (IsTransitionPending() && currentActiveMenuIndex != i_menuIndex)
+            {
+                // A menu transition is still in effect and the user pressed menu buttons in quick succession!
+                // Clear the pending animations, then show the newly selected screen
+                mainAnimController.ClearQueue();
+                mainAnimController.ShowScreen(menuItems[i_menuIndex].AnimationsController, selectedMenuAP);
+                currentActiveMenuIndex = i_menuIndex;
+                return;
+            }
+
             if (true == menuItems[currentActiveMenuIndex.Value].gameObject.activeInHierarchy)
             {
                 if (menuItems[currentActiveMenuIndex.Value].IsAnimated)
-                    mainAnimController.HideScreen(menuItems[currentActiveMenuIndex.Value].AnimationsController.ScreenID, currentMenuAP);
+                    mainAnimController.HideScreen(menuItems[currentActiveMenuIndex.Value].AnimationsController, currentMenuAP);
                 else
                     menuItems[currentActiveMenuIndex.Value].gameObject.SetActive(false);
             }
@@ -205,8 +212,8 @@ namespace Poomf.UI
             {
                 if (menuItems[i_menuIndex].IsAnimated)
                 {
-                    mainAnimController.ShowScreen(menuItems[i_menuIndex].AnimationsController.ScreenID, selectedMenuAP);
-                    screenToBeShown = i_menuIndex;
+                    mainAnimController.ShowScreen(menuItems[i_menuIndex].AnimationsController, selectedMenuAP);
+                    currentActiveMenuIndex = i_menuIndex;
                 }
                 else
                     menuItems[i_menuIndex].gameObject.SetActive(true);
@@ -216,11 +223,6 @@ namespace Poomf.UI
 
         private void onButtonSelected(int i_menuIndex)
         {
-            if (IsTransitionPending())
-            {
-                // A menu transition is still in effect and users pressed buttons in quick succession! Don't do anything
-                return;
-            }
             activateMenuElement(i_menuIndex);
         }
 
@@ -278,8 +280,8 @@ namespace Poomf.UI
         /// </returns>
         private bool IsTransitionPending()
         {
-            if (screenToBeShown != -1)
-                if (!menuItems[screenToBeShown].gameObject.activeSelf)
+            if (currentActiveMenuIndex != null)
+                if (!menuItems[currentActiveMenuIndex.Value].gameObject.activeSelf)
                 {
                     return true;
                 }

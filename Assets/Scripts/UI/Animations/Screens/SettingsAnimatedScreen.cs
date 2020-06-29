@@ -7,9 +7,9 @@ using Coffee.UIEffects;
 public class SettingsAnimatedScreen : AUIAnimatedScreen
 {
     // Used to fade the image covering the settings screen
-    [SerializeField] private UITransitionEffect fadeEffect;
+    [SerializeField] private UITransitionEffect fadeEffect = null;
     // The min scale that the screen shrinks to if it's animating out, or grows from if it's animating in
-    [SerializeField] private Vector3 shrinkScale;
+    [SerializeField] private Vector3 shrinkScale = Vector3.zero;
     [Tooltip("The speed at which the menu fades/appears.")]
     [SerializeField] private float fadeSpeed = 1f;
 
@@ -20,13 +20,15 @@ public class SettingsAnimatedScreen : AUIAnimatedScreen
     private Vector3 basePosition;
 
     #region AUIAnimatedScreen
-    protected override void Initialize()
+    public override void Initialize()
     {
-        ScreenID = ScreensIDs.SettingsMenuID;
+        if (initialized)
+            return;
         cornerPoint = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 1));
         basePosition = transform.position;
         // Settings window is initially disabled
         ApplyInitialState();
+        initialized = true;
     }
     public override IEnumerator AnimateIn(AnimationProperties properties = null)
     {

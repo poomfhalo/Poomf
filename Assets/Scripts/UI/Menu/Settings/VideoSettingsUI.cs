@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class VideoSettingsUI : MonoBehaviour
 {
-    [SerializeField] private Toggle fullscreenToggle;
-    [SerializeField] private Dropdown qualityDropdown;
-    [SerializeField] private Dropdown resolutionDropdown;
+    [SerializeField] private Toggle fullscreenToggle = null;
+    [SerializeField] private Dropdown qualityDropdown = null;
+    [SerializeField] private Dropdown resolutionDropdown = null;
 
     // An array containing the available resolutions, received from the settings menu on startup
     private List<Resolution> resolutions;
