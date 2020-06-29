@@ -22,14 +22,18 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         tutorial.onClick.AddListener(OnTutorialClicked);
         findingPlayers.onClick.AddListener(OnFindingPlayersClicked);
         findingPlayers.gameObject.SetActive(false);
-        if (PhotonNetwork.IsConnectedAndReady)
+        if (PhotonNetwork.IsConnectedAndReady || !string.IsNullOrEmpty(PhotonNetwork.NickName))
             loginMenu.SetActive(false);
     }
 
     private void OnReadyClicked()
     {
         ready.interactable = false;
-
+        if(PhotonNetwork.IsConnectedAndReady)
+        {
+            PrepareRoom();
+            return;
+        }
         if (regionsGroup.ActiveButton.text == "DEF")
         {
             PhotonNetwork.ConnectUsingSettings();
@@ -45,14 +49,11 @@ public class N_Lobby : MonoBehaviourPunCallbacks
     }
     public override void OnConnectedToMaster()
     {
-        base.OnConnectedToMaster();
-        Log.Message("I Connected To Master " + PhotonNetwork.NickName + " Trying To Join RND Room");
-        PhotonNetwork.JoinRandomRoom();
-        loginMenu.SetActive(false);
-
-        ready.interactable = true;
-        ready.gameObject.SetActive(false);
-        findingPlayers.gameObject.SetActive(true);
+        if (!ready.interactable)
+        {
+            Log.Message("I Connected To Master " + PhotonNetwork.NickName + " Trying To Join RND Room");
+            PrepareRoom();
+        }
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -68,11 +69,11 @@ public class N_Lobby : MonoBehaviourPunCallbacks
     }
     public override void OnCreatedRoom()
     {
-        base.OnCreatedRoom();
         Log.Message("Created room " + PhotonNetwork.CurrentRoom.Name);
     }
     public override void OnJoinedRoom()
     {
+        Log.Message("Joined room " + PhotonNetwork.CurrentRoom.Name);
         PhotonNetwork.AutomaticallySyncScene = true;
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -96,5 +97,18 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
         PhotonNetwork.Disconnect();
         PhotonNetwork.AutomaticallySyncScene = false;
+        Log.Message(PhotonNetwork.NickName + " Have Dissconnected, left room, and stopped syncing scenes");
+        regionsGroup.gameObject.SetActive(true);
+    }
+
+    private void PrepareRoom()
+    {
+        PhotonNetwork.JoinRandomRoom();
+        loginMenu.SetActive(false);
+
+        ready.interactable = true;
+        ready.gameObject.SetActive(false);
+        findingPlayers.gameObject.SetActive(true);
+        regionsGroup.gameObject.SetActive(false);
     }
 }
