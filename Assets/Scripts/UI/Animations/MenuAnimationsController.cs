@@ -4,48 +4,51 @@ using UnityEngine;
 
 public class MenuAnimationsController : MonoBehaviour, IUIAnimationsController
 {
-    [SerializeField] Dictionary<string, IUIAnimatedScreenController> screens = new Dictionary<string, IUIAnimatedScreenController>();
-
+    //private Dictionary<string, IUIAnimatedScreenController> screens = new Dictionary<string, IUIAnimatedScreenController>();
+    [SerializeField] private AUIAnimatedScreen settingsAnimatedScreen;
     // The queue that holds the pending animations
     private Queue<IEnumerator> animationsQueue = new Queue<IEnumerator>();
     // The currently running coroutine
-    private IEnumerator currentCoroutine;
+    private IEnumerator currentCoroutine = null;
     // Flag that's raised when we want to pause the queue
     private bool pauseQueue = false;
 
+    #region Setters/Getters
+    public AUIAnimatedScreen SettingsAnimatedScreen { get { return settingsAnimatedScreen; } private set { settingsAnimatedScreen = value; } }
+    #endregion
+
+    private void Awake()
+    {
+        // Initialize the global screens
+        settingsAnimatedScreen.Initialize();
+    }
     private void Start()
     {
+
         // Start processing the queue, make sure pause is false
         pauseQueue = false;
         StartCoroutine(ProcessQueue());
-    }
-
-    public void RegisterScreen(string screenID, IUIAnimatedScreenController screen)
-    {
-        screens.Add(screenID, screen);
     }
 
     private IEnumerator Wait(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
     }
-
-    #region IUICommmunicationProvider
-    public void ShowScreen(string screenID, AnimationProperties properties = null)
+    #region IUIAnimationsController
+    public void ShowScreen(AUIAnimatedScreen screen, AnimationProperties properties = null)
     {
-        AddToQueue(screens[screenID].AnimateIn(properties));
+        AddToQueue(screen.AnimateIn(properties));
     }
-    public void HideScreen(string screenID, AnimationProperties properties = null)
+    public void HideScreen(AUIAnimatedScreen screen, AnimationProperties properties = null)
     {
-        AddToQueue(screens[screenID].AnimateOut(properties));
+        AddToQueue(screen.AnimateOut(properties));
     }
     public void InsertWaitingPeriod(float waitTime)
     {
         AddToQueue(Wait(waitTime));
     }
-    #endregion
 
-    #region IUIAnimationsController
+
     public IEnumerator ProcessQueue()
     {
         while (true && !pauseQueue)
@@ -70,6 +73,7 @@ public class MenuAnimationsController : MonoBehaviour, IUIAnimationsController
     public void StopCurrentAnimation()
     {
         StopCoroutine(currentCoroutine);
+        currentCoroutine = null;
     }
     public void PauseAnimationsQueue(bool cancelCurrent = false)
     {
@@ -81,6 +85,10 @@ public class MenuAnimationsController : MonoBehaviour, IUIAnimationsController
     public void ResumeAnimationsQueue()
     {
         pauseQueue = false;
+    }
+    public void ClearQueue()
+    {
+        animationsQueue.Clear();
     }
     #endregion
 }

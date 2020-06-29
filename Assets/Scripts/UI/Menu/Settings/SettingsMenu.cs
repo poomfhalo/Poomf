@@ -5,31 +5,31 @@ using UnityEngine.Audio;
 
 public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
 {
-    [SerializeField] private MenuAnimationsController animationsController;
+    [SerializeField] private MenuAnimationsController animationsController = null;
     [Header("UI")]
     // UI panel that asks the user if they want to exit without saving
-    [SerializeField] private GameObject closeWithoutSavingUI;
+    [SerializeField] private GameObject closeWithoutSavingUI = null;
     // Contains the UI elements relative to the Audio volume settings
-    [SerializeField] private SliderControlledSetting sfxUISettings;
+    [SerializeField] private SliderControlledSetting sfxUISettings = null;
     // Contains the UI elements relative to the Music volume settings
-    [SerializeField] private SliderControlledSetting musicUISettings;
+    [SerializeField] private SliderControlledSetting musicUISettings = null;
     // Contains the UI elements of video settings
-    [SerializeField] private VideoSettingsUI videoSettingsUI;
+    [SerializeField] private VideoSettingsUI videoSettingsUI = null;
     [Header("Settings")]
     // The asset that manages the audio settings
-    [SerializeField] private AudioManager audioManager;
+    [SerializeField] private AudioManager audioManager = null;
     // The asset that manages the video settings
-    [SerializeField] private VideoManager videoManager;
+    [SerializeField] private VideoManager videoManager = null;
     // Any resolution that's less than this resolution will be omitted
     // In other words, this is the minimum supported resolution
     // X: width, Y: height
-    [SerializeField] private Vector2 resolutionThreshold;
+    [SerializeField] private Vector2 resolutionThreshold = Vector2.zero;
     [Header("Assets", order = 0)]
     [Header("Audio", order = 1)]
-    [SerializeField] private AudioMixer currentMixer;
+    [SerializeField] private AudioMixer currentMixer = null;
     [Header("Default Settings")]
-    [SerializeField] private AudioManager defaultAudioSettings;
-    [SerializeField] private VideoManager defaultVideoSettings;
+    [SerializeField] private AudioManager defaultAudioSettings = null;
+    [SerializeField] private VideoManager defaultVideoSettings = null;
 
     // Used to store audio settings before hitting the Apply button
     private AudioManager tempAudioSettings;
@@ -82,7 +82,7 @@ public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
             return;
         }
         // Show the UI menu
-        animationsController.ShowScreen(ScreensIDs.SettingsMenuID);
+        animationsController.ShowScreen(animationsController.SettingsAnimatedScreen);
         // Create temp assets to store temp settings
         tempAudioSettings = ScriptableObject.CreateInstance("AudioManager") as AudioManager;
         tempVideoSettings = ScriptableObject.CreateInstance("VideoManager") as VideoManager;
@@ -161,7 +161,7 @@ public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
     public void CloseSettingsWindow()
     {
         // Hide the settings window
-        animationsController.HideScreen(ScreensIDs.SettingsMenuID);
+        animationsController.HideScreen(animationsController.SettingsAnimatedScreen);
         // Unload the temp settings assets
         Destroy(tempAudioSettings);
         Destroy(tempVideoSettings);

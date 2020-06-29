@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class MainMenuAnimatedScreen : AUIAnimatedScreen
 {
-    [SerializeField] private Vector3 shrinkScale;
+    [SerializeField] private Vector3 shrinkScale = Vector3.zero;
 
     // The edges of the screen that the screens will fade in/out to or from
     private Vector3 leftEdge;
@@ -15,23 +15,16 @@ public class MainMenuAnimatedScreen : AUIAnimatedScreen
     // The starting position of the screen
     private Vector3 basePosition;
 
-    private void Start()
-    {
-        if (ScreenID == "notset")
-        {
-            // The child's screenID hasn't been initialized
-            Debug.LogError("ScreenID not initialized!");
-        }
-    }
-
     #region AUIAnimatedScreen
-    protected override void Initialize()
+    public override void Initialize()
     {
-        // Main menu UI doesn't need to be called globally, so they will get random IDs
-        ScreenID = gameObject.name + Time.time;
+        if (initialized)
+            return;
         leftEdge = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height / 2, 1));
         rightEdge = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height / 2, 1));
         basePosition = transform.position;
+        ApplyInitialState();
+        initialized = true;
     }
     public override IEnumerator AnimateIn(AnimationProperties properties = null)
     {

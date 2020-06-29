@@ -6,7 +6,7 @@ namespace Poomf.UI
 {
     public class MenuLockerColorOption : MonoBehaviour
     {
-        [SerializeField] private Animator animator;
+        [SerializeField] private Animator animator = null;
         private bool visible = false;
 
         public void Appear()

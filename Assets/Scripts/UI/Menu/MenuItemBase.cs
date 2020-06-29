@@ -17,16 +17,12 @@ namespace Poomf.UI
         private void Awake()
         {
             AnimationsController = GetComponent<AUIAnimatedScreen>();
-        }
-
-        private void Start()
-        {
             if (null == AnimationsController)
                 IsAnimated = false;
             else
             {
                 IsAnimated = true;
-                AnimationsController.ApplyInitialState();
+                AnimationsController.Initialize();
             }
         }
 
