@@ -10,6 +10,8 @@ public class SettingsAnimatedScreen : AUIAnimatedScreen
     [SerializeField] private UITransitionEffect fadeEffect;
     // The min scale that the screen shrinks to if it's animating out, or grows from if it's animating in
     [SerializeField] private Vector3 shrinkScale;
+    [Tooltip("The speed at which the menu fades/appears.")]
+    [SerializeField] private float fadeSpeed = 1f;
 
 
     // Bottom left corner of the screen
@@ -53,7 +55,7 @@ public class SettingsAnimatedScreen : AUIAnimatedScreen
             while (fadeEffect.effectFactor > 0)
             {
                 fadeEffect.effectFactor = Mathf.Lerp(1f, 0f, t);
-                t += Time.deltaTime;
+                t += Time.deltaTime * fadeSpeed;
                 yield return null;
             }
         }
@@ -72,17 +74,17 @@ public class SettingsAnimatedScreen : AUIAnimatedScreen
             while (fadeEffect.effectFactor < 1)
             {
                 fadeEffect.effectFactor = Mathf.Lerp(0f, 1f, t);
-                t += Time.deltaTime;
+                t += Time.deltaTime * fadeSpeed;
                 yield return null;
             }
 
             // Shrink
-            transform.DOScale(shrinkScale, animDuration - 0.2f).SetEase(Ease.InBack);
-            yield return new WaitForSeconds(animDuration - 0.2f);
+            transform.DOScale(shrinkScale, animDuration).SetEase(Ease.InBack);
+            yield return new WaitForSeconds(animDuration);
 
             // Move to corner
-            transform.DOMove(cornerPoint, animDuration - 0.2f).SetEase(Ease.InBack);
-            yield return new WaitForSeconds(animDuration - 0.2f);
+            transform.DOMove(cornerPoint, animDuration).SetEase(Ease.InBack);
+            yield return new WaitForSeconds(animDuration);
             gameObject.SetActive(false);
         }
     }
