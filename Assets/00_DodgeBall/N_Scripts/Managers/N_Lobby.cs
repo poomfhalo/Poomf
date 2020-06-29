@@ -66,6 +66,11 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         string roomName = "M_" + PhotonNetwork.NickName + "_P_" + ops.MaxPlayers + "_ID_" + UnityEngine.Random.Range(int.MinValue, int.MaxValue) + fraction;
         PhotonNetwork.CreateRoom(roomName, ops);
     }
+    public override void OnCreatedRoom()
+    {
+        base.OnCreatedRoom();
+        Log.Message("Created room " + PhotonNetwork.CurrentRoom.Name);
+    }
     public override void OnJoinedRoom()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
