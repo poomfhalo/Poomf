@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Poomf.Data;
+using Cinemachine;
+using UnityEngine.UI;
 
 namespace Poomf.UI
 {
@@ -11,12 +13,34 @@ namespace Poomf.UI
         [SerializeField] GameObject lockerItemPrefab = null;
         // TODO : For testing, to be removed.
         [SerializeField] private ItemData[] testItemData = null;
+        [Header("Zoom Button")]
+        [SerializeField] Image zoomButtonImage = null;
+        [SerializeField] Sprite zoomInSprite = null;
+        [SerializeField] Sprite zoomOutSprite = null;
+        [Header("Virtual Cameras")]
+        [SerializeField] CinemachineVirtualCamera zoomedOutCamera = null;
+        [SerializeField] CinemachineVirtualCamera zoomedInCamera = null;
 
         bool initialized = false;
+        bool zoomedIn = false;
 
         void OnEnable()
         {
             initialize();
+            if (initialized)
+            {
+                // Enable the zoomed out camera
+                zoomedOutCamera.gameObject.SetActive(true);
+                // Make sure the Zoomed in camera is disabled
+                zoomedInCamera.gameObject.SetActive(false);
+            }
+        }
+
+        void OnDisable()
+        {
+            // Disable both cameras to go back to the lobby camera
+            zoomedOutCamera.gameObject.SetActive(false);
+            zoomedInCamera.gameObject.SetActive(false);
         }
 
         void initialize()
@@ -24,6 +48,10 @@ namespace Poomf.UI
             if (true == initialized) return;
 
             populateStoreItems();
+            // Make sure the zoom button has the zoom in image
+            zoomButtonImage.sprite = zoomInSprite;
+            // Make sure zoomed in is false
+            zoomedIn = false;
             initialized = true;
         }
 
@@ -59,6 +87,26 @@ namespace Poomf.UI
 
                 item.InitializeItem(testItemData[i].ItemName, null, null, itemData.ItemSprite, "OWNED");
                 newItem.transform.SetParent(storeContent, false);
+            }
+        }
+
+        public void OnZoomButtonPressed()
+        {
+            if (zoomedIn)
+            {
+                // This means that we should zoom out
+                zoomedInCamera.gameObject.SetActive(false);
+                zoomedOutCamera.gameObject.SetActive(true);
+                zoomButtonImage.sprite = zoomInSprite;
+                zoomedIn = false;
+            }
+            else
+            {
+                // Zoom in
+                zoomedOutCamera.gameObject.SetActive(false);
+                zoomedInCamera.gameObject.SetActive(true);
+                zoomButtonImage.sprite = zoomOutSprite;
+                zoomedIn = true;
             }
         }
     }

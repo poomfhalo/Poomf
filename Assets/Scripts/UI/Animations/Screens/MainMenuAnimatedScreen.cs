@@ -8,10 +8,9 @@ using UnityEngine;
 public class MainMenuAnimatedScreen : AUIAnimatedScreen
 {
     [SerializeField] private Vector3 shrinkScale = Vector3.zero;
-
     // The edges of the screen that the screens will fade in/out to or from
-    private Vector3 leftEdge;
-    private Vector3 rightEdge;
+    [SerializeField] Transform leftEdge;
+    [SerializeField] Transform rightEdge;
     // The starting position of the screen
     private Vector3 basePosition;
 
@@ -20,8 +19,8 @@ public class MainMenuAnimatedScreen : AUIAnimatedScreen
     {
         if (initialized)
             return;
-        leftEdge = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height / 2, 1));
-        rightEdge = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height / 2, 1));
+        //leftEdge = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height / 2, 1));
+        //rightEdge = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height / 2, 1));
         basePosition = transform.position;
         ApplyInitialState();
         initialized = true;
@@ -85,11 +84,11 @@ public class MainMenuAnimatedScreen : AUIAnimatedScreen
     {
         if (dir == AnimationDirection.Left)
         {
-            return leftEdge;
+            return leftEdge.position;
         }
         else if (dir == AnimationDirection.Right)
         {
-            return rightEdge;
+            return rightEdge.position;
         }
         else
         {
