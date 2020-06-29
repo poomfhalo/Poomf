@@ -74,7 +74,7 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
             {
                 Log.Warning("Game Is over, one of the teams is empty");
                 PhotonNetwork.LeaveRoom();
-                PhotonNetwork.LoadLevel("MP Launcher");
+                PhotonNetwork.LoadLevel("MP Menu");
             }
         });
     }
