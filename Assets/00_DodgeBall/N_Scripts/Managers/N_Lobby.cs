@@ -111,4 +111,13 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         findingPlayers.gameObject.SetActive(true);
         regionsGroup.gameObject.SetActive(false);
     }
+
+    public static RoomOptions GetDefOptions()
+    {
+        RoomOptions ops = new RoomOptions();
+        ops.MaxPlayers = 6;
+        ops.IsVisible = true;
+        ops.IsOpen = true;
+        return ops;
+    }
 }

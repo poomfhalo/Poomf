@@ -39,7 +39,7 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         Debug.Log(PhotonNetwork.NickName + " failed to join random room, creating Dev Room");
-        PhotonNetwork.CreateRoom("Dev Room", N_LaunchManager.GetDefOptions());
+        PhotonNetwork.CreateRoom("Dev Room", N_Lobby.GetDefOptions());
     }
     public override void OnJoinedRoom()
     {
