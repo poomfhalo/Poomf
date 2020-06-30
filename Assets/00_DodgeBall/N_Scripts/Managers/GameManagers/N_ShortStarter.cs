@@ -73,7 +73,7 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
             if (isTeamAEmpty || isTeamBEmpty)
             {
                 Log.Warning("Game Is over, one of the teams is empty");
-                PhotonNetwork.LoadLevel("MP Menu");
+                PhotonNetwork.LoadLevel("Menu");
                 PhotonNetwork.LeaveRoom();
             }
         });
