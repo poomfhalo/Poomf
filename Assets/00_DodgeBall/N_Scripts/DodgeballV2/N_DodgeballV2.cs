@@ -52,6 +52,12 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
             case DodgeballCommand.GoToChara:
                 syncer.enabled = false;
                 break;
+            case DodgeballCommand.LaunchTo:
+                syncer.enabled = true;
+                break;
+            case DodgeballCommand.LaunchUp:
+                syncer.enabled = false;
+                break;
         }
     }
     private void OnStateUpdated(Dodgeball.BallState newState)
