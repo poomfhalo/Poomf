@@ -19,10 +19,6 @@ public class N_LoginMenuAnims : AUIAnimatedScreen
         c.a = 0;
         bg.color = c;
     }
-    private void Awake()
-    {
-        Initialize();
-    }
 
     public override IEnumerator AnimateIn(AnimationProperties properties = null)
     {
