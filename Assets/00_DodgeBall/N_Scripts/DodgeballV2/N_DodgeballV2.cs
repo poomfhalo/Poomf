@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Photon.Pun;
+using Smooth;
 
 //We Will Testout 2 Methods:
 //1.
@@ -19,11 +20,13 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
 
     PhotonView pv = null;
     Dodgeball ball = null;
+    SmoothSyncPUN2 syncer = null;
 
     void Start()
     {
         ball = GetComponent<Dodgeball>();
         pv = GetComponent<PhotonView>();
+        syncer = GetComponent<SmoothSyncPUN2>();
 
         ball.E_OnCommandActivated += OnCommandActivated;
         ball.E_OnStateUpdated += OnStateUpdated;
@@ -36,13 +39,34 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
             //Debug.LogWarning("Reflection Is running and I Am The Master :: " + pv.IsMine);
         }
     }
+
     private void OnCommandActivated(DodgeballCommand cmd)
     {
+        if(pv.IsMine)
+        {
+            return;
+        }
 
+        switch (cmd)
+        {
+            case DodgeballCommand.GoToChara:
+                syncer.enabled = false;
+                break;
+        }
     }
     private void OnStateUpdated(Dodgeball.BallState newState)
     {
+        if (pv.IsMine)
+        {
+            return;
+        }
 
+        switch (newState)
+        {
+            case Dodgeball.BallState.OnGround:
+                syncer.enabled = true;
+                break;
+        }
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
