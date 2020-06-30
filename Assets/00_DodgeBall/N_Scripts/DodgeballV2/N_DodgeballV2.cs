@@ -30,7 +30,7 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
 
         ball.E_OnCommandActivated += OnCommandActivated;
         ball.E_OnStateUpdated += OnStateUpdated;
-        ball.reflection.extReflectionTest = pv.IsMine;
+        //ball.reflection.extReflectionTest = pv.IsMine;
     }
     void Update()
     {
