@@ -74,6 +74,10 @@ public class BallLauncher : DodgeballCharaAction, ICharaAction
     {
 
     }
+    protected virtual void RunThrowPrepFinished()
+    {
+        E_OnThrowPrepFinished?.Invoke();
+    }
     protected virtual void RunOnThrowPointReached()
     {
         onThrowPointReached?.Invoke();
