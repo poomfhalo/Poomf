@@ -31,14 +31,17 @@ public class N_PC : MonoBehaviour,IPunObservable
     bool firstRead = true;
     bool canCallMovement = true;
 
+    void Start()
+    {
+        BallLauncherV2 lV2 = chara.launcher as BallLauncherV2;
+        if (lV2 && !PhotonNetwork.IsMasterClient)
+            lV2.extDelay = 0.2f;
+    }
     void OnEnable()
     {
         pv = GetComponent<PhotonView>();
         pc = GetComponent<PC>();
-        if (!pv.IsMine)
-        {
-            pc.enabled = false;
-        }
+        pc.enabled = pv.IsMine;
         rb3d = GetComponent<Rigidbody>();
         chara = GetComponent<DodgeballCharacter>();
         if (pv.IsMine)

@@ -9,8 +9,12 @@ public class BallLauncherV2 : BallLauncher
     [Header("Launcher Data")]
     [SerializeField] BallThrowData throwData = null;
     [SerializeField] float throwDelay = 0.2f;
+
     [Header("Read Only")]
     [SerializeField] bool finishedThrowPrep = false;
+    [Tooltip("To be set, from external scripts, mainly used in multiplayer")]
+    public float extDelay = 0;
+
     Coroutine conditionalThrowCoro = null;
     public override void StartThrowAction(DodgeballCharacter toChara)
     {
@@ -39,6 +43,7 @@ public class BallLauncherV2 : BallLauncher
         yield return new WaitForSeconds(throwDelay);
         RunThrowPrepFinished();
         yield return new WaitUntil(()=>ExtThrowCondition());
+        yield return new WaitForSeconds(extDelay);
         animator.SetTrigger("ThrowV2");
         Log.Message("Triggered, Throw?");
     }

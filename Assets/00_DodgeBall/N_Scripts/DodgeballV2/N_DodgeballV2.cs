@@ -28,8 +28,6 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
     [Tooltip("is true, if the ball, has traveled, over this percent of the total distance it should travel when thrown")]
     [Range(0.05f, 0.95f)]
     [SerializeField] float traveledDistBeforeEnable = 0.45f;
-    //[SerializeField] int commandsSnapCount = 3;
-    //[SerializeField] List<DodgeballCommand> sentCommands = new List<DodgeballCommand>();
 
     PhotonView pv = null;
     Dodgeball ball = null;
