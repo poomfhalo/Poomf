@@ -2,6 +2,7 @@
 using Photon.Pun;
 using System.Linq;
 using GW_Lib;
+using System;
 
 public class N_PC : MonoBehaviour,IPunObservable
 {
@@ -40,9 +41,9 @@ public class N_PC : MonoBehaviour,IPunObservable
         }
         rb3d = GetComponent<Rigidbody>();
         chara = GetComponent<DodgeballCharacter>();
-        if (GetComponent<PhotonView>().IsMine)
+        if (pv.IsMine)
         {
-            chara.OnCommandActivated += SendCommand;
+            chara.OnCommandActivated += SendMyCommand;
             chara.GetComponent<Mover>().movementMode = Mover.MovementType.ByInput;
         }
         else
@@ -50,11 +51,18 @@ public class N_PC : MonoBehaviour,IPunObservable
             chara.GetComponent<Mover>().movementMode = Mover.MovementType.ToPoint;
             chara.GetComponentInChildren<CharaFeet>().extCanPush = false;
         }
+
+        chara.launcher.ExtThrowCondition = () => false;
+        chara.launcher.E_OnThrowPrepFinished += OnThrowPrepFinished;
+        chara.launcher.onThrowPointReached += OnThrowPointReached;
     }
     void OnDisable()
     {
         if (pv.IsMine)
-            chara.OnCommandActivated -= SendCommand;
+            chara.OnCommandActivated -= SendMyCommand;
+
+        chara.launcher.E_OnThrowPrepFinished -= OnThrowPrepFinished;
+        chara.launcher.onThrowPointReached -= OnThrowPointReached;
     }
 
     [PunRPC]//Called In N_PlayerManager
@@ -115,7 +123,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         UpdateSyncedInput();
     }
 
-    private void SendCommand(DodgeballCharaCommand command)
+    private void SendMyCommand(DodgeballCharaCommand command)
     {
         float currX = rb3d.position.x;
         float currZ = rb3d.position.z;
@@ -127,16 +135,16 @@ public class N_PC : MonoBehaviour,IPunObservable
             Vector3 startPos = transform.position;
             Vector3 expectedPos = d.GetExpectedPosition();
 
-            pv.RPC("RecieveDodgeCommand", RpcTarget.Others, startPos.x, startPos.z, expectedPos.x, expectedPos.z);
+            pv.RPC("R_DodgeCommand", RpcTarget.Others, startPos.x, startPos.z, expectedPos.x, expectedPos.z);
         }
         else if (command == DodgeballCharaCommand.PushBall)
         {
             CharaFeet feet = GetComponentInChildren<CharaFeet>();
-            //pv.RPC("RecieveFeetPush", RpcTarget.Others, feet.lastPushUsed,currX,currZ);
+            //pv.RPC("R_FeetPush", RpcTarget.Others, feet.lastPushUsed,currX,currZ);
         }
         else
         {
-            pv.RPC("RecieveCommand", RpcTarget.Others, (int)command, currX, currZ);
+            pv.RPC("R_Command", RpcTarget.Others, (int)command, currX, currZ);
         }
 
         if (command == DodgeballCharaCommand.BraceForBall || command == DodgeballCharaCommand.ReleaseFromBrace)
@@ -150,7 +158,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     }
 
     [PunRPC]
-    private void RecieveCommand(int c, float currX, float currZ)
+    private void R_Command(int c, float currX, float currZ)
     {
         netPos.x = currX;
         netPos.z = currZ;
@@ -159,11 +167,11 @@ public class N_PC : MonoBehaviour,IPunObservable
         DodgeballCharaCommand command = (DodgeballCharaCommand)c;
         if (command == DodgeballCharaCommand.BraceForBall || command == DodgeballCharaCommand.ReleaseFromBrace)
         {
-            Log.Message("N_PC().RPC :: Recieved Command " + command);
+            Log.Message("N_PC().RPC :: R_Command " + command);
         }
         else
         {
-            Log.LogL0("N_PC().RPC :: RecieveCommand " + command);
+            Log.LogL0("N_PC().RPC :: R_Command " + command);
         }
 
         switch (command)
@@ -204,7 +212,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         lastCommand = command;
     }   
     [PunRPC]
-    private void RecieveDodgeCommand(float startX,float startZ,float expectedX,float expectedZ)
+    private void R_DodgeCommand(float startX,float startZ,float expectedX,float expectedZ)
     {
         lastCommand = DodgeballCharaCommand.Dodge;
         canCallMovement = false;
@@ -220,7 +228,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         GetComponent<Dodger>().StartDodgeAction(netPos, null);
     }
     [PunRPC]
-    private void RecieveFeetPush(Vector3 lastUsedForce,float x, float z)
+    private void R_FeetPush(Vector3 lastUsedForce,float x, float z)
     {
         netPos.x = x;
         netPos.z = z;
@@ -231,6 +239,28 @@ public class N_PC : MonoBehaviour,IPunObservable
         feet.ApplyPush(Dodgeball.instance, lastUsedForce);
         Log.Warning("Pushed Ball By Feet");
     }
+
+    //Local Events
+    private void OnThrowPrepFinished()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Log.Message("N_PC().ThrowPointReached :: " + name, gameObject);
+            pv.RPC("R_ActivateBallThrow", RpcTarget.AllViaServer);
+        }
+    }
+    [PunRPC]
+    private void R_ActivateBallThrow()
+    {
+        Log.Message("N_PC().R_ActivateBallThrow :: " + name, gameObject);
+        chara.launcher.ExtThrowCondition = () => true;
+    }
+    private void OnThrowPointReached()
+    {
+        Log.Message("Re Enabled Waiting For Networked Position");
+        chara.launcher.ExtThrowCondition = () => false;
+    }
+
     //Helper Functions
     private void UpdateNetData()
     {

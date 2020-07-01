@@ -582,7 +582,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -594,9 +594,9 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
-  m_textAlignment: 514
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -653,6 +653,7 @@ GameObject:
   - component: {fileID: 6963099543513805059}
   - component: {fileID: 6963099543513805060}
   - component: {fileID: 4258123539632355922}
+  - component: {fileID: 6482619497595609318}
   - component: {fileID: 6963099543513805061}
   m_Layer: 0
   m_Name: Player Character
@@ -697,13 +698,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'Bip002 L Finger01'\n\tTransform 'Bip002 R Finger32'\n\tTransform
-    'Bip002 R Toe0'\n\tTransform 'Bip002 R Finger01'\n\tTransform 'Bip002 L Finger32'\n\tTransform
-    'Bip002 L Calf'\n\tTransform 'Bip002 L Foot'\n\tTransform 'Bip002 Head'\n\tTransform
-    'Bip002 R Finger12'\n\tTransform 'Bip002'\n\tand more ...\n\tFrom animation clip
-    'dodge'"
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -972,18 +967,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6963099543513805180}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1977e5199803bee518990b746542a32c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   recievedInput: {x: 0, y: 0, z: 0}
   throwFacingSpeed: 200
-  heigth: 0.3
-  gravity: 15
-  throwData: {fileID: 11400000, guid: 85e253f2e592b0bb784f06d2e0373da2, type: 2}
   isThrowing: 0
   activityName: Throw Action
+  throwData: {fileID: 11400000, guid: 85e253f2e592b0bb784f06d2e0373da2, type: 2}
 --- !u!114 &6963099543513805063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1125,6 +1118,26 @@ MonoBehaviour:
   ballGrabPoint: {fileID: 436484578604985273}
   team: 0
   selectionIndicator: {fileID: 6963099544742490871}
+  launcher: {fileID: 0}
+--- !u!114 &6482619497595609318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6963099543513805180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d2842d20b8a6989c8b7c10c1a67f8d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recievedInput: {x: 0, y: 0, z: 0}
+  throwFacingSpeed: 200
+  isThrowing: 0
+  activityName: 
+  throwData: {fileID: 11400000, guid: 85e253f2e592b0bb784f06d2e0373da2, type: 2}
+  throwDelay: 0.2
+  finishedThrowPrep: 0
 --- !u!114 &6963099543513805061
 MonoBehaviour:
   m_ObjectHideFlags: 0

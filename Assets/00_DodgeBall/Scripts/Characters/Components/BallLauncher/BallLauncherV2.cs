@@ -37,6 +37,7 @@ public class BallLauncherV2 : BallLauncher
     {
         yield return new WaitUntil(() => finishedThrowPrep);
         yield return new WaitForSeconds(throwDelay);
+        yield return new WaitUntil(ExtThrowCondition);
         animator.SetTrigger("ThrowV2");
     }
     public void A_OnThrowPrepFinished()

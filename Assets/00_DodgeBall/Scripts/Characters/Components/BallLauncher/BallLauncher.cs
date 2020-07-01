@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class BallLauncher : DodgeballCharaAction, ICharaAction
 {
+    public event Action E_OnThrowPrepFinished = null;
+    public Func<bool> ExtThrowCondition = () => true;
     public event Action onThrowPointReached = null;
     public bool IsThrowing => isThrowing;
     public string actionName => activityName;

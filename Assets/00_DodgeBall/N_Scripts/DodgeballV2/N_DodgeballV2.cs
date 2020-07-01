@@ -7,6 +7,13 @@ using Smooth;
 //Keep the Syncer, run appropriately, at the correct times, be disabled/enabled.
 //Have The Authority, being Transfered, to the correct character.
 //Actions only apply on the Appropriate "Owner"
+
+//Note: if Client, Calls Throw, we keep waiting, on the client machine, 
+//untill the same player, but on the master, reaches the throw point, then we allow them to throw
+//at the same time
+//If Master, Throws, we Do not, allow throw locally, but we send the throw, across the network
+//at the same time for everyone.
+
 //2.
 //Do Commands Syncing, ball is local unless on ground, and does snap.
 //Only core Commands get called
