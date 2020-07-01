@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 using Smooth;
+using System.Collections;
+using GW_Lib;
 
 //We Will Testout 2 Methods:
 //1.
@@ -22,12 +24,17 @@ using Smooth;
 
 public class N_DodgeballV2 : MonoBehaviour, IPunObservable
 {
+    [SerializeField] float delayAfterThrowToEnable = 0.2f;
+    [Tooltip("is true, if the ball, has traveled, over this percent of the total distance it should travel when thrown")]
+    [Range(0.05f, 0.95f)]
+    [SerializeField] float traveledDistBeforeEnable = 0.45f;
     //[SerializeField] int commandsSnapCount = 3;
     //[SerializeField] List<DodgeballCommand> sentCommands = new List<DodgeballCommand>();
 
     PhotonView pv = null;
     Dodgeball ball = null;
     SmoothSyncPUN2 syncer = null;
+    Coroutine ballThrowSyncerCoro = null;
 
     void Start()
     {
@@ -60,12 +67,21 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
                 syncer.enabled = false;
                 break;
             case DodgeballCommand.LaunchTo:
-                syncer.enabled = true;
+                this.BeginCoro(ref ballThrowSyncerCoro, BallThrowSyncEnable());
                 break;
             case DodgeballCommand.LaunchUp:
                 syncer.enabled = false;
                 break;
         }
+    }
+    private IEnumerator BallThrowSyncEnable()
+    {
+        yield return new WaitForSeconds(delayAfterThrowToEnable);
+        while (GetComponent<DodgeballGoLaunchTo>().traveledPercent< traveledDistBeforeEnable)
+        {
+            yield return 0;
+        }
+        syncer.enabled = true;
     }
     private void OnStateUpdated(Dodgeball.BallState newState)
     {
@@ -73,7 +89,6 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
         {
             return;
         }
-
         switch (newState)
         {
             case Dodgeball.BallState.OnGround:

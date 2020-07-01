@@ -6,9 +6,10 @@ using UnityEngine;
 public class DodgeballGoLaunchTo : DodgeballAction
 {
     public event Action onLaunchedTo = null;
-
     public override DodgeballCommand Command => DodgeballCommand.LaunchTo;
     public override string actionName => "Thrown To";
+
+    public float traveledPercent = 0;
 
     [Tooltip("Time, before ball can collide again, with physics colliders after being thrown")]
     [SerializeField] float leavingHandsTime = 0.1f;
@@ -18,6 +19,7 @@ public class DodgeballGoLaunchTo : DodgeballAction
     public byte lastAppliedThrow = 0;
 
     Tweener activeTweener = null;
+
 
     public void C_GoLaunchTo(Vector3 targetPos, BallThrowData d)
     {
@@ -50,6 +52,7 @@ public class DodgeballGoLaunchTo : DodgeballAction
         activeTweener = DOTween.To(() => tweenV, f => tweenV = f, 1, time).SetEase(d.ease).OnUpdate(OnUpdate).OnComplete(OnComplete);
         void OnUpdate()
         {
+            traveledPercent = tweenV;
             Vector3 lerpedPos = Vector3.Lerp(startPos, targetPos, tweenV);
             rb3d.MovePosition(lerpedPos);
         }
@@ -70,5 +73,6 @@ public class DodgeballGoLaunchTo : DodgeballAction
         this.SetKinematic(false);
         ball.bodyCol.GetCollider.enabled = true;
         isRunning = false;
+        traveledPercent = 0;
     }
 }
