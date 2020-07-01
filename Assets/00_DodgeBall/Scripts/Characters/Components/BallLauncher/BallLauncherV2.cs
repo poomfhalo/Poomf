@@ -35,10 +35,15 @@ public class BallLauncherV2 : BallLauncher
     }
     IEnumerator ConditionalThrow()
     {
+        Log.Warning("Conditional Throw Started");
         yield return new WaitUntil(() => finishedThrowPrep);
+        Log.Warning("Completed Perp Animation");
         yield return new WaitForSeconds(throwDelay);
+        Log.Warning("Completed wait Delay");
         RunThrowPrepFinished();
-        yield return new WaitUntil(ExtThrowCondition);
+        Log.Warning("Called Run ThrowPerpFinished");
+        yield return new WaitUntil(()=>ExtThrowCondition());
+        Log.Warning("Completed, External Condition");
         animator.SetTrigger("ThrowV2");
     }
     public void A_OnThrowPrepFinished()

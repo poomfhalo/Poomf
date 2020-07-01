@@ -245,7 +245,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            Log.Message("N_PC().ThrowPointReached :: " + name, gameObject);
+            Log.Message("N_PC().OnThrowPerpFinished :: " + name, gameObject);
             pv.RPC("R_ActivateBallThrow", RpcTarget.AllViaServer);
         }
     }
@@ -257,7 +257,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     }
     private void OnThrowPointReached()
     {
-        Log.Message("Re Enabled Waiting For Networked Position");
+        Log.Message("N_PC()."+ name + " :: Resetting External Throw Condition");
         chara.launcher.ExtThrowCondition = () => false;
     }
 
