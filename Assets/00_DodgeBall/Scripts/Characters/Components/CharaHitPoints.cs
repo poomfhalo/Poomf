@@ -13,6 +13,7 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
     public string actionName => "Get Hit";
     public bool IsBeingHurt => isBeingHurt;
     public bool IsWaitingForHit => isWaitingForHit;
+    public bool IsInHitCd => isInHitCd;
 
     [SerializeField] int maxHP = 2;
     [SerializeField] int hurtAnimsCount = 2;
@@ -24,6 +25,7 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
     [SerializeField] int currHP = 0;
     [SerializeField] bool isBeingHurt = false;
     [SerializeField] bool isWaitingForHit = false;
+    [SerializeField] bool isInHitCd = false;
 
     Animator animator = null;
     ActionsScheduler scheduler = null;
@@ -53,6 +55,8 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
         if (!IsWaitingForHit)
             return;
         if (isBeingHurt)
+            return;
+        if (IsInHitCd)
             return;
 
         C_StartHitAction();
@@ -113,15 +117,18 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
         if (!gameObject.activeSelf)
             return;
 
+        isInHitCd = true;
         this.InvokeDelayed(minTimeBetweenHurts, () =>{
-            isBeingHurt = false;
-
-            mover.ReadFacingValues();
-            if (recievedInput == Vector3.zero)
-                return;
-            mover.ApplyInput(recievedInput);
+            isInHitCd = false;
         });
+
+        isBeingHurt = false;
         isWaitingForHit = false;
+
+        mover.ReadFacingValues();
+        if (recievedInput == Vector3.zero)
+            return;
+        mover.ApplyInput(recievedInput);
     }
 
     public void DisableHitDetection()
