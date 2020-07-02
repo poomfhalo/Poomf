@@ -43,6 +43,7 @@ public class VideoSettingsUI : MonoBehaviour
     public void UpdateFullscreenToggle(bool value)
     {
         fullscreenToggle.isOn = value;
+        
     }
 
     public void UpdateQualityDropdownSelection(Quality index)
@@ -54,4 +55,5 @@ public class VideoSettingsUI : MonoBehaviour
     {
         resolutionDropdown.value = index;
     }
+
 }

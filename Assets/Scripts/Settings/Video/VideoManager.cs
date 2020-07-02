@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 [CreateAssetMenu(fileName = "VideoManager", menuName = "ScriptableObjects/Settings/VideoManager", order = 2)]
 public class VideoManager : ScriptableObject, IVideoManager
@@ -48,7 +47,10 @@ public class VideoManager : ScriptableObject, IVideoManager
     {
         isFullscreen = fullscreen;
         if (isCurrent)
+        {
             Screen.fullScreen = fullscreen;
+            ForceUIUpdate();
+        }
     }
     public void SetQuality(Quality qualityIndex)
     {
@@ -64,6 +66,7 @@ public class VideoManager : ScriptableObject, IVideoManager
             // The new resolution
             Resolution newRes = resolutions[resolution];
             Screen.SetResolution(newRes.width, newRes.height, isFullscreen);
+            ForceUIUpdate();
         }
     }
     public void UpdateAllSettings(IVideoProvider settings)
@@ -71,6 +74,10 @@ public class VideoManager : ScriptableObject, IVideoManager
         SetFullscreen(settings.IsFullscreen());
         SetQuality(settings.GetQualityIndex());
         SetResolution(settings.GetResolutionIndex());
+    }
+    public void ForceUIUpdate()
+    {
+        Canvas.ForceUpdateCanvases();
     }
     #endregion
 

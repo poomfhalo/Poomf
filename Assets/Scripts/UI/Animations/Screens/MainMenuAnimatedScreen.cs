@@ -9,10 +9,8 @@ public class MainMenuAnimatedScreen : AUIAnimatedScreen
 {
     [SerializeField] private Vector3 shrinkScale = Vector3.zero;
     // The edges of the screen that the screens will fade in/out to or from
-    [SerializeField] Transform leftEdge;
-    [SerializeField] Transform rightEdge;
-    // The starting position of the screen
-    private Vector3 basePosition;
+    [SerializeField] Transform midLeftEdge;
+    [SerializeField] Transform midRightEdge;
 
     #region AUIAnimatedScreen
     public override void Initialize()
@@ -21,7 +19,6 @@ public class MainMenuAnimatedScreen : AUIAnimatedScreen
             return;
         //leftEdge = Camera.main.ScreenToWorldPoint(new Vector3(0, Screen.height / 2, 1));
         //rightEdge = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height / 2, 1));
-        basePosition = transform.position;
         ApplyInitialState();
         initialized = true;
     }
@@ -46,7 +43,7 @@ public class MainMenuAnimatedScreen : AUIAnimatedScreen
             // Place it at the starting point
             transform.position = pointToAnimateFrom;
             // Tween to base position
-            transform.DOMove(basePosition, animDuration).SetEase(Ease.InBack);
+            transform.DOMove(basePosition.position, animDuration).SetEase(Ease.InBack);
             yield return new WaitForSeconds(animDuration);
             // Enlarge
             transform.DOScale(Vector3.one, animDuration).SetEase(Ease.InBack);
@@ -84,11 +81,11 @@ public class MainMenuAnimatedScreen : AUIAnimatedScreen
     {
         if (dir == AnimationDirection.Left)
         {
-            return leftEdge.position;
+            return midLeftEdge.position;
         }
         else if (dir == AnimationDirection.Right)
         {
-            return rightEdge.position;
+            return midRightEdge.position;
         }
         else
         {

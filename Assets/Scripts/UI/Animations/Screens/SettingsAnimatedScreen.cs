@@ -16,8 +16,6 @@ public class SettingsAnimatedScreen : AUIAnimatedScreen
 
     // Bottom left corner of the screen
     private Vector3 cornerPoint;
-    // The original position
-    private Vector3 basePosition;
 
     #region AUIAnimatedScreen
     public override void Initialize()
@@ -25,7 +23,6 @@ public class SettingsAnimatedScreen : AUIAnimatedScreen
         if (initialized)
             return;
         cornerPoint = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 1));
-        basePosition = transform.position;
         // Settings window is initially disabled
         ApplyInitialState();
         initialized = true;
@@ -46,7 +43,7 @@ public class SettingsAnimatedScreen : AUIAnimatedScreen
             // Place it at the top center of the screen
             transform.position = cornerPoint;
             // Tween to base position
-            transform.DOMove(basePosition, animDuration).SetEase(Ease.InBack);
+            transform.DOMove(basePosition.position, animDuration).SetEase(Ease.InBack);
             yield return new WaitForSeconds(animDuration);
             // Enlarge
             transform.DOScale(Vector3.one, animDuration).SetEase(Ease.InBack);

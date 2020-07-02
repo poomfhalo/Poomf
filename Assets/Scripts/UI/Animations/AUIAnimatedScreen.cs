@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class AUIAnimatedScreen : MonoBehaviour
 {
+    // The original position of the UI menu
+    [SerializeField] protected Transform basePosition = null;
     [Tooltip("The base duration that each animation phase takes. Lower = faster animations.")]
     [SerializeField] protected float animDuration = 1f;
     [Tooltip("Is this screen initially enabled (true) or disabled (false)?")]
