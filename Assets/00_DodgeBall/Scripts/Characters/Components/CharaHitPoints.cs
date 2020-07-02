@@ -54,7 +54,7 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
             return;
         if (!IsWaitingForHit)
             return;
-        if (isBeingHurt)
+        if (IsBeingHurt)
             return;
         if (IsInHitCd)
             return;
@@ -133,6 +133,6 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
 
     public void DisableHitDetection()
     {
-        A_OnHitEnded();
+        isWaitingForHit = false;
     }
 }

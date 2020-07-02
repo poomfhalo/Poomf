@@ -33,7 +33,7 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
     }
     public override void OnConnectedToMaster()
     {
-        Log.LogL0(PhotonNetwork.NickName + " Connected to Master, Attempting joining random room");
+        Log.Message(PhotonNetwork.NickName + " Connected to Master, Attempting joining random room");
         PhotonNetwork.JoinRandomRoom();
     }
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -47,7 +47,7 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
         Log.LogL0(PhotonNetwork.NickName + " joined room " + room.Name + " now there are " + room.PlayerCount + " in room ");
         if (autoStart)
         {
-            Log.LogL0("Waiting for second player");
+            Log.Message("Waiting for second player");
         }
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
