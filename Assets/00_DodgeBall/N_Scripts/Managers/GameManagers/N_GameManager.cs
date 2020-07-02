@@ -27,6 +27,9 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     public List<LoadablePrefab> Prefabs => prefabs;
     [SerializeField] List<LoadablePrefab> prefabs = new List<LoadablePrefab> { new LoadablePrefab(N_Prefab.Player, "N_PlayerManager") };
     #endregion
+    [Header("Very Dangerous Networking Data")]
+    [SerializeField] int sendRate = 20;
+    [SerializeField] int serializationRate = 10;
 
     #region UnityFunctions
     void Reset()
@@ -42,8 +45,8 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
         base.Awake();
         N_Extentions.prefabs = prefabs;
 
-        Log.Message("Send Rate " + PhotonNetwork.SendRate);
-        Log.Message("Serilization Rate " + PhotonNetwork.SerializationRate);
+        PhotonNetwork.SendRate = sendRate;
+        PhotonNetwork.SerializationRate = serializationRate;
     }
     public override void OnEnable()
     {
