@@ -41,6 +41,9 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     {
         base.Awake();
         N_Extentions.prefabs = prefabs;
+
+        Log.Message("Send Rate " + PhotonNetwork.SendRate);
+        Log.Message("Serilization Rate " + PhotonNetwork.SerializationRate);
     }
     public override void OnEnable()
     {
@@ -73,12 +76,12 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
         {
             if (p.ActorNumber % 2 == 0)
             {
-                Debug.Log(p.NickName + " Added to team A with num :: " + p.ActorNumber);
+                Log.LogL0(p.NickName + " Added to team A with num :: " + p.ActorNumber);
                 teams.AddPlayer(TeamTag.A, p.ActorNumber);
             }
             else
             {
-                Debug.Log(p.NickName + " Added to team B with num :: " + p.ActorNumber);
+                Log.LogL0(p.NickName + " Added to team B with num :: " + p.ActorNumber);
                 teams.AddPlayer(TeamTag.B, p.ActorNumber);
             }
         }

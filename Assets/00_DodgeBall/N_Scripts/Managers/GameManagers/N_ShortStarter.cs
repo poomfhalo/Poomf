@@ -33,26 +33,26 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
     }
     public override void OnConnectedToMaster()
     {
-        Log.Message(PhotonNetwork.NickName + " Connected to Master, Attempting joining random room");
+        Log.LogL0(PhotonNetwork.NickName + " Connected to Master, Attempting joining random room");
         PhotonNetwork.JoinRandomRoom();
     }
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Debug.Log(PhotonNetwork.NickName + " failed to join random room, creating Dev Room");
+        Log.LogL0(PhotonNetwork.NickName + " failed to join random room, creating Dev Room");
         PhotonNetwork.CreateRoom("Dev Room", N_Lobby.GetDefOptions());
     }
     public override void OnJoinedRoom()
     {
         var room = PhotonNetwork.CurrentRoom;
-        Log.Message(PhotonNetwork.NickName + " joined room " + room.Name + " now there are " + room.PlayerCount + " in room ");
+        Log.LogL0(PhotonNetwork.NickName + " joined room " + room.Name + " now there are " + room.PlayerCount + " in room ");
         if (autoStart)
         {
-            Debug.Log("Waiting for second player");
+            Log.LogL0("Waiting for second player");
         }
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Log.Message(newPlayer.NickName + " Have Joined Total Count :: " + PhotonNetwork.CurrentRoom.PlayerCount);
+        Log.LogL0(newPlayer.NickName + " Have Joined Total Count :: " + PhotonNetwork.CurrentRoom.PlayerCount);
         photonView.RPC("StartGame", RpcTarget.AllViaServer);
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
