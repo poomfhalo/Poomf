@@ -112,6 +112,8 @@ public class DodgeballCharacter : MonoBehaviour
             return;
         if (IsDodging)
             return;
+        if (IsBeingHurt)
+            return;
 
         mover.StartMoveByInput(i, cam.transform);
         OnCommandActivated?.Invoke(DodgeballCharaCommand.MoveInput);

@@ -28,12 +28,14 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
     Animator animator = null;
     ActionsScheduler scheduler = null;
     Rigidbody rb3d = null;
+    Mover mover = null;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         scheduler = GetComponent<ActionsScheduler>();
         rb3d = GetComponent<Rigidbody>();
+        mover = GetComponent<Mover>();
 
         currHP = maxHP;
         hurtZone.onTriggerEnter.AddListener(OnObjEntered);
@@ -111,8 +113,13 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
         if (!gameObject.activeSelf)
             return;
 
-        this.InvokeDelayed(minTimeBetweenHurts, () => {
+        this.InvokeDelayed(minTimeBetweenHurts, () =>{
             isBeingHurt = false;
+
+            mover.ReadFacingValues();
+            if (recievedInput == Vector3.zero)
+                return;
+            mover.ApplyInput(recievedInput);
         });
         isWaitingForHit = false;
     }

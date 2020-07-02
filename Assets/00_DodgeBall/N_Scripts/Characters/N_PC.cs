@@ -2,7 +2,6 @@
 using Photon.Pun;
 using System.Linq;
 using GW_Lib;
-using System;
 
 public class N_PC : MonoBehaviour,IPunObservable
 {
@@ -35,7 +34,8 @@ public class N_PC : MonoBehaviour,IPunObservable
     {
         BallLauncherV2 lV2 = chara.launcher as BallLauncherV2;
         if (lV2 && !PhotonNetwork.IsMasterClient)
-            lV2.extDelay = 0.2f;
+            lV2.extDelay = 0.2f;//TODO: Change this delay, to be travel percent of the master
+        //once master travels this as percent.
     }
     void OnEnable()
     {

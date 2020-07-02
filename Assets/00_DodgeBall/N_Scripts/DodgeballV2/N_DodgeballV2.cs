@@ -15,6 +15,7 @@ using GW_Lib;
 //at the same time
 //If Master, Throws, we Do not, allow throw locally, but we send the throw, across the network
 //at the same time for everyone.
+//TODO: Change the extDelay in BallLauncherV2, to be travel percent of the master, once master travels this as percent.
 
 //2.
 //Do Commands Syncing, ball is local unless on ground, and does snap.

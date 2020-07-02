@@ -12,6 +12,7 @@ public class BallLauncher : DodgeballCharaAction, ICharaAction
     [Tooltip("If the value is less than 1 then we will use the Mover turn speed, noting that, if its too low, character may not" +
 "\nface the target, by the end of the animation, but the ball, will still travel towards the target")]
     [SerializeField] float throwFacingSpeed = 200;
+    [SerializeField] BallThrowData throwData = null;
 
     [Header("Read Only")]
     [SerializeField] protected bool isThrowing = false;
@@ -42,6 +43,30 @@ public class BallLauncher : DodgeballCharaAction, ICharaAction
     }
     public virtual void A_OnThrowPointReached()
     {
+        if (!aimedAtChara)
+            return;
+        Dodgeball.instance.transform.SetParent(null);
+        animator.SetBool("HasBall", false);
+        isThrowing = false;
+
+        Vector3 targetPos = new Vector3();
+        if (TeamsManager.AreFriendlies(aimedAtChara, chara))
+        {
+            //Call, recieving ball or sth here?
+            targetPos = aimedAtChara.RecievablePoint.position;
+            Debug.LogWarning("Passing To Friendlies has not been implemented yet");
+        }
+        else
+        {
+            targetPos = aimedAtChara.ShootablePoint.position;
+            Vector3 dir = (targetPos - transform.position).normalized;
+            targetPos = targetPos + dir * throwData.ofShootDist;
+            Dodgeball.instance.launchTo.C_GoLaunchTo(targetPos, throwData);
+            DodgeballGameManager.instance.OnBallThrownAtEnemy(GetComponent<DodgeballCharacter>());
+        }
+
+        selectionIndicator.SetFocus(null);
+        RunOnThrowPointReached();
     }
     public virtual void A_OnThrowEnded()
     {

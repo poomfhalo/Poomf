@@ -17,6 +17,7 @@ public class N_Lobby : MonoBehaviourPunCallbacks
     [SerializeField] Button findingPlayers = null;
     [SerializeField] GameObject loginMenu = null;
     [SerializeField] TextMeshProUGUI playerNameText = null;
+
     void Start()
     {
         ready.onClick.AddListener(OnReadyClicked);
