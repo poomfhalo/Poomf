@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using GW_Lib;
+using TMPro;
 
 //this Must be placed on a game object that is always active.
 //this component, must also never be disabled. 
@@ -15,7 +16,7 @@ public class N_Lobby : MonoBehaviourPunCallbacks
     [SerializeField] ToggleButtonGroup regionsGroup = null;
     [SerializeField] Button findingPlayers = null;
     [SerializeField] GameObject loginMenu = null;
-
+    [SerializeField] TextMeshProUGUI playerNameText = null;
     void Start()
     {
         ready.onClick.AddListener(OnReadyClicked);
@@ -23,7 +24,14 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         findingPlayers.onClick.AddListener(OnFindingPlayersClicked);
         findingPlayers.gameObject.SetActive(false);
         if (PhotonNetwork.IsConnectedAndReady || !string.IsNullOrEmpty(PhotonNetwork.NickName))
+        {
             loginMenu.SetActive(false);
+            playerNameText.text = PhotonNetwork.NickName;
+        }
+        else
+        {
+            loginMenu.GetComponent<N_LoginMenu>().onNameSet += (n) => playerNameText.text = n;
+        }
     }
 
     private void OnReadyClicked()
