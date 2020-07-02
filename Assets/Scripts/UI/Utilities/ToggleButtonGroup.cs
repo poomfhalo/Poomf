@@ -6,8 +6,10 @@ public class ToggleButtonGroup : MonoBehaviour
 {
     public ToggleButton ActiveButton => activeButton;
     [SerializeField] ToggleButton activeButton = null;
+    [SerializeField] GameObject inActivityImage = null;
 
     List<ToggleButton> toggleButtons = new List<ToggleButton>();
+
     void Start()
     {
         toggleButtons = GetComponentsInChildren<ToggleButton>().ToList();
@@ -20,6 +22,16 @@ public class ToggleButtonGroup : MonoBehaviour
             activeButton.Select();
         }
     }
+
+    public void SetInteractable(bool state)
+    {
+        inActivityImage.SetActive(!state);
+        foreach (var b in toggleButtons)
+        {
+            b.SetInteractable(state);
+        }
+    }
+
     private void OnSelected(ToggleButton selection)
     {
         foreach (var t in toggleButtons)

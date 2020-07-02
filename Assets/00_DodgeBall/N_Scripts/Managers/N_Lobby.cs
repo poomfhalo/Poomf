@@ -36,12 +36,16 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         }
         if (regionsGroup.ActiveButton.text == "DEF")
         {
+            Log.LogL0("Trying To Connect To Best Region");
             PhotonNetwork.ConnectUsingSettings();
         }
         else
         {
-            PhotonNetwork.ConnectToRegion(regionsGroup.ActiveButton.text);
+            string region = regionsGroup.ActiveButton.text.ToLower();
+            Log.LogL0("Trying to connect to region " + region);
+            PhotonNetwork.ConnectToRegion(region);
         }
+        regionsGroup.SetInteractable(false);
     }
     private void OnTutorialClicked()
     {
@@ -51,7 +55,7 @@ public class N_Lobby : MonoBehaviourPunCallbacks
     {
         if (!ready.interactable)
         {
-            Log.Message("I Connected To Master " + PhotonNetwork.NickName + " Trying To Join RND Room");
+            Log.Message("I Connected To Master " + PhotonNetwork.NickName + " Trying To Join RND Room in " + PhotonNetwork.CloudRegion);
             PrepareRoom();
         }
     }
@@ -98,9 +102,8 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         PhotonNetwork.Disconnect();
         PhotonNetwork.AutomaticallySyncScene = false;
         Log.Message(PhotonNetwork.NickName + " Have Dissconnected, left room, and stopped syncing scenes");
-        regionsGroup.gameObject.SetActive(true);
+        regionsGroup.SetInteractable(true);
     }
-
     private void PrepareRoom()
     {
         PhotonNetwork.JoinRandomRoom();
@@ -109,7 +112,6 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         ready.interactable = true;
         ready.gameObject.SetActive(false);
         findingPlayers.gameObject.SetActive(true);
-        regionsGroup.gameObject.SetActive(false);
     }
 
     public static RoomOptions GetDefOptions()
