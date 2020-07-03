@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.29890612, g: 0.7406462, b: 0.9910036, a: 1}
+  m_IndirectSpecularColor: {r: 0.29824954, g: 0.74061275, b: 0.99116963, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -671,6 +671,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Particle_effects
+      objectReference: {fileID: 0}
+    - target: {fileID: 1349437383148692054, guid: 0451d63fc744a2a46963450067d991ad,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1349437383148692055, guid: 0451d63fc744a2a46963450067d991ad,
         type: 3}
@@ -8988,6 +8993,98 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 979962161}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &981004921
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 981004924}
+  - component: {fileID: 981004923}
+  - component: {fileID: 981004922}
+  m_Layer: 0
+  m_Name: Screen Shot Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &981004922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 981004921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cb4d9bd051a71f48a18edd27bce7c19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  threshold: 0.71
+  intensity: 0.21
+  blurSize: 1.12
+  blurIterations: 2
+  fastBloomMaterial: {fileID: 2100000, guid: 221340b8b5ad10940ba1646f87e3770c, type: 2}
+--- !u!20 &981004923
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 981004921}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!4 &981004924
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 981004921}
+  m_LocalRotation: {x: -0.045818362, y: 0.9514159, z: -0.17490846, w: -0.2492298}
+  m_LocalPosition: {x: 7.4756875, y: 2.5272806, z: 0.03860283}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &982449675 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 71e4bdebc3e03cd4e88cc93d89e52222,
@@ -12453,6 +12550,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player Character
+      objectReference: {fileID: 0}
+    - target: {fileID: 6963099543513805180, guid: c395b7056ca0ebe79951bbb94ce6667d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6963099543513805183, guid: c395b7056ca0ebe79951bbb94ce6667d,
         type: 3}

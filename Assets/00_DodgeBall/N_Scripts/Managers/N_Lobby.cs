@@ -18,6 +18,8 @@ public class N_Lobby : MonoBehaviourPunCallbacks
     [SerializeField] GameObject loginMenu = null;
     [SerializeField] TextMeshProUGUI playerNameText = null;
 
+    bool reachedMaxPlayers => PhotonNetwork.PlayerList.Length >= PhotonNetwork.CurrentRoom.MaxPlayers;
+
     void Start()
     {
         ready.onClick.AddListener(OnReadyClicked);
@@ -58,7 +60,7 @@ public class N_Lobby : MonoBehaviourPunCallbacks
     }
     private void OnTutorialClicked()
     {
-        SceneManager.LoadScene("SP Game");
+        SceneFader.instance.FadeIn(1, () => SceneManager.LoadScene("SP Game"));
     }
     public override void OnConnectedToMaster()
     {
@@ -71,7 +73,7 @@ public class N_Lobby : MonoBehaviourPunCallbacks
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Log.Message("Failed To Join Random Room : Creating Room");
+        Log.LogL0("Failed To Join Random Room : Creating Room");
         RoomOptions ops = new RoomOptions();
         ops.MaxPlayers = 2;
         ops.IsOpen = true;
@@ -88,14 +90,18 @@ public class N_Lobby : MonoBehaviourPunCallbacks
     {
         Log.Message("Joined room " + PhotonNetwork.CurrentRoom.Name);
         PhotonNetwork.AutomaticallySyncScene = true;
+        if(reachedMaxPlayers)
+        {
+            GoToRoom();
+        }
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Log.Message(newPlayer.NickName + " have Entered room " + PhotonNetwork.CurrentRoom.Name);
-        if(PhotonNetwork.PlayerList.Length>=PhotonNetwork.CurrentRoom.MaxPlayers && PhotonNetwork.IsMasterClient)
+
+        if (reachedMaxPlayers && PhotonNetwork.IsMasterClient)
         {
-            Log.Message("Loading MP Game");
-            PhotonNetwork.LoadLevel("MP Game");
+            GoToRoom();
         }
     }
     private void OnFindingPlayersClicked()
@@ -121,6 +127,18 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         ready.interactable = true;
         ready.gameObject.SetActive(false);
         findingPlayers.gameObject.SetActive(true);
+    }
+    private void GoToRoom()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Log.Message("Loading MP Game");
+            SceneFader.instance.FadeIn(1.3f, () => PhotonNetwork.LoadLevel("MP Game"));
+        }
+        else
+        {
+            SceneFader.instance.FadeIn(1, null);
+        }
     }
 
     public static RoomOptions GetDefOptions()
