@@ -35,14 +35,26 @@ public class N_Room : MonoBehaviour
         levelChangeCounter = levelChangeCounter - Time.deltaTime;
         int minutes = Mathf.FloorToInt(levelChangeCounter) / 60;
         int seconds = Mathf.FloorToInt(levelChangeCounter) % 60;
+
+        string m = "";
+        string s = "";
         if(minutes<10)
         {
-            timerText.text = "0" + minutes + ":" + seconds;
+            m = "0" + minutes;
         }
         else
         {
-            timerText.text = minutes + ":" + seconds;
+            m = minutes.ToString();
         }
+        if (seconds < 10)
+        {
+            s = "0" + seconds;
+        }
+        else
+        {
+            s = seconds.ToString();
+        }
+        timerText.text = m + ":" + s;
 
         if (levelChangeCounter<=0)
         {
