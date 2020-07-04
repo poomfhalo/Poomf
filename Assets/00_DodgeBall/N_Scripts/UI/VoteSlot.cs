@@ -14,6 +14,9 @@ public class VoteSlot : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,I
 
     public event Action<VoteSlot> E_OnSelected = null;
     public event Action<VoteSlot> E_OnPointerEntered = null;
+
+    public int votesCount => votesHead.childCount;
+
     [Header("Constants")]
     [SerializeField] Image selectedImage = null;
     [SerializeField] Image deSelectedImage = null;
@@ -39,6 +42,7 @@ public class VoteSlot : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,I
             Destroy(children[i].gameObject);
         }
     }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         E_OnPointerEntered?.Invoke(this);
@@ -62,5 +66,23 @@ public class VoteSlot : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,I
     {
         selectedImage.gameObject.SetActive(false);
         deSelectedImage.gameObject.SetActive(true);
+    }
+
+    public void AddVote()
+    {
+        GameObject vote = Instantiate(votePrefab);
+        vote.transform.SetParent(votesHead);
+        vote.transform.localPosition = Vector3.zero;
+
+        LayoutRebuilder.MarkLayoutForRebuild(GetComponent<RectTransform>());
+    }
+    public void RemoveVote()
+    {
+        if (votesHead.childCount == 0)
+            return;
+
+        GameObject child = votesHead.GetChild(votesHead.childCount - 1).gameObject;
+        Destroy(child);
+        LayoutRebuilder.MarkLayoutForRebuild(GetComponent<RectTransform>());
     }
 }
