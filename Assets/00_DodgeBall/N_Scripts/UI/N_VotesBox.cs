@@ -69,9 +69,9 @@ public class N_VotesBox : MonoBehaviour
         slot.RemoveVote();
     }
     [PunRPC]
-    private void ClickRpc()
+    private void ClickRpc(string xxx)
     {
-        Debug.Log("WTF");
+        Debug.Log("WTF :: " + xxx);
     }
 
     public string GetWinner()
