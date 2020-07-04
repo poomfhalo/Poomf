@@ -68,18 +68,28 @@ public class N_VotesBox : MonoBehaviour
         VoteSlot slot = slots.Single(s => s.SceneName == fromScene);
         slot.RemoveVote();
     }
-    [PunRPC]
-    private void ClickRpc(string xxx)
-    {
-        Debug.Log("WTF :: " + xxx);
-    }
 
-    public string GetWinner()
+    public string GetMostVotedScene()
     {
-        if(activeSlot)
-            return activeSlot.SceneName;
-
-        Log.Warning("Could Not, Local Winner, sending Stadium");
-        return "SP Game";
+        int highestVotes = int.MinValue;
+        foreach (var slot in slots)
+        {
+            if (slot.votesCount > highestVotes)
+            {
+                highestVotes = slot.votesCount;
+            }
+        }
+        List<VoteSlot> highestSlots = slots.FindAll(s => s.votesCount == highestVotes);
+        if (highestSlots.Count == 0)
+        {
+            Log.Warning("Could Not, Local Winner, sending to MP Game (Development Level)");
+            return "MP Game";
+        }
+        if(highestSlots.Count == 1)
+        {
+            return highestSlots[0].SceneName;
+        }
+        int i = UnityEngine.Random.Range(0, highestSlots.Count);
+        return highestSlots[i].SceneName;
     }
 }
