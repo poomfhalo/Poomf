@@ -68,6 +68,11 @@ public class N_VotesBox : MonoBehaviour
         VoteSlot slot = slots.Single(s => s.SceneName == fromScene);
         slot.RemoveVote();
     }
+    [PunRPC]
+    private void ClickRpc()
+    {
+        Debug.Log("WTF");
+    }
 
     public string GetWinner()
     {
