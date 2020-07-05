@@ -8,14 +8,16 @@ public class CustomItem : MonoBehaviour
 {
     // Can this item's color be adjusted?
     [SerializeField] protected bool isColorable = false;
+    // Determines if this object's texture can be changed or not.
+    [SerializeField] protected bool isTextureCustomizable = false;
 
-    [Tooltip("Contains the different textures that are used to customize this item. Applied 1 at a time using an index. Leave empty if the object has no textures.")]
+    [Tooltip("Contains the different textures that are used to customize this item. Applied 1 at a time using an index. Leave empty if this item's textures are not customizable.")]
     [SerializeField] protected Texture2D[] itemTextures = null;
     [SerializeField] protected ItemData itemData = null;
     [SerializeField] protected CustomItemData customData = null;
 
-    // Determines if this object's texture can be changed or not. Set to false(non-customizable) if the textures array is empty.
-    public bool IsTextureCustomizable { get; protected set; } = false;
+    public bool IsTextureCustomizable { get { return isTextureCustomizable; } protected set { isTextureCustomizable = value; } }
+    public int ItemID { get; private set; }
 
     // The main mesh renderer.
     protected Renderer meshRenderer = null;
@@ -23,6 +25,9 @@ public class CustomItem : MonoBehaviour
     protected MaterialPropertyBlock materialProperties;
     public virtual void Initialize()
     {
+        // During development, some items may not have item data!
+        if (itemData != null)
+            ItemID = itemData.ItemID;
         meshRenderer = GetComponent<SkinnedMeshRenderer>();
         materialProperties = new MaterialPropertyBlock();
         // Update colors
@@ -54,15 +59,8 @@ public class CustomItem : MonoBehaviour
             SetColors(customData.CurrentColors);
         }
 
-        if (itemTextures == null || itemTextures.Length == 0)
+        if (IsTextureCustomizable)
         {
-            // This item's texture is not customizable
-            IsTextureCustomizable = false;
-        }
-        else
-        {
-            IsTextureCustomizable = true;
-            // Update Texture
             SetTexture(customData.CurrentTextureIndex);
         }
     }
@@ -77,7 +75,7 @@ public class CustomItem : MonoBehaviour
     {
         if (!isColorable)
         {
-            Debug.LogError("CustomItem -> SetColor: This object is non-colorable!");
+            Debug.LogError("CustomItem -> SetColors: This object is non-colorable!");
             return;
         }
 
@@ -88,6 +86,43 @@ public class CustomItem : MonoBehaviour
             meshRenderer.SetPropertyBlock(materialProperties, i);
         }
         customData.CurrentColors = colors;
+    }
+    /// <summary>
+    /// Sets the color of a specific material
+    /// </summary>
+    /// <param name="color">
+    /// The new color
+    /// </param>
+    /// <param name="materialIndex">
+    /// The index of the material that we want to change its color
+    /// </param>
+    public virtual void SetColor(Color color, int materialIndex)
+    {
+        if (!isColorable)
+        {
+            Debug.LogError("CustomItem -> SetColor: This object is non-colorable!");
+            return;
+        }
+
+        // Update the material's color
+        materialProperties.SetColor("_Color", color);
+        meshRenderer.SetPropertyBlock(materialProperties, materialIndex);
+
+        customData.CurrentColors[materialIndex] = color;
+    }
+
+    /// <summary>
+    /// Returns the current color of the specified material
+    /// </summary>
+    public virtual Color GetColor(int materialIndex)
+    {
+        if (!isColorable)
+        {
+            Debug.LogError("CustomItem -> GetColor: This object is non-colorable!");
+            return Color.white;
+        }
+
+        return customData.CurrentColors[materialIndex];
     }
 
     public virtual void SetTexture(int textureIndex)

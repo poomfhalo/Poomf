@@ -4,6 +4,7 @@ using UnityEngine;
 using Poomf.Data;
 using Cinemachine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace Poomf.UI
 {
@@ -91,8 +92,9 @@ namespace Poomf.UI
                     priceGems = itemData.PriceGems;
                 }
 
-                item.InitializeItem(testItemData[i].ItemName, null, null, itemData.ItemSprite, "OWNED");
+                item.InitializeItem(testItemData[i].ItemName, null, null, itemData.ItemSprite, "OWNED", itemData.ItemID);
                 newItem.transform.SetParent(storeContent, false);
+                item.MyButton.onClick.AddListener(OnInventoryItemButtonPressed);
             }
         }
 
@@ -113,6 +115,28 @@ namespace Poomf.UI
                 zoomedInCamera.gameObject.SetActive(true);
                 zoomButtonImage.sprite = zoomOutSprite;
                 zoomedIn = true;
+            }
+        }
+
+        // TODO: change to a more suitable implementation when Asset Bundles are ready
+        public void OnInventoryItemButtonPressed()
+        {
+            // Get the currently selected inventory item
+            InventoryItem selectedItem = EventSystem.current.currentSelectedGameObject.GetComponent<InventoryItem>();
+            if (selectedItem != null)
+            {
+                // Get the item corresponding to that button
+                for (int i = 0; i < testItemData.Length; i++)
+                {
+                    if (testItemData[i].ItemID == selectedItem.ItemID)
+                    {
+                        if (testItemData[i].ItemCategory == ItemCategory.HEAD)
+                            customizablePlayer.EquipHead(testItemData[i].ItemID);
+                        else if (testItemData[i].ItemCategory == ItemCategory.BODY)
+                            customizablePlayer.EquipOutfit(testItemData[i].ItemID);
+                        break;
+                    }
+                }
             }
         }
     }

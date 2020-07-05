@@ -96,7 +96,7 @@ public class AudioManager : ScriptableObject, IAudioManager
     }
     #endregion
 
-    // Returns a volume value that can be used with audio mixers [-80dB, 0dB]. Volume should be between 0 and 1
+    // Returns a volume value that can be used with audio mixers, which use values between [-80dB, 0dB]. Volume should be between 0 and 1
     // Returns a value between [-30dB,0dB]. Using [-80dB,0dB] made the volume drop too rapidly, where it
     // gets too quiet around -30dB, so we use a smaller range instead, and mute it if the volume is 0, which 
     // means returning -80dB.

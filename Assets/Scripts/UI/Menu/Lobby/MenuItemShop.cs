@@ -72,7 +72,7 @@ namespace Poomf.UI
                     priceGems = itemData.PriceGems;
                 }
 
-                item.InitializeItem(testItemData[i].ItemName, priceCoins, priceGems, itemData.ItemSprite, null);
+                item.InitializeItem(testItemData[i].ItemName, priceCoins, priceGems, itemData.ItemSprite, null, itemData.ItemID);
                 newItem.transform.SetParent(storeContent, false);
             }
         }

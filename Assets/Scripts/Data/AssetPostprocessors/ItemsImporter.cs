@@ -34,7 +34,7 @@ namespace Poomf.Data
 
         private static void manageItemID(UniqueIDDelegate i_uniqueIDDelegate, string i_path)
         {
-            if (i_path.Contains("Data/ScriptableObject_Instances/Test_Instances"))
+            if (i_path.Contains("Data/ScriptableObject_Instances/Test_Instances") || i_path.Contains("Data/ScriptableObject_Instances/Items"))
             {
                 ItemData itemData = AssetDatabase.LoadAssetAtPath<ItemData>(i_path);
 

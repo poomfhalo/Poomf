@@ -13,7 +13,10 @@ namespace Poomf.UI
         [SerializeField] private Text itemStatus = null;
         [SerializeField] private Image itemImage = null;
 
-        public void InitializeItem(string i_itemName, int? i_itemCoinsPrice, int? i_itemGemsPrice, Sprite itemSprite, string i_itemStatus)
+        public int ItemID { get; private set; }
+        public Button MyButton { get; private set; }
+
+        public void InitializeItem(string i_itemName, int? i_itemCoinsPrice, int? i_itemGemsPrice, Sprite itemSprite, string i_itemStatus, int itemID)
         {
             if (null != itemName)
                 itemName.text = i_itemName;
@@ -24,6 +27,9 @@ namespace Poomf.UI
 
             if (null != itemImage)
                 itemImage.sprite = itemSprite;
+
+            ItemID = itemID;
+            MyButton = GetComponent<Button>();
         }
 
         private void setupPrice(Text i_priceText, int? i_value)

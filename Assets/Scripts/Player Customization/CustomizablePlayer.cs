@@ -26,7 +26,6 @@ public class CustomizablePlayer : MonoBehaviour
         Initialize();
     }
 
-
     // Initializes the custom items lists, all custom items and equipment slots
     void Initialize()
     {
@@ -63,5 +62,21 @@ public class CustomizablePlayer : MonoBehaviour
         outfitSlot.Initialize(customOutfits[outfitSlot.CurrentItemIndex]);
     }
 
+    public void EquipHead(int itemID)
+    {
+        // Get the item to equip from the heads list
+        CustomItem itemToEquip = customHeads.Find(x => x.ItemID == itemID);
+        // Equip this item
+        // TODO: check gender
+        headSlot.Equip(itemToEquip);
+    }
 
+    public void EquipOutfit(int itemID)
+    {
+        // Get the item to equip from the heads list
+        CustomItem itemToEquip = customOutfits.Find(x => x.ItemID == itemID);
+        // Equip this item
+        // TODO: check gender
+        outfitSlot.Equip(itemToEquip);
+    }
 }

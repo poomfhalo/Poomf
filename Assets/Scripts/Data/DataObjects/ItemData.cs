@@ -16,7 +16,7 @@ namespace Poomf.Data
         [SerializeField] private ItemSet itemSet = ItemSet.SCHOOL;
         [SerializeField] private Gender itemGender = Gender.UNISEX;
 
-        [HideInInspector] [SerializeField] private int itemID = -1;
+        [SerializeField, HideInInspector] private int itemID = -1;
 
         public string ItemName { get { return itemName; } }
         public int PriceCoins { get { return coinsPrice; } }

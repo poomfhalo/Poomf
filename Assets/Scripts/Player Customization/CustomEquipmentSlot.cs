@@ -6,10 +6,10 @@ using UnityEngine;
 public class CustomEquipmentSlot : ScriptableObject
 {
     // The index of the currently equipped item in the hierarchy.
-    [SerializeField] int currentItemIndex = 0;
+    [SerializeField, HideInInspector] int currentItemIndex = 0;
 
     // Is there an item equipped already?
-    [SerializeField] bool isOccupied = false;
+    [SerializeField, HideInInspector] bool isOccupied = false;
 
     // The currently equipped game object
     CustomItem currentEquip = null;
@@ -17,6 +17,7 @@ public class CustomEquipmentSlot : ScriptableObject
     #region Setters/Getters
     public int CurrentItemIndex { get { return currentItemIndex; } set { currentItemIndex = value; } }
     public bool IsOccupied { get { return isOccupied; } private set { isOccupied = value; } }
+    public CustomItem CurrentEquip { get { return currentEquip; } private set { currentEquip = value; } }
     #endregion
 
     public void Initialize(CustomItem equipment)
