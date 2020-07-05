@@ -14,6 +14,7 @@ namespace Poomf.Data
         [SerializeField] private ItemCategory itemCategory = ItemCategory.HEAD;
         [SerializeField] private ItemRarity itemRarity = ItemRarity.COMMON;
         [SerializeField] private ItemSet itemSet = ItemSet.SCHOOL;
+        [SerializeField] private Gender itemGender = Gender.UNISEX;
 
         [HideInInspector] [SerializeField] private int itemID = -1;
 

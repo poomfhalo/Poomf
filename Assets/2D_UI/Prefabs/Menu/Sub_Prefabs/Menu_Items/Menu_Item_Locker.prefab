@@ -2805,6 +2805,13 @@ MonoBehaviour:
   testItemData:
   - {fileID: 11400000, guid: 9304bcf2a45b46d40a391a69179e73f3, type: 2}
   - {fileID: 11400000, guid: 45758f76b6c45af4c8c98cf919920d45, type: 2}
+  zoomButtonImage: {fileID: 0}
+  zoomInSprite: {fileID: 0}
+  zoomOutSprite: {fileID: 0}
+  customizablePlayer: {fileID: 0}
+  hairColorMenu: {fileID: 2742208274710730048}
+  zoomedOutCamera: {fileID: 0}
+  zoomedInCamera: {fileID: 0}
 --- !u!1 &7226663275510934711
 GameObject:
   m_ObjectHideFlags: 0
@@ -4500,3 +4507,15 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 5002722006206664890}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2742208274710730048 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7161702853801625082, guid: 90a5e5d1707c02c46818f39671ff5fe7,
+    type: 3}
+  m_PrefabInstance: {fileID: 5002722006206664890}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 513426885c67b014fb09e875c948dde9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

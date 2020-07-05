@@ -34,3 +34,9 @@ public enum ItemSet
     ROBOT = 9,
     CHRISTMAS = 10
 }
+public enum Gender
+{
+    MALE = 0,
+    FEMALE = 1,
+    UNISEX = 2
+}

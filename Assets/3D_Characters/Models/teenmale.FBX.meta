@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 3631b2fd40d0c6e4f83e9201eaf9b139
 ModelImporter:
-  serializedVersion: 19300
+  serializedVersion: 19301
   internalIDToNameTable:
   - first:
       1: 100000
@@ -696,7 +696,62 @@ ModelImporter:
   - first:
       137: 13700004
     second: TeenBoy_Eyes
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Boy-Hair
+    second: {fileID: 2100000, guid: 654f6159d1872f74aba05c82ee0bc5db, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Female-Hair
+    second: {fileID: 2100000, guid: f7ae02ced73537b41adc13918a93005f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material #2
+    second: {fileID: 2100000, guid: 672be09c9823fb44aadab9f107d854da, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material #3
+    second: {fileID: 2100000, guid: 369e4c2badda5cb43b29280ab12852cb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material #31
+    second: {fileID: 2100000, guid: 14339ab471679bb4e93529e1799f6d5c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material #32
+    second: {fileID: 2100000, guid: 905ab84e2a3883841b6155411d0526bd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material #4
+    second: {fileID: 2100000, guid: c40decca4abeb744ba51d08f70967fb1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material #5
+    second: {fileID: 2100000, guid: 273c2c7ef59c3754e8917c07038c2238, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: c31a06998e117f7479a67ad7cf957865, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Teen-Boy-Hair
+    second: {fileID: 2100000, guid: 8d61bde9a4fdb9c42bf5febb615c9b0d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Teen-Girl-Hair
+    second: {fileID: 2100000, guid: 52c41f8645e299a459655d2085e4e140, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -736,6 +791,7 @@ ModelImporter:
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1

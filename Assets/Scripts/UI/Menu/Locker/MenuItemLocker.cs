@@ -17,6 +17,9 @@ namespace Poomf.UI
         [SerializeField] Image zoomButtonImage = null;
         [SerializeField] Sprite zoomInSprite = null;
         [SerializeField] Sprite zoomOutSprite = null;
+        [Header("Character Customization")]
+        [SerializeField] CustomizablePlayer customizablePlayer = null;
+        [SerializeField] MenuLockerColorOption hairColorMenu = null;
         [Header("Virtual Cameras")]
         [SerializeField] CinemachineVirtualCamera zoomedOutCamera = null;
         [SerializeField] CinemachineVirtualCamera zoomedInCamera = null;
@@ -53,6 +56,9 @@ namespace Poomf.UI
             // Make sure zoomed in is false
             zoomedIn = false;
             initialized = true;
+
+            // Assign the correct item slot to each colors menu
+            hairColorMenu.EquipSlot = customizablePlayer.HeadSlot;
         }
 
         private void populateStoreItems()
