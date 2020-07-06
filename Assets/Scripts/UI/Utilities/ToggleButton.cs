@@ -38,4 +38,8 @@ public class ToggleButton : MonoBehaviour
         selectedImage.gameObject.SetActive(false);
         deSelectedImage.gameObject.SetActive(true);
     }
+    public void SetInteractable(bool state)
+    {
+        button.interactable = state;
+    }
 }

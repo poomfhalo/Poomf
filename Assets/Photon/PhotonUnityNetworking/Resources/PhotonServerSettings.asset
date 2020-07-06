@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: 51bb29dc-94ea-4f57-a8a0-f65b749d6bc8
+    AppIdRealtime: '51bb29dc-94ea-4f57-a8a0-f65b749d6bc8  '
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
@@ -31,6 +31,7 @@ MonoBehaviour:
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - AddVote
   - ClickRpc
   - DestroyRpc
   - DestroySpaceship
@@ -39,16 +40,18 @@ MonoBehaviour:
   - Free
   - OnCreated
   - PrepareForGame
+  - R_ActivateBallThrow
+  - R_Command
+  - R_DodgeCommand
+  - R_FeetPush
   - R_GoToChara
   - R_LaunchTo
   - R_OnGroundHit
   - R_Reflection
   - R_StartHitAction
   - R_UpdateBallState
-  - RecieveCommand
-  - RecieveDodgeCommand
-  - RecieveFeetPush
   - RecieveTeamsData
+  - RemoveVote
   - RespawnSpaceship
   - RpcClearBuffer
   - RpcNonServerOwnedTeleportFromServer
@@ -57,5 +60,5 @@ MonoBehaviour:
   - SyncWithTeamsManager
   - UpdateButtonClick
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
-  DevRegionSetOnce: 0
+  ShowSettings: 1
+  DevRegionSetOnce: 1

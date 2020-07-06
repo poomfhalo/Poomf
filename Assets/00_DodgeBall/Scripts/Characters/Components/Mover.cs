@@ -144,6 +144,13 @@ public class Mover : DodgeballCharaAction, ICharaAction
     }
     public void SmoothStop(Action onCompleted)
     {
+        if(cancelationTime<=0)
+        {
+            Cancel();
+            onCompleted?.Invoke();
+            return;
+        }
+
         IsMoving = false;
         Vector3 cancelStartVel = xzVel;
         float startCancelSpeed = speed;
@@ -157,10 +164,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
             animator.SetFloat("Speed", speed);
         }).OnComplete(() =>
         {
-            xzVel = Vector3.zero;
-            ApplyVel();
-            speed = 0;
-            animator.SetFloat("Speed", speed);
+            Cancel();
             onCompleted?.Invoke();
         });
     }

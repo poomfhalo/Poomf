@@ -78,6 +78,9 @@ public class DodgeballReflection : DodgeballAction
                         Debug.Log("Started Reflection Action");
                         StartReflectionAction();
                         break;
+                    case DodgeballCommand.HitGround:
+                        Cancel();
+                        break;
                 }
             };
         }
@@ -129,7 +132,7 @@ public class DodgeballReflection : DodgeballAction
             if (dist <= expectedTravelDist)
             {
                 SetReflectionData();
-                isRunning = false;
+                Cancel();
 
                 ball.RunCommand(Command);
                 Reflect(lastReflectionVel, lastReflectionStartPoint, lastReflectionTarget,lastContact);

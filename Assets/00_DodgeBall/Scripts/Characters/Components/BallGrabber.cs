@@ -24,8 +24,10 @@ public class BallGrabber : DodgeballCharaAction, ICharaAction
     {
         ball = Dodgeball.instance;
         animator = GetComponent<Animator>();
-        GetComponent<BallLauncher>().onThrowPointReached += () => hasBall = false;
-
+    }
+    void Start()
+    {
+        GetComponent<DodgeballCharacter>().launcher.onThrowPointReached += () => hasBall = false;
         ballGrabbingZone.onTriggerEnter.AddListener(OnBallGrabZoneEntered);
         ballGrabbingZone.onTriggerExit.AddListener(OnBallGrabZoneExitted);
     }

@@ -27,6 +27,9 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     public List<LoadablePrefab> Prefabs => prefabs;
     [SerializeField] List<LoadablePrefab> prefabs = new List<LoadablePrefab> { new LoadablePrefab(N_Prefab.Player, "N_PlayerManager") };
     #endregion
+    [Header("Very Dangerous Networking Data")]
+    [SerializeField] int sendRate = 20;
+    [SerializeField] int serializationRate = 10;
 
     #region UnityFunctions
     void Reset()
@@ -41,6 +44,9 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     {
         base.Awake();
         N_Extentions.prefabs = prefabs;
+
+        PhotonNetwork.SendRate = sendRate;
+        PhotonNetwork.SerializationRate = serializationRate;
     }
     public override void OnEnable()
     {
@@ -73,12 +79,12 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
         {
             if (p.ActorNumber % 2 == 0)
             {
-                Debug.Log(p.NickName + " Added to team A with num :: " + p.ActorNumber);
+                Log.LogL0(p.NickName + " Added to team A with num :: " + p.ActorNumber);
                 teams.AddPlayer(TeamTag.A, p.ActorNumber);
             }
             else
             {
-                Debug.Log(p.NickName + " Added to team B with num :: " + p.ActorNumber);
+                Log.LogL0(p.NickName + " Added to team B with num :: " + p.ActorNumber);
                 teams.AddPlayer(TeamTag.B, p.ActorNumber);
             }
         }

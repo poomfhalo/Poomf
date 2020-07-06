@@ -121,8 +121,8 @@ public class Dodgeball : Singleton<Dodgeball>
         }
     }
 
-    private void OnBodyEntered(Collision col){ }
-    private void OnBodyExitted(Collision col){ }
+    private void OnBodyEntered(Collision col) { }
+    private void OnBodyExitted(Collision col) { }
     public void RunCommand(DodgeballCommand command) => E_OnCommandActivated?.Invoke(command);
 
     private void C_OnGroundHit()

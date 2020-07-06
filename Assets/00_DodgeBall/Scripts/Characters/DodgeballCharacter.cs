@@ -49,7 +49,7 @@ public class DodgeballCharacter : MonoBehaviour
     protected Camera cam = null;
 
     protected Mover mover = null;
-    protected BallLauncher launcher = null;
+    public BallLauncher launcher = null;
     protected Dodger dodger = null;
     protected BallGrabber grabber = null;
     protected Jumper jumper = null;
@@ -70,8 +70,8 @@ public class DodgeballCharacter : MonoBehaviour
         animator = GetComponent<Animator>();
         cam = Camera.main;
 
-        launcher = GetComponent<BallLauncher>();
         mover = GetComponent<Mover>();
+        launcher = GetComponents<BallLauncher>().ToList().Find(a => a.enabled);
         dodger = GetComponent<Dodger>();
         grabber = GetComponent<BallGrabber>();
         jumper = GetComponent<Jumper>();
@@ -111,6 +111,8 @@ public class DodgeballCharacter : MonoBehaviour
         if (IsThrowing)
             return;
         if (IsDodging)
+            return;
+        if (IsBeingHurt)
             return;
 
         mover.StartMoveByInput(i, cam.transform);
