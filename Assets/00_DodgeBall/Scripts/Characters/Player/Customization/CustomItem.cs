@@ -76,7 +76,7 @@ public class CustomItem : MonoBehaviour
     {
         if (!isColorable)
         {
-            Log.Error("CustomItem -> SetColors: This object is non-colorable!",gameObject);
+            Log.Warning("CustomItem -> SetColors: This object is non-colorable!",gameObject);
             return;
         }
 
@@ -101,7 +101,7 @@ public class CustomItem : MonoBehaviour
     {
         if (!isColorable)
         {
-            Debug.LogError("CustomItem -> SetColor: This object is non-colorable!", gameObject);
+            Log.Warning("CustomItem -> SetColor: This object is non-colorable!", gameObject);
             return;
         }
 
@@ -115,7 +115,7 @@ public class CustomItem : MonoBehaviour
     {
         if (!IsTextureCustomizable)
         {
-            Log.Error("CustomItem -> SetTexture: Texture not customizable!", gameObject);
+            Log.Warning("CustomItem -> SetTexture: Texture not customizable!", gameObject);
             return;
         }
         materialProperties.SetTexture("_MainTex", itemTextures[textureIndex]);
