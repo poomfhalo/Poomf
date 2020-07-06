@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO: To Be Deleted, once everything is clear.
 [CreateAssetMenu(fileName = "CustomEquipmentSlot", menuName = "ScriptableObjects/Customization/CustomEquipmentSlot", order = 1)]
 public class CustomEquipmentSlot : ScriptableObject
 {
+    [Header("Read Only")]
     // The index of the currently equipped item in the hierarchy.
-    [SerializeField, HideInInspector] int currentItemIndex = 0;
-
+    [SerializeField] int currentItemIndex = 0;
     // Is there an item equipped already?
-    [SerializeField, HideInInspector] bool isOccupied = false;
+    [SerializeField] bool isOccupied = false;
 
     // The currently equipped game object
     CustomItem currentEquip = null;

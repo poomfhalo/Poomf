@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Poomf.Data
 {
+    //TODO: To be Removed once everything is checked.
     /// <summary>
     /// Stores the current properties of custom objects. Objects with similar options (like hair objects that are all colorable)
     /// should use the same CustomItemData instance.

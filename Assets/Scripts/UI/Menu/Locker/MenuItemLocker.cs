@@ -27,6 +27,7 @@ namespace Poomf.UI
 
         bool initialized = false;
         bool zoomedIn = false;
+        CharaSkinData skinData => customizablePlayer.GetSkinData;
 
         void OnEnable()
         {
@@ -59,7 +60,8 @@ namespace Poomf.UI
             initialized = true;
 
             // Assign the correct item slot to each colors menu
-            hairColorMenu.EquipSlot = customizablePlayer.HeadSlot;
+            //hairColorMenu.EquipSlot = customizablePlayer.HeadSlot;
+            hairColorMenu.Initialize(skinData);
         }
 
         private void populateStoreItems()
@@ -130,10 +132,13 @@ namespace Poomf.UI
                 {
                     if (testItemData[i].ItemID == selectedItem.ItemID)
                     {
+                        int id = testItemData[i].ItemID;
                         if (testItemData[i].ItemCategory == ItemCategory.HEAD)
-                            customizablePlayer.EquipHead(testItemData[i].ItemID);
+                            //customizablePlayer.EquipHead(testItemData[i].ItemID);
+                            skinData.SetItemID(ItemType.Head, id);
                         else if (testItemData[i].ItemCategory == ItemCategory.BODY)
-                            customizablePlayer.EquipOutfit(testItemData[i].ItemID);
+                            //customizablePlayer.EquipOutfit(testItemData[i].ItemID);
+                            skinData.SetItemID(ItemType.Outfit, id);
                         break;
                     }
                 }
