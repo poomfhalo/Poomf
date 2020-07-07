@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Photon.Pun;
-using System;
 
 public class SpawnPoint : MonoBehaviourPunCallbacks
 {
@@ -8,8 +7,10 @@ public class SpawnPoint : MonoBehaviourPunCallbacks
     public Quaternion rotation => transform.rotation;
     public bool HasPlayer => hasPlayer;
     public TeamTag BelongsTo => belongsTo;
+    public Transform LinkedTo => linkedTo;
 
     [SerializeField] TeamTag belongsTo = TeamTag.A;
+    [SerializeField] Transform linkedTo = null;
     [Header("Read Only")]
     [SerializeField] bool hasPlayer = false;
     [SerializeField] int activePlayer = -1;

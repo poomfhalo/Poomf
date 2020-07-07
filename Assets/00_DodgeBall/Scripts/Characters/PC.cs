@@ -1,32 +1,24 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(DodgeballCharacter))]
-public class PC : MonoBehaviour
+public class PC : CharaController
 {
     MatchInputController input = null;
-    DodgeballCharacter chara = null;
+    [Header("Read Only")]
+    [SerializeField] bool isLocked = false;
+    public override bool IsLocked { get => isLocked; protected set => isLocked = value; }
+
     void OnEnable()
     {
-        chara = GetComponent<DodgeballCharacter>();
         input = GetComponent<MatchInputController>();
-        ConnectInput();
+        Unlock();
     }
     void OnDisable()
     {
-        DisconnectInput();
+        Lock();
     }
 
-    private void ConnectInput()
-    {
-        input.OnMoveInput += chara.C_MoveInput;
-        input.OnEnemy += chara.C_Enemy;
-        input.OnFriendly += chara.C_Friendly;
-        input.OnBallAction += chara.C_OnBallAction;
-        input.OnDodge += chara.C_Dodge;
-        input.OnFakeFire += chara.C_FakeFire;
-        input.OnJump += chara.C_Jump;
-    }
-    private void DisconnectInput()
+    public override void Lock()
     {
         input.OnMoveInput -= chara.C_MoveInput;
         input.OnEnemy -= chara.C_Enemy;
@@ -35,5 +27,17 @@ public class PC : MonoBehaviour
         input.OnDodge -= chara.C_Dodge;
         input.OnFakeFire -= chara.C_FakeFire;
         input.OnJump -= chara.C_Jump;
+        IsLocked = true;
+    }
+    public override void Unlock()
+    {
+        IsLocked = false;
+        input.OnMoveInput += chara.C_MoveInput;
+        input.OnEnemy += chara.C_Enemy;
+        input.OnFriendly += chara.C_Friendly;
+        input.OnBallAction += chara.C_OnBallAction;
+        input.OnDodge += chara.C_Dodge;
+        input.OnFakeFire += chara.C_FakeFire;
+        input.OnJump += chara.C_Jump;
     }
 }

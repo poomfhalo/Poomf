@@ -147,7 +147,7 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     [PunRPC]
     private void PrepareForGame()
     {
-        DodgeballGameManager.instance.StartBallLaunch();
+        GameIntroManager.instance.StartBallLaunch();
     }
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {

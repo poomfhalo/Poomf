@@ -1,17 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GW_Lib;
 using GW_Lib.Utility;
 using UnityEngine;
 using TMPro;
 
 public class DodgeballGameManager : Singleton<DodgeballGameManager>
 {
-    [SerializeField] float timeBeforeBallLaunch = 1f;
-    [SerializeField] float launchGravity = -20;
-    [SerializeField] float ballLaunchHeigth = 6;
-    [SerializeField] GameObject ballLauncher = null;
-    [SerializeField] bool launchBallOnStart = false;
     [Header("Build Settings")]
     [SerializeField] string build = "Build : 0.0001";
     [SerializeField] TextMeshProUGUI buildText = null;
@@ -23,21 +17,7 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
 
     void Start()
     {
-        Dodgeball.instance.gameObject.SetActive(false);
-        if (launchBallOnStart)
-            StartBallLaunch();
-
         buildText.text = build;
-    }
-
-    public void StartBallLaunch()
-    {
-        Dodgeball.instance.gameObject.SetActive(true);
-        this.InvokeDelayed(timeBeforeBallLaunch, () =>
-        {
-            Dodgeball.instance.launchUp.C_LaunchUp(ballLaunchHeigth, launchGravity);
-            ballLauncher.SetActive(false);
-        });
     }
 
     public void OnBallThrownAtEnemy(DodgeballCharacter by)

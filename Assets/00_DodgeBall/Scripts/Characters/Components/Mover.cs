@@ -282,7 +282,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
     {
         lastNonZeroVel = transform.forward * (stoppingSpeed + 0.05f);
     }
-    public void ApplyInput(Vector3 newInput, Transform withRespectTo)
+    private void ApplyInput(Vector3 newInput, Transform withRespectTo)
     {
         if (withRespectTo == null)
         {

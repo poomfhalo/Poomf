@@ -28,7 +28,7 @@ public class Log : MonoBehaviour
     public bool CanLogErrors => CanLog(LogLevel.Errors);
     public bool CanLogL0 => CanLog(LogLevel.L0);
 
-    public enum LogLevel { L0, All, Warnings, Errors }
+    public enum LogLevel { All, L0, Message, Warnings, Errors }
 
     [SerializeField] LogLevel logLevel = LogLevel.All;
 
@@ -85,6 +85,28 @@ public class Log : MonoBehaviour
     public static void Error(object o, UnityEngine.Object ctx = null)
     {
         Debug.LogError(o, ctx);
+    }
+    public static void LogByLevel(LogLevel level, object o, UnityEngine.Object ctx = null)
+    {
+        if(Instance.CanLog(level))
+        {
+            switch (level)
+            {
+                case LogLevel.Errors:
+                    Error(o, ctx);
+                    break;
+                case LogLevel.Warnings:
+                    Warning(o, ctx);
+                    break;
+                case LogLevel.Message:
+                case LogLevel.All:
+                    Message(o, ctx);
+                    break;
+                case LogLevel.L0:
+                    LogL0(o, ctx);
+                    break;
+            }
+        }
     }
     public bool CanLog(LogLevel logLevel)
     {
