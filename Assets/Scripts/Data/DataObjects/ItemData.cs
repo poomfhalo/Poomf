@@ -11,7 +11,7 @@ namespace Poomf.Data
         [SerializeField] private int gemsPrice = 0;
         [SerializeField] private Sprite itemSprite = null;
         [SerializeField] private CurrencyType currencyType = CurrencyType.COINS;
-        [SerializeField] private ItemCategory itemCategory = ItemCategory.HEAD;
+        [SerializeField] private ItemCategory itemCategory = ItemCategory.Head;
         [SerializeField] private ItemRarity itemRarity = ItemRarity.COMMON;
         [SerializeField] private ItemSet itemSet = ItemSet.SCHOOL;
         [SerializeField] private Gender itemGender = Gender.UNISEX;

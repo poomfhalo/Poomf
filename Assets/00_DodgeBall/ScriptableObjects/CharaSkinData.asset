@@ -12,12 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca03c8137a9f822fd9cbaf88989a281d, type: 3}
   m_Name: CharaSkinData
   m_EditorClassIdentifier: 
+  gender: 1
   items:
   - type: 0
-    itemID: 0
+    isColorable: 1
+    isTextureCustomizable: 0
+    activeItemID: 4
     colors:
-    - {r: 0.021381378, g: 1, b: 0, a: 1}
+    - {r: 0.61609405, g: 0.08627451, b: 0.18431373, a: 1}
+    currentTextureIndex: 0
   - type: 1
-    itemID: 0
+    isColorable: 0
+    isTextureCustomizable: 1
+    activeItemID: 11
     colors:
     - {r: 1, g: 0.89248455, b: 0, a: 1}
+    currentTextureIndex: 2
+  - type: 2
+    isColorable: 0
+    isTextureCustomizable: 1
+    activeItemID: 16
+    colors: []
+    currentTextureIndex: 1
+  - type: 3
+    isColorable: 0
+    isTextureCustomizable: 1
+    activeItemID: 17
+    colors: []
+    currentTextureIndex: 1

@@ -5,12 +5,6 @@
     COINS_GEMS = 2
 }
 
-public enum ItemCategory
-{
-    HEAD = 0,
-    BODY = 1
-}
-
 public enum ItemRarity
 {
     COMMON = 0,
@@ -22,17 +16,18 @@ public enum ItemRarity
 
 public enum ItemSet
 {
-    SCHOOL = 0,
-    STREET = 1,
-    WESTERN = 2,
-    SERVICE = 3,
-    PAJANIMALS = 4,
-    FANCY = 5,
-    HALLOWEEN = 6,
-    SUPPORTER = 7,
-    ANIME = 8,
-    ROBOT = 9,
-    CHRISTMAS = 10
+    NONE = 0,
+    SCHOOL = 1,
+    STREET = 2,
+    WESTERN = 3,
+    SERVICE = 4,
+    PAJANIMALS = 5,
+    FANCY = 6,
+    HALLOWEEN = 7,
+    SUPPORTER = 8,
+    ANIME = 9,
+    ROBOT = 10,
+    CHRISTMAS = 11
 }
 public enum Gender
 {

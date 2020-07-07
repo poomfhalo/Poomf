@@ -20,7 +20,7 @@ namespace Poomf.UI
         [SerializeField] Sprite zoomOutSprite = null;
         [Header("Character Customization")]
         [SerializeField] CustomizablePlayer customizablePlayer = null;
-        [SerializeField] MenuLockerColorOption hairColorMenu = null;
+        [SerializeField] List<MenuLockerColorOption> colorControlMenus = null;
         [Header("Virtual Cameras")]
         [SerializeField] CinemachineVirtualCamera zoomedOutCamera = null;
         [SerializeField] CinemachineVirtualCamera zoomedInCamera = null;
@@ -59,9 +59,9 @@ namespace Poomf.UI
             zoomedIn = false;
             initialized = true;
 
-            // Assign the correct item slot to each colors menu
-            //hairColorMenu.EquipSlot = customizablePlayer.HeadSlot;
-            hairColorMenu.Initialize(skinData);
+            // Initialize the color menus
+            for (int i = 0; i < colorControlMenus.Count; i++)
+                colorControlMenus[i].Initialize(skinData);
         }
 
         private void populateStoreItems()
@@ -133,12 +133,12 @@ namespace Poomf.UI
                     if (testItemData[i].ItemID == selectedItem.ItemID)
                     {
                         int id = testItemData[i].ItemID;
-                        if (testItemData[i].ItemCategory == ItemCategory.HEAD)
+                        if (testItemData[i].ItemCategory == ItemCategory.Head)
                             //customizablePlayer.EquipHead(testItemData[i].ItemID);
-                            skinData.SetItemID(ItemType.Head, id);
-                        else if (testItemData[i].ItemCategory == ItemCategory.BODY)
+                            skinData.SetItemID(ItemCategory.Head, id);
+                        else if (testItemData[i].ItemCategory == ItemCategory.Outfit)
                             //customizablePlayer.EquipOutfit(testItemData[i].ItemID);
-                            skinData.SetItemID(ItemType.Outfit, id);
+                            skinData.SetItemID(ItemCategory.Outfit, id);
                         break;
                     }
                 }

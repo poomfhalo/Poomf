@@ -14,23 +14,18 @@ namespace Poomf.UI
         [SerializeField, ConditionalField("isRGBAdjustable")] private Slider greenSlider = null;
         [SerializeField, ConditionalField("isRGBAdjustable")] private Slider blueSlider = null;
 
-        // The slot that this menu is controlling its colors
-        //public CustomEquipmentSlot EquipSlot;
         [SerializeField] CharaSkinData skinData = null;
-        [SerializeField] ItemType itemToModify = ItemType.Head;
+        [SerializeField] ItemCategory itemToModify = ItemCategory.Head;
 
         private bool visible = false;
 
-        //private void Start()
         public void Initialize(CharaSkinData skinData)
         {
             this.skinData = skinData;
             // Update the sliders values with the current equipment's colors
-            //if (EquipSlot.IsOccupied && isRGBAdjustable)
-            if(isRGBAdjustable)
+            if (isRGBAdjustable)
             {
-                //Color currentColor = EquipSlot.CurrentEquip.GetColor(0);
-                Color currentColor = skinData.GetColor(itemToModify,0);
+                Color currentColor = skinData.GetColor(itemToModify, 0);
                 redSlider.value = currentColor.r;
                 greenSlider.value = currentColor.g;
                 blueSlider.value = currentColor.b;
@@ -47,17 +42,25 @@ namespace Poomf.UI
         {
             // Get the currently selected button's image and send its color to the equip slot
             Image buttonImage = EventSystem.current.currentSelectedGameObject.GetComponent<Image>();
-            if(buttonImage != null)
-            //if (buttonImage != null && EquipSlot.IsOccupied)
+            if (buttonImage != null)
             {
-                skinData.SetColor(itemToModify, 0, buttonImage.color);
-                //EquipSlot.CurrentEquip.SetColor(buttonImage.color, 0);
-                if (isRGBAdjustable)
+                if (skinData.IsColorable(itemToModify))
                 {
-                    // Update the RGB sliders to reflect the selected color's RGB values
-                    redSlider.value = buttonImage.color.r;
-                    greenSlider.value = buttonImage.color.g;
-                    blueSlider.value = buttonImage.color.b;
+                    // The item type uses colors, modify their colors' values
+                    skinData.SetColor(itemToModify, 0, buttonImage.color);
+                    if (isRGBAdjustable)
+                    {
+                        // Update the RGB sliders to reflect the selected color's RGB values
+                        redSlider.value = buttonImage.color.r;
+                        greenSlider.value = buttonImage.color.g;
+                        blueSlider.value = buttonImage.color.b;
+                    }
+                }
+                else if (skinData.IsTextureCustomizable(itemToModify))
+                {
+                    // The item type uses textures rather than colors. Update its texture.
+                    // Use the button's order in the hierarchy as an index to textures
+                    skinData.SetTextureIndex(itemToModify, buttonImage.transform.GetSiblingIndex());
                 }
             }
         }
@@ -65,24 +68,13 @@ namespace Poomf.UI
         // Called when Sliders values change. Updates the corresponding color value in the equipment
         public void AdjustRed(float value)
         {
-            //NOTE: IsOccupied is no longer needed, as the SkinData, does not rely on CustomItem, it just holds the data.
-            //if (EquipSlot.IsOccupied)
-            //{
-            //    Color currentColor = EquipSlot.CurrentEquip.GetColor(0);
-            //    EquipSlot.CurrentEquip.SetColor(new Color(value, currentColor.g, currentColor.b), 0);
-            //}
-            Color currentColor = skinData.GetColor(itemToModify,0);
+            Color currentColor = skinData.GetColor(itemToModify, 0);
             Color newColor = new Color(value, currentColor.g, currentColor.b);
             skinData.SetColor(itemToModify, 0, newColor);
         }
 
         public void AdjustGreen(float value)
         {
-            //if (EquipSlot.IsOccupied)
-            //{
-            //    Color currentColor = EquipSlot.CurrentEquip.GetColor(0);
-            //    EquipSlot.CurrentEquip.SetColor(new Color(currentColor.r, value, currentColor.b), 0);
-            //}
             Color currentColor = skinData.GetColor(itemToModify, 0);
             Color newColor = new Color(currentColor.r, value, currentColor.b);
             skinData.SetColor(itemToModify, 0, newColor);
@@ -90,11 +82,6 @@ namespace Poomf.UI
 
         public void AdjustBlue(float value)
         {
-            //if (EquipSlot.IsOccupied)
-            //{
-            //    Color currentColor = EquipSlot.CurrentEquip.GetColor(0);
-            //    EquipSlot.CurrentEquip.SetColor(new Color(currentColor.r, currentColor.g, value), 0);
-            //}
             Color currentColor = skinData.GetColor(itemToModify, 0);
             Color newColor = new Color(currentColor.r, currentColor.g, value);
             skinData.SetColor(itemToModify, 0, newColor);
