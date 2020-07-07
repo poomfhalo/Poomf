@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using MyBox;
 
 public class CustomizablePlayer : MonoBehaviour
 {
@@ -9,10 +10,10 @@ public class CustomizablePlayer : MonoBehaviour
 
     // Lists that contain all custom items
     [Header("Read Only")]
-    [SerializeField] List<CustomItem> allHeads = new List<CustomItem>();
-    [SerializeField] List<CustomItem> allOutfits = new List<CustomItem>();
-    [SerializeField] List<CustomItem> allEyes = new List<CustomItem>();
-    [SerializeField] CustomItem playerSkinTone = null;
+    [SerializeField, ReadOnly] List<CustomItem> allHeads = new List<CustomItem>();
+    [SerializeField, ReadOnly] List<CustomItem> allOutfits = new List<CustomItem>();
+    [SerializeField, ReadOnly] List<CustomItem> allEyes = new List<CustomItem>();
+    [SerializeField, ReadOnly] CustomItem playerSkinTone = null;
 
     void Start()
     {

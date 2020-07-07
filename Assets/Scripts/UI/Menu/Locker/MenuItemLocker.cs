@@ -134,10 +134,8 @@ namespace Poomf.UI
                     {
                         int id = testItemData[i].ItemID;
                         if (testItemData[i].ItemCategory == ItemCategory.Head)
-                            //customizablePlayer.EquipHead(testItemData[i].ItemID);
                             skinData.SetItemID(ItemCategory.Head, id);
                         else if (testItemData[i].ItemCategory == ItemCategory.Outfit)
-                            //customizablePlayer.EquipOutfit(testItemData[i].ItemID);
                             skinData.SetItemID(ItemCategory.Outfit, id);
                         break;
                     }
