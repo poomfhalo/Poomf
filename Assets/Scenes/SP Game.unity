@@ -518,6 +518,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 416231429}
+  - component: {fileID: 416231431}
   - component: {fileID: 416231430}
   m_Layer: 0
   m_Name: Give Control
@@ -563,6 +564,25 @@ MonoBehaviour:
   - {fileID: 996240510}
   - {fileID: 497144724}
   command: 1
+--- !u!114 &416231431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416231428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77873099842d8611b936402a9708d715, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  onCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  playOnStart: 0
 --- !u!1 &432366972
 GameObject:
   m_ObjectHideFlags: 0
@@ -2823,6 +2843,7 @@ GameObject:
   - component: {fileID: 2068496686}
   - component: {fileID: 2068496685}
   - component: {fileID: 2068496684}
+  - component: {fileID: 2068496688}
   m_Layer: 0
   m_Name: Intro Reactor
   m_TagString: Untagged
@@ -2898,6 +2919,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2068496688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2068496683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 091f10abd4a1e6031b90dcb8030cf250, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startDelay: 0
+  duration: 0
+  waitEndType: 1
+  reactor: {fileID: 416231431}
 --- !u!1 &2095647421
 GameObject:
   m_ObjectHideFlags: 3

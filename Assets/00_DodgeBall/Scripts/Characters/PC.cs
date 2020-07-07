@@ -31,7 +31,6 @@ public class PC : CharaController
     }
     public override void Unlock()
     {
-        IsLocked = false;
         input.OnMoveInput += chara.C_MoveInput;
         input.OnEnemy += chara.C_Enemy;
         input.OnFriendly += chara.C_Friendly;
@@ -39,5 +38,6 @@ public class PC : CharaController
         input.OnDodge += chara.C_Dodge;
         input.OnFakeFire += chara.C_FakeFire;
         input.OnJump += chara.C_Jump;
+        IsLocked = false;
     }
 }
