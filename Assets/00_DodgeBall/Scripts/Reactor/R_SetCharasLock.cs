@@ -21,16 +21,15 @@ public class R_SetCharasLock : Reaction,I_R_CharaSupplier
     {
         foreach (var chara in characters)
         {
-            PlayerInput pi = chara.GetComponent<PlayerInput>();
-            Mover mover = chara.GetComponent<Mover>();
+            Mover mover = chara.GetComponent<Mover>();    
             switch (command)
             {
                 case Command.Lock:
-                    pi.enabled = false;
+                    chara.GetComponent<CharaController>().Lock();
                     mover.movementMode = Mover.MovementType.ToPoint;
                     break;
                 case Command.Unlock:
-                    pi.enabled = true;
+                    chara.GetComponent<CharaController>().Unlock();
                     mover.movementMode = Mover.MovementType.ByInput;
                     break;
             }
