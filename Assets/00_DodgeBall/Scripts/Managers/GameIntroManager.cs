@@ -19,8 +19,11 @@ public class GameIntroManager : Singleton<GameIntroManager>
     void Start()
     {
         Dodgeball.instance.gameObject.SetActive(false);
-        introReactor.React();
-        introReactor.onCompleted.AddListener(OnCompleted);
+        if (introReactor)
+        {
+            introReactor.React();
+            introReactor.onCompleted.AddListener(OnCompleted);
+        }
     }
 
     public void StartBallLaunch()

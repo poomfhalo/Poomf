@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca03c8137a9f822fd9cbaf88989a281d, type: 3}
+  m_Name: CharaSkinDataA
+  m_EditorClassIdentifier: 
+  gender: 1
+  items:
+  - type: 0
+    isColorable: 1
+    isTextureCustomizable: 0
+    activeItemID: 4
+    colors:
+    - {r: 0.61609405, g: 0.08627451, b: 0.18431373, a: 1}
+    currentTextureIndex: 0
+  - type: 1
+    isColorable: 0
+    isTextureCustomizable: 1
+    activeItemID: 11
+    colors:
+    - {r: 1, g: 0.89248455, b: 0, a: 1}
+    currentTextureIndex: 2
+  - type: 2
+    isColorable: 0
+    isTextureCustomizable: 1
+    activeItemID: 16
+    colors: []
+    currentTextureIndex: 1
+  - type: 3
+    isColorable: 0
+    isTextureCustomizable: 1
+    activeItemID: 17
+    colors: []
+    currentTextureIndex: 1

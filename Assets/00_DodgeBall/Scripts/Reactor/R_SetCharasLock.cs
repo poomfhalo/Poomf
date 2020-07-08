@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class R_SetCharasLock : Reaction,I_R_CharaSupplier
 {
@@ -21,16 +20,13 @@ public class R_SetCharasLock : Reaction,I_R_CharaSupplier
     {
         foreach (var chara in characters)
         {
-            Mover mover = chara.GetComponent<Mover>();    
             switch (command)
             {
                 case Command.Lock:
                     chara.GetComponent<CharaController>().Lock();
-                    mover.movementMode = Mover.MovementType.ToPoint;
                     break;
                 case Command.Unlock:
                     chara.GetComponent<CharaController>().Unlock();
-                    mover.movementMode = Mover.MovementType.ByInput;
                     break;
             }
         }

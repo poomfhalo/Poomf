@@ -30,6 +30,10 @@ public class N_PC : MonoBehaviour,IPunObservable
     bool firstRead = true;
     bool canCallMovement = true;
 
+    void Awake()
+    {
+        GetComponent<CharaSlot>().setActiveOnStart = false;
+    }
     void Start()
     {
         BallLauncherV2 lV2 = chara.launcher as BallLauncherV2;
@@ -47,11 +51,11 @@ public class N_PC : MonoBehaviour,IPunObservable
         if (pv.IsMine)
         {
             chara.OnCommandActivated += SendMyCommand;
-            chara.GetComponent<Mover>().movementMode = Mover.MovementType.ByInput;
+            chara.GetComponent<Mover>().movementType = Mover.MovementType.ByInput;
         }
         else
         {
-            chara.GetComponent<Mover>().movementMode = Mover.MovementType.ToPoint;
+            chara.GetComponent<Mover>().movementType = Mover.MovementType.ToPoint;
             chara.GetComponentInChildren<CharaFeet>().extCanPush = false;
         }
 
@@ -79,14 +83,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     [PunRPC]//Called In N_GameManager
     private void PrepareForGame()
     {
-        SpawnPoint s = FindObjectsOfType<SpawnPoint>().ToList().Find(p => p.CheckPlayer(pv.Controller.ActorNumber));
-        transform.position = s.position;
-        transform.rotation = s.rotation;
-        netPos = s.position;
-
-        gameObject.SetActive(true);
-
-        GetComponent<DodgeballCharacter>().SetTeam(N_TeamsManager.GetTeam(ActorID));
+        netPos = GetComponent<DodgeballCharacter>().PrepareForGame();
     }
 
     public virtual void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

@@ -6,7 +6,18 @@ using UnityEngine;
 public class Mover : DodgeballCharaAction, ICharaAction
 {
     public enum MovementType { ByInput, ToPoint }
-    public MovementType movementMode = MovementType.ByInput;
+    public MovementType movementType
+    {
+        set
+        {
+            m_movementType = value;
+            Cancel();
+        }
+        get
+        {
+            return m_movementType;
+        }
+    }
     public Func<Vector3> GetYDisp = () => Vector3.zero;
 
     [SerializeField] float accel = 10;
@@ -46,6 +57,8 @@ public class Mover : DodgeballCharaAction, ICharaAction
     [SerializeField] int movabilityDir = 0;
     [SerializeField] Vector3 smoothMoveInput = Vector3.zero;
     [SerializeField] float distToLastPos = 0;
+    [SerializeField] MovementType m_movementType = MovementType.ByInput;
+    public bool workAsAction = true;
 
     Vector3 dir = Vector3.zero;
 
@@ -71,7 +84,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
         if (!IsMoving)
             return;
 
-        if (usesInputDelay && movementMode == MovementType.ByInput)
+        if (usesInputDelay && movementType == MovementType.ByInput)
         {
             bool isZero = Mathf.Abs(minInputTimeCounter) < Mathf.Epsilon;
 
@@ -81,7 +94,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
                 return;
         }
 
-        switch (movementMode)
+        switch (movementType)
         {
             case MovementType.ByInput:
                 animator.SetFloat("Speed", speed);
@@ -100,7 +113,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
     {
         smoothMoveInput = Vector3.MoveTowards(smoothMoveInput, recievedInput, inputSensitivity * Time.fixedDeltaTime);
 
-        if (usesInputDelay && movementMode == MovementType.ByInput)
+        if (usesInputDelay && movementType == MovementType.ByInput)
         {
             minInputTimeCounter = minInputTimeCounter + Time.fixedDeltaTime / minInputTime * movabilityDir;
             minInputTimeCounter = Mathf.Clamp(minInputTimeCounter, 0, 1);
@@ -131,7 +144,10 @@ public class Mover : DodgeballCharaAction, ICharaAction
     }
     public void StartMoveByInput(Vector3 newInput, Transform withRespectTo)
     {
-        scheduler.StartAction(this);
+        if (workAsAction)
+        {
+            scheduler.StartAction(this);
+        }
         ApplyInput(newInput, withRespectTo);
     }
     public void Cancel()
@@ -141,6 +157,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
         speed = 0;
         ApplyVel();
         animator.SetFloat("Speed", speed);
+        recievedInput = Vector3.zero;
     }
     public void SmoothStop(Action onCompleted)
     {
@@ -186,7 +203,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
     }
     private void SetVel()
     {
-        switch (movementMode)
+        switch (movementType)
         {
             case MovementType.ByInput:
                 SetVelByInput();
@@ -247,7 +264,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
     private void SetMoveDir()
     {
         dir = Vector3.zero;
-        switch (movementMode)
+        switch (movementType)
         {
             case MovementType.ByInput:
                 float ax = Mathf.Abs(smoothMoveInput.x);
@@ -301,7 +318,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
         IsMoving = true;
         this.recievedInput = input;
         movabilityDir = 1;
-        if (input == Vector3.zero && movementMode == MovementType.ByInput)
+        if (input == Vector3.zero && movementType == MovementType.ByInput)
         {
             movabilityDir = -1;
         }

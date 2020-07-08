@@ -6,6 +6,9 @@ using TMPro;
 
 public class DodgeballGameManager : Singleton<DodgeballGameManager>
 {
+    public GameSlotsData gameSlotsData => m_gameSlotsData;
+    [Header("Game Settings")]
+    [SerializeField] GameSlotsData m_gameSlotsData = null;
     [Header("Build Settings")]
     [SerializeField] string build = "Build : 0.0001";
     [SerializeField] TextMeshProUGUI buildText = null;
@@ -42,13 +45,13 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
         t.players.ForEach(p => p.C_ReleaseFromBrace());
     }
 
-    public static SpawnPoint GetSpawnPosition(TeamTag team)
+    public static SpawnPath GetSpawnPosition(TeamTag team)
     {
-        List<SpawnPoint> playerSpawnPoints = FindObjectsOfType<SpawnPoint>().ToList();
-        List<SpawnPoint> spawnPoints = playerSpawnPoints.FindAll(p => p.CheckTeam(team));
-        SpawnPoint s = null;
+        List<SpawnPath> playerSpawnPoints = FindObjectsOfType<SpawnPath>().ToList();
+        List<SpawnPath> spawnPoints = playerSpawnPoints.FindAll(p => p.CheckTeam(team));
+        SpawnPath s = null;
 
-        int maxTries = 120;
+        int maxTries = 300;
         do
         {
             int i = UnityEngine.Random.Range(0, spawnPoints.Count);

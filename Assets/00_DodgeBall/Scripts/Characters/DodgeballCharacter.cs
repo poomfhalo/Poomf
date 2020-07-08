@@ -114,7 +114,6 @@ public class DodgeballCharacter : MonoBehaviour
             return;
         if (IsBeingHurt)
             return;
-
         mover.StartMoveByInput(i, cam.transform);
         OnCommandActivated?.Invoke(DodgeballCharaCommand.MoveInput);
     }
@@ -220,4 +219,18 @@ public class DodgeballCharacter : MonoBehaviour
         OnCommandActivated?.Invoke(DodgeballCharaCommand.PushBall);
     }
     #endregion
+
+    public Vector3 PrepareForGame()
+    {
+        CharaSlot slot = GetComponent<CharaSlot>();
+        SpawnPath s = FindObjectsOfType<SpawnPath>().ToList().Find(p => p.CheckSlot(slot.GetID));
+
+        transform.position = s.position;
+        transform.rotation = s.rotation;
+
+        gameObject.SetActive(true);
+
+        SetTeam(slot.GetTeam);
+        return s.position;
+    }
 }
