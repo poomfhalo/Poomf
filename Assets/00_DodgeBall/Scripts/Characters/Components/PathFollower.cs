@@ -19,6 +19,8 @@ public class PathFollower : DodgeballCharaAction, ICharaAction
 
     DodgeballCharacter chara = null;
     Mover mover = null;
+
+
     void Start()
     {
         chara = GetComponent<DodgeballCharacter>();

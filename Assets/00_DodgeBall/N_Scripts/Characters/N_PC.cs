@@ -211,6 +211,10 @@ public class N_PC : MonoBehaviour,IPunObservable
             case DodgeballCharaCommand.BraceForBall:
                 chara.C_BraceForContact();
                 break;
+            case DodgeballCharaCommand.PathFollow:
+                Transform path = DodgeballGameManager.GetPathsOfSlot(GetComponent<CharaSlot>().GetID)[0].transform;
+                chara.C_PathFollow(path);
+                break;
         }
 
         lastCommand = command;
