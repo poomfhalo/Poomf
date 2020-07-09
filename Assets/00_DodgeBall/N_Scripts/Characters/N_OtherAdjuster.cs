@@ -9,14 +9,13 @@ public class N_OtherAdjuster : MonoBehaviour
     PhotonView pv = null;
     N_PC n_pc = null;
 
-    void Start()
+    void Awake()
     {
         pv = GetComponent<PhotonView>();
         n_pc = GetComponent<N_PC>();
 
         if(!pv.IsMine)
         {
-            GetComponent<MatchInputController>().IsEnabled = false;
             ApplyAdjustments();
         }
     }

@@ -45,7 +45,10 @@ public class N_PC : MonoBehaviour,IPunObservable
     {
         pv = GetComponent<PhotonView>();
         pc = GetComponent<PC>();
+
+        pc.extAllowInputOnStart = pv.IsMine;
         pc.enabled = pv.IsMine;
+
         rb3d = GetComponent<Rigidbody>();
         chara = GetComponent<DodgeballCharacter>();
         if (pv.IsMine)

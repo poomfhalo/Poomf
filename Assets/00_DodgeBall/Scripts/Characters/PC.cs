@@ -3,7 +3,7 @@
 [RequireComponent(typeof(DodgeballCharacter))]
 public class PC : CharaController
 {
-    public bool connectToInputOnStart = true;
+    public bool extAllowInputOnStart = true;
     [SerializeField] MatchInputController inputPrefab = null;
     MatchInputController input = null;
     [Header("Read Only")]
@@ -20,7 +20,7 @@ public class PC : CharaController
     }
     void Start()
     {
-        if (connectToInputOnStart)
+        if (extAllowInputOnStart)
         {
             ConnectToInput();
             Unlock();
