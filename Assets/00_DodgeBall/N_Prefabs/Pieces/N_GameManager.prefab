@@ -112,7 +112,6 @@ GameObject:
   - component: {fileID: 7256501493418980315}
   - component: {fileID: 4263371695546772442}
   - component: {fileID: 4542471381685568632}
-  - component: {fileID: 2715160716042842445}
   m_Layer: 0
   m_Name: N_GameManager
   m_TagString: Untagged
@@ -201,18 +200,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 16fd04909a5812cbbae5e788331ef6c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &2715160716042842445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5543377977081306203}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de0501fd131574ce59e769334c9a3030, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6249178068436708900
@@ -376,7 +363,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -388,9 +375,9 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
-  m_textAlignment: 514
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
