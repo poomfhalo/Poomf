@@ -109,6 +109,7 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
     }
     public static List<SpawnPath> GetPathsOfSlot(int slotID)
     {
-        return FindObjectsOfType<SpawnPath>().ToList().FindAll(s => s.CheckSlot(slotID));
+        List<SpawnPath> allPaths = FindObjectsOfType<SpawnPath>().ToList();
+        return allPaths.FindAll(s => s.CheckSlot(slotID));
     }
 }

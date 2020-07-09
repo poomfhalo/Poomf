@@ -1138,11 +1138,6 @@ PrefabInstance:
       propertyPath: viewIdField
       value: 27
       objectReference: {fileID: 0}
-    - target: {fileID: 5976663811676327297, guid: 96f274dc48619c33e92dfddf5fc17e06,
-        type: 3}
-      propertyPath: introReactor
-      value: 
-      objectReference: {fileID: 1232288979}
     - target: {fileID: 6109713651408751446, guid: 96f274dc48619c33e92dfddf5fc17e06,
         type: 3}
       propertyPath: viewIdField
@@ -1508,18 +1503,6 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 1688378246}
---- !u!114 &1232288979 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3469581724176353789, guid: 8d32081fa41eac406a7cca0ab7938689,
-    type: 3}
-  m_PrefabInstance: {fileID: 6239266748176466359}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77873099842d8611b936402a9708d715, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1241399815 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7281414732227171902, guid: 8d32081fa41eac406a7cca0ab7938689,
@@ -1645,7 +1628,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6239266748176466360}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1587799043 stripped
 Transform:
@@ -2271,10 +2254,10 @@ PrefabInstance:
       propertyPath: launchBallOnStart
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2578201133821622360, guid: 8d32081fa41eac406a7cca0ab7938689,
+    - target: {fileID: 4565184118461384280, guid: 8d32081fa41eac406a7cca0ab7938689,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5088890609628337747, guid: 8d32081fa41eac406a7cca0ab7938689,
         type: 3}
