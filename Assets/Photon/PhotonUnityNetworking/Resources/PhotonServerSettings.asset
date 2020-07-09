@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: '51bb29dc-94ea-4f57-a8a0-f65b749d6bc8  '
+    AppIdRealtime: 51bb29dc-94ea-4f57-a8a0-f65b749d6bc8
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
@@ -56,10 +56,10 @@ MonoBehaviour:
   - RpcClearBuffer
   - RpcNonServerOwnedTeleportFromServer
   - RpcTeleport
+  - SetUp
   - StartGame
   - SyncWithTeamsManager
   - UpdateButtonClick
-  - SetUp
   DisableAutoOpenWizard: 1
-  ShowSettings: 1
-  DevRegionSetOnce: 1
+  ShowSettings: 0
+  DevRegionSetOnce: 0
