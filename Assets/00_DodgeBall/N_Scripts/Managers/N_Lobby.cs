@@ -60,7 +60,7 @@ public class N_Lobby : MonoBehaviourPunCallbacks
     }
     private void OnTutorialClicked()
     {
-        SceneFader.instance.FadeIn(1, () => SceneManager.LoadScene("SP Room"));
+        SceneFader.instance.FadeIn(1, () => SceneManager.LoadScene("SP_Room"));
     }
     public override void OnConnectedToMaster()
     {
