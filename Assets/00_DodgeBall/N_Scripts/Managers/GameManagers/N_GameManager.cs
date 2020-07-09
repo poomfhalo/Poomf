@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
+using GW_Lib;
 
 public enum N_Prefab { PlayerManager,Player }
 /// <summary>
@@ -43,6 +44,7 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     protected override void Awake()
     {
         base.Awake();
+        GameIntroManager.instance.extActivateOnStart = false;
         N_Extentions.prefabs = prefabs;
 
         PhotonNetwork.SendRate = sendRate;
@@ -150,7 +152,7 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     [PunRPC]
     private void PrepareForGame()
     {
-        GameIntroManager.instance.StartBallLaunch();
+        this.InvokeDelayed(0.5f, GameIntroManager.instance.StartGame);
     }
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GW_Lib;
+﻿using GW_Lib;
 using GW_Lib.Utility;
 using UnityEngine;
 
 public enum GameType { OneOnOne, TwoOnTwo, ThreeOnThree }
 public class GameIntroManager : Singleton<GameIntroManager>
 {
+    public bool extActivateOnStart = true;
     [Header("Ball Launch Data")]
     [SerializeField] float timeBeforeBallLaunch = 1f;
     [SerializeField] float launchGravity = -20;
@@ -16,17 +14,29 @@ public class GameIntroManager : Singleton<GameIntroManager>
 
     [Header("Intro Data")]
     [SerializeField] Reactor introReactor;
+
     void Start()
     {
         Dodgeball.instance.gameObject.SetActive(false);
+        if (extActivateOnStart)
+        {
+            StartGame();
+        }
+    }
+    public void StartGame()
+    {
         if (introReactor)
         {
             introReactor.React();
             introReactor.onCompleted.AddListener(OnCompleted);
         }
+        else
+        {
+            StartBallLaunch();
+        }
     }
 
-    public void StartBallLaunch()
+    private void StartBallLaunch()
     {
         Dodgeball.instance.gameObject.SetActive(true);
         this.InvokeDelayed(timeBeforeBallLaunch, () =>
@@ -38,5 +48,6 @@ public class GameIntroManager : Singleton<GameIntroManager>
     private void OnCompleted()
     {
         StartBallLaunch();
+
     }
 }
