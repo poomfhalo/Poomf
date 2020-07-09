@@ -65,8 +65,26 @@ public class Mover : DodgeballCharaAction, ICharaAction
 
     Vector3 dir = Vector3.zero;
 
-    Animator animator = null;
-    Rigidbody rb3d = null;
+    Animator animator
+    {
+        get
+        {
+            if (m_animator == null)
+                m_animator = GetComponent<Animator>();
+            return m_animator;
+        }
+    }
+    Rigidbody rb3d 
+    { 
+        get
+        {
+            if (m_rb3d == null)
+                m_rb3d = GetComponent<Rigidbody>();
+            return m_rb3d;
+        }
+    }
+    Animator m_animator = null;
+    Rigidbody m_rb3d = null;
     ActionsScheduler scheduler = null;
 
     public string actionName => "Move Action";
@@ -76,10 +94,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
 
     void OnEnable()
     {
-        animator = GetComponent<Animator>();
-        rb3d = GetComponent<Rigidbody>();
         scheduler = GetComponent<ActionsScheduler>();
-
         ReadFacingValues();
     }
     void Update()

@@ -1,4 +1,5 @@
-﻿using GW_Lib;
+﻿using System.Linq;
+using GW_Lib;
 using GW_Lib.Utility;
 using UnityEngine;
 
@@ -21,6 +22,9 @@ public class GameIntroManager : Singleton<GameIntroManager>
         if (extActivateOnStart)
         {
             StartGame();
+            TeamTag team = TeamsManager.GetTeam(FindObjectOfType<PC>().GetComponent<DodgeballCharacter>()).teamTag;
+            var p = FindObjectsOfType<TaggedSpawnPoint>().ToList().Find(s => s.HasTag("MainCamera") && s.BelongsTo(team));
+            p.GetComponent<Cinemachine.CinemachineVirtualCamera>().Priority = 15;
         }
     }
     public void StartGame()
