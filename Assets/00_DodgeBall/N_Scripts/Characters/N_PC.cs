@@ -57,6 +57,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         {
             chara.GetComponent<Mover>().movementType = Mover.MovementType.ToPoint;
             chara.GetComponentInChildren<CharaFeet>().extCanPush = false;
+            GetComponent<PathFollower>().extCanPlayAction = false;
         }
 
         chara.launcher.ExtThrowCondition = () => false;

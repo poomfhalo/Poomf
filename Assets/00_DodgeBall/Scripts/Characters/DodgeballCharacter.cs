@@ -6,7 +6,8 @@ using UnityEngine.InputSystem;
 public enum DodgeballCharaCommand { MoveInput, Friendly, Enemy, BallAction, Dodge, FakeFire, Jump,
     BraceForBall,
     ReleaseFromBrace,
-    PushBall
+    PushBall,
+    PathFollow
 }
 
 [RequireComponent(typeof(Animator))]
@@ -56,6 +57,7 @@ public class DodgeballCharacter : MonoBehaviour
     protected BallReciever reciever = null;
     protected CharaHitPoints hp = null;
     protected CharaFeet feet = null;
+    protected PathFollower pathFollower = null;
 
     protected virtual void Reset()
     {
@@ -78,6 +80,7 @@ public class DodgeballCharacter : MonoBehaviour
         reciever = GetComponent<BallReciever>();
         hp = GetComponent<CharaHitPoints>();
         feet = GetComponentInChildren<CharaFeet>();
+        pathFollower = GetComponent<PathFollower>();
 
         SetTeam(team);
 
@@ -217,6 +220,11 @@ public class DodgeballCharacter : MonoBehaviour
     public void C_PushBall()
     {
         OnCommandActivated?.Invoke(DodgeballCharaCommand.PushBall);
+    }
+    public void C_PathFollow(Transform path)
+    {
+        pathFollower.StartFollowAction(path);
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.PathFollow);
     }
     #endregion
 

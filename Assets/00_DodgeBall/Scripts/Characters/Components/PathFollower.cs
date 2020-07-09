@@ -2,7 +2,7 @@
 
 public class PathFollower : DodgeballCharaAction, ICharaAction
 {
-    public bool IsRunning = false;
+    public bool extCanPlayAction = true;
     public string actionName => "Follow Path";
 
     [Tooltip("Detecting when we're too close to the next point, noting that it shoudl be higher thna stopping dist of Mover")]
@@ -15,6 +15,8 @@ public class PathFollower : DodgeballCharaAction, ICharaAction
     [SerializeField] int activePoint = 0;
     [SerializeField] bool changingPoint = false;
     [SerializeField] float changingPointCounter = 0;
+    public bool IsRunning = false;
+
     DodgeballCharacter chara = null;
     Mover mover = null;
     void Start()
@@ -79,6 +81,9 @@ public class PathFollower : DodgeballCharaAction, ICharaAction
 
     public void StartFollowAction(Transform pathHead)
     {
+        if (!extCanPlayAction)
+            return;
+
         GetComponent<Mover>().ReadFacingValues();
         activePathHead = pathHead;
         GetComponent<CharaController>().Lock();
