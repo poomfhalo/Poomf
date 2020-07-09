@@ -44,7 +44,7 @@ public class PC : CharaController
     public override void Unlock()
     {
         IsLocked = false;
-        GetComponent<Mover>().movementType = Mover.MovementType.ByInput;
+        GetComponent<Mover>().movementType = moveTypeOnUnlock;
         if (!input)
             return;
 

@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(ActionsScheduler))]
 public class Mover : DodgeballCharaAction, ICharaAction
 {
+    public bool IsMoving => isMoving;
+
     public enum MovementType { ByInput, ToPoint }
     public MovementType movementType
     {
@@ -21,8 +23,8 @@ public class Mover : DodgeballCharaAction, ICharaAction
     public Func<Vector3> GetYDisp = () => Vector3.zero;
 
     [SerializeField] float accel = 10;
-    public float maxSpeed = 3;
-    public bool IsMoving = false;
+    [SerializeField] float maxSpeed = 3;
+
 
     [Header("Slowing Down")]
     [Tooltip("how fast speed decreases, when no input is being applied")]
@@ -58,6 +60,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
     [SerializeField] Vector3 smoothMoveInput = Vector3.zero;
     [SerializeField] float distToLastPos = 0;
     [SerializeField] MovementType m_movementType = MovementType.ByInput;
+    [SerializeField] bool isMoving = false;
     public bool workAsAction = true;
 
     Vector3 dir = Vector3.zero;
@@ -152,7 +155,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
     }
     public void Cancel()
     {
-        IsMoving = false;
+        isMoving = false;
         xzVel = Vector3.zero;
         speed = 0;
         ApplyVel();
@@ -168,7 +171,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
             return;
         }
 
-        IsMoving = false;
+        isMoving = false;
         Vector3 cancelStartVel = xzVel;
         float startCancelSpeed = speed;
 
@@ -315,7 +318,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
     }
     public void ApplyInput(Vector3 input)
     {
-        IsMoving = true;
+        isMoving = true;
         this.recievedInput = input;
         movabilityDir = 1;
         if (input == Vector3.zero && movementType == MovementType.ByInput)

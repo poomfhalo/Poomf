@@ -55,10 +55,12 @@ public class N_PC : MonoBehaviour,IPunObservable
         {
             chara.OnCommandActivated += SendMyCommand;
             chara.GetComponent<Mover>().movementType = Mover.MovementType.ByInput;
+            GetComponent<CharaController>().moveTypeOnUnlock = Mover.MovementType.ByInput;
         }
         else
         {
             chara.GetComponent<Mover>().movementType = Mover.MovementType.ToPoint;
+            GetComponent<CharaController>().moveTypeOnUnlock = Mover.MovementType.ToPoint;
             chara.GetComponentInChildren<CharaFeet>().extCanPush = false;
             GetComponent<PathFollower>().extCanPlayAction = false;
         }
