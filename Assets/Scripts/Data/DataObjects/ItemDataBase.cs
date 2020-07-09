@@ -3,7 +3,7 @@ using System;
 
 namespace Poomf.Data
 {
-    [CreateAssetMenu(fileName = "ItemData", menuName = "ScriptableObjects/Items/ItemData", order = 0)]
+    //[CreateAssetMenu(fileName = "ItemData", menuName = "ScriptableObjects/Items/ItemData", order = 0)]
     public class ItemDataBase : ScriptableObject
     {
         [SerializeField] private string itemName = "Item_Name";
