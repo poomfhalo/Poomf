@@ -9,16 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b0dd8b0ad1c8ce4dbb52c493004d2ad, type: 3}
+  m_Script: {fileID: 11500000, guid: e4c2e66765c53514fb8c34418e65b4c5, type: 3}
   m_Name: Gym M
   m_EditorClassIdentifier: 
-  itemName: Gym Outfit
+  itemName: Gym
   coinsPrice: 0
   gemsPrice: 0
-  itemSprite: {fileID: 21300000, guid: 857572a168fb2fb4ea7a287cf858a6a5, type: 3}
+  itemSprite: {fileID: 21300000, guid: 8c140fbd9bbc4774399fb6e0e0e1740a, type: 3}
   currencyType: 0
   itemCategory: 1
   itemRarity: 0
-  itemSet: 0
+  itemSet: 1
   itemGender: 0
-  itemID: 10
+  itemID: 8
+  variantNamesExtensions:
+  - A
+  - B
+  - C
+  variantAdditionalCoinPrices: 000000000000000000000000
+  variantAdditionalGemPrices: 000000000000000000000000
+  initialized: 1

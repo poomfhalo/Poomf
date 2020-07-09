@@ -7,7 +7,7 @@ using MyBox;
 //To Add New Item Types Here: 
 //Add it to the enum, then assign CustomItem to the appropriate game object and assign the itemTypeField to the new enum type.
 //Create a new field on all CharaSkinData Objects, that corrosponds to the new ItemType
-public enum ItemCategory { Head, Outfit, Eyes, Skin }
+public enum ItemCategory { Head, Body, Eyes, Skin }
 
 
 //New Concept: SkinItemData

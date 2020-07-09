@@ -10,10 +10,13 @@ namespace Poomf.UI
 {
     public class MenuItemLocker : MenuItemBase
     {
-        [SerializeField] Transform storeContent = null;
+        [SerializeField] Transform headsContentParent = null;
+        [SerializeField] Transform bodiesContentParent = null;
         [SerializeField] GameObject lockerItemPrefab = null;
         // TODO : For testing, to be removed.
-        [SerializeField] private ItemData[] testItemData = null;
+        [SerializeField] private HeadItemData[] testItemHeads = null;
+        // TODO : For testing, to be removed.
+        [SerializeField] private BodyItemData[] testItemBodies = null;
         [Header("Zoom Button")]
         [SerializeField] Image zoomButtonImage = null;
         [SerializeField] Sprite zoomInSprite = null;
@@ -52,7 +55,7 @@ namespace Poomf.UI
         {
             if (true == initialized) return;
 
-            populateStoreItems();
+            populateLockerItems();
             // Make sure the zoom button has the zoom in image
             zoomButtonImage.sprite = zoomInSprite;
             // Make sure zoomed in is false
@@ -64,23 +67,32 @@ namespace Poomf.UI
                 colorControlMenus[i].Initialize(skinData);
         }
 
-        private void populateStoreItems()
+        private void populateLockerItems()
         {
-            if (null == lockerItemPrefab || null == testItemData || 0 == testItemData.Length) return;
+            if (null == lockerItemPrefab || null == testItemBodies || 0 == testItemBodies.Length || null == testItemHeads || 0 == testItemHeads.Length) return;
 
-            int itemsCount = testItemData.Length;
+            // Initialize the bodies
+            int itemsCount = testItemBodies.Length;
 
             for (int i = 0; i < itemsCount; i++)
             {
-                GameObject newItem = Instantiate(lockerItemPrefab);
-                InventoryItem item = newItem.GetComponent<InventoryItem>();
-                if (null == item) return;
-                ItemData itemData = testItemData[i];
-                CurrencyType itemCurrencyType = itemData.CurrencyType;
-                int? priceCoins = null;
-                int? priceGems = null;
+                BodyItemData itemData = testItemBodies[i];
+                // Create an "inventory item" for each variant
+                for (int j = 0; j < itemData.GetVariantsCount(); j++)
+                {
+                    GameObject newItem = Instantiate(lockerItemPrefab);
+                    InventoryItem item = newItem.GetComponent<InventoryItem>();
+                    if (null == item) return;
+                    item.InitializeItem(itemData.GetVariantName(j), null, null, itemData.ItemSprite, "OWNED", itemData.ItemID, ItemCategory.Body, j);
+                    newItem.transform.SetParent(bodiesContentParent, false);
+                    item.MyButton.onClick.AddListener(OnInventoryItemButtonPressed);
+                }
 
-                if (itemCurrencyType == CurrencyType.COINS_GEMS)
+                //CurrencyType itemCurrencyType = itemData.CurrencyType;
+                //int? priceCoins = null;
+                //int? priceGems = null;
+
+                /* if (itemCurrencyType == CurrencyType.COINS_GEMS)
                 {
                     priceCoins = itemData.PriceCoins;
                     priceGems = itemData.PriceGems;
@@ -92,10 +104,20 @@ namespace Poomf.UI
                 else if (itemCurrencyType == CurrencyType.GEMS)
                 {
                     priceGems = itemData.PriceGems;
-                }
+                } */
+            }
 
-                item.InitializeItem(testItemData[i].ItemName, null, null, itemData.ItemSprite, "OWNED", itemData.ItemID);
-                newItem.transform.SetParent(storeContent, false);
+            // Initialize the heads
+            itemsCount = testItemHeads.Length;
+
+            for (int i = 0; i < itemsCount; i++)
+            {
+                HeadItemData itemData = testItemHeads[i];
+                GameObject newItem = Instantiate(lockerItemPrefab);
+                InventoryItem item = newItem.GetComponent<InventoryItem>();
+                if (null == item) return;
+                item.InitializeItem(itemData.ItemName, null, null, itemData.ItemSprite, "OWNED", itemData.ItemID, ItemCategory.Head);
+                newItem.transform.SetParent(headsContentParent, false);
                 item.MyButton.onClick.AddListener(OnInventoryItemButtonPressed);
             }
         }
@@ -127,19 +149,32 @@ namespace Poomf.UI
             InventoryItem selectedItem = EventSystem.current.currentSelectedGameObject.GetComponent<InventoryItem>();
             if (selectedItem != null)
             {
-                // Get the item corresponding to that button
-                for (int i = 0; i < testItemData.Length; i++)
+                if (selectedItem.ItemType == ItemCategory.Body)
                 {
-                    if (testItemData[i].ItemID == selectedItem.ItemID)
+                    // Get the item corresponding to that button
+                    for (int i = 0; i < testItemBodies.Length; i++)
                     {
-                        int id = testItemData[i].ItemID;
-                        if (testItemData[i].ItemCategory == ItemCategory.Head)
-                            skinData.SetItemID(ItemCategory.Head, id);
-                        else if (testItemData[i].ItemCategory == ItemCategory.Outfit)
-                            skinData.SetItemID(ItemCategory.Outfit, id);
-                        break;
+                        if (testItemBodies[i].ItemID == selectedItem.ItemID)
+                        {
+                            skinData.SetItemID(ItemCategory.Body, testItemBodies[i].ItemID);
+                            // Variants are just different textures, so set the texture index as the variant number
+                            skinData.SetTextureIndex(ItemCategory.Body, selectedItem.VariantNumber);
+                            break;
+                        }
                     }
                 }
+                else if (selectedItem.ItemType == ItemCategory.Head)
+                {
+                    for (int i = 0; i < testItemHeads.Length; i++)
+                    {
+                        if (testItemHeads[i].ItemID == selectedItem.ItemID)
+                        {
+                            skinData.SetItemID(ItemCategory.Head, testItemHeads[i].ItemID);
+                            break;
+                        }
+                    }
+                }
+
             }
         }
     }
