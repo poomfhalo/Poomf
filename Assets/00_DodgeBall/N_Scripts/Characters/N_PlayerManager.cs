@@ -51,9 +51,7 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
             return;
         }
 
-        Camera cam = Camera.main;
         var p = FindObjectsOfType<TaggedSpawnPoint>().ToList().Find(s => s.HasTag("MainCamera") && s.BelongsTo(team.teamTag));
-        cam.transform.position = p.position;
-        cam.transform.rotation = p.rotation;
+        p.GetComponent<Cinemachine.CinemachineVirtualCamera>().Priority = 15;
     }
 }
