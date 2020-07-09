@@ -45,6 +45,8 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
         t.players.ForEach(p => p.C_ReleaseFromBrace());
     }
 
+
+    //Helper Functions:
     public static SpawnPath GetSpawnPosition(TeamTag team)
     {
         List<SpawnPath> playerSpawnPoints = FindObjectsOfType<SpawnPath>().ToList();
@@ -75,7 +77,6 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
         }
         return null;
     }
-
     public static Dodgeball GetClosestBall(Transform closestTo)
     {
         List<Dodgeball> balls = instance.balls;
@@ -101,5 +102,13 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
     {
         if (instance && instance.balls.Contains(b))
             instance.balls.Remove(b);
+    }
+    public static CharaController GetCharaOfSlot(int slotID)
+    {
+        return FindObjectsOfType<CharaSlot>().ToList().Find(s => s.GetID == slotID).GetComponent<CharaController>();
+    }
+    public static List<SpawnPath> GetPathsOfSlot(int slotID)
+    {
+        return FindObjectsOfType<SpawnPath>().ToList().FindAll(s => s.CheckSlot(slotID));
     }
 }

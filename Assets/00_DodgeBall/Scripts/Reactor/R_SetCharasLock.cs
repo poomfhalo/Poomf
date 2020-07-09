@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class R_SetCharasLock : Reaction,I_R_CharaSupplier
 {
-    [SerializeField] DodgeballCharacter[] characters = new DodgeballCharacter[0];
+    [SerializeField] int[] slots = new int[0];
     [SerializeField] Command command = Command.Lock;
 
     public enum Command { Lock,Unlock }
@@ -18,8 +18,9 @@ public class R_SetCharasLock : Reaction,I_R_CharaSupplier
     }
     protected override IEnumerator ReactionBehavior()
     {
-        foreach (var chara in characters)
+        foreach (var slot in slots)
         {
+            CharaController chara = DodgeballGameManager.GetCharaOfSlot(slot);
             switch (command)
             {
                 case Command.Lock:
@@ -32,8 +33,5 @@ public class R_SetCharasLock : Reaction,I_R_CharaSupplier
         }
         yield return 0;
     }
-    public void RecieveCharacters(DodgeballCharacter[] charas)
-    {
-        this.characters = charas;
-    }
+    public void RecieveCharacters(int[] charaSlots)=> this.slots = charaSlots;
 }

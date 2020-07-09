@@ -29,8 +29,8 @@ public class R_PathFollower : Reaction
 
         foreach (var slotToMove in slotsToMove)
         {
-            CharaController controller = FindObjectsOfType<CharaSlot>().ToList().Find(s => s.GetID == slotToMove).GetComponent<CharaController>();
-            SpawnPath path = FindObjectsOfType<SpawnPath>().ToList().Find(s => s.CheckSlot(slotToMove));
+            CharaController controller = DodgeballGameManager.GetCharaOfSlot(slotToMove);
+            SpawnPath path = DodgeballGameManager.GetPathsOfSlot(slotToMove)[0];
             PathFollower pathFollower = controller.GetComponent<PathFollower>();
 
             if (pathFollower.extCanPlayAction)
