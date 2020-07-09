@@ -21,6 +21,9 @@ public class R_SetCharasLock : Reaction,I_R_CharaSupplier
         foreach (var slot in slots)
         {
             CharaController chara = DodgeballGameManager.GetCharaOfSlot(slot);
+            if (chara == null)
+                continue;
+
             switch (command)
             {
                 case Command.Lock:

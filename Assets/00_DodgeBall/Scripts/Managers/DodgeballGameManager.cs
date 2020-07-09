@@ -105,7 +105,11 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
     }
     public static CharaController GetCharaOfSlot(int slotID)
     {
-        return FindObjectsOfType<CharaSlot>().ToList().Find(s => s.GetID == slotID).GetComponent<CharaController>();
+        CharaSlot charaSlot = FindObjectsOfType<CharaSlot>().ToList().Find(s => s.GetID == slotID);
+        if(charaSlot)
+            return charaSlot.GetComponent<CharaController>();
+
+        return null;
     }
     public static List<SpawnPath> GetPathsOfSlot(int slotID)
     {

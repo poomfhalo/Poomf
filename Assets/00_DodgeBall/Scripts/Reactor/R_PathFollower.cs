@@ -30,6 +30,9 @@ public class R_PathFollower : Reaction
         foreach (var slotToMove in slotsToMove)
         {
             CharaController controller = DodgeballGameManager.GetCharaOfSlot(slotToMove);
+            if (controller == null)
+                continue;
+
             List<SpawnPath> pathsObjs = DodgeballGameManager.GetPathsOfSlot(slotToMove);
             SpawnPath path = pathsObjs[0];
 
