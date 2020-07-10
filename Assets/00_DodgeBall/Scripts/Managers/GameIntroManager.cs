@@ -12,6 +12,7 @@ public class GameIntroManager : Singleton<GameIntroManager>
     [SerializeField] float launchGravity = -20;
     [SerializeField] float ballLaunchHeigth = 6;
     [SerializeField] GameObject ballLauncher = null;
+    [SerializeField] GameStartTextsAnim animatedTexts = null;
 
     [Header("Intro Data")]
     [SerializeField] Reactor introReactor;
@@ -31,8 +32,9 @@ public class GameIntroManager : Singleton<GameIntroManager>
     {
         if (introReactor)
         {
+            introReactor.callOnCompleteExternally = true;
             introReactor.React();
-            introReactor.onCompleted.AddListener(OnCompleted);
+            introReactor.onCompleted.AddListener(OnReactorCompleted);
         }
         else
         {
@@ -49,9 +51,6 @@ public class GameIntroManager : Singleton<GameIntroManager>
             ballLauncher.SetActive(false);
         });
     }
-    private void OnCompleted()
-    {
-        StartBallLaunch();
 
-    }
+    private void OnReactorCompleted() => this.InvokeDelayed(0.5f, StartBallLaunch);
 }

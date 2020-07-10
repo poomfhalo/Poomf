@@ -7,6 +7,8 @@ public class Reactor : MonoBehaviour
     public UnityEvent onStarted = null;
     public UnityEvent onCompleted = null;
     [SerializeField] bool playOnStart = false;
+    [Header("Read Only")]
+    public bool callOnCompleteExternally = false;
 
     void Start()
     {
@@ -29,6 +31,14 @@ public class Reactor : MonoBehaviour
             yield return StartCoroutine(r.React(this));
         }
 
+        if (callOnCompleteExternally)
+            yield break;
+
+        RunOnComplete();
+    }
+
+    public void RunOnComplete()
+    {
         onCompleted.Invoke();
     }
 }

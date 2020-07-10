@@ -221,9 +221,9 @@ public class DodgeballCharacter : MonoBehaviour
     {
         OnCommandActivated?.Invoke(DodgeballCharaCommand.PushBall);
     }
-    public void C_PathFollow(Transform path)
+    public void C_PathFollow(Transform path, bool allowLockSwitching)
     {
-        pathFollower.StartFollowAction(path);
+        pathFollower.StartFollowAction(path,allowLockSwitching);
         OnCommandActivated?.Invoke(DodgeballCharaCommand.PathFollow);
     }
     #endregion

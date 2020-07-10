@@ -148,6 +148,10 @@ public class N_PC : MonoBehaviour,IPunObservable
             CharaFeet feet = GetComponentInChildren<CharaFeet>();
             //pv.RPC("R_FeetPush", RpcTarget.Others, feet.lastPushUsed,currX,currZ);
         }
+        else if (command == DodgeballCharaCommand.PathFollow)
+        {
+            pv.RPC("R_PathFollow", RpcTarget.Others, currX, currZ, GetComponent<PathFollower>().lastAllowLockSwitching);
+        }
         else
         {
             pv.RPC("R_Command", RpcTarget.Others, (int)command, currX, currZ);
@@ -213,14 +217,11 @@ public class N_PC : MonoBehaviour,IPunObservable
             case DodgeballCharaCommand.BraceForBall:
                 chara.C_BraceForContact();
                 break;
-            case DodgeballCharaCommand.PathFollow:
-                Transform path = DodgeballGameManager.GetPathsOfSlot(GetComponent<CharaSlot>().GetID)[0].transform;
-                chara.C_PathFollow(path);
-                break;
         }
 
         lastCommand = command;
     }   
+
     [PunRPC]
     private void R_DodgeCommand(float startX,float startZ,float expectedX,float expectedZ)
     {
@@ -249,7 +250,15 @@ public class N_PC : MonoBehaviour,IPunObservable
         feet.ApplyPush(Dodgeball.instance, lastUsedForce);
         Log.Warning("Pushed Ball By Feet");
     }
+    [PunRPC]
+    private void R_PathFollow(float currX,float currZ,bool lastAllowLockSwitching)
+    {
+        netPos.x = currX;
+        netPos.z = currZ;
 
+        Transform path = DodgeballGameManager.GetPathsOfSlot(GetComponent<CharaSlot>().GetID)[0].transform;
+        chara.C_PathFollow(path,lastAllowLockSwitching);
+    }
     //Local Events
     private void OnThrowPrepFinished()
     {

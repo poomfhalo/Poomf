@@ -23,7 +23,6 @@ public class R_PathFollower : Reaction
     }
     protected override IEnumerator ReactionBehavior()
     {
-        List<bool> oldStates = new List<bool>();
         List<CharaController> controllers = new List<CharaController>();
         List<SpawnPath> paths = new List<SpawnPath>();
 
@@ -42,8 +41,6 @@ public class R_PathFollower : Reaction
             {
                 controllers.Add(controller);
                 paths.Add(path);
-                bool oldLockState = controller.IsLocked;
-                oldStates.Add(oldLockState);
             }
         }
 
@@ -53,7 +50,7 @@ public class R_PathFollower : Reaction
             SpawnPath path = paths[i];
             controller.Lock();
             DodgeballCharacter chara = controller.GetComponent<DodgeballCharacter>();
-            chara.C_PathFollow(path.transform);
+            chara.C_PathFollow(path.transform, false);
         }
 
         yield return new WaitForSeconds(0.1f);
@@ -66,12 +63,6 @@ public class R_PathFollower : Reaction
             }
             return true;
         });
-        yield return new WaitForSeconds(0.3f);
-
-        for (int i =0;i<controllers.Count;i++)
-        {
-            controllers[i].SetLockTo(oldStates[i]);
-        }
 
         yield return 0;
 

@@ -16,6 +16,7 @@ public class PathFollower : DodgeballCharaAction, ICharaAction
     [SerializeField] bool changingPoint = false;
     [SerializeField] float changingPointCounter = 0;
     public bool IsRunning = false;
+    public bool lastAllowLockSwitching = true;
 
     DodgeballCharacter chara = null;
     Mover mover = null;
@@ -81,16 +82,19 @@ public class PathFollower : DodgeballCharaAction, ICharaAction
         chara.C_MoveInput(activePos);
     }
 
-    public void StartFollowAction(Transform pathHead)
+    public void StartFollowAction(Transform pathHead,bool allowLockSwitching)
     {
         if (!extCanPlayAction)
             return;
 
         GetComponent<Mover>().ReadFacingValues();
         activePathHead = pathHead;
-        GetComponent<CharaController>().Lock();
+        this.lastAllowLockSwitching = allowLockSwitching;
         IsRunning = true;
         GetComponent<Mover>().workAsAction = false;
+
+        if (allowLockSwitching)
+            GetComponent<CharaController>().Lock();
     }
     public void Cancel()
     {
@@ -98,7 +102,9 @@ public class PathFollower : DodgeballCharaAction, ICharaAction
         activePathHead = null;
         changingPoint = false;
         activePoint = 0;
-        GetComponent<CharaController>().Unlock();
         GetComponent<Mover>().workAsAction = true;
+
+        if (lastAllowLockSwitching)
+            GetComponent<CharaController>().Unlock();
     }
 }
