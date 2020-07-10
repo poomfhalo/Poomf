@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class R_PathFollower : Reaction
@@ -25,7 +24,7 @@ public class R_PathFollower : Reaction
     {
         List<CharaController> controllers = new List<CharaController>();
         List<SpawnPath> paths = new List<SpawnPath>();
-
+        List<bool> oldStates = new List<bool>();
         foreach (var slotToMove in slotsToMove)
         {
             CharaController controller = DodgeballGameManager.GetCharaOfSlot(slotToMove);
@@ -41,6 +40,7 @@ public class R_PathFollower : Reaction
             {
                 controllers.Add(controller);
                 paths.Add(path);
+                oldStates.Add(controller.IsLocked);
             }
         }
 
@@ -48,7 +48,8 @@ public class R_PathFollower : Reaction
         {
             CharaController controller = controllers[i];
             SpawnPath path = paths[i];
-            controller.Lock();
+            //no longer needed, for reason below.
+            //controller.Lock();
             DodgeballCharacter chara = controller.GetComponent<DodgeballCharacter>();
             chara.C_PathFollow(path.transform, false);
         }
@@ -63,6 +64,15 @@ public class R_PathFollower : Reaction
             }
             return true;
         });
+
+        //No Longer Needed, as we sync, whether the PathFollower, controls locking input or not, so, 
+        //Pathfollower, will not control Locking, from the reaction, as R_SetCharaLock is the one that is responsible
+        //for locking the characters.
+        //for(int i =0;i<controllers.Count;i++)
+        //{
+        //    CharaController controller = controllers[i];
+        //    controller.SetLockTo(oldStates[i]);
+        //}
 
         yield return 0;
 

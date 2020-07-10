@@ -32,7 +32,6 @@ public class GameIntroManager : Singleton<GameIntroManager>
     {
         if (introReactor)
         {
-            introReactor.callOnCompleteExternally = true;
             introReactor.React();
             introReactor.onCompleted.AddListener(OnReactorCompleted);
         }

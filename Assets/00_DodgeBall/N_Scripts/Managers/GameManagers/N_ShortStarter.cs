@@ -33,7 +33,7 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
     }
     public override void OnConnectedToMaster()
     {
-        Log.Message(PhotonNetwork.NickName + " Connected to Master, Attempting joining random room");
+        Log.Message(PhotonNetwork.NickName + " Connected to Master, in " + PhotonNetwork.CloudRegion + " :: Attempting joining random room ");
         PhotonNetwork.JoinRandomRoom();
     }
     public override void OnJoinRandomFailed(short returnCode, string message)

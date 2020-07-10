@@ -4,6 +4,8 @@ using UnityEngine.Playables;
 
 public class R_PlayTimeLine : Reaction
 {
+    public enum Command { Play, Stop }
+    [SerializeField] Command command = Command.Play;
     [SerializeField] PlayableDirector director = null;
     bool isDone = false;
 
@@ -17,8 +19,16 @@ public class R_PlayTimeLine : Reaction
     }
     protected override IEnumerator ReactionBehavior()
     {
-        director.Play();
-        yield return new WaitForSeconds((float)director.duration);
+        switch (command)
+        {
+            case Command.Play:
+                director.Play();
+                yield return new WaitForSeconds((float)director.duration);
+                break;
+            case Command.Stop:
+                director.Stop();
+                break;
+        }
         isDone = true;
     }
 }
