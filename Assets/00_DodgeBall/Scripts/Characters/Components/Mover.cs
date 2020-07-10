@@ -5,13 +5,26 @@ using UnityEngine;
 [RequireComponent(typeof(ActionsScheduler))]
 public class Mover : DodgeballCharaAction, ICharaAction
 {
+    public bool IsMoving => isMoving;
+
     public enum MovementType { ByInput, ToPoint }
-    public MovementType movementMode = MovementType.ByInput;
+    public MovementType movementType
+    {
+        set
+        {
+            m_movementType = value;
+            Cancel();
+        }
+        get
+        {
+            return m_movementType;
+        }
+    }
     public Func<Vector3> GetYDisp = () => Vector3.zero;
 
     [SerializeField] float accel = 10;
-    public float maxSpeed = 3;
-    public bool IsMoving = false;
+    [SerializeField] float maxSpeed = 3;
+
 
     [Header("Slowing Down")]
     [Tooltip("how fast speed decreases, when no input is being applied")]
@@ -46,11 +59,32 @@ public class Mover : DodgeballCharaAction, ICharaAction
     [SerializeField] int movabilityDir = 0;
     [SerializeField] Vector3 smoothMoveInput = Vector3.zero;
     [SerializeField] float distToLastPos = 0;
+    [SerializeField] MovementType m_movementType = MovementType.ByInput;
+    [SerializeField] bool isMoving = false;
+    public bool workAsAction = true;
 
     Vector3 dir = Vector3.zero;
 
-    Animator animator = null;
-    Rigidbody rb3d = null;
+    Animator animator
+    {
+        get
+        {
+            if (m_animator == null)
+                m_animator = GetComponent<Animator>();
+            return m_animator;
+        }
+    }
+    Rigidbody rb3d 
+    { 
+        get
+        {
+            if (m_rb3d == null)
+                m_rb3d = GetComponent<Rigidbody>();
+            return m_rb3d;
+        }
+    }
+    Animator m_animator = null;
+    Rigidbody m_rb3d = null;
     ActionsScheduler scheduler = null;
 
     public string actionName => "Move Action";
@@ -60,10 +94,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
 
     void OnEnable()
     {
-        animator = GetComponent<Animator>();
-        rb3d = GetComponent<Rigidbody>();
         scheduler = GetComponent<ActionsScheduler>();
-
         ReadFacingValues();
     }
     void Update()
@@ -71,7 +102,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
         if (!IsMoving)
             return;
 
-        if (usesInputDelay && movementMode == MovementType.ByInput)
+        if (usesInputDelay && movementType == MovementType.ByInput)
         {
             bool isZero = Mathf.Abs(minInputTimeCounter) < Mathf.Epsilon;
 
@@ -81,7 +112,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
                 return;
         }
 
-        switch (movementMode)
+        switch (movementType)
         {
             case MovementType.ByInput:
                 animator.SetFloat("Speed", speed);
@@ -100,7 +131,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
     {
         smoothMoveInput = Vector3.MoveTowards(smoothMoveInput, recievedInput, inputSensitivity * Time.fixedDeltaTime);
 
-        if (usesInputDelay && movementMode == MovementType.ByInput)
+        if (usesInputDelay && movementType == MovementType.ByInput)
         {
             minInputTimeCounter = minInputTimeCounter + Time.fixedDeltaTime / minInputTime * movabilityDir;
             minInputTimeCounter = Mathf.Clamp(minInputTimeCounter, 0, 1);
@@ -131,20 +162,31 @@ public class Mover : DodgeballCharaAction, ICharaAction
     }
     public void StartMoveByInput(Vector3 newInput, Transform withRespectTo)
     {
-        scheduler.StartAction(this);
+        if (workAsAction)
+        {
+            scheduler.StartAction(this);
+        }
         ApplyInput(newInput, withRespectTo);
     }
     public void Cancel()
     {
-        IsMoving = false;
+        isMoving = false;
         xzVel = Vector3.zero;
         speed = 0;
         ApplyVel();
         animator.SetFloat("Speed", speed);
+        recievedInput = Vector3.zero;
     }
     public void SmoothStop(Action onCompleted)
     {
-        IsMoving = false;
+        if(cancelationTime<=0)
+        {
+            Cancel();
+            onCompleted?.Invoke();
+            return;
+        }
+
+        isMoving = false;
         Vector3 cancelStartVel = xzVel;
         float startCancelSpeed = speed;
 
@@ -157,10 +199,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
             animator.SetFloat("Speed", speed);
         }).OnComplete(() =>
         {
-            xzVel = Vector3.zero;
-            ApplyVel();
-            speed = 0;
-            animator.SetFloat("Speed", speed);
+            Cancel();
             onCompleted?.Invoke();
         });
     }
@@ -182,7 +221,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
     }
     private void SetVel()
     {
-        switch (movementMode)
+        switch (movementType)
         {
             case MovementType.ByInput:
                 SetVelByInput();
@@ -243,7 +282,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
     private void SetMoveDir()
     {
         dir = Vector3.zero;
-        switch (movementMode)
+        switch (movementType)
         {
             case MovementType.ByInput:
                 float ax = Mathf.Abs(smoothMoveInput.x);
@@ -278,7 +317,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
     {
         lastNonZeroVel = transform.forward * (stoppingSpeed + 0.05f);
     }
-    public void ApplyInput(Vector3 newInput, Transform withRespectTo)
+    private void ApplyInput(Vector3 newInput, Transform withRespectTo)
     {
         if (withRespectTo == null)
         {
@@ -294,10 +333,10 @@ public class Mover : DodgeballCharaAction, ICharaAction
     }
     public void ApplyInput(Vector3 input)
     {
-        IsMoving = true;
+        isMoving = true;
         this.recievedInput = input;
         movabilityDir = 1;
-        if (input == Vector3.zero && movementMode == MovementType.ByInput)
+        if (input == Vector3.zero && movementType == MovementType.ByInput)
         {
             movabilityDir = -1;
         }

@@ -11,7 +11,7 @@ namespace Poomf.UI
         [SerializeField] private Transform storeContent = null;
         [SerializeField] private GameObject storeItemPrefab = null;
         // TODO : For testing, to be removed.
-        [SerializeField] private ItemData[] testItemData = null;
+        [SerializeField] private ItemDataBase[] testItemData = null;
 
         private bool initialized = false;
 
@@ -42,9 +42,10 @@ namespace Poomf.UI
             initialized = true;
         }
 
+        // Shop isn't functional right now
         private void populateStoreItems()
         {
-            if (null == storeItemPrefab || null == testItemData || 0 == testItemData.Length) return;
+            /*if (null == storeItemPrefab || null == testItemData || 0 == testItemData.Length) return;
 
             int itemsCount = testItemData.Length;
 
@@ -53,7 +54,7 @@ namespace Poomf.UI
                 GameObject newItem = Instantiate(storeItemPrefab);
                 InventoryItem item = newItem.GetComponent<InventoryItem>();
                 if (null == item) return;
-                ItemData itemData = testItemData[i];
+                ItemDataBase itemData = testItemData[i];
                 CurrencyType itemCurrencyType = itemData.CurrencyType;
                 int? priceCoins = null;
                 int? priceGems = null;
@@ -72,9 +73,9 @@ namespace Poomf.UI
                     priceGems = itemData.PriceGems;
                 }
 
-                item.InitializeItem(testItemData[i].ItemName, priceCoins, priceGems, itemData.ItemSprite, null);
-                newItem.transform.SetParent(storeContent, false);
-            }
+                item.InitializeItem(testItemData[i].ItemName, priceCoins, priceGems, itemData.ItemSprite, null, itemData.ItemID, itemData.ItemCategory);
+                newItem.transform.SetParent(storeContent, false); 
+        } */
         }
     }
 }

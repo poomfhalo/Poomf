@@ -224,13 +224,12 @@ MonoBehaviour:
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: 0
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_outlineColor:
-    serializedVersion: 2
-    rgba: 4278190080
   m_fontSize: 36
   m_fontSizeBase: 36
   m_fontWeight: 400
@@ -238,6 +237,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 256
   m_textAlignment: 513
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -248,10 +249,8 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: -1
   m_linkedTextComponent: {fileID: 0}
-  m_isLinkedTextComponent: 0
-  m_isTextTruncated: 0
+  parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
@@ -259,40 +258,18 @@ MonoBehaviour:
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
-  m_ignoreRectMaskCulling: 0
-  m_ignoreCulling: 1
   m_horizontalMapping: 0
   m_verticalMapping: 0
   m_uvLineOffset: 0
   m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
   m_VertexBufferAutoSizeReduction: 1
-  m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
   m_margin: {x: 0, y: 0, z: 0, w: 0}
-  m_textInfo:
-    textComponent: {fileID: 1372938300433615530}
-    characterCount: 395
-    spriteCount: 0
-    spaceCount: 71
-    wordCount: 70
-    linkCount: 0
-    lineCount: 9
-    pageCount: 1
-    materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_spriteAnimator: {fileID: 0}
   m_hasFontAssetChanged: 0
-  m_subTextObjects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &4632257969925456261
@@ -604,13 +581,12 @@ MonoBehaviour:
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_outlineColor:
-    serializedVersion: 2
-    rgba: 4278190080
   m_fontSize: 100
   m_fontSizeBase: 100
   m_fontWeight: 400
@@ -618,7 +594,9 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_textAlignment: 514
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -628,10 +606,8 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: -1
   m_linkedTextComponent: {fileID: 0}
-  m_isLinkedTextComponent: 0
-  m_isTextTruncated: 0
+  parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
@@ -639,40 +615,18 @@ MonoBehaviour:
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
-  m_ignoreRectMaskCulling: 0
-  m_ignoreCulling: 1
   m_horizontalMapping: 0
   m_verticalMapping: 0
   m_uvLineOffset: 0
   m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
   m_VertexBufferAutoSizeReduction: 1
-  m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
   m_margin: {x: 0, y: 0, z: 0, w: 0}
-  m_textInfo:
-    textComponent: {fileID: 5431591831514340031}
-    characterCount: 1
-    spriteCount: 0
-    spaceCount: 0
-    wordCount: 1
-    linkCount: 0
-    lineCount: 1
-    pageCount: 1
-    materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_spriteAnimator: {fileID: 0}
   m_hasFontAssetChanged: 0
-  m_subTextObjects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &6963099543513805180
@@ -688,17 +642,18 @@ GameObject:
   - component: {fileID: 6963099543513805057}
   - component: {fileID: 6963099543513805056}
   - component: {fileID: 6963099543513805066}
-  - component: {fileID: 6963099543513805058}
   - component: {fileID: 6963099543513805181}
+  - component: {fileID: 7695761373045912386}
   - component: {fileID: 6963099543513805062}
   - component: {fileID: 6963099543513805063}
   - component: {fileID: 6963099543513805065}
   - component: {fileID: 6963099543513805064}
   - component: {fileID: 2619203686487082835}
   - component: {fileID: 5682459526312892566}
-  - component: {fileID: 6963099543513805059}
   - component: {fileID: 6963099543513805060}
   - component: {fileID: 4258123539632355922}
+  - component: {fileID: 6482619497595609318}
+  - component: {fileID: 3845013188078415913}
   - component: {fileID: 6963099543513805061}
   m_Layer: 0
   m_Name: Player Character
@@ -743,13 +698,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'Bip002 L Finger01'\n\tTransform 'Bip002 R Finger32'\n\tTransform
-    'Bip002 R Toe0'\n\tTransform 'Bip002 R Finger01'\n\tTransform 'Bip002 L Finger32'\n\tTransform
-    'Bip002 L Calf'\n\tTransform 'Bip002 L Foot'\n\tTransform 'Bip002 Head'\n\tTransform
-    'Bip002 R Finger12'\n\tTransform 'Bip002'\n\tand more ...\n\tFrom animation clip
-    'dodge'"
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -795,186 +744,6 @@ ConstantForce:
   m_RelativeForce: {x: 0, y: 0, z: 0}
   m_Torque: {x: 0, y: 0, z: 0}
   m_RelativeTorque: {x: 0, y: 0, z: 0}
---- !u!114 &6963099543513805058
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6963099543513805180}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 4faf581bce1e869ca89d22ad8b1bc104,
-    type: 3}
-  m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6963099543513805059}
-        m_MethodName: I_OnMove
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: f7e5b594-46a3-4e77-b911-6ee2060b45cb
-    m_ActionName: Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 0504606e-1827-41bd-ac36-37f5fd94fd36
-    m_ActionName: Player/Look[/Mouse/delta]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6963099543513805059}
-        m_MethodName: I_OnBallAction
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: a5f729c3-62b6-43ae-90ff-79f27f186a37
-    m_ActionName: Player/Fire[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 1c8c384c-9e93-479a-b2c8-0448c081e0c5
-    m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 3c6c3f50-51e6-4156-b295-6b659c489dc2
-    m_ActionName: UI/Submit[/Keyboard/enter]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 884c88e7-c92c-43b8-ae49-91a1bd39f5f8
-    m_ActionName: UI/Cancel[/Keyboard/escape]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 58b85046-65d9-484e-8db8-eb626be5bab2
-    m_ActionName: UI/Point[/Mouse/position]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 04eba311-19b0-4591-a29a-7510ac730eb7
-    m_ActionName: UI/Click[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 56be3eed-5390-4264-8ed8-d37337829f28
-    m_ActionName: UI/ScrollWheel[/Mouse/scroll]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 0754c6b7-11a0-48c2-b534-d292578df852
-    m_ActionName: UI/MiddleClick[/Mouse/middleButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: de263ea5-3d8e-44ad-b281-64a73dc869c2
-    m_ActionName: UI/RightClick[/Mouse/rightButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: a70579e8-bc75-4813-b01c-543aa7fc36f2
-    m_ActionName: UI/TrackedDevicePosition
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: f1d746fc-354b-4272-94c2-94fb7d5ad8d0
-    m_ActionName: UI/TrackedDeviceOrientation
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6963099543513805059}
-        m_MethodName: I_OnFriendly
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 74c01f54-29cc-4c48-b349-5ca084840ce8
-    m_ActionName: Player/Friendly[/Keyboard/q]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6963099543513805059}
-        m_MethodName: I_OnEnemy
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 1f8685aa-c731-40ca-855c-58f2c356abc5
-    m_ActionName: Player/Enemy[/Keyboard/e]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6963099543513805059}
-        m_MethodName: I_OnDodge
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: c20a6039-ddfb-4977-9f5f-597ef09ede26
-    m_ActionName: Player/Dodge[/Keyboard/space]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6963099543513805059}
-        m_MethodName: I_OnFakeFire
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 1871d2c6-d1a9-41cd-9e59-3979cf8f9624
-    m_ActionName: Player/FakeFire[/Keyboard/f]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6963099543513805059}
-        m_MethodName: I_OnJump
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 2fd2901a-6c76-4786-9e77-2c1dc869dc41
-    m_ActionName: Player/Jump[/Keyboard/space]
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!114 &6963099543513805181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -988,15 +757,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recievedInput: {x: 0, y: 0, z: 0}
-  movementMode: 0
   accel: 90
   maxSpeed: 10
-  IsMoving: 0
   deAccel: 45
   dampingSpeed: 0.1
   speedDamper: 1.5
   stoppingSpeed: 0.5
-  cancelationTime: 0.12
+  cancelationTime: 0.08
   slowingDist: 0.5
   stoppingDist: 0.06
   turningSpeed: 880
@@ -1011,7 +778,10 @@ MonoBehaviour:
   movabilityDir: 0
   smoothMoveInput: {x: 0, y: 0, z: 0}
   distToLastPos: 0
---- !u!114 &6963099543513805062
+  m_movementType: 0
+  isMoving: 0
+  workAsAction: 1
+--- !u!114 &7695761373045912386
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1020,13 +790,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 6963099543513805180}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5de6f2b6f5ecf35c817b9ecfcb8bfe6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recievedInput: {x: 0, y: 0, z: 0}
+  extCanPlayAction: 1
+  satisfactionRadious: 0.5
+  stopTimeAtPoint: -1
+  activePathHead: {fileID: 0}
+  activePoint: 0
+  changingPoint: 0
+  changingPointCounter: 0
+  IsRunning: 0
+  lastAllowLockSwitching: 1
+--- !u!114 &6963099543513805062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6963099543513805180}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1977e5199803bee518990b746542a32c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   recievedInput: {x: 0, y: 0, z: 0}
   throwFacingSpeed: 200
-  heigth: 0.3
-  gravity: 15
   throwData: {fileID: 11400000, guid: 85e253f2e592b0bb784f06d2e0373da2, type: 2}
   isThrowing: 0
   activityName: Throw Action
@@ -1130,18 +920,7 @@ MonoBehaviour:
   currHP: 0
   isBeingHurt: 0
   isWaitingForHit: 0
---- !u!114 &6963099543513805059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6963099543513805180}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19b6638a652a0fe5daafbfc60b1d6cfe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  isInHitCd: 0
 --- !u!114 &6963099543513805060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1154,6 +933,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6db924df4735a12ed89145cacb1e7b8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveTypeOnUnlock: 0
+  extAllowInputOnStart: 1
+  inputPrefab: {fileID: 45190570772085883, guid: 5cfe749bff975bb12a2263a0ddc41258,
+    type: 3}
+  isLocked: 0
 --- !u!114 &4258123539632355922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1171,6 +955,45 @@ MonoBehaviour:
   ballGrabPoint: {fileID: 436484578604985273}
   team: 0
   selectionIndicator: {fileID: 6963099544742490871}
+  launcher: {fileID: 0}
+--- !u!114 &6482619497595609318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6963099543513805180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d2842d20b8a6989c8b7c10c1a67f8d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recievedInput: {x: 0, y: 0, z: 0}
+  throwFacingSpeed: 200
+  throwData: {fileID: 11400000, guid: 85e253f2e592b0bb784f06d2e0373da2, type: 2}
+  isThrowing: 0
+  activityName: 
+  throwDelay: 0.2
+  finishedThrowPrep: 0
+  extDelay: 0
+--- !u!114 &3845013188078415913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6963099543513805180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1df87940cb0295eedafe9fe50ff7a2b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  setActiveOnStart: 1
+  id: 0
+  wasSetUp: 0
+  activeSlot:
+    team: 0
+    id: 0
 --- !u!114 &6963099543513805061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1394,6 +1217,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5253863328466775101, guid: ad1680e76f370cf168f43dc2ddb59ffd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5389014394154190484, guid: ad1680e76f370cf168f43dc2ddb59ffd,
         type: 3}
       propertyPath: m_IsActive
@@ -1422,7 +1250,7 @@ PrefabInstance:
     - target: {fileID: 7218524053860074266, guid: ad1680e76f370cf168f43dc2ddb59ffd,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.07
       objectReference: {fileID: 0}
     - target: {fileID: 7218524053860074266, guid: ad1680e76f370cf168f43dc2ddb59ffd,
         type: 3}
@@ -1491,6 +1319,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7218524053851057290, guid: ad1680e76f370cf168f43dc2ddb59ffd, type: 3}
+    - {fileID: 387815230, guid: ad1680e76f370cf168f43dc2ddb59ffd, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ad1680e76f370cf168f43dc2ddb59ffd, type: 3}
 --- !u!4 &3302477631334740664 stripped
 Transform:
@@ -1536,7 +1365,7 @@ PrefabInstance:
     - target: {fileID: 1828201718854840054, guid: d4328074830d262838910bdc760a8dc7,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.05
       objectReference: {fileID: 0}
     - target: {fileID: 1828201718854840054, guid: d4328074830d262838910bdc760a8dc7,
         type: 3}

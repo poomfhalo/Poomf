@@ -8,7 +8,7 @@ namespace Poomf.Data
     public class ItemsImporter : AssetPostprocessor
     {
         private static bool debug = false;
-        private delegate void UniqueIDDelegate(ItemsUniqueIDManager i_uniqueIDManager, ItemData i_itemData);
+        private delegate void UniqueIDDelegate(ItemsUniqueIDManager i_uniqueIDManager, ItemDataBase i_itemData);
         private const string ItemsUniqueIDManagerPath = "Assets/Scripts/Data/ScriptableObject_Instances/ItemsUniqueIDManager.asset";
 
         private enum DebugLevel
@@ -34,9 +34,9 @@ namespace Poomf.Data
 
         private static void manageItemID(UniqueIDDelegate i_uniqueIDDelegate, string i_path)
         {
-            if (i_path.Contains("Data/ScriptableObject_Instances/Test_Instances"))
+            if (i_path.Contains("Data/ScriptableObject_Instances/Test_Instances") || i_path.Contains("Data/ScriptableObject_Instances/Items"))
             {
-                ItemData itemData = AssetDatabase.LoadAssetAtPath<ItemData>(i_path);
+                ItemDataBase itemData = AssetDatabase.LoadAssetAtPath<ItemDataBase>(i_path);
 
                 if (null != itemData)
                 {
@@ -54,7 +54,7 @@ namespace Poomf.Data
             }
         }
 
-        private static void setUniqueID(ItemsUniqueIDManager i_uniqueIDManager, ItemData i_itemData)
+        private static void setUniqueID(ItemsUniqueIDManager i_uniqueIDManager, ItemDataBase i_itemData)
         {
             int uniqueID = i_uniqueIDManager.GetUniqueID();
 
@@ -70,7 +70,7 @@ namespace Poomf.Data
             }
         }
 
-        private static void removeUniqueID(ItemsUniqueIDManager i_uniqueIDManager, ItemData i_itemData)
+        private static void removeUniqueID(ItemsUniqueIDManager i_uniqueIDManager, ItemDataBase i_itemData)
         {
             i_uniqueIDManager.RemoveUniqueID(i_itemData.ItemID);
 

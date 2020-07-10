@@ -13,7 +13,13 @@ namespace Poomf.UI
         [SerializeField] private Text itemStatus = null;
         [SerializeField] private Image itemImage = null;
 
-        public void InitializeItem(string i_itemName, int? i_itemCoinsPrice, int? i_itemGemsPrice, Sprite itemSprite, string i_itemStatus)
+        public int ItemID { get; private set; }
+        public ItemCategory ItemType { get; private set; }
+        // Used with items that have variants like outfits.
+        public int VariantNumber { get; private set; } = -1;
+        public Button MyButton { get; private set; }
+
+        public void InitializeItem(string i_itemName, int? i_itemCoinsPrice, int? i_itemGemsPrice, Sprite itemSprite, string i_itemStatus, int itemID, ItemCategory itemType, int variantNumber = -1)
         {
             if (null != itemName)
                 itemName.text = i_itemName;
@@ -24,6 +30,11 @@ namespace Poomf.UI
 
             if (null != itemImage)
                 itemImage.sprite = itemSprite;
+
+            ItemID = itemID;
+            ItemType = itemType;
+            VariantNumber = variantNumber;
+            MyButton = GetComponent<Button>();
         }
 
         private void setupPrice(Text i_priceText, int? i_value)

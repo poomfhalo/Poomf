@@ -6,7 +6,8 @@ using UnityEngine.InputSystem;
 public enum DodgeballCharaCommand { MoveInput, Friendly, Enemy, BallAction, Dodge, FakeFire, Jump,
     BraceForBall,
     ReleaseFromBrace,
-    PushBall
+    PushBall,
+    PathFollow
 }
 
 [RequireComponent(typeof(Animator))]
@@ -49,13 +50,14 @@ public class DodgeballCharacter : MonoBehaviour
     protected Camera cam = null;
 
     protected Mover mover = null;
-    protected BallLauncher launcher = null;
+    public BallLauncher launcher = null;
     protected Dodger dodger = null;
     protected BallGrabber grabber = null;
     protected Jumper jumper = null;
     protected BallReciever reciever = null;
     protected CharaHitPoints hp = null;
     protected CharaFeet feet = null;
+    protected PathFollower pathFollower = null;
 
     protected virtual void Reset()
     {
@@ -70,14 +72,15 @@ public class DodgeballCharacter : MonoBehaviour
         animator = GetComponent<Animator>();
         cam = Camera.main;
 
-        launcher = GetComponent<BallLauncher>();
         mover = GetComponent<Mover>();
+        launcher = GetComponents<BallLauncher>().ToList().Find(a => a.enabled);
         dodger = GetComponent<Dodger>();
         grabber = GetComponent<BallGrabber>();
         jumper = GetComponent<Jumper>();
         reciever = GetComponent<BallReciever>();
         hp = GetComponent<CharaHitPoints>();
         feet = GetComponentInChildren<CharaFeet>();
+        pathFollower = GetComponent<PathFollower>();
 
         SetTeam(team);
 
@@ -112,7 +115,8 @@ public class DodgeballCharacter : MonoBehaviour
             return;
         if (IsDodging)
             return;
-
+        if (IsBeingHurt)
+            return;
         mover.StartMoveByInput(i, cam.transform);
         OnCommandActivated?.Invoke(DodgeballCharaCommand.MoveInput);
     }
@@ -217,5 +221,24 @@ public class DodgeballCharacter : MonoBehaviour
     {
         OnCommandActivated?.Invoke(DodgeballCharaCommand.PushBall);
     }
+    public void C_PathFollow(Transform path, bool allowLockSwitching)
+    {
+        pathFollower.StartFollowAction(path,allowLockSwitching);
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.PathFollow);
+    }
     #endregion
+
+    public Vector3 PrepareForGame()
+    {
+        CharaSlot slot = GetComponent<CharaSlot>();
+        SpawnPath s = FindObjectsOfType<SpawnPath>().ToList().Find(p => p.CheckSlot(slot.GetID));
+
+        transform.position = s.position;
+        transform.rotation = s.rotation;
+
+        gameObject.SetActive(true);
+
+        SetTeam(slot.GetTeam);
+        return s.position;
+    }
 }

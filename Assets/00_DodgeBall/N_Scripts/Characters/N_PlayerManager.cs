@@ -32,7 +32,7 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
         pc = N_Extentions.N_MakeObj(N_Prefab.Player, Vector3.zero, Quaternion.identity);
         pc.GetComponent<PhotonView>().RPC("OnCreated", RpcTarget.All, GetComponent<PhotonView>().ViewID);
         yield return new WaitForSeconds(0.1f);
-        Debug.Log(photonView.Controller + " Created a PC ", pc);
+        Log.LogL0(photonView.Controller + " Created a PC ", pc);
         N_Extentions.N_RaiseEvent(N_GameManager.N_OnCreatedPC, null, false);
     }
 
@@ -51,9 +51,7 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
             return;
         }
 
-        Camera cam = Camera.main;
         var p = FindObjectsOfType<TaggedSpawnPoint>().ToList().Find(s => s.HasTag("MainCamera") && s.BelongsTo(team.teamTag));
-        cam.transform.position = p.position;
-        cam.transform.rotation = p.rotation;
+        p.GetComponent<Cinemachine.CinemachineVirtualCamera>().Priority = 15;
     }
 }

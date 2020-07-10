@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
+using GW_Lib;
 
 public enum N_Prefab { PlayerManager,Player }
 /// <summary>
@@ -27,6 +28,9 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     public List<LoadablePrefab> Prefabs => prefabs;
     [SerializeField] List<LoadablePrefab> prefabs = new List<LoadablePrefab> { new LoadablePrefab(N_Prefab.Player, "N_PlayerManager") };
     #endregion
+    [Header("Very Dangerous Networking Data")]
+    [SerializeField] int sendRate = 20;
+    [SerializeField] int serializationRate = 10;
 
     #region UnityFunctions
     void Reset()
@@ -40,7 +44,11 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     protected override void Awake()
     {
         base.Awake();
+        GameIntroManager.instance.extActivateOnStart = false;
         N_Extentions.prefabs = prefabs;
+
+        PhotonNetwork.SendRate = sendRate;
+        PhotonNetwork.SerializationRate = serializationRate;
     }
     public override void OnEnable()
     {
@@ -73,12 +81,12 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
         {
             if (p.ActorNumber % 2 == 0)
             {
-                Debug.Log(p.NickName + " Added to team A with num :: " + p.ActorNumber);
+                Log.LogL0(p.NickName + " Added to team A with num :: " + p.ActorNumber);
                 teams.AddPlayer(TeamTag.A, p.ActorNumber);
             }
             else
             {
-                Debug.Log(p.NickName + " Added to team B with num :: " + p.ActorNumber);
+                Log.LogL0(p.NickName + " Added to team B with num :: " + p.ActorNumber);
                 teams.AddPlayer(TeamTag.B, p.ActorNumber);
             }
         }
@@ -121,8 +129,11 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
         foreach (var player in PhotonNetwork.PlayerList)
         {
             TeamTag t = N_TeamsManager.GetTeam(player.ActorNumber);
-            SpawnPoint s = DodgeballGameManager.GetSpawnPosition(t);
-            s.GetComponent<PhotonView>().RPC("Fill", RpcTarget.All, player.ActorNumber);
+            SpawnPath s = DodgeballGameManager.GetSpawnPosition(t);
+            N_PC p = N_TeamsManager.GetPlayer(player.ActorNumber);
+
+            p.GetComponent<PhotonView>().RPC("SetUp",RpcTarget.All, s.SlotId);
+            s.GetComponent<PhotonView>().RPC("Fill", RpcTarget.All);
         }
     }
     private void M_PreparePlayersForGame()
@@ -141,7 +152,7 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     [PunRPC]
     private void PrepareForGame()
     {
-        DodgeballGameManager.instance.StartBallLaunch();
+        this.InvokeDelayed(0.5f, GameIntroManager.instance.StartGame);
     }
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {

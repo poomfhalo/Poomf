@@ -25,12 +25,13 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: eu
+  DevRegion: 
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
+  - AddVote
   - ClickRpc
   - DestroyRpc
   - DestroySpaceship
@@ -39,23 +40,27 @@ MonoBehaviour:
   - Free
   - OnCreated
   - PrepareForGame
+  - R_ActivateBallThrow
+  - R_Command
+  - R_DodgeCommand
+  - R_FeetPush
   - R_GoToChara
   - R_LaunchTo
   - R_OnGroundHit
   - R_Reflection
   - R_StartHitAction
   - R_UpdateBallState
-  - RecieveCommand
-  - RecieveDodgeCommand
-  - RecieveFeetPush
   - RecieveTeamsData
+  - RemoveVote
   - RespawnSpaceship
   - RpcClearBuffer
   - RpcNonServerOwnedTeleportFromServer
   - RpcTeleport
+  - SetUp
   - StartGame
   - SyncWithTeamsManager
   - UpdateButtonClick
+  - R_PathFollow
   DisableAutoOpenWizard: 1
   ShowSettings: 0
-  DevRegionSetOnce: 1
+  DevRegionSetOnce: 0

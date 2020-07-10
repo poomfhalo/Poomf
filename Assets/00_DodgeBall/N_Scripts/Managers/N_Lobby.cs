@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using GW_Lib;
+using TMPro;
 
 //this Must be placed on a game object that is always active.
 //this component, must also never be disabled. 
@@ -15,6 +16,9 @@ public class N_Lobby : MonoBehaviourPunCallbacks
     [SerializeField] ToggleButtonGroup regionsGroup = null;
     [SerializeField] Button findingPlayers = null;
     [SerializeField] GameObject loginMenu = null;
+    [SerializeField] TextMeshProUGUI playerNameText = null;
+
+    bool reachedMaxPlayers => PhotonNetwork.PlayerList.Length >= PhotonNetwork.CurrentRoom.MaxPlayers;
 
     void Start()
     {
@@ -23,7 +27,14 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         findingPlayers.onClick.AddListener(OnFindingPlayersClicked);
         findingPlayers.gameObject.SetActive(false);
         if (PhotonNetwork.IsConnectedAndReady || !string.IsNullOrEmpty(PhotonNetwork.NickName))
+        {
             loginMenu.SetActive(false);
+            playerNameText.text = PhotonNetwork.NickName;
+        }
+        else
+        {
+            loginMenu.GetComponent<N_LoginMenu>().onNameSet += (n) => playerNameText.text = n;
+        }
     }
 
     private void OnReadyClicked()
@@ -36,29 +47,33 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         }
         if (regionsGroup.ActiveButton.text == "DEF")
         {
+            Log.LogL0("Trying To Connect To Best Region");
             PhotonNetwork.ConnectUsingSettings();
         }
         else
         {
-            PhotonNetwork.ConnectToRegion(regionsGroup.ActiveButton.text);
+            string region = regionsGroup.ActiveButton.text.ToLower();
+            Log.LogL0("Trying to connect to region " + region);
+            PhotonNetwork.ConnectToRegion(region);
         }
+        regionsGroup.SetInteractable(false);
     }
     private void OnTutorialClicked()
     {
-        SceneManager.LoadScene("SP Game");
+        SceneFader.instance.FadeIn(1, () => SceneManager.LoadScene("SP_Room"));
     }
     public override void OnConnectedToMaster()
     {
         if (!ready.interactable)
         {
-            Log.Message("I Connected To Master " + PhotonNetwork.NickName + " Trying To Join RND Room");
+            Log.Message("I Connected To Master " + PhotonNetwork.NickName + " Trying To Join RND Room in " + PhotonNetwork.CloudRegion);
             PrepareRoom();
         }
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Log.Message("Failed To Join Random Room : Creating Room");
+        Log.LogL0("Failed To Join Random Room : Creating Room");
         RoomOptions ops = new RoomOptions();
         ops.MaxPlayers = 2;
         ops.IsOpen = true;
@@ -75,14 +90,18 @@ public class N_Lobby : MonoBehaviourPunCallbacks
     {
         Log.Message("Joined room " + PhotonNetwork.CurrentRoom.Name);
         PhotonNetwork.AutomaticallySyncScene = true;
+        if(reachedMaxPlayers)
+        {
+            GoToRoom();
+        }
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Log.Message(newPlayer.NickName + " have Entered room " + PhotonNetwork.CurrentRoom.Name);
-        if(PhotonNetwork.PlayerList.Length>=PhotonNetwork.CurrentRoom.MaxPlayers && PhotonNetwork.IsMasterClient)
+
+        if (reachedMaxPlayers && PhotonNetwork.IsMasterClient)
         {
-            Log.Message("Loading MP Game");
-            PhotonNetwork.LoadLevel("MP Game");
+            GoToRoom();
         }
     }
     private void OnFindingPlayersClicked()
@@ -98,9 +117,8 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         PhotonNetwork.Disconnect();
         PhotonNetwork.AutomaticallySyncScene = false;
         Log.Message(PhotonNetwork.NickName + " Have Dissconnected, left room, and stopped syncing scenes");
-        regionsGroup.gameObject.SetActive(true);
+        regionsGroup.SetInteractable(true);
     }
-
     private void PrepareRoom()
     {
         PhotonNetwork.JoinRandomRoom();
@@ -109,6 +127,26 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         ready.interactable = true;
         ready.gameObject.SetActive(false);
         findingPlayers.gameObject.SetActive(true);
-        regionsGroup.gameObject.SetActive(false);
+    }
+    private void GoToRoom()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Log.Message("Loading MP Game");
+            SceneFader.instance.FadeIn(1.3f, () => PhotonNetwork.LoadLevel("MP Room"));
+        }
+        else
+        {
+            SceneFader.instance.FadeIn(1, null);
+        }
+    }
+
+    public static RoomOptions GetDefOptions()
+    {
+        RoomOptions ops = new RoomOptions();
+        ops.MaxPlayers = 6;
+        ops.IsVisible = true;
+        ops.IsOpen = true;
+        return ops;
     }
 }

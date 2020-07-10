@@ -10,4 +10,6 @@ public interface IVideoManager : IVideoProvider, ISettingsManager
     void SetResolution(int index);
     // Updates all settings at once
     void UpdateAllSettings(IVideoProvider settings);
+    // Forces all canvas menus to update after video settings are changed
+    void ForceUIUpdate();
 }

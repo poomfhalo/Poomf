@@ -1,22 +1,25 @@
 ﻿using UnityEngine;
 
-public class AIController : MonoBehaviour
+public class AIController : CharaController
 {
     [SerializeField] Transform moveTarget = null;
     [SerializeField] bool useWarp = false;
     [Header("Read Only")]
     [SerializeField] float lastDist = 0;
-    DodgeballCharacter chara = null;
+    [SerializeField] bool isLocked;
     Rigidbody rb3d = null;
+
+    public override bool IsLocked { get => isLocked; protected set => isLocked = value; }
 
     void Start()
     {
-        chara = GetComponent<DodgeballCharacter>();
         rb3d = GetComponent<Rigidbody>();
     }
     void Update()
     {
         if (!moveTarget)
+            return;
+        if (!IsLocked)
             return;
 
         Vector3 disp = moveTarget.position - rb3d.position;
@@ -24,12 +27,20 @@ public class AIController : MonoBehaviour
         lastDist = disp.magnitude;
         if(useWarp)
         {
-            //GetComponent<Mover>().Warp(moveTarget.position);
             transform.position = moveTarget.position;
         }
         else
         {
             chara.C_MoveInput(moveTarget.position);
         }
+    }
+
+    public override void Lock()
+    {
+        IsLocked = true;
+    }
+    public override void Unlock()
+    {
+        IsLocked = false;
     }
 }
