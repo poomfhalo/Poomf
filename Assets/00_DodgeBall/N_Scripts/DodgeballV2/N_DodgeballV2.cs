@@ -91,8 +91,8 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
     {
         StatePUN2 simulatedState = new StatePUN2();
         simulatedState.position = GetComponent<Rigidbody>().position;
-        simulatedState.receivedOnServerTimestamp = (float)PhotonNetwork.Time;
-        simulatedState.ownerTimestamp = lastTimeStamp;
+        //simulatedState.receivedOnServerTimestamp = (float)PhotonNetwork.Time;
+        //simulatedState.ownerTimestamp = lastTimeStamp;
         return simulatedState;
     }
     private void OnStateUpdated(Dodgeball.BallState newState)
