@@ -1,14 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [RequireComponent(typeof(DodgeballCharacter))]
 public class PC : CharaController
 {
+    public event Action<bool> onLockUpdated = null;
     public bool extAllowInputOnStart = true;
     [SerializeField] MatchInputController inputPrefab = null;
     MatchInputController input = null;
     [Header("Read Only")]
     [SerializeField] bool isLocked = false;
-    public override bool IsLocked { get => isLocked; protected set => isLocked = value; }
+    public override bool IsLocked { get => isLocked; protected set { isLocked = value; onLockUpdated?.Invoke(value); } }
 
     void OnEnable()
     {
@@ -22,7 +24,7 @@ public class PC : CharaController
     {
         if (extAllowInputOnStart)
         {
-            ConnectToInput();
+            CreatePlayInput();
             Unlock();
         }
     }
@@ -57,9 +59,9 @@ public class PC : CharaController
         input.E_OnJump += chara.C_Jump;
     }
 
-    public void ConnectToInput()
+    private void CreatePlayInput()
     {
-        input = Instantiate(inputPrefab, transform);
+        input = Instantiate(inputPrefab,transform);
         input.transform.localPosition = Vector3.zero;
         input.transform.localRotation = Quaternion.identity;
     }

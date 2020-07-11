@@ -30,6 +30,8 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
     [Range(0.05f, 0.95f)]
     [SerializeField] float traveledDistBeforeEnable = 0.45f;
 
+    [Header("Read Only")]
+    [SerializeField] float lastTimeStamp = 0;
     PhotonView pv = null;
     Dodgeball ball = null;
     SmoothSyncPUN2 syncer = null;
@@ -78,9 +80,20 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
         yield return new WaitForSeconds(delayAfterThrowToEnable);
         while (GetComponent<DodgeballGoLaunchTo>().traveledPercent< traveledDistBeforeEnable)
         {
+            syncer.addState(GetSimulatedState());
             yield return 0;
         }
+        syncer.addState(GetSimulatedState());
         syncer.enabled = true;
+        syncer.addState(GetSimulatedState());
+    }
+    private StatePUN2 GetSimulatedState()
+    {
+        StatePUN2 simulatedState = new StatePUN2();
+        simulatedState.position = GetComponent<Rigidbody>().position;
+        simulatedState.receivedOnServerTimestamp = (float)PhotonNetwork.Time;
+        simulatedState.ownerTimestamp = lastTimeStamp;
+        return simulatedState;
     }
     private void OnStateUpdated(Dodgeball.BallState newState)
     {
@@ -98,6 +111,8 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
+        lastTimeStamp = (float)info.SentServerTime;
+
         if (stream.IsWriting)
         {
 

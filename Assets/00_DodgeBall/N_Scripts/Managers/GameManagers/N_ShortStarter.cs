@@ -13,6 +13,7 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
 {
     [SerializeField] bool autoStart = true;
     [SerializeField] TextMeshProUGUI isMasterText = null;
+    [SerializeField] TextMeshProUGUI pingText = null;
 
     void Start()
     {
@@ -78,7 +79,10 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
             }
         });
     }
-
+    void Update()
+    {
+        pingText.text = PhotonNetwork.GetPing().ToString();
+    }
 
     [PunRPC]
     private void StartGame()

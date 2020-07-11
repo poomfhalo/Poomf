@@ -654,6 +654,7 @@ GameObject:
   - component: {fileID: 4258123539632355922}
   - component: {fileID: 6482619497595609318}
   - component: {fileID: 3845013188078415913}
+  - component: {fileID: 7796705118256343267}
   - component: {fileID: 6963099543513805061}
   m_Layer: 0
   m_Name: Player Character
@@ -820,6 +821,7 @@ MonoBehaviour:
   throwData: {fileID: 11400000, guid: 85e253f2e592b0bb784f06d2e0373da2, type: 2}
   isThrowing: 0
   activityName: Throw Action
+  ExtThrowCondition: 1
 --- !u!114 &6963099543513805063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -973,9 +975,10 @@ MonoBehaviour:
   throwData: {fileID: 11400000, guid: 85e253f2e592b0bb784f06d2e0373da2, type: 2}
   isThrowing: 0
   activityName: 
+  ExtThrowCondition: 1
   throwDelay: 0.2
-  finishedThrowPrep: 0
-  extDelay: 0
+  finishedThrowP1: 0
+  travelPercentToThrow: 0
 --- !u!114 &3845013188078415913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -994,6 +997,36 @@ MonoBehaviour:
   activeSlot:
     team: 0
     id: 0
+--- !u!114 &7796705118256343267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6963099543513805180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd5b1b11954c31fb98765b611b818d23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cancelInput:
+    m_Name: Cancel Input
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 2c8c56d7-b132-45be-97be-034ff0f816b7
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: f2cd57b4-d1bf-4401-82f7-dc41f9efe131
+      m_Path: <Keyboard>/escape
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Cancel Input
+      m_Flags: 0
+  exitScene: Menu
+  isLocked: 0
 --- !u!114 &6963099543513805061
 MonoBehaviour:
   m_ObjectHideFlags: 0
