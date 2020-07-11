@@ -1,7 +1,6 @@
-﻿using UnityEngine;
+﻿using GW_Lib;
 using Photon.Pun;
-using System.Linq;
-using GW_Lib;
+using UnityEngine;
 
 public class N_PC : MonoBehaviour,IPunObservable
 {
@@ -9,6 +8,8 @@ public class N_PC : MonoBehaviour,IPunObservable
     public int ActorID => pv.Controller.ActorNumber;
     [SerializeField] int creatorViewID = 0;
     [SerializeField] float afterDodgeMovementBlock = 0.1f;
+    [SerializeField] float safeThrowPercentThreshold = 0.15f;
+
 
     [Header("Move Smoothing Settings")]
     [Tooltip("if this distance between current position and networked position is higher than this, we snap to correct XZ place")]
@@ -37,9 +38,10 @@ public class N_PC : MonoBehaviour,IPunObservable
     void Start()
     {
         BallLauncherV2 lV2 = chara.launcher as BallLauncherV2;
-        if (lV2 && !PhotonNetwork.IsMasterClient)
-            lV2.extDelay = 0.2f;//TODO: Change this delay, to be travel percent of the master
-        //once master travels this as percent.
+        if (lV2 && PhotonNetwork.IsMasterClient)
+        {
+            lV2.travelPercentToThrow = safeThrowPercentThreshold;
+        }
     }
     void OnEnable()
     {
@@ -65,8 +67,8 @@ public class N_PC : MonoBehaviour,IPunObservable
             GetComponent<PathFollower>().extCanPlayAction = false;
         }
 
-        chara.launcher.ExtThrowCondition = () => false;
-        chara.launcher.E_OnThrowPrepFinished += OnThrowPrepFinished;
+        chara.launcher.ExtThrowCondition = () => PhotonNetwork.IsMasterClient;
+        chara.launcher.E_OnBallLaunchedSafely += OnBallLaunchedSafely;
         chara.launcher.onThrowPointReached += OnThrowPointReached;
     }
     void OnDisable()
@@ -74,7 +76,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         if (pv.IsMine)
             chara.OnCommandActivated -= SendMyCommand;
 
-        chara.launcher.E_OnThrowPrepFinished -= OnThrowPrepFinished;
+        chara.launcher.E_OnThrowP1Finished -= OnBallLaunchedSafely;
         chara.launcher.onThrowPointReached -= OnThrowPointReached;
     }
 
@@ -129,7 +131,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         UpdateSyncedInput();
     }
 
-    private void SendMyCommand(DodgeballCharaCommand command)
+    private void SendMyCommand(DodgeballCharaCommand command)//We only reach this step if IsMine is true
     {
         float currX = rb3d.position.x;
         float currZ = rb3d.position.z;
@@ -260,12 +262,12 @@ public class N_PC : MonoBehaviour,IPunObservable
         chara.C_PathFollow(path,lastAllowLockSwitching);
     }
     //Local Events
-    private void OnThrowPrepFinished()
+    private void OnBallLaunchedSafely()
     {
+        Log.Message("N_PC().OnBallLaunchedSafely :: " + name + " :: Is Master " + PhotonNetwork.IsMasterClient, gameObject);
         if (PhotonNetwork.IsMasterClient)
         {
-            Log.Message("N_PC().OnThrowPerpFinished :: " + name, gameObject);
-            pv.RPC("R_ActivateBallThrow", RpcTarget.AllViaServer);
+            pv.RPC("R_ActivateBallThrow", RpcTarget.Others);
         }
     }
     [PunRPC]

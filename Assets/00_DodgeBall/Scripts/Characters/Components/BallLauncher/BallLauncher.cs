@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class BallLauncher : DodgeballCharaAction, ICharaAction
 {
-    public event Action E_OnThrowPrepFinished = null;
+    public event Action E_OnBallLaunchedSafely = null;
+    public event Action E_OnThrowP1Finished = null;
     public Func<bool> ExtThrowCondition = () => true;
     public event Action onThrowPointReached = null;
     public bool IsThrowing => isThrowing;
@@ -99,12 +100,16 @@ public class BallLauncher : DodgeballCharaAction, ICharaAction
     {
 
     }
-    protected virtual void RunThrowPrepFinished()
+    protected virtual void RunThrowP1Finished()
     {
-        E_OnThrowPrepFinished?.Invoke();
+        E_OnThrowP1Finished?.Invoke();
     }
     protected virtual void RunOnThrowPointReached()
     {
         onThrowPointReached?.Invoke();
+    }
+    protected void RunOnBallLaunchedSafely()
+    {
+        E_OnBallLaunchedSafely?.Invoke();
     }
 }
