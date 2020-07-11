@@ -279,7 +279,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     private void OnThrowPointReached()
     {
         Log.Message("N_PC()."+ name + " :: Resetting External Throw Condition");
-        chara.launcher.ExtThrowCondition = false;
+        chara.launcher.ExtThrowCondition = PhotonNetwork.IsMasterClient;
     }
 
     //Helper Functions
