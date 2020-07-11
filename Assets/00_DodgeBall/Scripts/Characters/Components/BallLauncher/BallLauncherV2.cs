@@ -62,7 +62,7 @@ public class BallLauncherV2 : BallLauncher
     {
         float startWait = Time.time;
         //Used for networking check, example, master passes, and clients, wait for master to enable them
-        yield return new WaitUntil(() => ExtThrowCondition());
+        yield return new WaitUntil(() => ExtThrowCondition);
         float endWaitTime = Time.time;
         float diff = endWaitTime - startWait;
         if (diff < throwDelay)
@@ -75,5 +75,10 @@ public class BallLauncherV2 : BallLauncher
         if (!aimedAtChara)
             return;
         finishedThrowP1 = true;
+    }
+    public override void A_OnThrowEnded()
+    {
+        base.A_OnThrowEnded();
+        finishedThrowP1 = false;
     }
 }

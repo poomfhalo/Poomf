@@ -1,11 +1,11 @@
 ﻿using System;
 using UnityEngine;
 
-public class BallLauncher : DodgeballCharaAction, ICharaAction
+public abstract class BallLauncher : DodgeballCharaAction, ICharaAction
 {
     public event Action E_OnBallLaunchedSafely = null;
     public event Action E_OnThrowP1Finished = null;
-    public Func<bool> ExtThrowCondition = () => true;
+
     public event Action onThrowPointReached = null;
     public bool IsThrowing => isThrowing;
     public string actionName => activityName;
@@ -18,6 +18,7 @@ public class BallLauncher : DodgeballCharaAction, ICharaAction
     [Header("Read Only")]
     [SerializeField] protected bool isThrowing = false;
     [SerializeField] protected string activityName = "";
+    public bool ExtThrowCondition = true;
 
     protected DodgeballCharacter chara = null;
     protected Animator animator = null;
@@ -39,9 +40,28 @@ public class BallLauncher : DodgeballCharaAction, ICharaAction
             mover.TurnToPoint(aimedAtChara.position, throwFacingSpeed);
     }
 
-    public virtual void StartThrowAction(DodgeballCharacter toChara)
+    public abstract void StartThrowAction(DodgeballCharacter toChara);
+    
+
+    public virtual void StartFakeThrow(DodgeballCharacter activeChara)
     {
+        if (isThrowing)
+            return;
+
+        isThrowing = true;
+        aimedAtChara = activeChara;
+
+        Action a = () =>{
+            animator.SetTrigger("FakeThrow");
+            activityName = "Fake Throw ActionV2";
+            scheduler.StartAction(this, false);
+        };
+        if (mover.IsMoving)
+            mover.SmoothStop(a);
+        else
+            a.Invoke();
     }
+    public virtual void A_OnFakeThrowEnded() => isThrowing = false;
     public virtual void A_OnThrowPointReached()
     {
         if (!aimedAtChara)
@@ -76,25 +96,6 @@ public class BallLauncher : DodgeballCharaAction, ICharaAction
             return;
         mover.ApplyInput(recievedInput);
     }
-    public virtual void StartFakeThrow(DodgeballCharacter activeChara)
-    {
-        if (isThrowing)
-            return;
-
-        isThrowing = true;
-        aimedAtChara = activeChara;
-
-        Action a = () =>{
-            animator.SetTrigger("FakeThrow");
-            activityName = "Fake Throw ActionV2";
-            scheduler.StartAction(this, false);
-        };
-        if (mover.IsMoving)
-            mover.SmoothStop(a);
-        else
-            a.Invoke();
-    }
-    public virtual void A_OnFakeThrowEnded() => isThrowing = false;
 
     public virtual void Cancel()
     {
@@ -108,7 +109,7 @@ public class BallLauncher : DodgeballCharaAction, ICharaAction
     {
         onThrowPointReached?.Invoke();
     }
-    protected void RunOnBallLaunchedSafely()
+    protected virtual void RunOnBallLaunchedSafely()
     {
         E_OnBallLaunchedSafely?.Invoke();
     }

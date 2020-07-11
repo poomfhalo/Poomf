@@ -67,7 +67,7 @@ public class N_PC : MonoBehaviour,IPunObservable
             GetComponent<PathFollower>().extCanPlayAction = false;
         }
 
-        chara.launcher.ExtThrowCondition = () => PhotonNetwork.IsMasterClient;
+        chara.launcher.ExtThrowCondition = PhotonNetwork.IsMasterClient;
         chara.launcher.E_OnBallLaunchedSafely += OnBallLaunchedSafely;
         chara.launcher.onThrowPointReached += OnThrowPointReached;
     }
@@ -274,12 +274,12 @@ public class N_PC : MonoBehaviour,IPunObservable
     private void R_ActivateBallThrow()
     {
         Log.Message("N_PC().R_ActivateBallThrow :: " + name, gameObject);
-        chara.launcher.ExtThrowCondition = () => true;
+        chara.launcher.ExtThrowCondition = true;
     }
     private void OnThrowPointReached()
     {
         Log.Message("N_PC()."+ name + " :: Resetting External Throw Condition");
-        chara.launcher.ExtThrowCondition = () => false;
+        chara.launcher.ExtThrowCondition = false;
     }
 
     //Helper Functions
