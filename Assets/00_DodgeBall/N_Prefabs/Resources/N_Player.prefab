@@ -28,6 +28,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   creatorViewID: 0
   afterDodgeMovementBlock: 0.1
+  safeThrowPercentThreshold: 0.15
   snapXZDist: 3.5
   autoMoveThreshold: 0.2
   netDist: 0
@@ -97,11 +98,6 @@ PrefabInstance:
         type: 3}
       propertyPath: maxHP
       value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 6482619497595609318, guid: c395b7056ca0ebe79951bbb94ce6667d,
-        type: 3}
-      propertyPath: throwDelay
-      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 6963099543513805180, guid: c395b7056ca0ebe79951bbb94ce6667d,
         type: 3}
