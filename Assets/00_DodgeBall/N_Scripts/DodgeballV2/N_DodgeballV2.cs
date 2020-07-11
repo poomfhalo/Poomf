@@ -80,12 +80,12 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
         yield return new WaitForSeconds(delayAfterThrowToEnable);
         while (GetComponent<DodgeballGoLaunchTo>().traveledPercent< traveledDistBeforeEnable)
         {
-            syncer.addState(GetSimulatedState());
+            //syncer.addState(GetSimulatedState());
             yield return 0;
         }
-        syncer.addState(GetSimulatedState());
+        //syncer.addState(GetSimulatedState());
         syncer.enabled = true;
-        syncer.addState(GetSimulatedState());
+        //syncer.addState(GetSimulatedState());
     }
     private StatePUN2 GetSimulatedState()
     {
