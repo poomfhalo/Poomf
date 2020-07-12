@@ -63,7 +63,7 @@ public class CustomizablePlayer : MonoBehaviour
     private void RefreshItemVisuals(CustomItemBase item)
     {
         if (skinData.IsColorable(item.itemType))
-            item.SetColor(skinData.GetColor(item.itemType, 0), 0);
+            item.SetColor(skinData.GetColor(item.itemType, 0));
         if (skinData.IsTextureCustomizable(item.itemType))
             item.SetTexture(skinData.GetTextureIndex(item.itemType));
     }

@@ -7,6 +7,8 @@ public abstract class CustomItemBase : MonoBehaviour
     [Tooltip("Contains the different textures that are used to customize this item. Applied 1 at a time using an index. Leave empty if this item's textures are not customizable.")]
     [SerializeField] protected Texture2D[] itemTextures = null;
     [SerializeField] ItemCategory m_itemType = ItemCategory.Head;
+    [Tooltip("The index of the material, among the mesh renderer's materials, that will be customized when the color or texture change.")]
+    [SerializeField] int matToCustomize = 0;
 
     #region Setters/Getters
     public ItemCategory itemType => m_itemType;
@@ -19,6 +21,11 @@ public abstract class CustomItemBase : MonoBehaviour
     public virtual void Initialize()
     {
         meshRenderer = GetComponent<SkinnedMeshRenderer>();
+        if (matToCustomize >= meshRenderer.materials.Length)
+        {
+            Debug.LogError("CustomItemBase : \"material index to customize\" is out of range! It will be set to 0.");
+            matToCustomize = 0;
+        }
         materialProperties = new MaterialPropertyBlock();
         // Update colors
         //if (isColorable)
@@ -70,14 +77,11 @@ public abstract class CustomItemBase : MonoBehaviour
     /// <param name="color">
     /// The new color
     /// </param>
-    /// <param name="materialIndex">
-    /// The index of the material that we want to change its color
-    /// </param>
-    public virtual void SetColor(Color color, int materialIndex)
+    public virtual void SetColor(Color color)
     {
         // Update the material's color
         materialProperties.SetColor("_Color", color);
-        meshRenderer.SetPropertyBlock(materialProperties, materialIndex);
+        meshRenderer.SetPropertyBlock(materialProperties, matToCustomize);
     }
     public virtual void SetTexture(int textureIndex)
     {
@@ -92,6 +96,6 @@ public abstract class CustomItemBase : MonoBehaviour
             textureIndex = itemTextures.Length - 1;
         }
         materialProperties.SetTexture("_MainTex", itemTextures[textureIndex]);
-        meshRenderer.SetPropertyBlock(materialProperties);
+        meshRenderer.SetPropertyBlock(materialProperties, matToCustomize);
     }
 }
