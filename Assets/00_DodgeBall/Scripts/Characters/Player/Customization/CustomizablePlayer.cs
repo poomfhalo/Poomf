@@ -10,10 +10,10 @@ public class CustomizablePlayer : MonoBehaviour
 
     // Lists that contain all custom items
     [Header("Read Only")]
-    [SerializeField, ReadOnly] List<CustomItem> allHeads = new List<CustomItem>();
-    [SerializeField, ReadOnly] List<CustomItem> allOutfits = new List<CustomItem>();
-    [SerializeField, ReadOnly] UniqueCustomItem playerEyes = null;
-    [SerializeField, ReadOnly] UniqueCustomItem playerSkinTone = null;
+    [SerializeField] List<CustomItem> allHeads = new List<CustomItem>();
+    [SerializeField] List<CustomItem> allOutfits = new List<CustomItem>();
+    [SerializeField] UniqueCustomItem playerEyes = null;
+    [SerializeField] UniqueCustomItem playerSkinTone = null;
 
     void Start()
     {
@@ -34,6 +34,11 @@ public class CustomizablePlayer : MonoBehaviour
         skinData.onDataUpdated += RefreshCharaVisuals;
         RefreshCharaVisuals();
     }
+    void OnDestroy()
+    {
+        skinData.onDataUpdated -= RefreshCharaVisuals;
+    }
+    
 
     private void RefreshCharaVisuals()
     {
