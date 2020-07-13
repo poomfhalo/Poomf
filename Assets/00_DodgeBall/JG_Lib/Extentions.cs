@@ -87,6 +87,10 @@ namespace GW_Lib
     {
         public static void SetKinematic(this MonoBehaviour caller,bool toState)
         {
+            SetKinematic(caller, caller, toState);
+        }
+        public static void SetKinematic(this Component caller,MonoBehaviour delayer, bool toState)
+        {
             Rigidbody rb3d = caller.GetComponent<Rigidbody>();
             if (rb3d == null)
                 return;
@@ -95,8 +99,18 @@ namespace GW_Lib
 
             rb3d.collisionDetectionMode = CollisionDetectionMode.Discrete;
             rb3d.isKinematic = toState;
-            caller.InvokeDelayed(new WaitForEndOfFrame(), () => {
-                if (toState)
+            if (!delayer)
+            {
+                SetStateOfBody(toState);
+                return;
+            }
+
+            delayer.InvokeDelayed(new WaitForEndOfFrame(), () => {
+                SetStateOfBody(toState);
+            });
+            void SetStateOfBody(bool s)
+            {
+                if (s)
                 {
                     rb3d.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
                 }
@@ -104,7 +118,7 @@ namespace GW_Lib
                 {
                     rb3d.collisionDetectionMode = CollisionDetectionMode.Continuous;
                 }
-            });
+            }
         }
         public static void KillCoro(this MonoBehaviour caller, ref Coroutine c)
         {

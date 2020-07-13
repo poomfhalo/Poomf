@@ -129,7 +129,7 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
         foreach (var player in PhotonNetwork.PlayerList)
         {
             TeamTag t = N_TeamsManager.GetTeam(player.ActorNumber);
-            SpawnPath s = DodgeballGameManager.GetSpawnPosition(t);
+            SpawnPath s = GameExtentions.GetSpawnPosition(t);
             N_PC p = N_TeamsManager.GetPlayer(player.ActorNumber);
 
             p.GetComponent<PhotonView>().RPC("SetUp",RpcTarget.All, s.SlotId);

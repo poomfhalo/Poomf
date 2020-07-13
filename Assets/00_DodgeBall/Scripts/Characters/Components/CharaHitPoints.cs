@@ -4,11 +4,12 @@ using GW_Lib.Utility;
 using UnityEngine;
 
 public enum HPCommand { Subtract } 
-public class CharaHitPoints : DodgeballCharaAction,ICharaAction
+public class CharaHitPoints : DodgeballCharaAction, ICharaAction
 {
     public int CurrHP => currHP;
     public event Action OnZeroHP;
-    public event Action OnHPUpdated;
+    public event Action OnHpSubtracted;
+    public event Action OnHPInitialized;
     public event Action<HPCommand> OnHpCommand;
     public string actionName => "Get Hit";
     public bool IsBeingHurt => isBeingHurt;
@@ -19,7 +20,7 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
     [SerializeField] int hurtAnimsCount = 2;
     [SerializeField] TriggerDelegator hurtZone = null;
     [SerializeField] float minTimeBetweenHurts = 1;
-    public Func<bool> ApplyHealthChanges = () => true;
+    public Func<bool> ExtApplyHealthChanges = () => true;
 
     [Header("Read Only")]
     [SerializeField] int currHP = 0;
@@ -41,7 +42,7 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
 
         currHP = maxHP;
         hurtZone.onTriggerEnter.AddListener(OnObjEntered);
-        OnHPUpdated?.Invoke();
+        OnHPInitialized?.Invoke();
     }
 
     private void OnObjEntered(Collider other)
@@ -74,7 +75,7 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
         OnHpCommand?.Invoke(HPCommand.Subtract);
         isWaitingForHit = false;
 
-        if (!ApplyHealthChanges())
+        if (!ExtApplyHealthChanges())
             return;
 
         StartHitAction();
@@ -82,15 +83,14 @@ public class CharaHitPoints : DodgeballCharaAction,ICharaAction
 
     public void StartHitAction()
     {
-        if (!ApplyHealthChanges())
+        if (!ExtApplyHealthChanges())
             return;
 
         currHP = currHP - 1;
-        OnHPUpdated?.Invoke();
+        OnHpSubtracted?.Invoke();
         if (currHP <= 0)
         {
             OnZeroHP?.Invoke();
-            gameObject.SetActive(false);
             Log.Message("HP: Zero Health", gameObject);
         }
         else

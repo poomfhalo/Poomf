@@ -14,7 +14,7 @@ public class N_CharaHitPoints : MonoBehaviour
     }
     void Start()
     {
-        hp.ApplyHealthChanges = () => false;
+        hp.ExtApplyHealthChanges = () => false;
 
         if (PhotonNetwork.IsMasterClient)
             hp.OnHpCommand += OnHpCommand;
@@ -34,8 +34,8 @@ public class N_CharaHitPoints : MonoBehaviour
     private void R_StartHitAction()
     {
         Log.Message("N_CharaHitPoints().RPC :: R_StartHitAction");
-        hp.ApplyHealthChanges = () => true;
+        hp.ExtApplyHealthChanges = () => true;
         hp.StartHitAction();
-        hp.ApplyHealthChanges = () => false;
+        hp.ExtApplyHealthChanges = () => false;
     }
 }

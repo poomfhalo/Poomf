@@ -69,7 +69,7 @@ public class N_PC : MonoBehaviour,IPunObservable
 
         chara.launcher.ExtThrowCondition = PhotonNetwork.IsMasterClient;
         chara.launcher.E_OnBallLaunchedSafely += OnBallLaunchedSafely;
-        chara.launcher.onThrowPointReached += OnThrowPointReached;
+        chara.launcher.E_OnThrowPointReached += OnThrowPointReached;
     }
     void OnDisable()
     {
@@ -77,7 +77,7 @@ public class N_PC : MonoBehaviour,IPunObservable
             chara.OnCommandActivated -= SendMyCommand;
 
         chara.launcher.E_OnThrowP1Finished -= OnBallLaunchedSafely;
-        chara.launcher.onThrowPointReached -= OnThrowPointReached;
+        chara.launcher.E_OnThrowPointReached -= OnThrowPointReached;
     }
 
     [PunRPC]//Called In N_PlayerManager
@@ -258,7 +258,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         netPos.x = currX;
         netPos.z = currZ;
 
-        Transform path = DodgeballGameManager.GetPathsOfSlot(GetComponent<CharaSlot>().GetID)[0].transform;
+        Transform path = GameExtentions.GetPathsOfSlot(GetComponent<CharaSlot>().GetID)[0].transform;
         chara.C_PathFollow(path,lastAllowLockSwitching);
     }
     //Local Events

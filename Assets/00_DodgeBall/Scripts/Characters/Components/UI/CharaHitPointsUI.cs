@@ -8,7 +8,8 @@ public class CharaHitPointsUI : MonoBehaviour
 
     void Awake()
     {
-        hp.OnHPUpdated += OnHPUpdated;
+        hp.OnHpSubtracted += OnHPUpdated;
+        hp.OnHPInitialized += OnHPUpdated;
     }
 
     private void OnHPUpdated()

@@ -27,11 +27,11 @@ public class R_PathFollower : Reaction
         List<bool> oldStates = new List<bool>();
         foreach (var slotToMove in slotsToMove)
         {
-            CharaController controller = DodgeballGameManager.GetCharaOfSlot(slotToMove);
+            CharaController controller = GameExtentions.GetCharaOfSlot(slotToMove);
             if (controller == null)
                 continue;
 
-            List<SpawnPath> pathsObjs = DodgeballGameManager.GetPathsOfSlot(slotToMove);
+            List<SpawnPath> pathsObjs = GameExtentions.GetPathsOfSlot(slotToMove);
             SpawnPath path = pathsObjs[0];
 
             PathFollower pathFollower = controller.GetComponent<PathFollower>();

@@ -23,6 +23,9 @@ public class GameIntroManager : Singleton<GameIntroManager>
         if (extActivateOnStart)
         {
             StartGame();
+            if (!FindObjectOfType<PC>())
+                return;
+
             TeamTag team = TeamsManager.GetTeam(FindObjectOfType<PC>().GetComponent<DodgeballCharacter>()).teamTag;
             var p = FindObjectsOfType<TaggedSpawnPoint>().ToList().Find(s => s.HasTag("MainCamera") && s.BelongsTo(team));
             p.GetComponent<Cinemachine.CinemachineVirtualCamera>().Priority = 15;

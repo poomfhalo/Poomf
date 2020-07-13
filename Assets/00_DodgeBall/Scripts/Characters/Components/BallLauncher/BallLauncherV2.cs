@@ -22,6 +22,8 @@ public class BallLauncherV2 : BallLauncher
         if (isThrowing)
             return;
 
+        RunOnBallThrowStart();
+
         finishedThrowP1 = false;
         isThrowing = true;
         aimedAtChara = toChara;
@@ -64,10 +66,11 @@ public class BallLauncherV2 : BallLauncher
         //Used for networking check, example, master passes, and clients, wait for master to enable them
         yield return new WaitUntil(() => ExtThrowCondition);
         float endWaitTime = Time.time;
-        float diff = endWaitTime - startWait;
-        if (diff < throwDelay)
+        float externalWaitTime = endWaitTime - startWait;
+        if (externalWaitTime < throwDelay)
         {
-            yield return new WaitForSeconds(diff);
+            float remainingTime = throwDelay - externalWaitTime;
+            yield return new WaitForSeconds(remainingTime);
         }
     }
     public void A_OnThrowP1Finished()

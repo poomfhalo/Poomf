@@ -47,22 +47,15 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
 
 
     //Helper Functions:
-    public static SpawnPath GetSpawnPosition(TeamTag team)
+    public static void AddBall(Dodgeball b)
     {
-        List<SpawnPath> playerSpawnPoints = FindObjectsOfType<SpawnPath>().ToList();
-        List<SpawnPath> spawnPoints = playerSpawnPoints.FindAll(p => p.CheckTeam(team));
-        SpawnPath s = null;
-
-        int maxTries = 300;
-        do
-        {
-            int i = UnityEngine.Random.Range(0, spawnPoints.Count);
-            s = spawnPoints[i];
-            maxTries = maxTries - 1;
-            if (maxTries <= 0)
-                break;
-        } while (s == null || s.HasPlayer);
-        return s;
+        if (!instance.balls.Contains(b))
+            instance.balls.Add(b);
+    }
+    public static void RemoveBall(Dodgeball b)
+    {
+        if (instance && instance.balls.Contains(b))
+            instance.balls.Remove(b);
     }
     public static BallThrowData GetThrow(byte id)
     {
@@ -85,35 +78,12 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
         foreach (var b in balls)
         {
             float d = Vector3.Distance(closestTo.position, closestBall.position);
-            if(d<=minDist)
+            if (d <= minDist)
             {
                 minDist = d;
                 closestBall = b;
             }
         }
         return closestBall;
-    }
-    public static void AddBall(Dodgeball b)
-    {
-        if (!instance.balls.Contains(b))
-            instance.balls.Add(b);
-    }
-    public static void RemoveBall(Dodgeball b)
-    {
-        if (instance && instance.balls.Contains(b))
-            instance.balls.Remove(b);
-    }
-    public static CharaController GetCharaOfSlot(int slotID)
-    {
-        CharaSlot charaSlot = FindObjectsOfType<CharaSlot>().ToList().Find(s => s.GetID == slotID);
-        if(charaSlot)
-            return charaSlot.GetComponent<CharaController>();
-
-        return null;
-    }
-    public static List<SpawnPath> GetPathsOfSlot(int slotID)
-    {
-        List<SpawnPath> allPaths = FindObjectsOfType<SpawnPath>().ToList();
-        return allPaths.FindAll(s => s.CheckSlot(slotID));
     }
 }

@@ -18,8 +18,8 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
     public string actionName => "Recieve Ball";
     CharaHitPoints hp => GetComponent<CharaHitPoints>();
 
-    void OnEnable() => hp.OnHPUpdated += DisableDetection;
-    void OnDisable() => hp.OnHPUpdated -= DisableDetection;
+    void OnEnable() => hp.OnHpSubtracted += DisableDetection;
+    void OnDisable() => hp.OnHpSubtracted -= DisableDetection;
 
     #region BallDetection
     void Update()

@@ -3,10 +3,11 @@ using UnityEngine;
 
 public abstract class BallLauncher : DodgeballCharaAction, ICharaAction
 {
-    public event Action E_OnBallLaunchedSafely = null;
+    public event Action E_OnThrowStarted = null;
     public event Action E_OnThrowP1Finished = null;
+    public event Action E_OnThrowPointReached = null;
+    public event Action E_OnBallLaunchedSafely = null;
 
-    public event Action onThrowPointReached = null;
     public bool IsThrowing => isThrowing;
     public string actionName => activityName;
 
@@ -41,8 +42,6 @@ public abstract class BallLauncher : DodgeballCharaAction, ICharaAction
     }
 
     public abstract void StartThrowAction(DodgeballCharacter toChara);
-    
-
     public virtual void StartFakeThrow(DodgeballCharacter activeChara)
     {
         if (isThrowing)
@@ -107,10 +106,14 @@ public abstract class BallLauncher : DodgeballCharaAction, ICharaAction
     }
     protected virtual void RunOnThrowPointReached()
     {
-        onThrowPointReached?.Invoke();
+        E_OnThrowPointReached?.Invoke();
     }
     protected virtual void RunOnBallLaunchedSafely()
     {
         E_OnBallLaunchedSafely?.Invoke();
+    }
+    protected virtual void RunOnBallThrowStart()
+    {
+        E_OnThrowStarted?.Invoke();
     }
 }
