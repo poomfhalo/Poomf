@@ -64,7 +64,7 @@ public class SelectionIndicator : MonoBehaviour
         {
             if (wasLookingAtFriendly || lastFriendly == null)
             {
-                newFocus = TeamsManager.GetNextFriendly(owner, lastFriendly);
+                newFocus = TeamsManager.GetNextFriendly(owner, lastFriendly, true);
             }
             else
             {
@@ -79,9 +79,12 @@ public class SelectionIndicator : MonoBehaviour
             }
             else
             {
-                newFocus = TeamsManager.GetNextEnemy(owner, lastEnemy);
+                newFocus = TeamsManager.GetNextEnemy(owner, lastEnemy, true);
             }
         }
+        if (newFocus == null)
+            newFocus = owner;
+
         SetFocus(newFocus);
     }
 }

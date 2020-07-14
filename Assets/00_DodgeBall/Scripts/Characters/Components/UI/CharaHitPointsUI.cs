@@ -10,6 +10,7 @@ public class CharaHitPointsUI : MonoBehaviour
     {
         hp.OnHpSubtracted += OnHPUpdated;
         hp.OnHPInitialized += OnHPUpdated;
+        hp.OnZeroHP += OnHPUpdated;
     }
 
     private void OnHPUpdated()

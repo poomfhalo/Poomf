@@ -1117,7 +1117,16 @@ MonoBehaviour:
   startDelay: 0
   duration: 0
   waitEndType: 0
-  slotsToMove: 050000000400000003000000
+  pathsDatas:
+  - slotToMove: 5
+    pathTag: 0
+    pathIndex: -1
+  - slotToMove: 4
+    pathTag: 0
+    pathIndex: -1
+  - slotToMove: 3
+    pathTag: 0
+    pathIndex: -1
 --- !u!114 &341494854497585559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1491,7 +1500,16 @@ MonoBehaviour:
   startDelay: 0
   duration: 0
   waitEndType: 0
-  slotsToMove: 000000000100000002000000
+  pathsDatas:
+  - slotToMove: 0
+    pathTag: 0
+    pathIndex: -1
+  - slotToMove: 1
+    pathTag: 0
+    pathIndex: -1
+  - slotToMove: 2
+    pathTag: 0
+    pathIndex: -1
 --- !u!114 &1675502564263135774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3464,15 +3482,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15d27563bb8109ee5a1943dff3d0c582, type: 3}
---- !u!1 &7281414732227171902 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2885129166342530931, guid: 15d27563bb8109ee5a1943dff3d0c582,
-    type: 3}
-  m_PrefabInstance: {fileID: 5550336543887290701}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7281414732227171897 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2885129166342530932, guid: 15d27563bb8109ee5a1943dff3d0c582,
+    type: 3}
+  m_PrefabInstance: {fileID: 5550336543887290701}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7281414732227171902 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2885129166342530931, guid: 15d27563bb8109ee5a1943dff3d0c582,
     type: 3}
   m_PrefabInstance: {fileID: 5550336543887290701}
   m_PrefabAsset: {fileID: 0}

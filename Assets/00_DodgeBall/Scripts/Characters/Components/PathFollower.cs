@@ -2,13 +2,14 @@
 
 public class PathFollower : DodgeballCharaAction, ICharaAction
 {
+    public CharaPath ActivePath => activePathHead.GetComponent<CharaPath>();
     public bool extCanPlayAction = true;
     public string actionName => "Follow Path";
 
     [Tooltip("Detecting when we're too close to the next point, noting that it shoudl be higher thna stopping dist of Mover")]
     [SerializeField] float satisfactionRadious = 0.5f;
     [Tooltip("If 0 or less then we will not stop at all, when we are at a point, we will move the next right away")]
-    [SerializeField] float stopTimeAtPoint = -1;
+    public float stopTimeAtPoint = -1;
 
     [Header("Read Only")]
     [SerializeField] Transform activePathHead = null;
@@ -16,7 +17,7 @@ public class PathFollower : DodgeballCharaAction, ICharaAction
     [SerializeField] bool changingPoint = false;
     [SerializeField] float changingPointCounter = 0;
     public bool IsRunning = false;
-    public bool lastAllowLockSwitching = true;
+    public bool isLooping;
 
     DodgeballCharacter chara = null;
     Mover mover = null;
@@ -34,7 +35,20 @@ public class PathFollower : DodgeballCharaAction, ICharaAction
             return;
         if (activePoint >= activePathHead.childCount && IsRunning)
         {
-            Cancel();
+            if (isLooping)
+                activePoint = 0;
+            else
+                Cancel();
+            return;
+        }
+        if (changingPoint)
+        {
+            changingPointCounter = changingPointCounter + Time.deltaTime / stopTimeAtPoint;
+            if (changingPointCounter >= 1)
+            {
+                changingPoint = false;
+                changingPointCounter = 0;
+            }
             return;
         }
 
@@ -45,55 +59,42 @@ public class PathFollower : DodgeballCharaAction, ICharaAction
         if (testDist <= satisfactionRadious && !mover.IsMoving)
         {
             activePoint = activePoint + 1;
+            if(stopTimeAtPoint>0)
+                changingPoint = true;
+            return;
         }
 
         bool isLastPoint = activePoint >= activePathHead.childCount - 1;
-        if (!isLastPoint && !changingPoint)
+        if (!isLastPoint)
         {
             endPos = activePathHead.GetChild(activePoint + 1).position;
             startPos.y = endPos.y = 0;
             testDist = Vector3.Distance(startPos, endPos);
-            if (testDist <= satisfactionRadious && stopTimeAtPoint <= 0)
+            if (testDist <= satisfactionRadious)
             {
                 activePoint = activePoint + 1;
-                changingPoint = true;
+                if (stopTimeAtPoint > 0)
+                    changingPoint = true;
                 return;
             }
         }
     
-        if (activePoint >= activePathHead.childCount)
-        {
-            Cancel();
-            return;
-        }
-        if (changingPoint)
-        {
-            changingPointCounter = changingPointCounter + Time.deltaTime / stopTimeAtPoint;
-            if(changingPointCounter>=1)
-            {
-                changingPoint = false;
-                changingPointCounter = 0;
-            }
-            return;
-        }
         Vector3 activePos = activePathHead.GetChild(activePoint).position;
         activePos.y = 0;
         chara.C_MoveInput(activePos);
     }
 
-    public void StartFollowAction(Transform pathHead,bool allowLockSwitching)
+    public void StartFollowAction(CharaPath path,bool isLooping,float stopTimeAtPoint)
     {
         if (!extCanPlayAction)
             return;
 
+        this.stopTimeAtPoint = stopTimeAtPoint;
         GetComponent<Mover>().ReadFacingValues();
-        activePathHead = pathHead;
-        this.lastAllowLockSwitching = allowLockSwitching;
+        activePathHead = path.transform;
         IsRunning = true;
         GetComponent<Mover>().workAsAction = false;
-
-        if (allowLockSwitching)
-            GetComponent<CharaController>().Lock();
+        this.isLooping = isLooping;
     }
     public void Cancel()
     {
@@ -102,8 +103,6 @@ public class PathFollower : DodgeballCharaAction, ICharaAction
         changingPoint = false;
         activePoint = 0;
         GetComponent<Mover>().workAsAction = true;
-
-        if (lastAllowLockSwitching)
-            GetComponent<CharaController>().Unlock();
+        isLooping = false;
     }
 }

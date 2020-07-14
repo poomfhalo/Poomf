@@ -27,6 +27,7 @@ public class DodgeballCharacter : MonoBehaviour
     public bool IsBeingHurt => hp.IsBeingHurt;
     public bool IsWaitingForHit => hp.IsWaitingForHit;
     public string charaName => name;
+    public bool IsInField => isInField;
 
     //Body Parts
     public Transform BallGrabPoint => ballGrabPoint;
@@ -44,6 +45,7 @@ public class DodgeballCharacter : MonoBehaviour
     [Header("Core")]
     [SerializeField] TeamTag team = TeamTag.A;
     public SelectionIndicator selectionIndicator = null;
+    [SerializeField] bool isInField = true;
 
     protected Rigidbody rb3d = null;
     protected Animator animator = null;
@@ -86,6 +88,8 @@ public class DodgeballCharacter : MonoBehaviour
 
         selectionIndicator.SetOwner(this);
         selectionIndicator.SetFocus(null);
+
+        hp.OnZeroHP += () => isInField = false;
 
         if(feet)
             feet.SetUp(this);
@@ -221,9 +225,15 @@ public class DodgeballCharacter : MonoBehaviour
     {
         OnCommandActivated?.Invoke(DodgeballCharaCommand.PushBall);
     }
-    public void C_PathFollow(Transform path, bool allowLockSwitching)
+    /// <summary>
+    /// Commands character to follow the path
+    /// </summary>
+    /// <param name="path">Path.</param>
+    /// <param name="isLooping">If set to <c>true</c> is looping.</param>
+    /// <param name="stopTimeAtPoint">Stop time at point, -1 means we do not stop at any point.</param>
+    public void C_PathFollow(CharaPath path,bool isLooping,float stopTimeAtPoint)
     {
-        pathFollower.StartFollowAction(path,allowLockSwitching);
+        pathFollower.StartFollowAction(path,isLooping,stopTimeAtPoint);
         OnCommandActivated?.Invoke(DodgeballCharaCommand.PathFollow);
     }
     #endregion
@@ -231,7 +241,7 @@ public class DodgeballCharacter : MonoBehaviour
     public Vector3 PrepareForGame()
     {
         CharaSlot slot = GetComponent<CharaSlot>();
-        SpawnPath s = FindObjectsOfType<SpawnPath>().ToList().Find(p => p.CheckSlot(slot.GetID));
+        CharaPath s = GameExtentions.GetPath(slot.GetID, PathType.GameStartPath, -1);
 
         transform.position = s.position;
         transform.rotation = s.rotation;

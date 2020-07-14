@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 
-public enum PathType { GameStartPath }
-public class SpawnPath : MonoBehaviourPunCallbacks
+public enum PathType { GameStartPath, OutPath }
+public class CharaPath : MonoBehaviourPunCallbacks
 {
     public PathType pathType = PathType.GameStartPath;
 
     public Transform[] GetPoints => points;
-    public Vector3 position => transform.position;
-    public Quaternion rotation => transform.rotation;
+    public Vector3 position => transform.GetChild(0).position;
+    public Quaternion rotation => transform.GetChild(0).rotation;
     public bool HasPlayer => hasPlayer;
     public int SlotId => GetCharaSlotData().id;
 
@@ -31,6 +31,7 @@ public class SpawnPath : MonoBehaviourPunCallbacks
 
     public bool CheckSlot(int slotID) => SlotId == slotID;
     public bool CheckTeam(TeamTag t) => t == GetCharaSlotData().team;
-    
+    public bool CheckTag(PathType tag) => pathType == tag;
+
     CharaSlotData GetCharaSlotData() => DodgeballGameManager.instance.gameSlotsData.GetData(slotID);
 }

@@ -87,7 +87,6 @@ public class CharaHitPoints : DodgeballCharaAction, ICharaAction
             return;
 
         currHP = currHP - 1;
-        OnHpSubtracted?.Invoke();
         if (currHP <= 0)
         {
             OnZeroHP?.Invoke();
@@ -95,6 +94,7 @@ public class CharaHitPoints : DodgeballCharaAction, ICharaAction
         }
         else
         {
+            OnHpSubtracted?.Invoke();
             isBeingHurt = true;
             int i = UnityEngine.Random.Range(0, hurtAnimsCount);
             animator.SetInteger("RndAnim", i);

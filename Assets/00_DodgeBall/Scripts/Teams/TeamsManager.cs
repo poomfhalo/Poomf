@@ -41,22 +41,47 @@ public class TeamsManager : Singleton<TeamsManager>
 
         return sameTeam;
     }
-    public static DodgeballCharacter GetNextFriendly(DodgeballCharacter ofThis,DodgeballCharacter curr)
+    public static DodgeballCharacter GetNextFriendly(DodgeballCharacter ofThis,DodgeballCharacter curr,bool onlyInField)
     {
         Team thisTeam = GetTeam(ofThis);
-        DodgeballCharacter next = null;
-        DodgeballCharacter testableChara = curr;
+
+        DodgeballCharacter next = curr;
+        int maxTries = 10;
         do
         {
-            next = thisTeam.GetNext(testableChara);
-            testableChara = next;
-        } while (next == ofThis);
+            next = thisTeam.GetNext(curr);
+            if (onlyInField)
+            {
+                maxTries--;
+                if (maxTries < 0)
+                {
+                    next = null;
+                    break;
+                }
+            }
+        } while (next == ofThis || (!next.IsInField && onlyInField));
         return next;
     }
-    public static DodgeballCharacter GetNextEnemy(DodgeballCharacter ofThis, DodgeballCharacter curr)
+    public static DodgeballCharacter GetNextEnemy(DodgeballCharacter ofThis, DodgeballCharacter curr,bool onlyInField)
     {
         Team t = GetNextTeam(ofThis);
         DodgeballCharacter next = t.GetNext(curr);
+
+        int maxTries = 10;
+        if (onlyInField)
+        {
+            while (!next.IsInField)
+            {
+                next = t.GetNext(next);
+
+                maxTries--;
+                if (maxTries < 0)
+                {
+                    next = null;
+                    break;
+                }
+            }
+        }
         return next;
     }
     public static Team GetNextTeam(DodgeballCharacter chara)

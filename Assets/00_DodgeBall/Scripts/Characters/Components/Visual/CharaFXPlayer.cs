@@ -31,21 +31,16 @@ public class CharaFXPlayer : MonoBehaviour
 
     private void OnHPSubtracted()
     {
-        PlayEffect(vHitvEffectsHead);
+        GameExtentions.PlayChildEffect(vHitvEffectsHead);
     }
     private void OnZeroHP()
     {
-        PlayEffect(vDeathEffectsHead);
+        GameExtentions.PlayChildEffect(vDeathEffectsHead);
+        GameExtentions.PlayChildEffect(vHitvEffectsHead);
     }
     private void OnThrowStarted()
     {
-        print("WT");
-        PlayEffect(vOnThrowStarted);
-    }
-    private void PlayEffect(Transform head)
-    {
-        Transform child = GameExtentions.GetRndChild(head);
-        child.GetComponent<ParticleSystem>().Play(true);
+        GameExtentions.PlayChildEffect(vOnThrowStarted);
     }
     private void OnThrowPointReached()
     {

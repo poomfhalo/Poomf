@@ -1,11 +1,22 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class R_PathFollower : Reaction
 {
+    [Serializable]
+    private class CharaPathFollowData
+    {
+        [Tooltip("Each slot, has a single character, we will try to move that character")]
+        public int slotToMove;
+        public PathType pathTag;
+        public int pathIndex;
+    }
+
     [Tooltip("Each slot, has a single character, we will try to move that character")]
-    [SerializeField] int[] slotsToMove = new int[0];
+    [SerializeField] CharaPathFollowData[] pathsDatas = new CharaPathFollowData[0];
+    [SerializeField] float stopTimeAtPoint = -1;
     bool isDone = false;
 
     void Reset()
@@ -23,23 +34,20 @@ public class R_PathFollower : Reaction
     protected override IEnumerator ReactionBehavior()
     {
         List<CharaController> controllers = new List<CharaController>();
-        List<SpawnPath> paths = new List<SpawnPath>();
+        List<CharaPathFollowData> paths = new List<CharaPathFollowData>();
         List<bool> oldStates = new List<bool>();
-        foreach (var slotToMove in slotsToMove)
+        foreach (var pathData in pathsDatas)
         {
-            CharaController controller = GameExtentions.GetCharaOfSlot(slotToMove);
+            CharaController controller = GameExtentions.GetCharaOfSlot(pathData.slotToMove);
             if (controller == null)
                 continue;
-
-            List<SpawnPath> pathsObjs = GameExtentions.GetPathsOfSlot(slotToMove);
-            SpawnPath path = pathsObjs[0];
 
             PathFollower pathFollower = controller.GetComponent<PathFollower>();
 
             if (pathFollower.extCanPlayAction)
             {
                 controllers.Add(controller);
-                paths.Add(path);
+                paths.Add(pathData);
                 oldStates.Add(controller.IsLocked);
             }
         }
@@ -47,11 +55,11 @@ public class R_PathFollower : Reaction
         for (int i = 0; i < controllers.Count;i++)
         {
             CharaController controller = controllers[i];
-            SpawnPath path = paths[i];
             //no longer needed, for reason below.
             //controller.Lock();
             DodgeballCharacter chara = controller.GetComponent<DodgeballCharacter>();
-            chara.C_PathFollow(path.transform, false);
+            CharaPath path = GameExtentions.GetPath(paths[i].slotToMove, paths[i].pathTag, paths[i].pathIndex);
+            chara.C_PathFollow(path,false, stopTimeAtPoint);
         }
 
         yield return new WaitForSeconds(0.1f);

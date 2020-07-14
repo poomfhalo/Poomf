@@ -34,11 +34,25 @@ public static class GameExtentions
         return hitEffectsHead.GetChild(i);
     }
 
-    public static SpawnPath GetSpawnPosition(TeamTag team)
+    public static void PlayChildEffect(Transform head)
     {
-        List<SpawnPath> playerSpawnPoints = UnityEngine.Object.FindObjectsOfType<SpawnPath>().ToList();
-        List<SpawnPath> spawnPoints = playerSpawnPoints.FindAll(p => p.CheckTeam(team));
-        SpawnPath s = null;
+        Transform child = GetRndChild(head);
+        child.GetComponent<ParticleSystem>().Play(true);
+    }
+    public static CharaController GetCharaOfSlot(int slotID)
+    {
+        CharaSlot charaSlot = UnityEngine.Object.FindObjectsOfType<CharaSlot>().ToList().Find(s => s.GetID == slotID);
+        if (charaSlot)
+            return charaSlot.GetComponent<CharaController>();
+
+        return null;
+    }
+
+    public static CharaPath GetSpawnPosition(TeamTag team)
+    {
+        List<CharaPath> playerSpawnPoints = UnityEngine.Object.FindObjectsOfType<CharaPath>().ToList();
+        List<CharaPath> spawnPoints = playerSpawnPoints.FindAll(p => p.CheckTeam(team));
+        CharaPath s = null;
 
         int maxTries = 300;
         do
@@ -51,17 +65,48 @@ public static class GameExtentions
         } while (s == null || s.HasPlayer);
         return s;
     }
-    public static CharaController GetCharaOfSlot(int slotID)
+
+    /// <summary>
+    /// Gets the path.
+    /// </summary>
+    /// <returns>The path.</returns>
+    /// <param name="slotID">Slot identifier.</param>
+    /// <param name="tag">Tag.</param>
+    /// <param name="index">Index, use -1 for random path, 0 for first path,note value is clampped correctly</param>
+    public static CharaPath GetPath(int slotID,PathType tag,int index)
     {
-        CharaSlot charaSlot = UnityEngine.Object.FindObjectsOfType<CharaSlot>().ToList().Find(s => s.GetID == slotID);
-        if (charaSlot)
-            return charaSlot.GetComponent<CharaController>();
+        List<CharaPath> allPaths = UnityEngine.Object.FindObjectsOfType<CharaPath>().ToList();
+        List<CharaPath> goodPaths = allPaths.FindAll(p => p.CheckSlot(slotID) && p.CheckTag(tag));
+        if (goodPaths.Count == 0)
+        {
+            return null;
+        }
+        if (goodPaths.Count == 1)
+        {
+            return goodPaths[0];
+        }
+        if(index == -1)
+        {
+            index = UnityEngine.Random.Range(0, goodPaths.Count);
+        }
+        index = Mathf.Clamp(index, 0, goodPaths.Count - 1);
+        return goodPaths[index];
+    }
+    public static CharaPath GetPath(int slotID, PathType tag, string pathName)
+    {
+        List<CharaPath> allPaths = UnityEngine.Object.FindObjectsOfType<CharaPath>().ToList();
+        List<CharaPath> goodPaths = allPaths.FindAll(p => p.CheckSlot(slotID) && p.CheckTag(tag));
+        if (goodPaths.Count == 0)
+            return null;
+        if (goodPaths.Count == 1)
+            return goodPaths[0];
+
+        foreach (var p in goodPaths)
+        {
+            if (p.name == pathName)
+                return p;
+        }
 
         return null;
-    }
-    public static List<SpawnPath> GetPathsOfSlot(int slotID)
-    {
-        List<SpawnPath> allPaths = UnityEngine.Object.FindObjectsOfType<SpawnPath>().ToList();
-        return allPaths.FindAll(s => s.CheckSlot(slotID));
     }
 }

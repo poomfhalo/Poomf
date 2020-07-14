@@ -152,7 +152,9 @@ public class N_PC : MonoBehaviour,IPunObservable
         }
         else if (command == DodgeballCharaCommand.PathFollow)
         {
-            pv.RPC("R_PathFollow", RpcTarget.Others, currX, currZ, GetComponent<PathFollower>().lastAllowLockSwitching);
+            PathFollower follower = GetComponent<PathFollower>();
+            CharaPath p = follower.ActivePath;
+            pv.RPC("R_PathFollow", RpcTarget.Others, currX, currZ, (int)p.pathType, p.name,follower.isLooping,follower.stopTimeAtPoint);
         }
         else
         {
@@ -243,6 +245,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     [PunRPC]
     private void R_FeetPush(Vector3 lastUsedForce,float x, float z)
     {
+        lastCommand = DodgeballCharaCommand.PushBall;
         netPos.x = x;
         netPos.z = z;
         if (Dodgeball.instance.ballState != Dodgeball.BallState.OnGround)
@@ -253,13 +256,15 @@ public class N_PC : MonoBehaviour,IPunObservable
         Log.Warning("Pushed Ball By Feet");
     }
     [PunRPC]
-    private void R_PathFollow(float currX,float currZ,bool lastAllowLockSwitching)
+    private void R_PathFollow(float currX,float currZ,int pathTag,string pathName,bool isLooping,float stopTimeAtPoint)
     {
+        lastCommand = DodgeballCharaCommand.PathFollow;
         netPos.x = currX;
         netPos.z = currZ;
 
-        Transform path = GameExtentions.GetPathsOfSlot(GetComponent<CharaSlot>().GetID)[0].transform;
-        chara.C_PathFollow(path,lastAllowLockSwitching);
+        int slotID = GetComponent<CharaSlot>().GetID;
+        CharaPath path = GameExtentions.GetPath(slotID, (PathType)pathTag, pathName);
+        chara.C_PathFollow(path,isLooping,stopTimeAtPoint);
     }
     //Local Events
     private void OnBallLaunchedSafely()
@@ -310,6 +315,8 @@ public class N_PC : MonoBehaviour,IPunObservable
         if (lastCommand == DodgeballCharaCommand.Dodge)
             return;
         if (!canCallMovement)
+            return;
+        if (lastCommand == DodgeballCharaCommand.PathFollow)
             return;
 
         chara.C_MoveInput(netPos);
