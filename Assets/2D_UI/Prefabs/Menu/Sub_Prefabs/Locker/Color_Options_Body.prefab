@@ -118,7 +118,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7332196126884441626}
+      - m_Target: {fileID: 4992233362640119301}
         m_MethodName: OnColorButtonSelected
         m_Mode: 1
         m_Arguments:
@@ -285,7 +285,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7332196126884441626}
+      - m_Target: {fileID: 4992233362640119301}
         m_MethodName: Appear
         m_Mode: 1
         m_Arguments:
@@ -306,7 +306,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3136223365019456915}
   - component: {fileID: 1087656522108252723}
-  - component: {fileID: 7332196126884441626}
+  - component: {fileID: 4992233362640119301}
   m_Layer: 5
   m_Name: Color_Options_Body
   m_TagString: Untagged
@@ -353,7 +353,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &7332196126884441626
+--- !u!114 &4992233362640119301
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -362,16 +362,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1802677674481644363}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 513426885c67b014fb09e875c948dde9, type: 3}
+  m_Script: {fileID: 11500000, guid: f242bd303e8af3a4ab6c2488af04c1fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1087656522108252723}
-  isRGBAdjustable: 1
-  redSlider: {fileID: 0}
-  greenSlider: {fileID: 0}
-  blueSlider: {fileID: 0}
-  skinData: {fileID: 0}
-  itemToModify: 0
+  skinData: {fileID: 11400000, guid: 2b967bce3a8192d6eada0ef487ca6943, type: 2}
 --- !u!1 &3262824150864506290
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,7 +485,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7332196126884441626}
+      - m_Target: {fileID: 4992233362640119301}
         m_MethodName: OnColorButtonSelected
         m_Mode: 1
         m_Arguments:
@@ -693,7 +688,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7332196126884441626}
+      - m_Target: {fileID: 4992233362640119301}
         m_MethodName: OnColorButtonSelected
         m_Mode: 1
         m_Arguments:
@@ -976,7 +971,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7332196126884441626}
+      - m_Target: {fileID: 4992233362640119301}
         m_MethodName: OnColorButtonSelected
         m_Mode: 1
         m_Arguments:
@@ -1105,7 +1100,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7332196126884441626}
+      - m_Target: {fileID: 4992233362640119301}
         m_MethodName: OnColorButtonSelected
         m_Mode: 1
         m_Arguments:
@@ -1300,7 +1295,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7332196126884441626}
+      - m_Target: {fileID: 4992233362640119301}
         m_MethodName: OnColorButtonSelected
         m_Mode: 1
         m_Arguments:

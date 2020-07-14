@@ -4,16 +4,15 @@ using Poomf.Data;
 [RequireComponent(typeof(Renderer))]
 public abstract class CustomItemBase : MonoBehaviour
 {
-    [Tooltip("Contains the different textures that are used to customize this item. Applied 1 at a time using an index. Leave empty if this item's textures are not customizable.")]
-    [SerializeField] protected Texture2D[] itemTextures = null;
-    [SerializeField] ItemCategory m_itemType = ItemCategory.Head;
     [Tooltip("The index of the material, among the mesh renderer's materials, that will be customized when the color or texture change.")]
-    [SerializeField] int matToCustomize = 0;
+    [SerializeField] protected int matToCustomize = 0;
 
     #region Setters/Getters
     public ItemCategory itemType => m_itemType;
     #endregion
 
+    // The children of this class will handle how itemType is initialized 
+    protected ItemCategory m_itemType = ItemCategory.Head;
     // The main mesh renderer.
     protected Renderer meshRenderer = null;
     // Used to edit the properties of the renderer's materials
@@ -56,46 +55,10 @@ public abstract class CustomItemBase : MonoBehaviour
         //}
     }
 
-    /// <summary>
-    /// Changes the color of each material attached to the renderer following the order they are attached in.
-    /// </summary>
-    /// <param name="colors">
-    /// Any number of colors can be passed. Extra colors will be discarded, however.
-    /// </param>
-    public virtual void SetColors(Color[] colors)
-    {
-        for (int i = 0; i < meshRenderer.materials.Length; i++)
-        {
-            // Update each material's color
-            materialProperties.SetColor("_Color", colors[i]);
-            meshRenderer.SetPropertyBlock(materialProperties, i);
-        }
-    }
-    /// <summary>
-    /// Sets the color of a specific material
-    /// </summary>
-    /// <param name="color">
-    /// The new color
-    /// </param>
-    public virtual void SetColor(Color color)
-    {
-        // Update the material's color
-        materialProperties.SetColor("_Color", color);
-        meshRenderer.SetPropertyBlock(materialProperties, matToCustomize);
-    }
-    public virtual void SetTexture(int textureIndex)
-    {
-        if (itemTextures.Length == 0)
-        {
-            Debug.LogWarning("CustomItem -> SetTexture : Textures array empty!");
-            return;
-        }
-        if (textureIndex >= itemTextures.Length)
-        {
-            // Texture index is out of bounds! just set it to the last texture's index
-            textureIndex = itemTextures.Length - 1;
-        }
-        materialProperties.SetTexture("_MainTex", itemTextures[textureIndex]);
-        meshRenderer.SetPropertyBlock(materialProperties, matToCustomize);
-    }
+    // Each of this class's children will implement the functions that it needs 
+
+    public virtual void SetColor(Color color) { }
+    // Uses a color index instead of an explicit color
+    public virtual void SetColor(int colorIndex) { }
+    public virtual void SetTexture(int textureIndex) { }
 }

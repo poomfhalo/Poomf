@@ -18,20 +18,19 @@ public class SkinItemData
 {
     [Header("Manually Assigned")]//Can not be assigned in game
     public ItemCategory type = ItemCategory.Head;
-    [Tooltip("Can this type be colored (using Colors not Textures) or not?")]
-    public bool isColorable = false;
-    [Tooltip("Does this type have several interchangeable textures?")]
-    public bool isTextureCustomizable = false;
-
     [Header("Assigned By UI")]//Can be assigned in game, or in inspector
     public int activeItemID = 0;
-    [ConditionalField("isColorable")] public List<Color> colors = new List<Color> { Color.green };
+    [ConditionalField(nameof(type), false, ItemCategory.Head)] public Color currentColor = Color.white;
+    // Used with items that use preset colors rather than arbitrary ones like Eyes
+    [ConditionalField(nameof(type), false, ItemCategory.Eyes, ItemCategory.Skin)] public int currentColorIndex = 0;
     // The currently active texture of Texture customizable items like outfits
-    [ConditionalField("isTextureCustomizable")] public int currentTextureIndex = 0;
+    [ConditionalField(nameof(type), false, ItemCategory.Eyes, ItemCategory.Body)] public int currentTextureIndex = 0;
     //Never Call, Setters/Getters of this class, from anywhere other than CharaSkinData
-    public Color GetColor(int i) => colors[GetClamppedColorIndex(i)];
-    public void SetColor(int i, Color c) => colors[GetClamppedColorIndex(i)] = c;
-    private int GetClamppedColorIndex(int i) => i = Mathf.Clamp(i, 0, colors.Count - 1);
+    public Color GetColor() => currentColor;
+    public void SetColor(Color c) => currentColor = c;
+
+    public int GetColorIndex() => currentColorIndex;
+    public void SetColorIndex(int index) => currentColorIndex = index;
 
     public int GetTextureIndex() => currentTextureIndex;
     public void SetTextureIndex(int index) => currentTextureIndex = index;
@@ -48,33 +47,28 @@ public class CharaSkinData : ScriptableObject
     public List<SkinItemData> items = new List<SkinItemData>();
 
     public void SetItemID(ItemCategory outfit, int itemID) { GetItemData(outfit).activeItemID = itemID; Refresh(); }
-    public void SetColor(ItemCategory ofItem, int index, Color c)
+    public void SetColor(ItemCategory ofItem, Color c)
     {
-        if (!GetItemData(ofItem).isColorable)
-        {
-            Debug.LogWarning("Trying to color a/an " + GetItemData(ofItem).type.ToString() + ", which is non colorable!");
-            return;
-        }
-        GetItemData(ofItem).SetColor(index, c);
+        GetItemData(ofItem).SetColor(c);
         Refresh();
     }
-    public Color GetColor(ItemCategory ofItem, int index) => GetItemData(ofItem).GetColor(index);
+    public Color GetColor(ItemCategory ofItem) => GetItemData(ofItem).GetColor();
+
+    public void SetColorIndex(ItemCategory ofItem, int index)
+    {
+        GetItemData(ofItem).SetColorIndex(index);
+        Refresh();
+    }
+    public int GetColorIndex(ItemCategory ofItem) => GetItemData(ofItem).GetColorIndex();
 
     public int GetTextureIndex(ItemCategory ofItem) => GetItemData(ofItem).GetTextureIndex();
     public void SetTextureIndex(ItemCategory ofItem, int index)
     {
-        if (!GetItemData(ofItem).isTextureCustomizable)
-        {
-            Debug.LogWarning("Trying to change the texture of a/an " + GetItemData(ofItem).type.ToString() + ", which don't have textures!");
-            return;
-        }
         GetItemData(ofItem).SetTextureIndex(index);
         Refresh();
     }
 
     public int GetItemID(ItemCategory ofItem) => GetItemData(ofItem).activeItemID;
     SkinItemData GetItemData(ItemCategory itemType) => items.Single(i => i.type == itemType);
-    public bool IsColorable(ItemCategory itemType) => GetItemData(itemType).isColorable;
-    public bool IsTextureCustomizable(ItemCategory itemType) => GetItemData(itemType).isTextureCustomizable;
     private void Refresh() => onDataUpdated?.Invoke();
 }

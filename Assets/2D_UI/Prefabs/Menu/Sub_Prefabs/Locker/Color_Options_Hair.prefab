@@ -127,7 +127,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 192275335101423153}
+      - m_Target: {fileID: 4992233362640119300}
         m_MethodName: AdjustRed
         m_Mode: 0
         m_Arguments:
@@ -256,7 +256,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 192275335101423153}
+      - m_Target: {fileID: 4992233362640119300}
         m_MethodName: OnColorButtonSelected
         m_Mode: 1
         m_Arguments:
@@ -495,7 +495,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 192275335101423153}
+      - m_Target: {fileID: 4992233362640119300}
         m_MethodName: OnColorButtonSelected
         m_Mode: 1
         m_Arguments:
@@ -624,7 +624,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 192275335101423153}
+      - m_Target: {fileID: 4992233362640119300}
         m_MethodName: OnColorButtonSelected
         m_Mode: 1
         m_Arguments:
@@ -791,7 +791,7 @@ GameObject:
   - component: {fileID: 8052970219072037441}
   - component: {fileID: 6692982445043871849}
   m_Layer: 5
-  m_Name: BODY
+  m_Name: HAIR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -856,13 +856,13 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 0.56
-  m_Text: 'B
+  m_Text: 'H
 
-    O
+    A
 
-    D
+    I
 
-    Y'
+    R'
 --- !u!114 &8052970219072037441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1166,7 +1166,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 192275335101423153}
+      - m_Target: {fileID: 4992233362640119300}
         m_MethodName: AdjustBlue
         m_Mode: 0
         m_Arguments:
@@ -1295,7 +1295,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 192275335101423153}
+      - m_Target: {fileID: 4992233362640119300}
         m_MethodName: OnColorButtonSelected
         m_Mode: 1
         m_Arguments:
@@ -1498,7 +1498,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 192275335101423153}
+      - m_Target: {fileID: 4992233362640119300}
         m_MethodName: OnColorButtonSelected
         m_Mode: 1
         m_Arguments:
@@ -1708,7 +1708,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 192275335101423153}
+      - m_Target: {fileID: 4992233362640119300}
         m_MethodName: AdjustGreen
         m_Mode: 0
         m_Arguments:
@@ -1875,7 +1875,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 192275335101423153}
+      - m_Target: {fileID: 4992233362640119300}
         m_MethodName: OnColorButtonSelected
         m_Mode: 1
         m_Arguments:
@@ -2520,7 +2520,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 192275335101423153}
+      - m_Target: {fileID: 4992233362640119300}
         m_MethodName: OnColorButtonSelected
         m_Mode: 1
         m_Arguments:
@@ -2760,7 +2760,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 192275335101423153}
+      - m_Target: {fileID: 4992233362640119300}
         m_MethodName: OnColorButtonSelected
         m_Mode: 1
         m_Arguments:
@@ -3037,7 +3037,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 192275335101423153}
+      - m_Target: {fileID: 4992233362640119300}
         m_MethodName: Appear
         m_Mode: 1
         m_Arguments:
@@ -3500,7 +3500,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5542860668509152696}
   - component: {fileID: 7526088069927993880}
-  - component: {fileID: 192275335101423153}
+  - component: {fileID: 4992233362640119300}
   m_Layer: 5
   m_Name: Color_Options_Hair
   m_TagString: Untagged
@@ -3547,7 +3547,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &192275335101423153
+--- !u!114 &4992233362640119300
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3556,11 +3556,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 9110303942653920096}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 513426885c67b014fb09e875c948dde9, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b890459d36582647b8f229bcf4a017a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 7526088069927993880}
-  isRGBAdjustable: 1
+  skinData: {fileID: 11400000, guid: 2b967bce3a8192d6eada0ef487ca6943, type: 2}
   redSlider: {fileID: 6358809128002228395}
   greenSlider: {fileID: 6481146623527282350}
   blueSlider: {fileID: 3081778107005892094}
