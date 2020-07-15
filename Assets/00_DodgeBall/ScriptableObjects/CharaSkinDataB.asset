@@ -15,28 +15,22 @@ MonoBehaviour:
   gender: 1
   items:
   - type: 0
-    isColorable: 1
-    isTextureCustomizable: 0
     activeItemID: 2
-    colors:
-    - {r: 0.0862745, g: 0.31985515, b: 0.6156863, a: 1}
+    currentColor: {r: 0.162079, g: 0.051619805, b: 0.3773585, a: 1}
+    currentColorIndex: 0
     currentTextureIndex: 0
   - type: 1
-    isColorable: 0
-    isTextureCustomizable: 1
     activeItemID: 8
-    colors:
-    - {r: 1, g: 0.89248455, b: 0, a: 1}
+    currentColor: {r: 1, g: 1, b: 1, a: 1}
+    currentColorIndex: 0
     currentTextureIndex: 2
   - type: 2
-    isColorable: 0
-    isTextureCustomizable: 1
     activeItemID: 16
-    colors: []
-    currentTextureIndex: 1
+    currentColor: {r: 1, g: 1, b: 1, a: 1}
+    currentColorIndex: 3
+    currentTextureIndex: 0
   - type: 3
-    isColorable: 0
-    isTextureCustomizable: 1
     activeItemID: 17
-    colors: []
+    currentColor: {r: 1, g: 1, b: 1, a: 1}
+    currentColorIndex: 0
     currentTextureIndex: 1
