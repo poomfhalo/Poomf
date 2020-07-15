@@ -84,7 +84,6 @@ public class N_PC : MonoBehaviour,IPunObservable
     private void OnCreated(int creatorViewID)
     {
         this.creatorViewID = creatorViewID;
-        TeamsManager.AddCharacter(GetComponent<DodgeballCharacter>());
         gameObject.SetActive(false);
         name = pv.Controller.NickName;
     }

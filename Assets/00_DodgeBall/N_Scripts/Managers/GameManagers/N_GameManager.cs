@@ -45,6 +45,8 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     {
         base.Awake();
         GameIntroManager.instance.extActivateOnStart = false;
+        MatchStateManager.instance.extCanPrepareOnStart = false;
+
         N_Extentions.prefabs = prefabs;
 
         PhotonNetwork.SendRate = sendRate;
@@ -147,6 +149,7 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     private void M_PrepareForGame()
     {
         photonView.RPC("PrepareForGame", RpcTarget.AllViaServer);
+        MatchStateManager.instance.PrerpareForGame();
     }
 
     [PunRPC]

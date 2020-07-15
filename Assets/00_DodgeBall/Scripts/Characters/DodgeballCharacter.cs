@@ -27,7 +27,7 @@ public class DodgeballCharacter : MonoBehaviour
     public bool IsBeingHurt => hp.IsBeingHurt;
     public bool IsWaitingForHit => hp.IsWaitingForHit;
     public string charaName => name;
-    public bool IsInField => isInField;
+    public bool IsInField => knockedOut.IsInField;
 
     //Body Parts
     public Transform BallGrabPoint => ballGrabPoint;
@@ -45,7 +45,6 @@ public class DodgeballCharacter : MonoBehaviour
     [Header("Core")]
     [SerializeField] TeamTag team = TeamTag.A;
     public SelectionIndicator selectionIndicator = null;
-    [SerializeField] bool isInField = true;
 
     protected Rigidbody rb3d = null;
     protected Animator animator = null;
@@ -60,6 +59,7 @@ public class DodgeballCharacter : MonoBehaviour
     protected CharaHitPoints hp = null;
     protected CharaFeet feet = null;
     protected PathFollower pathFollower = null;
+    protected CharaKnockoutPlayer knockedOut = null;
 
     protected virtual void Reset()
     {
@@ -83,18 +83,19 @@ public class DodgeballCharacter : MonoBehaviour
         hp = GetComponent<CharaHitPoints>();
         feet = GetComponentInChildren<CharaFeet>();
         pathFollower = GetComponent<PathFollower>();
+        knockedOut = GetComponent<CharaKnockoutPlayer>();
 
         SetTeam(team);
 
         selectionIndicator.SetOwner(this);
         selectionIndicator.SetFocus(null);
 
-        hp.OnZeroHP += () => isInField = false;
-
         if(feet)
             feet.SetUp(this);
         if (grabber)
             grabber.onBallInHands += OnBallInHands;
+
+        TeamsManager.AddCharacter(this);
     }
 
     public void SetTeam(TeamTag team)

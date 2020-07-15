@@ -3,13 +3,28 @@ using System.Collections.Generic;
 
 public enum TeamTag { A, B }
 
-[System.Serializable]
+[Serializable]
 public class Team
 {
     public List<DodgeballCharacter> players = new List<DodgeballCharacter>();
     public List<string> playersNames = new List<string>();
     public TeamTag teamTag = TeamTag.A;
-    public bool IsEmpty => players.Count == 0;
+    public bool IsEmpty
+    {
+        get
+        {
+            CleanUp();
+            if (players.Count == 0)
+                return true;
+
+            foreach (var p in players)
+            {
+                if (p.IsInField)
+                    return false;
+            }
+            return true;
+        }
+    }
 
     public Team(TeamTag teamTag)
     {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GW_Lib.Utility;
 using UnityEngine;
@@ -96,6 +97,10 @@ public class TeamsManager : Singleton<TeamsManager>
         i = (i + 1) % instance.teams.Count;
         Team team = instance.teams[i];
         return team;
+    }
+    public static Team GetNextTeam(TeamTag teamTag)
+    {
+        return GetNextTeam(GetTeam(teamTag));
     }
     public static Team GetTeam(TeamTag teamTag)
     {

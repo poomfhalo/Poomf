@@ -85,6 +85,18 @@ namespace GW_Lib
 
     public static class Extentions
     {
+        public static void CleanChildren(Transform t)
+        {
+            List<Transform> tes = new List<Transform>();
+            for (int i = 0; i < t.childCount; i++)
+            {
+                tes.Add(t.GetChild(i));
+            }
+            for (int i = 0; i < tes.Count; i++)
+            {
+                UnityEngine.Object.Destroy(tes[i].gameObject);
+            }
+        }
         public static void SetKinematic(this MonoBehaviour caller,bool toState)
         {
             SetKinematic(caller, caller, toState);

@@ -3,14 +3,21 @@ using UnityEngine;
 using System.Linq;
 using GW_Lib;
 using GW_Lib.Utility;
+using System;
 
 public class CharaKnockoutPlayer : MonoBehaviour
 {
+    public event Action<DodgeballCharacter> E_OnKnockedOut = null;
+    public bool IsInField { get => isInField; private set => isInField = value; }
+
     [SerializeField] List<Transform> vTeleportEffectsHead = null;
     [SerializeField] List<Collider> gameCols = new List<Collider>();
     [SerializeField] Transform ragDollHead = null;
     [Header("OutOfField Data")]
     [SerializeField] MinMaxRange stopTimeAtPoint = new MinMaxRange(0.2f, 3, 0.5f, 2);
+
+    [Header("ReadOnly")]
+    [SerializeField] bool isInField = true;
 
     List<Collider> ragDollCols = new List<Collider>();
     Vector3 ragDollHeadStartPos = Vector3.zero;
@@ -30,6 +37,7 @@ public class CharaKnockoutPlayer : MonoBehaviour
 
         hp.OnZeroHP += OnZeroHP;
         DisableRagDoll();
+        IsInField = true;
     }
     void OnDestroy()
     {
@@ -66,19 +74,26 @@ public class CharaKnockoutPlayer : MonoBehaviour
         this.InvokeDelayed(3f, () => {
             vTeleportEffectsHead.ForEach(v => GameExtentions.PlayChildEffect(v));
             DisableRagDoll();
-            CharaPath path = GameExtentions.GetPath(slot.GetID, PathType.OutPath, -1);
             ragDollHead.gameObject.SetActive(false);
 
             this.InvokeDelayed(1.2f, () =>{
-                transform.position = path.position;
-                transform.rotation = path.rotation;
-                ragDollHead.gameObject.SetActive(true);
-                vTeleportEffectsHead.ForEach(v => GameExtentions.PlayChildEffect(v));
-
-                this.InvokeDelayed(2, () =>{
-                    chara.C_PathFollow(path,true, stopTimeAtPoint.GetValue());
-                });
+                IsInField = false;
+                E_OnKnockedOut?.Invoke(chara);
+                GoToWaitField();
             });
+        });
+    }
+
+    private void GoToWaitField()
+    {
+        CharaPath path = GameExtentions.GetPath(slot.GetID, PathType.OutPath, -1);
+        transform.position = path.position;
+        transform.rotation = path.rotation;
+        ragDollHead.gameObject.SetActive(true);
+        vTeleportEffectsHead.ForEach(v => GameExtentions.PlayChildEffect(v));
+
+        this.InvokeDelayed(2, () => {
+            chara.C_PathFollow(path, true, stopTimeAtPoint.GetValue());
         });
     }
 }

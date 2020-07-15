@@ -23,6 +23,7 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
             {
                 PhotonNetwork.NickName = "Player(" + UnityEngine.Random.Range(-100, 100) + ")";
                 PhotonNetwork.ConnectUsingSettings();
+                FindObjectOfType<MatchStateManager>().StartNewGame();
             }
             else
             {
@@ -56,29 +57,7 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
         Log.LogL0(newPlayer.NickName + " Have Joined Total Count :: " + PhotonNetwork.CurrentRoom.PlayerCount);
         photonView.RPC("StartGame", RpcTarget.AllViaServer);
     }
-    public override void OnPlayerLeftRoom(Player otherPlayer)
-    {
-        this.InvokeDelayed(0.1f, () => {
-            TeamTag t = N_TeamsManager.GetTeam(otherPlayer.ActorNumber);
-            //DodgeballCharacter chara = N_TeamsManager.GetPlayer(otherPlayer.ActorNumber).GetComponent<DodgeballCharacter>();
-            Team team = TeamsManager.GetTeam(t);
-            team.CleanUp();
-            bool isTeamAEmpty = team.IsEmpty;
-            team = TeamsManager.GetNextTeam(team);
-            team.CleanUp();
-            bool isTeamBEmpty = team.IsEmpty;
 
-            MPTeam mpT = N_TeamsManager.GetMPTeam(otherPlayer.ActorNumber);
-            mpT.CleanUp();
-
-            if (isTeamAEmpty || isTeamBEmpty)
-            {
-                Log.Warning("Game Is over, one of the teams is empty");
-                PhotonNetwork.LoadLevel("Menu");
-                PhotonNetwork.LeaveRoom();
-            }
-        });
-    }
     void Update()
     {
         pingText.text = PhotonNetwork.GetPing().ToString();
