@@ -149,13 +149,13 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     private void M_PrepareForGame()
     {
         photonView.RPC("PrepareForGame", RpcTarget.AllViaServer);
-        MatchStateManager.instance.PrerpareForGame();
     }
 
     [PunRPC]
     private void PrepareForGame()
     {
         this.InvokeDelayed(0.5f, GameIntroManager.instance.StartGame);
+        MatchStateManager.instance.PrerpareForGame();
     }
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {

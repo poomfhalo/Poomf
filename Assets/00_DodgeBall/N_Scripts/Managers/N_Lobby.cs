@@ -66,9 +66,9 @@ public class N_Lobby : MonoBehaviourPunCallbacks
     {
         if (!ready.interactable)
         {
-            Log.Message("I Connected To Master " + PhotonNetwork.NickName + " Trying To Join RND Room in " + PhotonNetwork.CloudRegion);
             PrepareRoom();
         }
+        Log.Message("I Connected To Master " + PhotonNetwork.NickName + " Trying To Join RND Room in " + PhotonNetwork.CloudRegion);
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
