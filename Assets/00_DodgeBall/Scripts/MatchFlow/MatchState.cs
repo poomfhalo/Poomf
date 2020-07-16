@@ -18,9 +18,9 @@ public class MatchState : ScriptableObject
         get
         {
             int minWinsCount = (TotalRoundsCount / 2) + 1;
-            if (GetTeamAWins > minWinsCount)
+            if (GetTeamAWins >= minWinsCount)
                 return true;
-            if (GetTeamBWins > minWinsCount)
+            if (GetTeamBWins >= minWinsCount)
                 return true;
 
             return false;
