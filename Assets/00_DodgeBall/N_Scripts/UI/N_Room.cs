@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using GW_Lib;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -20,8 +21,7 @@ public class N_Room : MonoBehaviourPunCallbacks
         {
             SceneFader.instance.FadeIn(1,()=> {
                 string winner = GetComponent<N_VotesBox>().GetMostVotedScene();
-                MatchState.Instance.StartNewGame(winner);
-                PhotonNetwork.LoadLevel(winner);
+                photonView.RPC("DoLoadLevel", RpcTarget.AllViaServer, winner);
             });
         }
         else
@@ -29,7 +29,17 @@ public class N_Room : MonoBehaviourPunCallbacks
             SceneFader.instance.FadeIn(0.9f,null);
         }
     }
-
+    [PunRPC]
+    private void DoLoadLevel(string targetLevel)
+    {
+        MatchState.Instance.StartNewGame(targetLevel);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            this.InvokeDelayed(0.3f, () => {
+                PhotonNetwork.LoadLevel(targetLevel);
+            });
+        }
+    }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         Log.Warning("Player Has Disconnected");
