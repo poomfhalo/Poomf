@@ -25,7 +25,7 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: 
+  DevRegion: cae
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -47,6 +47,7 @@ MonoBehaviour:
   - R_GoToChara
   - R_LaunchTo
   - R_OnGroundHit
+  - R_PathFollow
   - R_Reflection
   - R_StartHitAction
   - R_UpdateBallState
@@ -60,7 +61,6 @@ MonoBehaviour:
   - StartGame
   - SyncWithTeamsManager
   - UpdateButtonClick
-  - R_PathFollow
   DisableAutoOpenWizard: 1
   ShowSettings: 0
-  DevRegionSetOnce: 0
+  DevRegionSetOnce: 1
