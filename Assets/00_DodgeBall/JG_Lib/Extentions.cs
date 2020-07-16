@@ -912,6 +912,13 @@ namespace GW_Lib
                 return bCol.size.x / 2.0f;
             return defVal;
         }
+
+        public static List<T> DuplicateList<T>(List<T> original)
+        {
+            List<T> duplicate = new List<T>();
+            original.ForEach(c => duplicate.Add(c));
+            return duplicate;
+        }
     }
     public static class MathExtensions
     {

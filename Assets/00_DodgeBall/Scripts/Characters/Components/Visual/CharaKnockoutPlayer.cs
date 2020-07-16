@@ -71,13 +71,14 @@ public class CharaKnockoutPlayer : MonoBehaviour
     {
         EnableRagdol();
         charaController.Lock();
+        IsInField = false;
         this.InvokeDelayed(3f, () => {
             vTeleportEffectsHead.ForEach(v => GameExtentions.PlayChildEffect(v));
             DisableRagDoll();
             ragDollHead.gameObject.SetActive(false);
 
             this.InvokeDelayed(1.2f, () =>{
-                IsInField = false;
+                TeamsManager.GetEmptyTeams(out bool a, out bool b);
                 E_OnKnockedOut?.Invoke(chara);
                 GoToWaitField();
             });

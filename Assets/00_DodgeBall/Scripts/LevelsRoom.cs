@@ -12,6 +12,7 @@ public class LevelsRoom : MonoBehaviour
     [Header("Constants")]
     [SerializeField] Image levelBGImage = null;
     [SerializeField] TextMeshProUGUI timerText = null;
+    [SerializeField] MatchState matchState = null;
     [Header("Variables")]
     [Tooltip("In Seconds")]
     [SerializeField] float levelChangeTimer = 30;
@@ -84,7 +85,7 @@ public class LevelsRoom : MonoBehaviour
                 int i = UnityEngine.Random.Range(0, delegators.Length);
                 selectedSceneName = delegators[i].SceneName;
             }
-
+            matchState.StartNewGame(selectedSceneName);
             SceneManager.LoadScene(selectedSceneName);
         });
     }

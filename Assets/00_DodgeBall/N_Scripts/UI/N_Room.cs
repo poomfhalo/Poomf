@@ -20,6 +20,7 @@ public class N_Room : MonoBehaviourPunCallbacks
         {
             SceneFader.instance.FadeIn(1,()=> {
                 string winner = GetComponent<N_VotesBox>().GetMostVotedScene();
+                MatchState.Instance.StartNewGame(winner);
                 PhotonNetwork.LoadLevel(winner);
             });
         }

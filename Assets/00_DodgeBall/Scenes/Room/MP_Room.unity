@@ -676,6 +676,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4376d9893a2a097eb92a1ef9c14803e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  matchState: {fileID: 11400000, guid: 45150d295f0eac6ada2261c5eebd42a8, type: 2}
 --- !u!114 &886523398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -695,7 +696,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 0}
-  viewIdField: 1
+  viewIdField: 24
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!1001 &1508974349

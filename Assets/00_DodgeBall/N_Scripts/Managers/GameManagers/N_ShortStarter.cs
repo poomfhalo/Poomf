@@ -2,13 +2,11 @@
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
-using GW_Lib;
 
 /// <summary>
 /// A simple script, responsible, for managing, connecting, players, and waiting, untill
 /// there are enough players, in case we start in MP_Game scene instead of the MP_Launcher
 /// </summary>
-
 public class N_ShortStarter : MonoBehaviourPunCallbacks
 {
     [SerializeField] bool autoStart = true;
@@ -23,7 +21,6 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
             {
                 PhotonNetwork.NickName = "Player(" + UnityEngine.Random.Range(-100, 100) + ")";
                 PhotonNetwork.ConnectUsingSettings();
-                FindObjectOfType<MatchStateManager>().StartNewGame();
             }
             else
             {

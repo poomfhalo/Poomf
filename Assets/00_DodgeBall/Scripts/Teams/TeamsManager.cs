@@ -119,4 +119,15 @@ public class TeamsManager : Singleton<TeamsManager>
 
         instance.allCharacters.Add(dodgeballCharacter);
     }
+
+    public static void GetEmptyTeams(out bool isTeamAEmpty, out bool isTeamBEmpty)
+    {
+        isTeamAEmpty = isTeamBEmpty = false;
+        if (!instance)
+            return;
+        Team testTeam = GetTeam(TeamTag.A);
+        isTeamAEmpty = testTeam.IsEmpty;
+        testTeam = GetNextTeam(testTeam);
+        isTeamBEmpty = testTeam.IsEmpty;
+    }
 }

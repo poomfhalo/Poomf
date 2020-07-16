@@ -132,8 +132,8 @@ public class N_Lobby : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            Log.Message("Loading MP Game");
-            SceneFader.instance.FadeIn(1.3f, () => PhotonNetwork.LoadLevel("MP Room"));
+            Log.Message("Loading MP_Room");
+            SceneFader.instance.FadeIn(1.3f, () => PhotonNetwork.LoadLevel("MP_Room"));
         }
         else
         {

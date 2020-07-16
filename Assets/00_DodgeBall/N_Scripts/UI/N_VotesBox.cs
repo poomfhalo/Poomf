@@ -82,8 +82,8 @@ public class N_VotesBox : MonoBehaviour
         List<VoteSlot> highestSlots = slots.FindAll(s => s.votesCount == highestVotes);
         if (highestSlots.Count == 0)
         {
-            Log.Warning("Could Not, Local Winner, sending to MP Game (Development Level)");
-            return "MP Game";
+            Log.Warning("Could Not, Local Winner, sending to MP_Game (Development Level)");
+            return "MP_Game";
         }
         if(highestSlots.Count == 1)
         {
