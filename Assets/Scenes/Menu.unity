@@ -2457,6 +2457,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2671034457783590097, guid: 74954060ed8cdad41be593b89de07905,
+        type: 3}
+      propertyPath: minLongIdleTime
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 2671034457783590097, guid: 74954060ed8cdad41be593b89de07905,
+        type: 3}
+      propertyPath: maxLongIdleTime
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 2671034457783590102, guid: 74954060ed8cdad41be593b89de07905,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2516,6 +2526,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Main Menu Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2671034458114648329, guid: 74954060ed8cdad41be593b89de07905,
+        type: 3}
+      propertyPath: maxTimeBetBlinks
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74954060ed8cdad41be593b89de07905, type: 3}
@@ -3027,7 +3042,7 @@ PrefabInstance:
     - target: {fileID: 996335744821218170, guid: 61285d8f5d1355545bf618a4655ad203,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 11995506
+      value: 12241276
       objectReference: {fileID: 0}
     - target: {fileID: 1455692202549044947, guid: 61285d8f5d1355545bf618a4655ad203,
         type: 3}
@@ -3247,7 +3262,7 @@ PrefabInstance:
     - target: {fileID: 2491481099392709836, guid: 61285d8f5d1355545bf618a4655ad203,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 7572109
+      value: 7728531
       objectReference: {fileID: 0}
     - target: {fileID: 2760848411333716624, guid: 61285d8f5d1355545bf618a4655ad203,
         type: 3}

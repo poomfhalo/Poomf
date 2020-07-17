@@ -64,8 +64,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 530ee3edaf2a4ab4aa626ab0afc5b8e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minLongIdleTime: 10
-  maxLongIdleTime: 20
+  minLongIdleTime: 18
+  maxLongIdleTime: 40
 --- !u!1001 &7847789777148476773
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -73,6 +73,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2671034457783590102}
     m_Modifications:
+    - target: {fileID: 5330459348283954284, guid: ad1680e76f370cf168f43dc2ddb59ffd,
+        type: 3}
+      propertyPath: maxTimeBetBlinks
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5330459348283954284, guid: ad1680e76f370cf168f43dc2ddb59ffd,
+        type: 3}
+      propertyPath: minTimeBetBlinks
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7218524053860074266, guid: ad1680e76f370cf168f43dc2ddb59ffd,
         type: 3}
       propertyPath: m_LocalPosition.x
