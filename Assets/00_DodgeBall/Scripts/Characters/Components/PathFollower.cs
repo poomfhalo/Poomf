@@ -104,6 +104,6 @@ public class PathFollower : DodgeballCharaAction, ICharaAction
         activePoint = 0;
         mover.workAsAction = true;
         isLooping = false;
-        chara.C_MoveInput(Vector3.zero);
+        chara.C_MoveInput(transform.position);
     }
 }

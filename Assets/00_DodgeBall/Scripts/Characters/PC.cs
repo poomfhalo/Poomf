@@ -47,6 +47,14 @@ public class PC : CharaController
     {
         IsLocked = false;
         GetComponent<Mover>().movementType = moveTypeOnUnlock;
+        if(moveTypeOnUnlock == Mover.MovementType.ByInput)
+        {
+            chara.C_MoveInput(Vector3.zero);
+        }
+        else if (moveTypeOnUnlock == Mover.MovementType.ToPoint)
+        {
+            chara.C_MoveInput(transform.position);
+        }
         if (!input)
             return;
 
