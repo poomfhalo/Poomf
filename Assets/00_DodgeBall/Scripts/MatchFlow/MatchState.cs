@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "DodgeBall/Match State", fileName = "Match State")]
-public class MatchState : ScriptableObject
+public class MatchState : PersistantSO
 {
     public string GetMatchSceneName => matchSceneName;
     public int PreviousRoundNum => currRound - 1;

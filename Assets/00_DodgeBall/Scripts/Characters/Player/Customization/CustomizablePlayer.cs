@@ -39,7 +39,6 @@ public class CustomizablePlayer : MonoBehaviour
         skinData.onDataUpdated -= RefreshCharaVisuals;
     }
 
-
     private void RefreshCharaVisuals()
     {
         CustomHead activeHead = allHeads.Single(h => h.ItemID == skinData.GetItemID(ItemCategory.Head));

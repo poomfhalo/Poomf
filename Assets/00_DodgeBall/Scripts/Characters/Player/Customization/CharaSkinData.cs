@@ -40,7 +40,7 @@ public class SkinItemData
 //to have one object, to hold the entirety of the SkinData.
 //To Add new data, such as Textures, follow the same pattern, by creating a Set function in CharaSkinData and SkinItemData
 [CreateAssetMenu(fileName = "CharaSkinData", menuName = "Dodgeball/CharaSkinData")]
-public class CharaSkinData : ScriptableObject
+public class CharaSkinData : PersistantSO
 {
     public Gender gender = Gender.FEMALE;
     public event Action onDataUpdated = null;
