@@ -12,7 +12,6 @@ public class GameIntroManager : Singleton<GameIntroManager>
     [SerializeField] float launchGravity = -20;
     [SerializeField] float ballLaunchHeigth = 6;
     [SerializeField] GameObject ballLauncher = null;
-    [SerializeField] GameStartTextsAnim animatedTexts = null;
 
     [Header("Intro Data")]
     [SerializeField] Reactor introReactor;

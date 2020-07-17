@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "DodgeBall/Match State", fileName = "Match State")]
+[CreateAssetMenu(menuName = "Dodgeball/Match State", fileName = "Match State")]
 public class MatchState : PersistantSO
 {
     public string GetMatchSceneName => matchSceneName;

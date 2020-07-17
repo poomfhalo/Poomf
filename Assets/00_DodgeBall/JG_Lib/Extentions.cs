@@ -85,6 +85,50 @@ namespace GW_Lib
 
     public static class Extentions
     {
+        /// <summary>
+        /// given v, we try to get  what direction of t is v closest rotated to.
+        /// when t is null, we used World axes
+        /// </summary>
+        /// <returns>The closest facing v.</returns>
+        public static Vector3 GetClosestFacingV(Vector3 v, Transform t)
+        {
+            Vector3 fwd = Vector3.forward;
+            Vector3 bwd = Vector3.back;
+            Vector3 right = Vector3.right;
+            Vector3 left = Vector3.left;
+            Vector3 up = Vector3.up;
+            Vector3 down = Vector3.down;
+            if (t)
+            {
+                fwd = t.forward;
+                bwd = -t.forward;
+                right = t.right;
+                left = -t.right;
+                up = t.up;
+                down = -t.up;
+            }
+
+            List<Vector3> axes = new List<Vector3> { fwd, bwd, right, left, up, down };
+            float highestDot = float.MinValue;
+            Vector3 closest = Vector3.zero;
+
+            foreach (var axis in axes)
+            {
+                float dot = Vector3.Dot(v, axis);
+                if (highestDot < dot)
+                {
+                    closest = axis;
+                    highestDot = dot;
+                }
+                else if (Mathf.Abs(highestDot - dot) < Mathf.Epsilon && closest.x < axis.x)
+                {
+                    closest = axis;
+                }
+            }
+
+            return closest;
+        }
+
         public static void CleanChildren(Transform t)
         {
             List<Transform> tes = new List<Transform>();

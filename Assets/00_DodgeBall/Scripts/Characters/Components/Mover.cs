@@ -1,5 +1,6 @@
 ﻿using System;
 using DG.Tweening;
+using GW_Lib;
 using UnityEngine;
 
 [RequireComponent(typeof(ActionsScheduler))]
@@ -326,8 +327,11 @@ public class Mover : DodgeballCharaAction, ICharaAction
         }
         else
         {
-            right = withRespectTo.right;
-            fwd = withRespectTo.forward;
+            //right = withRespectTo.right;
+            //fwd = withRespectTo.forward;
+
+            right = Extentions.GetClosestFacingV(withRespectTo.right, null);
+            fwd = Extentions.GetClosestFacingV(withRespectTo.forward, null);
         }
         ApplyInput(newInput);
     }

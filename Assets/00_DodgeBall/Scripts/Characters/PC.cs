@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(DodgeballCharacter))]
@@ -24,6 +25,10 @@ public class PC : CharaController
     {
         if (extAllowInputOnStart)
         {
+            var p = FindObjectsOfType<TaggedSpawnPoint>().ToList().Find(s => 
+                                            s.HasTag("MainCamera") && s.BelongsTo(TeamsManager.GetTeam(chara).teamTag));
+            p.GetComponent<Cinemachine.CinemachineVirtualCamera>().Priority = 15;
+
             CreatePlayInput();
             Unlock();
         }
