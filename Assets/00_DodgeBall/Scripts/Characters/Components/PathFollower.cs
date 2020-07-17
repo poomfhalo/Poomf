@@ -98,12 +98,12 @@ public class PathFollower : DodgeballCharaAction, ICharaAction
     }
     public void Cancel()
     {
-        chara.C_MoveInput(transform.position);
         IsRunning = false;
         activePathHead = null;
         changingPoint = false;
         activePoint = 0;
-        GetComponent<Mover>().workAsAction = true;
+        mover.workAsAction = true;
         isLooping = false;
+        chara.C_MoveInput(transform.position);
     }
 }
