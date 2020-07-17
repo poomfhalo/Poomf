@@ -52,6 +52,18 @@ namespace Poomf.UI
         */
         #endregion
 
+        #region PUBLIC
+
+        public void ActivateMenuElement(int i_menuIndex)
+        {
+            if (false == initialized) initialize();
+            if (false == initialized) return;
+
+            activateMenuElement(i_menuIndex);
+        }
+
+        #endregion
+
         #region PRIVATE
         private void initialize()
         {
@@ -77,7 +89,7 @@ namespace Poomf.UI
                 return false;
             }
 
-            menuTabsButtons = menuTabsButtonsTransform.GetComponentsInChildren<MenuTabButton>();
+            menuTabsButtons = menuTabsButtonsTransform.GetComponentsInChildren<MenuTabButton>(true);
 
             if (0 == menuTabsButtons.Length)
             {
