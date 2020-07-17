@@ -90,14 +90,15 @@ public class PathFollower : DodgeballCharaAction, ICharaAction
             return;
 
         this.stopTimeAtPoint = stopTimeAtPoint;
-        GetComponent<Mover>().ReadFacingValues();
+        mover.ReadFacingValues();
         activePathHead = path.transform;
         IsRunning = true;
-        GetComponent<Mover>().workAsAction = false;
+        mover.workAsAction = false;
         this.isLooping = isLooping;
     }
     public void Cancel()
     {
+        chara.C_MoveInput(transform.position);
         IsRunning = false;
         activePathHead = null;
         changingPoint = false;

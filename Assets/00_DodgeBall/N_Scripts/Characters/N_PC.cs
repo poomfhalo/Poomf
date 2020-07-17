@@ -10,7 +10,6 @@ public class N_PC : MonoBehaviour,IPunObservable
     [SerializeField] float afterDodgeMovementBlock = 0.1f;
     [SerializeField] float safeThrowPercentThreshold = 0.15f;
 
-
     [Header("Move Smoothing Settings")]
     [Tooltip("if this distance between current position and networked position is higher than this, we snap to correct XZ place")]
     [SerializeField] float snapXZDist = 2;

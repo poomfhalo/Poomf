@@ -23,7 +23,7 @@ public class Log : MonoBehaviour
     }
     static Log instance = null;
 
-    public bool CanLogMessage => CanLog(LogLevel.All);
+    public bool CanLogMessage => CanLog(LogLevel.Message);
     public bool CanLogWarnings => CanLog(LogLevel.Warnings);
     public bool CanLogErrors => CanLog(LogLevel.Errors);
     public bool CanLogL0 => CanLog(LogLevel.L0);
