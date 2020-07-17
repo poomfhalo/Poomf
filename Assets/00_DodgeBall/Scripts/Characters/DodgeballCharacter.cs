@@ -45,6 +45,8 @@ public class DodgeballCharacter : MonoBehaviour
     [Header("Core")]
     [SerializeField] TeamTag team = TeamTag.A;
     public SelectionIndicator selectionIndicator = null;
+    [Header("Read Only")]
+    [SerializeField] bool wasInitialized = false;
 
     protected Rigidbody rb3d = null;
     protected Animator animator = null;
@@ -96,6 +98,7 @@ public class DodgeballCharacter : MonoBehaviour
             grabber.onBallInHands += OnBallInHands;
 
         TeamsManager.AddCharacter(this);
+        wasInitialized = true;
     }
 
     public void SetTeam(TeamTag team)
@@ -114,6 +117,8 @@ public class DodgeballCharacter : MonoBehaviour
     {
         GetComponents<DodgeballCharaAction>().ToList().ForEach(a => { a.RecieveInput(i); });
 
+        if (!wasInitialized)
+            return;
         if (IsJumping)
             return;
         if (IsThrowing)
@@ -122,6 +127,7 @@ public class DodgeballCharacter : MonoBehaviour
             return;
         if (IsBeingHurt)
             return;
+
         mover.StartMoveByInput(i, cam.transform);
         OnCommandActivated?.Invoke(DodgeballCharaCommand.MoveInput);
     }
