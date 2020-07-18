@@ -149,7 +149,7 @@ public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
         if (videoSettingsChanged)
         {
             // Revert the video settings UI changes
-            videoSettingsUI.UpdateAllUI(videoManager.IsFullscreen(), videoManager.GetQualityIndex(), videoManager.GetResolutionIndex());
+            videoSettingsUI.UpdateAllUI(videoManager.GetDisplayMethod(), videoManager.GetQualityIndex(), videoManager.GetResolutionIndex());
         }
 
         // Close the prompt window
@@ -222,14 +222,14 @@ public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
         tempVideoSettings.SetResolution(index);
         videoSettingsChanged = true;
     }
-    public void OnFullscreenToggled(bool fullscreen)
+    public void OnDisplaySelected(int value)
     {
         if (tempVideoSettings == null)
         {
             // This means that the toggle changed without being in the settings menu (When the game first runs for example)
             return;
         }
-        tempVideoSettings.SetFullscreen(fullscreen);
+        tempVideoSettings.SetDisplayMethod(value);
         videoSettingsChanged = true;
     }
     public void OnQualitySelected(int index)
