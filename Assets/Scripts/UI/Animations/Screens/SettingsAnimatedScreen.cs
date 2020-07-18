@@ -7,7 +7,8 @@ using Coffee.UIEffects;
 public class SettingsAnimatedScreen : AUIAnimatedScreen
 {
     // Used to fade the image covering the settings screen
-    [SerializeField] private UITransitionEffect fadeEffect = null;
+    [SerializeField] private UITransitionEffect menuCoverFade = null;
+    [SerializeField] private UITransitionEffect backgroundFade = null;
     // The min scale that the screen shrinks to if it's animating out, or grows from if it's animating in
     [SerializeField] private Vector3 shrinkScale = Vector3.zero;
     [Tooltip("The speed at which the menu fades/appears.")]
@@ -37,7 +38,9 @@ public class SettingsAnimatedScreen : AUIAnimatedScreen
         {
             gameObject.SetActive(true);
             // Show the cover image
-            fadeEffect.effectFactor = 1;
+            menuCoverFade.effectFactor = 1;
+            // Hide the background image
+            backgroundFade.effectFactor = 0;
             // Start from the shrinked scale
             transform.localScale = shrinkScale;
             // Place it at the top center of the screen
@@ -48,12 +51,13 @@ public class SettingsAnimatedScreen : AUIAnimatedScreen
             // Enlarge
             transform.DOScale(Vector3.one, animDuration).SetEase(Ease.InBack);
             yield return new WaitForSeconds(animDuration);
-            // Fade the cover image
+            // Fade the cover image, show the background
             // Interpolator
             float t = 0;
-            while (fadeEffect.effectFactor > 0)
+            while (menuCoverFade.effectFactor > 0 || backgroundFade.effectFactor < 1)
             {
-                fadeEffect.effectFactor = Mathf.Lerp(1f, 0f, t);
+                menuCoverFade.effectFactor = Mathf.Lerp(1f, 0f, t);
+                backgroundFade.effectFactor = Mathf.Lerp(0f, 1f, t);
                 t += Time.deltaTime * fadeSpeed;
                 yield return null;
             }
@@ -67,12 +71,13 @@ public class SettingsAnimatedScreen : AUIAnimatedScreen
         }
         else
         {
-            // Show the cover image
+            // Show the cover image, hide the background
             // Interpolator
             float t = 0;
-            while (fadeEffect.effectFactor < 1)
+            while (menuCoverFade.effectFactor < 1 || backgroundFade.effectFactor > 0)
             {
-                fadeEffect.effectFactor = Mathf.Lerp(0f, 1f, t);
+                backgroundFade.effectFactor = Mathf.Lerp(1f, 0f, t);
+                menuCoverFade.effectFactor = Mathf.Lerp(0f, 1f, t);
                 t += Time.deltaTime * fadeSpeed;
                 yield return null;
             }
