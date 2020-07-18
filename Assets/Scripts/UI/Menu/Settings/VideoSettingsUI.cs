@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class VideoSettingsUI : MonoBehaviour
 {
-    [SerializeField] private Toggle fullscreenToggle = null;
+    [SerializeField] private Dropdown displayDropdown = null;
     [SerializeField] private Dropdown qualityDropdown = null;
     [SerializeField] private Dropdown resolutionDropdown = null;
 
@@ -29,21 +29,21 @@ public class VideoSettingsUI : MonoBehaviour
             resolutionDropdown.AddOptions(resolutionsStrings);
         }
         IVideoProvider videoSettings = settingsProvider.GetVideoSettings();
-        UpdateAllUI(videoSettings.IsFullscreen(), videoSettings.GetQualityIndex(), videoSettings.GetResolutionIndex());
+        UpdateAllUI(videoSettings.GetDisplayMethod(), videoSettings.GetQualityIndex(), videoSettings.GetResolutionIndex());
     }
 
     // Updates all UI elements at once
-    public void UpdateAllUI(bool fullscreen, Quality quality, int resolution)
+    public void UpdateAllUI(int displayMethod, Quality quality, int resolution)
     {
-        UpdateFullscreenToggle(fullscreen);
+        UpdateDisplayDropDownSelection(displayMethod);
         UpdateQualityDropdownSelection(quality);
         UpdateResolutionDropdownSelection(resolution);
     }
 
-    public void UpdateFullscreenToggle(bool value)
+    public void UpdateDisplayDropDownSelection(int index)
     {
-        fullscreenToggle.isOn = value;
-        
+        displayDropdown.value = index;
+
     }
 
     public void UpdateQualityDropdownSelection(Quality index)

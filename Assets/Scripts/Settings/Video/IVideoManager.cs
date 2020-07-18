@@ -5,7 +5,7 @@ using UnityEngine;
 // Contains the global video settings info as well as the ability to modify them
 public interface IVideoManager : IVideoProvider, ISettingsManager
 {
-    void SetFullscreen(bool fullscreen);
+    void SetDisplayMethod(int value);
     void SetQuality(Quality qualityIndex);
     void SetResolution(int index);
     // Updates all settings at once

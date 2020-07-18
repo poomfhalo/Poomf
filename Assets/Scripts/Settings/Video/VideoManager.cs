@@ -5,7 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "VideoManager", menuName = "ScriptableObjects/Settings/VideoManager", order = 2)]
 public class VideoManager : ScriptableObject, IVideoManager
 {
-    [SerializeField] private bool isFullscreen = false;
+    // Keeps track of the current display method (fullscreen, windowed, borderless window)
+    [SerializeField] private int displayMethodIndex = 0;
     [SerializeField] private Quality quality = Quality.High;
 
     [SerializeField, HideInInspector] private int resolutionIndex = -1;
@@ -22,7 +23,7 @@ public class VideoManager : ScriptableObject, IVideoManager
     {
         resolutions = settingsProvider.GetResolutionsList();
         defaultSettings = settingsProvider.GetDefaultVideoSettings();
-        SetFullscreen(isFullscreen);
+        SetDisplayMethod(displayMethodIndex);
         SetQuality(quality);
         if (resolutionIndex == -1 || resolutionIndex >= resolutions.Count)
         {
@@ -43,12 +44,32 @@ public class VideoManager : ScriptableObject, IVideoManager
     #endregion
 
     #region IVideoManager
-    public void SetFullscreen(bool fullscreen)
+    public void SetDisplayMethod(int value)
     {
-        isFullscreen = fullscreen;
+        displayMethodIndex = value;
         if (isCurrent)
         {
-            Screen.fullScreen = fullscreen;
+            if (value == 0)
+            {
+                // Windowed
+                Screen.fullScreen = false;
+            }
+            else if (value == 1)
+            {
+                // Exclusive Fullscreen
+                Screen.fullScreen = true;
+                Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
+            }
+            else if (value == 2)
+            {
+                // Borderless Window
+                Screen.fullScreen = true;
+                Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+            }
+            else
+            {
+                Debug.LogError("VideoManager -> SetDisplayMethod: Invalid index!");
+            }
             ForceUIUpdate();
         }
     }
@@ -65,13 +86,28 @@ public class VideoManager : ScriptableObject, IVideoManager
         {
             // The new resolution
             Resolution newRes = resolutions[resolution];
-            Screen.SetResolution(newRes.width, newRes.height, isFullscreen);
+            // Set the resolution based on the current display mode
+            if (displayMethodIndex == 0)
+            {
+                // Windowed
+                Screen.SetResolution(newRes.width, newRes.height, false);
+            }
+            else if (displayMethodIndex == 1)
+            {
+                // Exclusive Fullscreen
+                Screen.SetResolution(newRes.width, newRes.height, FullScreenMode.ExclusiveFullScreen);
+            }
+            else if (displayMethodIndex == 2)
+            {
+                // Borderless Window
+                Screen.SetResolution(newRes.width, newRes.height, FullScreenMode.FullScreenWindow);
+            }
             ForceUIUpdate();
         }
     }
     public void UpdateAllSettings(IVideoProvider settings)
     {
-        SetFullscreen(settings.IsFullscreen());
+        SetDisplayMethod(settings.GetDisplayMethod());
         SetQuality(settings.GetQualityIndex());
         SetResolution(settings.GetResolutionIndex());
     }
@@ -82,9 +118,9 @@ public class VideoManager : ScriptableObject, IVideoManager
     #endregion
 
     #region IVideoProvider
-    public bool IsFullscreen()
+    public int GetDisplayMethod()
     {
-        return isFullscreen;
+        return displayMethodIndex;
     }
     public Quality GetQualityIndex()
     {
