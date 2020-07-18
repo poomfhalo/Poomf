@@ -8,16 +8,16 @@ namespace GW_Lib.Utility
         [SerializeField] Transform xRot = null;
         [SerializeField] Transform yRot = null;
         [SerializeField] Transform pos = null;
+        [SerializeField] Vector3 posOffset = Vector3.zero;
         [SerializeField] bool runInEditor = false;
 
         private void Update()
         {
-            if (Application.isEditor)
+            if (!Application.isPlaying)
             {
-                if (runInEditor)
-                {
+                if(runInEditor)
                     DoMatch();
-                }
+
                 return;
             }
 
@@ -33,7 +33,7 @@ namespace GW_Lib.Utility
             }
             if (pos)
             {
-                transform.position = pos.position;
+                transform.position = pos.position + posOffset;
             }
         }
     }

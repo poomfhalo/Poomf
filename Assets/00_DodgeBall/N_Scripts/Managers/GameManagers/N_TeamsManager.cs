@@ -100,4 +100,14 @@ public class N_TeamsManager : N_Singleton<N_TeamsManager>
         }
         return null;
     }
+    public static DodgeballCharacter GetLocalPlayer()
+    {
+        foreach (var chara in FindObjectsOfType<DodgeballCharacter>())
+        {
+            PhotonView pv = chara.GetComponent<PhotonView>();
+            if(pv && pv.IsMine)
+                return GetPlayer(pv.Controller.ActorNumber).GetComponent<DodgeballCharacter>();
+        }
+        return null;
+    }
 }

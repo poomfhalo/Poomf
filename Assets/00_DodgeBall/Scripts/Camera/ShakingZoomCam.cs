@@ -4,7 +4,7 @@ using UnityEngine;
 using Cinemachine;
 using DG.Tweening;
 
-public class BallFocusCam : MonoBehaviour
+public class ShakingZoomCam : MonoBehaviour
 {
     [SerializeField] float zoomInMin = -5;
     [SerializeField] float zoomInMax = 2;
@@ -18,9 +18,10 @@ public class BallFocusCam : MonoBehaviour
     {
         cameras = FindObjectsOfType<TaggedSpawnPoint>().ToList().FindAll(t=>t.HasTag("MainCamera"));
         cam = GetComponent<CinemachineVirtualCamera>();
-        startFOV = cam.m_Lens.FieldOfView;
-        Dodgeball.instance.E_OnStateUpdated += OnStateUpdated;
         cam.LookAt = Dodgeball.instance.transform;
+        startFOV = cam.m_Lens.FieldOfView;
+
+        Dodgeball.instance.E_OnStateUpdated += OnStateUpdated;
         Dodgeball.instance.launchTo.onLaunchedTo += SetFocusOn;
         Dodgeball.instance.goTo.onGoto += SetFocusOn;
     }

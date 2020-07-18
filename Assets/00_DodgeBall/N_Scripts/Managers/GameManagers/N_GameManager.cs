@@ -46,6 +46,7 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
         base.Awake();
         GameIntroManager.instance.extActivateOnStart = false;
         MatchStateManager.instance.extCanPrepareOnStart = false;
+        DodgeballGameManager.instance.extSetPlayerOnStart = false;
 
         N_Extentions.prefabs = prefabs;
 
@@ -156,6 +157,7 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     {
         this.InvokeDelayed(0.5f, GameIntroManager.instance.StartGame);
         MatchStateManager.instance.PrerpareForGame();
+        DodgeballGameManager.SetPlayer(N_TeamsManager.GetLocalPlayer());
     }
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {

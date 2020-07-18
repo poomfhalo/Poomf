@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using GW_Lib;
 using GW_Lib.Utility;
 using UnityEngine;
@@ -6,6 +7,8 @@ using UnityEngine;
 public enum GameType { OneOnOne, TwoOnTwo, ThreeOnThree }
 public class GameIntroManager : Singleton<GameIntroManager>
 {
+    public event Action OnEntryCompleted = null;
+
     public bool extActivateOnStart = true;
     [Header("Ball Launch Data")]
     [SerializeField] float timeBeforeBallLaunch = 1f;
@@ -39,12 +42,13 @@ public class GameIntroManager : Singleton<GameIntroManager>
         }
         else
         {
-            StartBallLaunch();
+            this.InvokeDelayed(0.1f, StartBallLaunch);
         }
     }
 
     private void StartBallLaunch()
     {
+        OnEntryCompleted?.Invoke();
         Dodgeball.instance.gameObject.SetActive(true);
         this.InvokeDelayed(timeBeforeBallLaunch, () =>
         {

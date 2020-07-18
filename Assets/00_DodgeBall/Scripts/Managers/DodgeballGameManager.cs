@@ -6,6 +6,8 @@ using TMPro;
 public class DodgeballGameManager : Singleton<DodgeballGameManager>
 {
     public GameSlotsData gameSlotsData => m_gameSlotsData;
+    public DodgeballCharacter GetLocalPlayer => player;
+
     [Header("Game Settings")]
     [SerializeField] GameSlotsData m_gameSlotsData = null;
     [Header("Build Settings")]
@@ -14,12 +16,16 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
 
     [Header("Read Only")]
     [SerializeField] List<Dodgeball> balls = new List<Dodgeball>();
+    public bool extSetPlayerOnStart = true;
+    [SerializeField] DodgeballCharacter player = null;
 
     BallThrowData[] throws = new BallThrowData[0];
 
     void Start()
     {
         buildText.text = build;
+        if (extSetPlayerOnStart)
+            SetPlayer(FindObjectOfType<PC>().GetComponent<DodgeballCharacter>());
     }
 
     public void OnBallThrownAtEnemy(DodgeballCharacter by)
@@ -46,6 +52,10 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
 
 
     //Helper Functions:
+    public static void SetPlayer(DodgeballCharacter player)
+    {
+        instance.player = player;
+    }
     public static void AddBall(Dodgeball b)
     {
         if (!instance.balls.Contains(b))
@@ -76,7 +86,7 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
         Dodgeball closestBall = null;
         foreach (var b in balls)
         {
-            float d = Vector3.Distance(closestTo.position, closestBall.position);
+            float d = Vector3.Distance(closestTo.position, b.position);
             if (d <= minDist)
             {
                 minDist = d;

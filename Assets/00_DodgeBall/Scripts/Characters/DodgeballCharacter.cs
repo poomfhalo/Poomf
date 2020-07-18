@@ -127,8 +127,8 @@ public class DodgeballCharacter : MonoBehaviour
             return;
         if (IsBeingHurt)
             return;
-
-        mover.StartMoveByInput(i, cam.transform);
+        if(cam)
+            mover.StartMoveByInput(i, cam.transform);
         OnCommandActivated?.Invoke(DodgeballCharaCommand.MoveInput);
     }
 
