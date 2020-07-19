@@ -18,6 +18,7 @@ namespace Poomf.UI
         // Used with items that have variants like outfits.
         public int VariantNumber { get; private set; } = -1;
         public Button MyButton { get; private set; }
+        public Image MyButtonImage { get; private set; }
 
         public void InitializeItem(string i_itemName, int? i_itemCoinsPrice, int? i_itemGemsPrice, Sprite itemSprite, string i_itemStatus, int itemID, ItemCategory itemType, int variantNumber = -1)
         {
@@ -35,6 +36,19 @@ namespace Poomf.UI
             ItemType = itemType;
             VariantNumber = variantNumber;
             MyButton = GetComponent<Button>();
+            MyButtonImage = GetComponent<Image>();
+        }
+
+        public void Equip(Sprite equippedButtonSprite)
+        {
+            setupStatus("Equipped");
+            MyButtonImage.sprite = equippedButtonSprite;
+        }
+
+        public void Unequip(Sprite defaultButtonSprite)
+        {
+            setupStatus("");
+            MyButtonImage.sprite = defaultButtonSprite;
         }
 
         private void setupPrice(Text i_priceText, int? i_value)

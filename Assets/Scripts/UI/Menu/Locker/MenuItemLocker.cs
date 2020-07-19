@@ -18,14 +18,19 @@ namespace Poomf.UI
         [SerializeField] private HeadItemData[] testItemHeads = null;
         // TODO : For testing, to be removed.
         [SerializeField] private BodyItemData[] testItemBodies = null;
-        [Header("Zoom Button")]
+        [Header("UI")]
         [SerializeField] Image zoomButtonImage = null;
         [SerializeField] Sprite zoomInSprite = null;
         [SerializeField] Sprite zoomOutSprite = null;
+        // The default sprite of unequipped inventory items
+        [SerializeField] Sprite defaultButtonSprite = null;
+        [SerializeField] Sprite equippedButtonSprite = null;
         [Header("Character Customization")]
         [SerializeField] CustomizablePlayer customizablePlayer = null;
         [SerializeField] List<MenuLockerColorOption> colorControlMenus = null;
 
+        InventoryItem currentHead = null;
+        InventoryItem currentBody = null;
         bool initialized = false;
         bool zoomedIn = false;
         CharaSkinData skinData => customizablePlayer.GetSkinData;
@@ -77,7 +82,13 @@ namespace Poomf.UI
                     GameObject newItem = Instantiate(lockerItemPrefab);
                     InventoryItem item = newItem.GetComponent<InventoryItem>();
                     if (null == item) return;
-                    item.InitializeItem(itemData.GetVariantName(j), null, null, itemData.ItemSprite, "OWNED", itemData.ItemID, ItemCategory.Body, j);
+                    item.InitializeItem(itemData.GetVariantName(j), null, null, itemData.ItemSprite, "", itemData.ItemID, ItemCategory.Body, j);
+                    if (skinData.GetItemID(ItemCategory.Body) == itemData.ItemID && j == skinData.GetTextureIndex(ItemCategory.Body))
+                    {
+                        // This is the currently equipped variant!
+                        item.Equip(equippedButtonSprite);
+                        currentBody = item;
+                    }
                     newItem.transform.SetParent(bodiesContentParent, false);
                     item.MyButton.onClick.AddListener(OnInventoryItemButtonPressed);
                 }
@@ -110,7 +121,13 @@ namespace Poomf.UI
                 GameObject newItem = Instantiate(lockerItemPrefab);
                 InventoryItem item = newItem.GetComponent<InventoryItem>();
                 if (null == item) return;
-                item.InitializeItem(itemData.ItemName, null, null, itemData.ItemSprite, "OWNED", itemData.ItemID, ItemCategory.Head);
+                item.InitializeItem(itemData.ItemName, null, null, itemData.ItemSprite, "", itemData.ItemID, ItemCategory.Head);
+                if (skinData.GetItemID(ItemCategory.Head) == itemData.ItemID)
+                {
+                    // This is the currently equipped head
+                    item.Equip(equippedButtonSprite);
+                    currentHead = item;
+                }
                 newItem.transform.SetParent(headsContentParent, false);
                 item.MyButton.onClick.AddListener(OnInventoryItemButtonPressed);
             }
@@ -153,6 +170,11 @@ namespace Poomf.UI
                             skinData.SetItemID(ItemCategory.Body, testItemBodies[i].ItemID);
                             // Variants are just different textures, so set the texture index as the variant number
                             skinData.SetTextureIndex(ItemCategory.Body, selectedItem.VariantNumber);
+                            // Unequip the previous item and equip the new one
+                            if (currentBody != null)
+                                currentBody.Unequip(defaultButtonSprite);
+                            selectedItem.Equip(equippedButtonSprite);
+                            currentBody = selectedItem;
                             break;
                         }
                     }
@@ -164,6 +186,11 @@ namespace Poomf.UI
                         if (testItemHeads[i].ItemID == selectedItem.ItemID)
                         {
                             skinData.SetItemID(ItemCategory.Head, testItemHeads[i].ItemID);
+                            // Unequip the previous item and equip the new one
+                            if (currentHead != null)
+                                currentHead.Unequip(defaultButtonSprite);
+                            selectedItem.Equip(equippedButtonSprite);
+                            currentHead = selectedItem;
                             break;
                         }
                     }
