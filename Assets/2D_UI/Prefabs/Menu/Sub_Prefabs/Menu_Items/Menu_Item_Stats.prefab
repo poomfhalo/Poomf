@@ -85,7 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8583015132373601072}
   - component: {fileID: 1028117603}
-  - component: {fileID: 3191977082422681931}
+  - component: {fileID: 843467807}
   m_Layer: 5
   m_Name: Menu_Item_Stats
   m_TagString: Untagged
@@ -131,7 +131,7 @@ MonoBehaviour:
   shrinkScale: {x: 0.25, y: 0.25, z: 1}
   midLeftEdge: {fileID: 0}
   midRightEdge: {fileID: 0}
---- !u!114 &3191977082422681931
+--- !u!114 &843467807
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -140,10 +140,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8583015132373601075}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a542dbada59fb24418e17f4c7eec13a6, type: 3}
+  m_Script: {fileID: 11500000, guid: 70c7403b7e6d1e141ae0961ea0a43069, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   defaultMenuButton: {fileID: 0}
+  defaultCamera: {fileID: 0}
 --- !u!1 &8583015132831985606
 GameObject:
   m_ObjectHideFlags: 0

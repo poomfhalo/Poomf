@@ -15,16 +15,17 @@ namespace Poomf.UI
 
         private bool initialized = false;
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
             initialize();
-
+            base.OnEnable();
             if (null == mainmenuNavigator) return;
             mainmenuNavigator.enabled = false;
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             if (null == mainmenuNavigator) return;
             mainmenuNavigator.enabled = true;
         }

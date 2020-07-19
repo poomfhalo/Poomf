@@ -1766,6 +1766,7 @@ GameObject:
   - component: {fileID: 8057011666714428648}
   - component: {fileID: 5458662574490808960}
   - component: {fileID: 1265551892}
+  - component: {fileID: 478756558}
   m_Layer: 5
   m_Name: Support
   m_TagString: Untagged
@@ -1857,6 +1858,71 @@ MonoBehaviour:
     loop: 1
     loopDelay: 1
     updateMode: 0
+--- !u!114 &478756558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4009530584588912497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 5458662574490808960}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: ActivateMenuElement
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_MethodName: ActivateMenuElement
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4272218683071102586
 GameObject:
   m_ObjectHideFlags: 0
@@ -2231,6 +2297,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultMenuButton: {fileID: 0}
+  defaultCamera: {fileID: 0}
 --- !u!1 &6124444341581479756
 GameObject:
   m_ObjectHideFlags: 0
@@ -4016,15 +4083,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c9e6953da61badd4b37e4214ead47fb, type: 3}
---- !u!224 &3929321572456425634 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5964227144230765271, guid: 2c9e6953da61badd4b37e4214ead47fb,
-    type: 3}
-  m_PrefabInstance: {fileID: 7224602671751457397}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &7474295349007457235 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 286253311485866406, guid: 2c9e6953da61badd4b37e4214ead47fb,
+    type: 3}
+  m_PrefabInstance: {fileID: 7224602671751457397}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &3929321572456425634 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5964227144230765271, guid: 2c9e6953da61badd4b37e4214ead47fb,
     type: 3}
   m_PrefabInstance: {fileID: 7224602671751457397}
   m_PrefabAsset: {fileID: 0}

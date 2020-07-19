@@ -10,6 +10,7 @@ namespace Poomf.UI
 {
     public class MenuItemLocker : MenuItemBase
     {
+        [SerializeField] CinemachineVirtualCamera zoomedInCamera = null;
         [SerializeField] Transform headsContentParent = null;
         [SerializeField] Transform bodiesContentParent = null;
         [SerializeField] GameObject lockerItemPrefab = null;
@@ -24,30 +25,23 @@ namespace Poomf.UI
         [Header("Character Customization")]
         [SerializeField] CustomizablePlayer customizablePlayer = null;
         [SerializeField] List<MenuLockerColorOption> colorControlMenus = null;
-        [Header("Virtual Cameras")]
-        [SerializeField] CinemachineVirtualCamera zoomedOutCamera = null;
-        [SerializeField] CinemachineVirtualCamera zoomedInCamera = null;
 
         bool initialized = false;
         bool zoomedIn = false;
         CharaSkinData skinData => customizablePlayer.GetSkinData;
 
-        void OnEnable()
+        protected override void OnEnable()
         {
             initialize();
-            if (initialized)
-            {
-                // Enable the zoomed out camera
-                zoomedOutCamera.gameObject.SetActive(true);
-                // Make sure the Zoomed in camera is disabled
-                zoomedInCamera.gameObject.SetActive(false);
-            }
+            base.OnEnable();
+            // Make sure the Zoomed in camera is disabled
+            zoomedInCamera.gameObject.SetActive(false);
         }
 
-        void OnDisable()
+        protected override void OnDisable()
         {
             // Disable both cameras to go back to the lobby camera
-            zoomedOutCamera.gameObject.SetActive(false);
+            base.OnDisable();
             zoomedInCamera.gameObject.SetActive(false);
         }
 
@@ -128,14 +122,14 @@ namespace Poomf.UI
             {
                 // This means that we should zoom out
                 zoomedInCamera.gameObject.SetActive(false);
-                zoomedOutCamera.gameObject.SetActive(true);
+                defaultCamera.gameObject.SetActive(true);
                 zoomButtonImage.sprite = zoomInSprite;
                 zoomedIn = false;
             }
             else
             {
                 // Zoom in
-                zoomedOutCamera.gameObject.SetActive(false);
+                defaultCamera.gameObject.SetActive(false);
                 zoomedInCamera.gameObject.SetActive(true);
                 zoomButtonImage.sprite = zoomOutSprite;
                 zoomedIn = true;
