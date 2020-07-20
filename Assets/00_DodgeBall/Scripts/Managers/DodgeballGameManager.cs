@@ -25,7 +25,12 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
     {
         buildText.text = build;
         if (extSetPlayerOnStart)
-            SetPlayer(FindObjectOfType<PC>().GetComponent<DodgeballCharacter>());
+        {
+            PrepareForGame(FindObjectOfType<PC>().GetComponent<DodgeballCharacter>());
+            TeamsManager.instance.AllCharacters.ForEach(c => {
+                c.PrepareForGame();
+            });
+        }
     }
 
     public void OnBallThrownAtEnemy(DodgeballCharacter by)
@@ -52,7 +57,7 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
 
 
     //Helper Functions:
-    public static void SetPlayer(DodgeballCharacter player)
+    public static void PrepareForGame(DodgeballCharacter player)
     {
         instance.player = player;
     }

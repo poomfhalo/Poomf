@@ -26,6 +26,7 @@ public class MatchState : PersistantSO
             return false;
         }
     }
+    public bool IsFirstRound => currRound == 1;
 
     [Tooltip("To determine how many rounds is a match consisting of")]
     [SerializeField] int totalRoundsCount = 2;

@@ -249,9 +249,15 @@ public class DodgeballCharacter : MonoBehaviour
     {
         CharaSlot slot = GetComponent<CharaSlot>();
         CharaPath s = GameExtentions.GetPath(slot.GetID, PathType.GameStartPath, -1);
-
-        transform.position = s.position;
-        transform.rotation = s.rotation;
+        Vector3 pos = s.position;
+        Quaternion rot = s.rotation;
+        if(!MatchState.Instance.IsFirstRound)
+        {
+            pos = s.finalPosition;
+            rot = s.finalRotation;
+        }
+        transform.position = pos;
+        transform.rotation = rot;
 
         gameObject.SetActive(true);
 

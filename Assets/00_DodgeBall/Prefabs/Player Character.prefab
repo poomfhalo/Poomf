@@ -15036,7 +15036,6 @@ GameObject:
   - component: {fileID: 4258123539632355922}
   - component: {fileID: 6482619497595609318}
   - component: {fileID: 3845013188078415913}
-  - component: {fileID: 7796705118256343267}
   - component: {fileID: 594190138905668347}
   - component: {fileID: 3752413425842824036}
   - component: {fileID: 6963099543513805061}
@@ -15383,36 +15382,6 @@ MonoBehaviour:
   activeSlot:
     team: 0
     id: 0
---- !u!114 &7796705118256343267
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6963099543513805180}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd5b1b11954c31fb98765b611b818d23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cancelInput:
-    m_Name: Cancel Input
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 2c8c56d7-b132-45be-97be-034ff0f816b7
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: f2cd57b4-d1bf-4401-82f7-dc41f9efe131
-      m_Path: <Keyboard>/escape
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Cancel Input
-      m_Flags: 0
-  exitScene: Menu
-  isLocked: 0
 --- !u!114 &594190138905668347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15442,11 +15411,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pushForce: 300
   pushDist: 1
-  yOffset: -1
+  yOffset: 0
   explosionRad: 2
   forceMode: 1
-  teleportStartDelay: 5
-  teleportEndDelay: 1.2
+  flipDirection: 1
+  teleportStartDelay: 1.5
+  teleportEndDelay: 1
+  timeBeforePatrol: 0.5
   vTeleportEffectsHead:
   - {fileID: 7393605640726057618}
   - {fileID: 7391308122065667444}
@@ -16892,18 +16863,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 54c1253a611fbfdbbb6ba37302055fcd, type: 3}
---- !u!4 &3302477631334740664 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5198813397511452858, guid: 54c1253a611fbfdbbb6ba37302055fcd,
-    type: 3}
-  m_PrefabInstance: {fileID: 7345692964906551810}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &3302477631334740666 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5198813397511452856, guid: 54c1253a611fbfdbbb6ba37302055fcd,
-    type: 3}
-  m_PrefabInstance: {fileID: 7345692964906551810}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3302477631334740754 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5198813397511452944, guid: 54c1253a611fbfdbbb6ba37302055fcd,
@@ -16913,6 +16872,18 @@ Transform:
 --- !u!4 &3302477631334740668 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5198813397511452862, guid: 54c1253a611fbfdbbb6ba37302055fcd,
+    type: 3}
+  m_PrefabInstance: {fileID: 7345692964906551810}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3302477631334740666 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5198813397511452856, guid: 54c1253a611fbfdbbb6ba37302055fcd,
+    type: 3}
+  m_PrefabInstance: {fileID: 7345692964906551810}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3302477631334740664 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5198813397511452858, guid: 54c1253a611fbfdbbb6ba37302055fcd,
     type: 3}
   m_PrefabInstance: {fileID: 7345692964906551810}
   m_PrefabAsset: {fileID: 0}
@@ -16991,6 +16962,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4328074830d262838910bdc760a8dc7, type: 3}
+--- !u!4 &6963099544742490870 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1828201718854840054, guid: d4328074830d262838910bdc760a8dc7,
+    type: 3}
+  m_PrefabInstance: {fileID: 8790733874659761152}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6963099544742490871 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1828201718854840055, guid: d4328074830d262838910bdc760a8dc7,
@@ -17003,12 +16980,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f94e60a89352de17aaa18e8518fdaf77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &6963099544742490870 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1828201718854840054, guid: d4328074830d262838910bdc760a8dc7,
-    type: 3}
-  m_PrefabInstance: {fileID: 8790733874659761152}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8963375858890475470
 PrefabInstance:
   m_ObjectHideFlags: 0

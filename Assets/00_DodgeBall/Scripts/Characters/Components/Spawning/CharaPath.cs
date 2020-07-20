@@ -11,6 +11,8 @@ public class CharaPath : MonoBehaviourPunCallbacks
     public Quaternion rotation => transform.GetChild(0).rotation;
     public bool HasPlayer => hasPlayer;
     public int SlotId => GetCharaSlotData().id;
+    public Vector3 finalPosition => transform.GetChild(transform.childCount - 1).position;
+    public Quaternion finalRotation => transform.GetChild(transform.childCount - 1).rotation;
 
     [Tooltip("What Slot, does this spawn point links to")]
     [SerializeField] int slotID = 0;

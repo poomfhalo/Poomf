@@ -7,21 +7,27 @@ using System;
 
 public class CharaKnockoutPlayer : MonoBehaviour
 {
+    public event Action<DodgeballCharacter> E_OnTeleportedOut = null;
     public event Action<DodgeballCharacter> E_OnKnockedOut = null;
+
     public bool IsInField { get => isInField; private set => isInField = value; }
 
     [Header("Push Back Data")]
     [SerializeField] float pushForce = 5;
+    [Tooltip("Once a Hit is regiestered, character will be pushed back, the push explosion force, will be generated, this distance away from the character")]
     [SerializeField] float pushDist = 1;
+    [Tooltip("Zero means, exactly at character feet heigth, -1 means 1 unit above the character feet.")]
     [SerializeField] float yOffset = -0.5f;
     [SerializeField] float explosionRad = 2;
     [SerializeField] ForceMode forceMode = ForceMode.Impulse;
+    [SerializeField] bool flipDirection = false;
 
-    [Header("Variables")]
+    [Header("Teleportation Data")]
     [Tooltip("Time before character vanishes")]
     [SerializeField] float teleportStartDelay = 5;
     [Tooltip("time Before Character ReAppears")]
     [SerializeField] float teleportEndDelay = 1.2f;
+    [SerializeField] float timeBeforePatrol = 0.5f;
 
     [Header("Constants")]
     [SerializeField] List<Transform> vTeleportEffectsHead = null;
@@ -88,25 +94,30 @@ public class CharaKnockoutPlayer : MonoBehaviour
         EnableRagdol();
         charaController.Lock();
         IsInField = false;
+        E_OnKnockedOut?.Invoke(chara);
 
         Dodgeball ball = DodgeballGameManager.GetClosestBall(transform);
         Vector3 myFlatPos = transform.position;
         Vector3 ballFlatPos = ball.position;
         myFlatPos.y = ballFlatPos.y = 0;
         Vector3 forceDir = (myFlatPos - ballFlatPos).normalized;
+        if (flipDirection)
+            forceDir = forceDir * -1;
         Vector3 explosionPos = myFlatPos + forceDir * pushDist;
         ragDollCols.ForEach(rc => {
             Rigidbody rb = rc.GetComponent<Rigidbody>();
             rb.AddExplosionForce(pushForce, explosionPos, explosionRad, yOffset,forceMode);
         });
-         
+
+        if (TeamsManager.GetTeam(chara).IsEmpty)
+            return;
+
         this.InvokeDelayed(teleportStartDelay, () => {
             vTeleportEffectsHead.ForEach(v => GameExtentions.PlayChildEffect(v));
             ragDollHead.gameObject.SetActive(false);
 
             this.InvokeDelayed(teleportEndDelay, () =>{
-                TeamsManager.GetEmptyTeams(out bool a, out bool b);
-                E_OnKnockedOut?.Invoke(chara);
+                E_OnTeleportedOut?.Invoke(chara);
                 GoToWaitField();
             });
         });
@@ -124,7 +135,7 @@ public class CharaKnockoutPlayer : MonoBehaviour
             vTeleportEffectsHead.ForEach(v => GameExtentions.PlayChildEffect(v));
         });
 
-        this.InvokeDelayed(2, () => {
+        this.InvokeDelayed(timeBeforePatrol, () => {
             chara.C_PathFollow(path, true, stopTimeAtPoint.GetValue());
         });
     }

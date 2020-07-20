@@ -18,6 +18,7 @@ public class GameIntroManager : Singleton<GameIntroManager>
 
     [Header("Intro Data")]
     [SerializeField] Reactor introReactor;
+    [SerializeField] GameStartTextsAnim textAnims = null;
 
     void Start()
     {
@@ -35,14 +36,18 @@ public class GameIntroManager : Singleton<GameIntroManager>
     }
     public void StartGame()
     {
-        if (introReactor)
+        if (introReactor && MatchState.Instance.IsFirstRound)
         {
             introReactor.React();
             introReactor.onCompleted.AddListener(OnReactorCompleted);
         }
-        else
+        else if (introReactor && !MatchState.Instance.IsFirstRound)
         {
-            this.InvokeDelayed(0.1f, StartBallLaunch);
+            textAnims.Play(OnReactorCompleted);
+        }
+        else if(introReactor == null)
+        {
+            OnReactorCompleted();
         }
     }
 
