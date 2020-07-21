@@ -13,7 +13,7 @@ public class SceneFader : MonoBehaviour
                 return m_instance;
 
             m_instance = FindObjectOfType<SceneFader>();
-            if(m_instance == null)
+            if (m_instance == null)
             {
                 SceneFader prefab = Resources.Load<SceneFader>("Scene Fader");
                 m_instance = Instantiate(prefab);
@@ -40,7 +40,7 @@ public class SceneFader : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        if(m_instance == null)
+        if (m_instance == null)
             m_instance = this;
     }
     void Start()
@@ -51,40 +51,48 @@ public class SceneFader : MonoBehaviour
             FadeOut(startOutDur, null);
         }
     }
-
-    public void FadeOut(float dur,Action onCompleted)
+    void OnDestroy()
     {
-        if(activeTween != null)
-        {
-            activeTween.Kill();
-        }
-        onCompleted += ()=> {
-            group.interactable = false;
-            group.blocksRaycasts = false;
-        };
-        activeTween = Fade(dur, inColor, outColor, onCompleted);
+        transform.DOKill();
     }
-    public void FadeIn(float dur,Action onCompleted)
+
+    public void FadeOut(float dur, Action onCompleted)
     {
         if (activeTween != null)
         {
             activeTween.Kill();
         }
-        onCompleted += () =>{
+        onCompleted += () =>
+        {
+            group.interactable = false;
+            group.blocksRaycasts = false;
+        };
+        activeTween = Fade(dur, inColor, outColor, onCompleted);
+    }
+    public void FadeIn(float dur, Action onCompleted)
+    {
+        if (activeTween != null)
+        {
+            activeTween.Kill();
+        }
+        onCompleted += () =>
+        {
             group.interactable = true;
             group.blocksRaycasts = true;
         };
-        activeTween = Fade(dur, outColor,inColor,onCompleted);
+        activeTween = Fade(dur, outColor, inColor, onCompleted);
     }
-    private Tween Fade(float dur, Color startColor,Color endColor,Action onCompleted)
+    private Tween Fade(float dur, Color startColor, Color endColor, Action onCompleted)
     {
         group.interactable = true;
         group.blocksRaycasts = true;
 
         float lerper = 0;
-        return DOTween.To(() => lerper, newF => lerper = newF, 1, dur).SetEase(ease).OnUpdate(()=> {
+        return DOTween.To(() => lerper, newF => lerper = newF, 1, dur).SetEase(ease).OnUpdate(() =>
+        {
             cover.color = Color.Lerp(startColor, endColor, lerper);
-        }).OnComplete(()=> {
+        }).OnComplete(() =>
+        {
             onCompleted?.Invoke();
             activeTween = null;
         });
