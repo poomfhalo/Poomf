@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: settings.audio.audio
+  m_EditorClassIdentifier: 
+  m_GroupName: settings.audio
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 8d8d4ad100d01ce488e2fbb35fa57166
+  m_SerializeEntries:
+  - m_GUID: 7851bc8e8cda87c4c805de6327a7fc54
+    m_Address: Default Audio Mixer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 24100000, guid: 7851bc8e8cda87c4c805de6327a7fc54, type: 2}
+    m_TargetAsset: {fileID: 24100000, guid: 7851bc8e8cda87c4c805de6327a7fc54, type: 2}
+  - m_GUID: a11658c76a0143944bb6791bbd1f8731
+    m_Address: Default Audio Settings
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: b66e93f29211dd44fb5a35058d7a3b04
+    m_Address: Audio Settings
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d7a303e9a2315bf4d90d88c24ba37adf, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 9b752103cb3b52947ae18071c8a9bbff, type: 2}
+    - {fileID: 11400000, guid: d2eaaf8f070111248b15ac9e5c3b4b4a, type: 2}
