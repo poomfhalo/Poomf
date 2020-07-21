@@ -15,7 +15,7 @@ public class RegionSelector : MonoBehaviour
     public bool GetRegion(out string region)
     {
         ToggleButton button = buttonsGroup.ActiveButton;
-        if (button == null)
+        if (button == null || button.text =="DEF")
         {
             region = "DEF";
             return false;
