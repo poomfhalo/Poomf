@@ -22,9 +22,8 @@ public class ToggleButton : MonoBehaviour
         button.onClick.AddListener(Select);
 
         if (string.IsNullOrEmpty(textVal))
-            m_text.text = "DEF";
-        else
-            m_text.text = textVal.ToUpper();
+            return;
+        m_text.text = textVal.ToUpper();
     }
 
     public void Select()

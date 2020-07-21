@@ -1,18 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class ToggleButtonGroup : MonoBehaviour
 {
+    public event Action onActiveButtonUpdated = null;
     public ToggleButton ActiveButton => activeButton;
-    [SerializeField] ToggleButton activeButton = null;
     [SerializeField] GameObject inActivityImage = null;
-
-    List<ToggleButton> toggleButtons = new List<ToggleButton>();
+    [SerializeField] List<ToggleButton> toggleButtons = new List<ToggleButton>();
+    
+    [Header("Read Only")]
+    [SerializeField] ToggleButton activeButton = null;
 
     void Start()
     {
-        toggleButtons = GetComponentsInChildren<ToggleButton>().ToList();
+        if (toggleButtons.Count == 0)
+        {
+            toggleButtons = GetComponentsInChildren<ToggleButton>().ToList();
+        }
         foreach (var t in toggleButtons)
         {
             t.OnSelected += OnSelected;
@@ -25,7 +31,10 @@ public class ToggleButtonGroup : MonoBehaviour
 
     public void SetInteractable(bool state)
     {
-        inActivityImage.SetActive(!state);
+        if(inActivityImage)
+        {
+            inActivityImage.SetActive(!state);
+        }
         foreach (var b in toggleButtons)
         {
             b.SetInteractable(state);

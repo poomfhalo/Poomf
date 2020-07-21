@@ -9,6 +9,7 @@ using TMPro;
 /// </summary>
 public class N_ShortStarter : MonoBehaviourPunCallbacks
 {
+    [SerializeField] MatchType testType = MatchType.TwoVsTwo;
     [SerializeField] bool autoStart = true;
     [SerializeField] TextMeshProUGUI isMasterText = null;
     [SerializeField] TextMeshProUGUI pingText = null;
@@ -38,7 +39,7 @@ public class N_ShortStarter : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         Log.LogL0(PhotonNetwork.NickName + " failed to join random room, creating Dev Room");
-        PhotonNetwork.CreateRoom("Dev Room", N_Lobby.GetDefOptions());
+        PhotonNetwork.CreateRoom("Dev Room", N_MatchStarter.GetDefOptions(testType));
     }
     public override void OnJoinedRoom()
     {
