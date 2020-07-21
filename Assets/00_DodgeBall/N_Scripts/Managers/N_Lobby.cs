@@ -54,13 +54,11 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         }
         if(regionSelector.GetRegion(out string region) && region != "DEF")
         {
-            Debug.Log("X :: " + region);
             Log.LogL0("Trying to connect to region " + region);
             PhotonNetwork.ConnectToRegion(region);
         }
         else
         {
-            Debug.Log("Connectingu sing setseting");
             Log.LogL0("Trying To Connect To Best Region");
             PhotonNetwork.ConnectUsingSettings();
         }
