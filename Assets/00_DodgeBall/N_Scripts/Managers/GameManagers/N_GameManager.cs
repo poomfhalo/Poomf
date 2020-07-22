@@ -133,10 +133,14 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
         {
             TeamTag t = N_TeamsManager.GetTeam(player.ActorNumber);
             CharaPath s = GameExtentions.GetSpawnPosition(t);
-            N_PC p = N_TeamsManager.GetPlayer(player.ActorNumber);
+            CharaSlot p = N_TeamsManager.GetPlayer(player.ActorNumber).GetComponent<CharaSlot>();
 
-            p.GetComponent<PhotonView>().RPC("SetUp",RpcTarget.All, s.SlotId);
-            s.GetComponent<PhotonView>().RPC("Fill", RpcTarget.All);
+            p.SetUp(s.SlotId);
+            p.GetComponent<PhotonView>().RPC("SetUp",RpcTarget.Others, s.SlotId);
+        }
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+
         }
     }
     private void M_PreparePlayersForGame()

@@ -59,9 +59,17 @@ public static class GameExtentions
         {
             int i = UnityEngine.Random.Range(0, spawnPoints.Count);
             s = spawnPoints[i];
+            if(s.HasPlayer)
+            {
+                Debug.Log(s.name + " Has Player ");
+            }
             maxTries = maxTries - 1;
             if (maxTries <= 0)
+            {
+                Debug.Log("failed to find Random Position?");
                 break;
+            }
+
         } while (s == null || s.HasPlayer);
         return s;
     }

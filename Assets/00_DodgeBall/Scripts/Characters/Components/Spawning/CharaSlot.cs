@@ -28,5 +28,8 @@ public class CharaSlot : MonoBehaviour
         activeSlot = DodgeballGameManager.instance.gameSlotsData.GetData(id);
         this.id = id;
         wasSetUp = true;
+
+        CharaPath path = GameExtentions.GetPath(id, PathType.GameStartPath, 0);
+        path.Fill();
     }
 }
