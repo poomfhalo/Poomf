@@ -245,6 +245,7 @@ GameObject:
   - component: {fileID: -2474588121798371963}
   - component: {fileID: 2812203220639854979}
   - component: {fileID: 5209031455014098621}
+  - component: {fileID: 444778373521017559}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -317,6 +318,8 @@ MonoBehaviour:
   build: 'Build : 0.0012'
   buildText: {fileID: 1039483786588903348}
   balls: []
+  extSetPlayerOnStart: 1
+  player: {fileID: 0}
 --- !u!114 &5209031455014098621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,5 +332,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ac8e4f8c013344eebbd48f347046e50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  matchState: {fileID: 11400000, guid: 45150d295f0eac6ada2261c5eebd42a8, type: 2}
+  isPersistant: 0
   extCanPrepareOnStart: 1
+--- !u!114 &444778373521017559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7145794747918892414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd6b02aed5dc2e70d854b8a34eae77ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

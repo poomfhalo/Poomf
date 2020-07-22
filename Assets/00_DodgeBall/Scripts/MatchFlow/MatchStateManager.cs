@@ -19,6 +19,7 @@ public class MatchStateManager : Singleton<MatchStateManager>
             resultLoadFunc = value;
         }
     }
+    [SerializeField] float gameEndSlowTimeDur = 3;
     public Func<bool, IEnumerator> resultLoadFunc = null;
     MatchState matchState => MatchState.Instance;
 
@@ -46,15 +47,20 @@ public class MatchStateManager : Singleton<MatchStateManager>
         if (!isTeamAEmpty && !isTeamBEmpty)
             return;
 
-        bool isFinalRound = matchState.IsFinalRound();
+        GetComponent<MatchTimeWarper>().SlowTime(gameEndSlowTimeDur, EndGame);
 
-        TeamTag winningTeam = TeamTag.A;
-        if (isTeamAEmpty)
-            winningTeam = TeamTag.B;
-        matchState.SetRoundWinner(winningTeam);
-        bool isGameOver = isFinalRound || MatchState.Instance.HasTeamWonOverHalf;
+        void EndGame()
+        {
+            bool isFinalRound = matchState.IsFinalRound();
 
-        StartCoroutine(ResultLoadFunc(isGameOver));
+            TeamTag winningTeam = TeamTag.A;
+            if (isTeamAEmpty)
+                winningTeam = TeamTag.B;
+            matchState.SetRoundWinner(winningTeam);
+            bool isGameOver = isFinalRound || MatchState.Instance.HasTeamWonOverHalf;
+
+            StartCoroutine(ResultLoadFunc(isGameOver));
+        }
     }
     IEnumerator RoundEndLoad(bool isFinalRound)
     {
