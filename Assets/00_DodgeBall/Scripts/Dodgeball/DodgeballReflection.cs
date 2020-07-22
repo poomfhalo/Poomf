@@ -39,6 +39,8 @@ public class DodgeballReflection : DodgeballAction
     public Vector3 lastReflectionTarget = new Vector3();
     public Vector3 lastReflectionStartPoint = new Vector3();
     public GameObject lastContact = null;
+    public bool MakesLogSpheres;
+    public List<GameObject> loggedSpheres = new List<GameObject>();
 
     public override string actionName => "Reflection";
     public override DodgeballCommand Command => DodgeballCommand.Reflection;
@@ -114,7 +116,9 @@ public class DodgeballReflection : DodgeballAction
         scheduler.StartAction(this);
         transform.position = startPoint;
         rb3d.velocity = vel;
-        Extentions.LogSphere(endPoint, Color.green, 0.35f);
+
+        if(MakesLogSpheres)
+            loggedSpheres.Add(Extentions.LogSphere(endPoint, Color.green, 0.35f));
 
         CharaHitPoints hp = contactWith.GetComponent<CharaHitPoints>();
         hp.C_StartHitAction();
@@ -181,7 +185,10 @@ public class DodgeballReflection : DodgeballAction
         flatTravelDir.Normalize();
 
         Vector3 backUpPos = floorHit.point - flatTravelDir*reflectionDist.GetValue();
-        Extentions.LogSphere(backUpPos, Color.blue, 0.5f);
+
+        if(MakesLogSpheres)
+            loggedSpheres.Add(Extentions.LogSphere(backUpPos, Color.blue, 0.5f));
+
         collisionPoint = backUpPos;
         return false;
     }

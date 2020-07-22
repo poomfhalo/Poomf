@@ -2219,6 +2219,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5088890609628337747}
   - component: {fileID: 5815188493037750190}
+  - component: {fileID: 2940077908108962127}
   m_Layer: 0
   m_Name: Game
   m_TagString: Untagged
@@ -2300,6 +2301,69 @@ MonoBehaviour:
       m_Flags: 0
   exitScene: Menu
   isLocked: 0
+--- !u!114 &2940077908108962127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6309346013095018334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c4cab756f64edc7ea5bef9adf8cde38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPersistant: 0
+  enableDebugging:
+    m_Name: Enable Debugging
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: a26a7e07-c580-4620-a0b1-bf352aabd7e0
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 0614e678-3867-4952-9cc6-457b701b28f8
+      m_Path: <Keyboard>/numpadPlus
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Enable Debugging
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 92df9d0c-2a32-45b8-8c05-6ed48a8e863b
+      m_Path: <Keyboard>/equals
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Enable Debugging
+      m_Flags: 0
+  disableDebugging:
+    m_Name: Disable Debugging
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: ceac307e-4f6a-4b31-b543-401b896b610d
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: deb29609-a9ca-4216-9ff6-11724cbf2bdf
+      m_Path: <Keyboard>/minus
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Disable Debugging
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 71110d3c-63e0-4a85-ab3a-595737e3870a
+      m_Path: <Keyboard>/numpadMinus
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Disable Debugging
+      m_Flags: 0
+  debuggables: []
+  lastState: 1
 --- !u!1 &6618976822521471672
 GameObject:
   m_ObjectHideFlags: 0
@@ -2918,13 +2982,14 @@ GameObject:
   - component: {fileID: 5925800062166831969}
   - component: {fileID: 3607759767435276232}
   - component: {fileID: 8879180007721193777}
+  - component: {fileID: 6327014023163313126}
   m_Layer: 0
   m_Name: FPS Displayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2888400749640507114
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3022,6 +3087,18 @@ MonoBehaviour:
   period: 1
   pauseOnLowFPS: 0
   lowFPS: 55
+--- !u!114 &6327014023163313126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7352401416285017729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcb03b2f81de9de198069bd7b2fb9b16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7521591081312141143
 GameObject:
   m_ObjectHideFlags: 0

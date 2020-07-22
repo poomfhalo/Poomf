@@ -49,6 +49,7 @@ GameObject:
   - component: {fileID: 303846191332746217}
   - component: {fileID: 2571047185793813562}
   - component: {fileID: 7279175448926025499}
+  - component: {fileID: 307524554354280576}
   m_Layer: 29
   m_Name: Dodgeball
   m_TagString: Untagged
@@ -141,6 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isRunning: 0
+  traveledPercent: 0
   leavingHandsTime: 0.1
   tweenerVal: 0
   lastTargetPos: {x: 0, y: 0, z: 0}
@@ -208,6 +210,8 @@ MonoBehaviour:
   lastReflectionTarget: {x: 0, y: 0, z: 0}
   lastReflectionStartPoint: {x: 0, y: 0, z: 0}
   lastContact: {fileID: 0}
+  MakesLogSpheres: 0
+  loggedSpheres: []
 --- !u!114 &2571047185793813562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,6 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e453d9960515265ecb01fb6591ca9a89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  posCheckDist: 0.5
 --- !u!114 &7279175448926025499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,6 +238,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currActionName: 
+--- !u!114 &307524554354280576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57221109919460844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd9a35765e2460eb1b23d1f4f32cb26d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &120227174602930443
 MonoBehaviour:
   m_ObjectHideFlags: 0
