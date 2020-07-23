@@ -20,6 +20,7 @@ public abstract class BallLauncher : DodgeballCharaAction, ICharaAction
     [SerializeField] protected bool isThrowing = false;
     [SerializeField] protected string activityName = "";
     public bool ExtThrowCondition = true;
+    public bool isLastThrowAtEnemy = false;
 
     protected DodgeballCharacter chara = null;
     protected Animator animator = null;
@@ -70,18 +71,21 @@ public abstract class BallLauncher : DodgeballCharaAction, ICharaAction
         isThrowing = false;
 
         Vector3 targetPos = new Vector3();
-        if (TeamsManager.AreFriendlies(aimedAtChara, chara))
-        {
-            //Call, recieving ball or sth here?
+        if (!isLastThrowAtEnemy)
             targetPos = aimedAtChara.RecievablePoint.position;
-            Debug.LogWarning("Passing To Friendlies has not been implemented yet");
+        else
+            targetPos = aimedAtChara.ShootablePoint.position;
+
+        Vector3 dir = (targetPos - transform.position).normalized;
+        targetPos = targetPos + dir * throwData.ofShootDist;
+        Dodgeball.instance.launchTo.C_GoLaunchTo(targetPos, throwData);
+
+        if (!isLastThrowAtEnemy)
+        {
+            DodgeballGameManager.instance.OnBallThrownAtAlly(GetComponent<DodgeballCharacter>());
         }
         else
         {
-            targetPos = aimedAtChara.ShootablePoint.position;
-            Vector3 dir = (targetPos - transform.position).normalized;
-            targetPos = targetPos + dir * throwData.ofShootDist;
-            Dodgeball.instance.launchTo.C_GoLaunchTo(targetPos, throwData);
             DodgeballGameManager.instance.OnBallThrownAtEnemy(GetComponent<DodgeballCharacter>());
         }
 

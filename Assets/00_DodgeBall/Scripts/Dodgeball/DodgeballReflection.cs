@@ -39,7 +39,7 @@ public class DodgeballReflection : DodgeballAction
     public Vector3 lastReflectionTarget = new Vector3();
     public Vector3 lastReflectionStartPoint = new Vector3();
     public GameObject lastContact = null;
-    public bool MakesLogSpheres;
+    public bool MakesLogSpheres = true;
     public List<GameObject> loggedSpheres = new List<GameObject>();
 
     public override string actionName => "Reflection";
@@ -131,7 +131,6 @@ public class DodgeballReflection : DodgeballAction
             return;
         if (UpdateValidHit())
         {
-            //Debug.Log(lastValidHit.collider.name);
             float dist = Vector3.Distance(lastValidHit.point, transform.position);
             if (dist <= expectedTravelDist)
             {
@@ -140,6 +139,7 @@ public class DodgeballReflection : DodgeballAction
 
                 ball.RunCommand(Command);
                 Reflect(lastReflectionVel, lastReflectionStartPoint, lastReflectionTarget,lastContact);
+                print("Reflection Called");
             }
         }
     }

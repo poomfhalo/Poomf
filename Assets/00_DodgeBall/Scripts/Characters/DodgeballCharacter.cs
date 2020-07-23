@@ -7,7 +7,9 @@ public enum DodgeballCharaCommand { MoveInput, Friendly, Enemy, BallAction, Dodg
     BraceForBall,
     ReleaseFromBrace,
     PushBall,
-    PathFollow
+    PathFollow,
+    BraceForBallReciption,
+    ReleaseFromBallReciptionBrace
 }
 
 [RequireComponent(typeof(Animator))]
@@ -227,6 +229,20 @@ public class DodgeballCharacter : MonoBehaviour
             reciever.DisableDetection();
 
         OnCommandActivated?.Invoke(DodgeballCharaCommand.ReleaseFromBrace);
+    }
+    public void C_BraceForBallReciption()
+    {
+        if (reciever && !reciever.IsDetecting)
+            reciever.EnableDetection();
+
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.BraceForBallReciption);
+    }
+    public void C_ReleaseFromBallReciptionBrace()
+    {
+        if (reciever && reciever.IsDetecting)
+            reciever.DisableDetection();
+
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.ReleaseFromBallReciptionBrace);
     }
     public void C_PushBall()
     {

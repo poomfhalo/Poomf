@@ -4,7 +4,8 @@ public class CharaFXPlayer : MonoBehaviour
 {
     [SerializeField] Transform vHitvEffectsHead = null;
     [SerializeField] Transform vDeathEffectsHead = null;
-    [SerializeField] Transform vOnThrowStarted = null;
+    [SerializeField] Transform vOnThrowStartedOnEnemy = null;
+    [SerializeField] Transform vOnThrowStartedOnAlly;
 
     CharaHitPoints hp = null;
     DodgeballCharacter chara;
@@ -40,11 +41,18 @@ public class CharaFXPlayer : MonoBehaviour
     }
     private void OnThrowStarted()
     {
-        GameExtentions.PlayChildEffect(vOnThrowStarted);
+        if (chara.launcher.isLastThrowAtEnemy)
+            GameExtentions.PlayChildEffect(vOnThrowStartedOnEnemy);
+        else
+            GameExtentions.PlayChildEffect(vOnThrowStartedOnAlly);
     }
     private void OnThrowPointReached()
     {
-        foreach (Transform t in vOnThrowStarted)
+        foreach (Transform t in vOnThrowStartedOnEnemy)
+        {
+            t.GetComponent<ParticleSystem>()?.Stop(true);
+        }
+        foreach (Transform t in vOnThrowStartedOnAlly)
         {
             t.GetComponent<ParticleSystem>()?.Stop(true);
         }

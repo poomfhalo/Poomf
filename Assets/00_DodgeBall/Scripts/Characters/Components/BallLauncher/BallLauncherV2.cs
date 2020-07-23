@@ -7,7 +7,7 @@ using UnityEngine;
 public class BallLauncherV2 : BallLauncher
 {
     [Header("Launcher Data")]
-    [SerializeField] float throwDelay = 0.2f;
+    [SerializeField] float throwAtEnemyDelay = 0.3f;
 
     [Header("Read Only")]
     [SerializeField] bool finishedThrowP1 = false;
@@ -22,11 +22,12 @@ public class BallLauncherV2 : BallLauncher
         if (isThrowing)
             return;
 
-        RunOnBallThrowStart();
-
+        isLastThrowAtEnemy = !TeamsManager.AreFriendlies(chara, toChara);
         finishedThrowP1 = false;
         isThrowing = true;
         aimedAtChara = toChara;
+
+        RunOnBallThrowStart();
 
         Action beginThrow = () => {
             animator.SetTrigger("ThrowV2");
@@ -67,9 +68,9 @@ public class BallLauncherV2 : BallLauncher
         yield return new WaitUntil(() => ExtThrowCondition);
         float endWaitTime = Time.time;
         float externalWaitTime = endWaitTime - startWait;
-        if (externalWaitTime < throwDelay)
+        if (externalWaitTime < throwAtEnemyDelay)
         {
-            float remainingTime = throwDelay - externalWaitTime;
+            float remainingTime = throwAtEnemyDelay - externalWaitTime;
             yield return new WaitForSeconds(remainingTime);
         }
     }

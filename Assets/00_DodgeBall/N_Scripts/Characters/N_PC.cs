@@ -75,7 +75,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         if (pv.IsMine)
             chara.OnCommandActivated -= SendMyCommand;
 
-        chara.launcher.E_OnThrowP1Finished -= OnBallLaunchedSafely;
+        chara.launcher.E_OnBallLaunchedSafely -= OnBallLaunchedSafely;
         chara.launcher.E_OnThrowPointReached -= OnThrowPointReached;
     }
 

@@ -33,6 +33,20 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
         }
     }
 
+    public void OnBallThrownAtAlly(DodgeballCharacter by)
+    {
+        Team team = TeamsManager.GetTeam(by);
+        team.players.ForEach(p => {
+            p.C_BraceForBallReciption();
+        });
+    }
+    public void OnBallRecieved(DodgeballCharacter by)
+    {
+        Team team = TeamsManager.GetTeam(by);
+        team.players.ForEach(p => {
+            p.C_ReleaseFromBallReciptionBrace();
+        });
+    }
     public void OnBallThrownAtEnemy(DodgeballCharacter by)
     {
         Team team = TeamsManager.GetNextTeam(by);
