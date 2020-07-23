@@ -159,7 +159,8 @@ public class N_PC : MonoBehaviour,IPunObservable
             pv.RPC("R_Command", RpcTarget.Others, (int)command, currX, currZ);
         }
 
-        if (command == DodgeballCharaCommand.BraceForBall || command == DodgeballCharaCommand.ReleaseFromBrace)
+        if (command == DodgeballCharaCommand.EnableHitDetection || command == DodgeballCharaCommand.DisableHitDetection
+            ||command == DodgeballCharaCommand.EnableBallReciption || command == DodgeballCharaCommand.DisableBallReciption)
         {
             Log.Message("N_PC().SendCommand :: " + command);
         }
@@ -177,7 +178,8 @@ public class N_PC : MonoBehaviour,IPunObservable
         UpdateNetData();
 
         DodgeballCharaCommand command = (DodgeballCharaCommand)c;
-        if (command == DodgeballCharaCommand.BraceForBall || command == DodgeballCharaCommand.ReleaseFromBrace)
+        if (command == DodgeballCharaCommand.EnableHitDetection || command == DodgeballCharaCommand.DisableHitDetection
+            || command == DodgeballCharaCommand.EnableBallReciption || command == DodgeballCharaCommand.DisableBallReciption)
         {
             Log.Message("N_PC().RPC :: R_Command " + command);
         }
@@ -216,8 +218,21 @@ public class N_PC : MonoBehaviour,IPunObservable
                 }
                 UpdateSyncedInput();
                 break;
-            case DodgeballCharaCommand.BraceForBall:
-                chara.C_BraceForContact();
+            //case DodgeballCharaCommand.BraceForBall:
+            //chara.C_BraceForContact();
+            //break;
+
+            case DodgeballCharaCommand.EnableHitDetection:
+                chara.C_EnableHitDetection();
+                break;
+            case DodgeballCharaCommand.DisableHitDetection:
+                chara.C_DisableHitDetection();
+                break;
+            case DodgeballCharaCommand.EnableBallReciption:
+                chara.C_EnableBallReciption();
+                break;
+            case DodgeballCharaCommand.DisableBallReciption:
+                chara.C_DisableBallReciption();
                 break;
         }
 

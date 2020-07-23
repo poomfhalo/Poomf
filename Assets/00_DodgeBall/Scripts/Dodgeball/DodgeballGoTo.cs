@@ -36,6 +36,7 @@ public class DodgeballGoTo : DodgeballAction
         onGoto?.Invoke();
         isRunning = true;
         scheduler.StartAction(this);
+        Debug.Log("Starting This Action?");
 
         float currTweener = 0;
         ball.bodyCol.GetCollider.enabled = false;

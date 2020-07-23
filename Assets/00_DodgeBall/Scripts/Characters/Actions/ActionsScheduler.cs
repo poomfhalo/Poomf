@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// Actions scheduler, a script to sequence the actions that a character does, so that, no more than one action
@@ -10,7 +11,10 @@ public class ActionsScheduler : MonoBehaviour
 {
     public string CurrActionName => currActionName;
     [SerializeField] string currActionName = "";
+
+    [SerializeField] List<string> actions = new List<string>();
     ICharaAction currAction = null;
+
     public void StartAction(ICharaAction action,bool cancelPrevious = true)
     {
         if (action == currAction)
@@ -22,5 +26,8 @@ public class ActionsScheduler : MonoBehaviour
 
         currAction = action;
         currActionName = action.actionName;
+        if (actions.Count > 20)
+            actions.Clear();
+        actions.Add(currAction.actionName);
     }
 }

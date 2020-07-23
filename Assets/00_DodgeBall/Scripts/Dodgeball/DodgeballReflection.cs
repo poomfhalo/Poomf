@@ -127,19 +127,28 @@ public class DodgeballReflection : DodgeballAction
 
     private void C_Reflect()
     {
+        if (!IsRunning)
+            return;
         if (!extReflectionTest)
             return;
+
         if (UpdateValidHit())
         {
+            BallReciever currReciever = lastValidHit.collider.GetComponent<BallReciever>();
+            if (currReciever.CanRecieveBallNow || currReciever.justCaughtBall)
+                return;
+
             float dist = Vector3.Distance(lastValidHit.point, transform.position);
+
             if (dist <= expectedTravelDist)
             {
+                Log.Message("Dist " + dist + " :: " + expectedTravelDist + " :: FPS " + avgFPSTime + " With Speed " + travelSpeed);
                 SetReflectionData();
-                Cancel();
 
                 ball.RunCommand(Command);
                 Reflect(lastReflectionVel, lastReflectionStartPoint, lastReflectionTarget,lastContact);
-                print("Reflection Called");
+
+                Cancel();
             }
         }
     }

@@ -37,25 +37,35 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
     {
         Team team = TeamsManager.GetTeam(by);
         team.players.ForEach(p => {
-            p.C_BraceForBallReciption();
+            if (p != by)
+                p.C_EnableBallReciption();
         });
     }
     public void OnBallRecieved(DodgeballCharacter by)
     {
-        Team team = TeamsManager.GetTeam(by);
-        team.players.ForEach(p => {
-            p.C_ReleaseFromBallReciptionBrace();
-        });
+        Log.Warning("To Be Implemetnted");
+        //Team team = TeamsManager.GetTeam(by);
+        //team.players.ForEach(p => {
+        //    p.C_ReleaseFromBallReciptionBrace();
+        //});
     }
     public void OnBallThrownAtEnemy(DodgeballCharacter by)
     {
         Team team = TeamsManager.GetNextTeam(by);
-        team.players.ForEach(p => p.C_BraceForContact());
+        team.players.ForEach(p =>{
+            //p.C_BraceForContact();
+            p.C_EnableHitDetection();
+            p.C_EnableBallReciption();
+        });
     }
     public void OnBallCaught(DodgeballCharacter by)
     {
         Team team = TeamsManager.GetTeam(by);
-        team.players.ForEach(p => p.C_ReleaseFromBrace());
+        team.players.ForEach(p => {
+            p.C_DisableHitDetection();
+            p.C_DisableBallReciption();
+            //p.C_ReleaseFromBrace();
+        });
     }
     public void OnBallHitGround()
     {
@@ -64,9 +74,17 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
 
         Log.LogL0("GameManager().OnBallHitGround");
         Team t = TeamsManager.GetTeam(Dodgeball.instance.holder);
-        t.players.ForEach(p => p.C_ReleaseFromBrace());
+        t.players.ForEach(p => { 
+            //p.C_ReleaseFromBrace();
+            p.C_DisableHitDetection();
+            p.C_DisableBallReciption(); 
+        });
         t = TeamsManager.GetNextTeam(Dodgeball.instance.holder);
-        t.players.ForEach(p => p.C_ReleaseFromBrace());
+        t.players.ForEach(p => { 
+            //p.C_ReleaseFromBrace();
+            p.C_DisableHitDetection();
+            p.C_DisableBallReciption();
+        });
     }
 
 

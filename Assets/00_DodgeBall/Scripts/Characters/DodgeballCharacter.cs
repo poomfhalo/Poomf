@@ -4,12 +4,15 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public enum DodgeballCharaCommand { MoveInput, Friendly, Enemy, BallAction, Dodge, FakeFire, Jump,
-    BraceForBall,
-    ReleaseFromBrace,
+    //BraceForBall,
+    //ReleaseFromBrace,
     PushBall,
     PathFollow,
     BraceForBallReciption,
-    ReleaseFromBallReciptionBrace
+    ReleaseFromBallReciptionBrace,
+
+    EnableBallReciption,DisableBallReciption,
+    EnableHitDetection,DisableHitDetection
 }
 
 [RequireComponent(typeof(Animator))]
@@ -30,6 +33,7 @@ public class DodgeballCharacter : MonoBehaviour
     public bool IsWaitingForHit => hp.IsWaitingForHit;
     public string charaName => name;
     public bool IsInField => knockedOut.IsInField;
+    public bool IsDetectingBallReciption => reciever.IsDetecting;
 
     //Body Parts
     public Transform BallGrabPoint => ballGrabPoint;
@@ -108,7 +112,10 @@ public class DodgeballCharacter : MonoBehaviour
         this.team = team;
         TeamsManager.JoinTeam(team, this);
     }
-
+    public void SetFocus(DodgeballCharacter chara)
+    {
+        selectionIndicator.SetFocus(chara);
+    }
     protected void OnBallInHands()
     {
         selectionIndicator.SetNewFocus(false);
@@ -212,38 +219,51 @@ public class DodgeballCharacter : MonoBehaviour
     #endregion
 
     #region Gameplay Commands
-    public void C_BraceForContact()
+    public void C_EnableHitDetection()
     {
-        if (reciever && !reciever.IsDetecting)
-            reciever.EnableDetection();
-
-        if (!hp.IsBeingHurt && !hp.IsWaitingForHit)
+        if (hp && !hp.IsWaitingForHit)
             hp.EnableHitDetection();
-        OnCommandActivated?.Invoke(DodgeballCharaCommand.BraceForBall);
-    }
-    public void C_ReleaseFromBrace()
-    {
-        if(hp.IsWaitingForHit)
-            hp.DisableHitDetection();
-        if(reciever && reciever.IsDetecting)
-            reciever.DisableDetection();
 
-        OnCommandActivated?.Invoke(DodgeballCharaCommand.ReleaseFromBrace);
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.EnableHitDetection);
     }
-    public void C_BraceForBallReciption()
+    public void C_DisableHitDetection()
+    {
+        if (hp && hp.IsWaitingForHit)
+            hp.DisableHitDetection();
+
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.DisableHitDetection);
+    }
+    public void C_EnableBallReciption()
     {
         if (reciever && !reciever.IsDetecting)
             reciever.EnableDetection();
 
-        OnCommandActivated?.Invoke(DodgeballCharaCommand.BraceForBallReciption);
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.EnableBallReciption);
     }
-    public void C_ReleaseFromBallReciptionBrace()
+    public void C_DisableBallReciption()
     {
         if (reciever && reciever.IsDetecting)
             reciever.DisableDetection();
 
-        OnCommandActivated?.Invoke(DodgeballCharaCommand.ReleaseFromBallReciptionBrace);
+        OnCommandActivated?.Invoke(DodgeballCharaCommand.DisableBallReciption);
     }
+
+    //public void C_BraceForContact()
+    //{
+    //    Log.Error("Deprecated we no longer C_BraceForContact", gameObject);
+    //}
+    //public void C_ReleaseFromBrace()
+    //{
+    //    Log.Error("Deprecated we no longer C_ReleaseFromBrace", gameObject);
+    //}
+    //public void C_BraceForBallReciption()
+    //{
+    //    Log.Error("Deprecated we no longer C_BraceForBallReciption", gameObject);
+    //}
+    //public void C_ReleaseFromBallReciptionBrace()
+    //{
+    //    Log.Error("Deprecated we no longer C_ReleaseFromBallReciptionBrace", gameObject);
+    //}
     public void C_PushBall()
     {
         OnCommandActivated?.Invoke(DodgeballCharaCommand.PushBall);

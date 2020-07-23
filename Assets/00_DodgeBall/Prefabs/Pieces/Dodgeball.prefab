@@ -191,7 +191,7 @@ MonoBehaviour:
   isRunning: 0
   autoActivate: 1
   castDist: 10
-  reflectionFramesPrediction: 3
+  reflectionFramesPrediction: 2
   useSafestPrediction: 0
   maxTries: 60
   collisionDirThreshold: -0.75
@@ -238,6 +238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currActionName: 
+  actions: []
 --- !u!114 &307524554354280576
 MonoBehaviour:
   m_ObjectHideFlags: 0
