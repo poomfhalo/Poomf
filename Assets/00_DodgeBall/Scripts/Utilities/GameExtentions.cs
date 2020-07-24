@@ -60,17 +60,17 @@ public static class GameExtentions
         {
             int i = UnityEngine.Random.Range(0, spawnPoints.Count);
             s = spawnPoints[i];
-            Debug.Log("Trying To Assign " + s.name);
+            Log.LogL0("Sending Position " + s.name);
             if(s.HasPlayer)
             {
-                Debug.Log(s.name + " Has Player ");
+                Log.LogL0("Failed To Send Position " + s.name + " It Has Player ");
                 s = null;
                 continue;
             }
             maxTries = maxTries - 1;
             if (maxTries <= 0)
             {
-                Debug.Log("failed to find Random Position?");
+                Log.Error("failed to find Random Position?");
                 break;
             }
         } 
