@@ -62,6 +62,7 @@ public static class GameExtentions
             if(s.HasPlayer)
             {
                 Debug.Log(s.name + " Has Player ");
+                continue;
             }
             maxTries = maxTries - 1;
             if (maxTries <= 0)
@@ -70,7 +71,7 @@ public static class GameExtentions
                 break;
             }
 
-        } while (s == null || s.HasPlayer);
+        } while (s == null);
         return s;
     }
 
