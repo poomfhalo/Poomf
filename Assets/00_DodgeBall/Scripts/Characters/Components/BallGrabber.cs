@@ -19,10 +19,12 @@ public class BallGrabber : DodgeballCharaAction, ICharaAction
 
     Animator animator = null;
     Dodgeball ball = null;
+    Rigidbody rb3d = null;
 
     void Awake()
     {
         ball = Dodgeball.instance;
+        rb3d = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
     }
     void Start()
@@ -67,6 +69,7 @@ public class BallGrabber : DodgeballCharaAction, ICharaAction
         Dodgeball.instance.goTo.C_GoTo(GetComponent<DodgeballCharacter>(), () => {
             hasBall = true;
             onBallInHands?.Invoke();
+            rb3d.velocity = Vector3.zero;
         });
         animator.SetBool("HasBall", true);
     }

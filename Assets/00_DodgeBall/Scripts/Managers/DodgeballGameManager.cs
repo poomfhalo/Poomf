@@ -41,14 +41,6 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
                 p.C_EnableBallReciption();
         });
     }
-    public void OnBallRecieved(DodgeballCharacter by)
-    {
-        Log.Warning("To Be Implemetnted");
-        //Team team = TeamsManager.GetTeam(by);
-        //team.players.ForEach(p => {
-        //    p.C_ReleaseFromBallReciptionBrace();
-        //});
-    }
     public void OnBallThrownAtEnemy(DodgeballCharacter by)
     {
         Team team = TeamsManager.GetNextTeam(by);
