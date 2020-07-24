@@ -160,8 +160,7 @@ namespace GW_Lib
                 SetStateOfBody(toState);
                 return;
             }
-            Debug.Log("Started Setting Kinemactic State :: to " + toState);
-            delayer.InvokeDelayed(2, () => {
+            delayer.InvokeDelayed(1, () => {
                 SetStateOfBody(toState);
             });
             void SetStateOfBody(bool s)

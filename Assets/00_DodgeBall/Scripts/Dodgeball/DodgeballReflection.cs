@@ -167,7 +167,7 @@ public class DodgeballReflection : DodgeballAction
                 this.SetKinematic(this, false);
                 if (MakesLogSpheres)
                     loggedSpheres.Add(Extentions.LogSphere(lastValidHit.point, Color.magenta, 0.35f));
-                Log.Message("Dist " + dist + " :: Expected Dist :: " + expectedTravelDist + " :: FPS " + avgFPSTime + " With Speed " + travelSpeed);
+                Log.LogL0("Reflected With This Data Dist " + dist + " :: Expected Dist :: " + expectedTravelDist + " :: FPS " + avgFPSTime + " With Speed " + travelSpeed);
                 SetReflectionData();
 
                 ball.RunCommand(Command);
