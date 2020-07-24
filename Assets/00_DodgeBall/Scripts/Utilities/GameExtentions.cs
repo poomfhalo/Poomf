@@ -52,16 +52,19 @@ public static class GameExtentions
     {
         List<CharaPath> playerSpawnPoints = UnityEngine.Object.FindObjectsOfType<CharaPath>().ToList();
         List<CharaPath> spawnPoints = playerSpawnPoints.FindAll(p => p.CheckTeam(team));
+        spawnPoints.RemoveAll(p => !p.CheckTag(PathType.GameStartPath));
         CharaPath s = null;
 
         int maxTries = 300;
-        do
+        while (s == null || s.HasPlayer)
         {
             int i = UnityEngine.Random.Range(0, spawnPoints.Count);
             s = spawnPoints[i];
+            Debug.Log("Trying To Assign " + s.name);
             if(s.HasPlayer)
             {
                 Debug.Log(s.name + " Has Player ");
+                s = null;
                 continue;
             }
             maxTries = maxTries - 1;
@@ -70,8 +73,7 @@ public static class GameExtentions
                 Debug.Log("failed to find Random Position?");
                 break;
             }
-
-        } while (s == null);
+        } 
         return s;
     }
 
