@@ -34,7 +34,6 @@ public class AIController : CharaController
     {
         if(Dodgeball.instance.goTo.LastHolder != chara && chara.IsDetectingBallReciption && TeamsManager.AreFriendlies(chara,player.chara) && !chara.HasBall)
         {
-            print(Dodgeball.instance.goTo.LastHolder.name);
             chara.C_OnBallAction(UnityEngine.InputSystem.InputActionPhase.Started);
             return;
         }

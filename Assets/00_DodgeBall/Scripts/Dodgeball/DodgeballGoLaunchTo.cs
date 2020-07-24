@@ -59,6 +59,7 @@ public class DodgeballGoLaunchTo : DodgeballAction
         void OnComplete()
         {
             Log.Message("Ball Completed Its movement");
+            this.SetKinematic(false);
             Cancel();
         }
     }
@@ -70,7 +71,6 @@ public class DodgeballGoLaunchTo : DodgeballAction
             activeTweener.Kill();
             activeTweener = null;
         }
-        this.SetKinematic(false);
         ball.bodyCol.GetCollider.enabled = true;
         isRunning = false;
         traveledPercent = 0;

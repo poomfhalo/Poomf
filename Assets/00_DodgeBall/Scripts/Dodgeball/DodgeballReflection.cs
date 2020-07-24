@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class DodgeballReflection : DodgeballAction
 {
+    public enum FPSType { Min, Avg, Max }
     public event Action onReflected = null;
     [Header("Reflection Detection")]
     [SerializeField] bool autoActivate = false;
@@ -15,8 +16,8 @@ public class DodgeballReflection : DodgeballAction
         "1 means, if we're 1 frame away from contact, 5 means we start reacting when we're far by 5")]
     [SerializeField] int reflectionFramesPrediction = 3;
     [Tooltip("if true, we will use the longest delta time for the prediction duration, " +
-    	"if false we will use the average")]
-    [SerializeField] bool useSafestPrediction = false;
+        "if false we will use the average")]
+    [SerializeField] FPSType fpsType = FPSType.Min;
     [Tooltip("How many times the script tries to find a proper collision point before using the backup point\n" +
         "back up point is usually in direct opposite position")]
     [SerializeField] int maxTries = 60;
@@ -32,6 +33,8 @@ public class DodgeballReflection : DodgeballAction
     [SerializeField] MinMaxRange reflectionDist = new MinMaxRange(0.5f, 3, 0.8f, 2.5f);
     [Tooltip("the number that the speed of the ball gets divided by")]
     [SerializeField] MinMaxRange reflectionSpeedDivider = new MinMaxRange(1.1f, 6, 4.5f, 6f);
+    [Tooltip("The Reflection, will do tis best, so that, the ball, never reaches closer than this distance to the player.")]
+    [SerializeField] float minReflectionDist = 1.35f;
 
     [Header("Read Only")]
     public bool extReflectionTest = true;
@@ -51,14 +54,27 @@ public class DodgeballReflection : DodgeballAction
 
     bool didHit => lastValidHit.collider != null;
     Vector3 travelDir => travelVel.normalized;
+    float lowestFPS = 0;
     float expectedTravelDist
     {
         get
         {
             float usableFPS = avgFPSTime;
-            if (useSafestPrediction)
-                usableFPS = highestFPSTime;
+            switch (fpsType)
+            {
+                case FPSType.Max:
+                    usableFPS = highestFPSTime;
+                    break;
+                case FPSType.Min:
+                    usableFPS = lowestFPS;
+                    break;
+            }
             float val = travelSpeed* reflectionFramesPrediction *usableFPS;
+
+            float highest = Mathf.Max(minReflectionDist, lowestTravelDist);
+            if (val < highest)
+                val = highest;
+
             return val;
         }
     }
@@ -68,6 +84,7 @@ public class DodgeballReflection : DodgeballAction
     int fpsCounter = 0;
     float fpsTimeCounter = 0;
     float highestFPSTime = 0;
+    [SerializeField] float lowestTravelDist = float.MaxValue;
 
     void Start()
     {
@@ -78,9 +95,12 @@ public class DodgeballReflection : DodgeballAction
                 {
                     case DodgeballCommand.LaunchTo:
                         Debug.Log("Started Reflection Action");
-                        StartReflectionAction();
+                        StartReflectionDetection();
                         break;
                     case DodgeballCommand.HitGround:
+                        Cancel();
+                        break;
+                    case DodgeballCommand.GoToChara:
                         Cancel();
                         break;
                 }
@@ -88,6 +108,7 @@ public class DodgeballReflection : DodgeballAction
         }
         avgFPSTime = Time.deltaTime;
         highestFPSTime = Time.deltaTime;
+        lowestFPS = Time.deltaTime;
     }
     void Update()
     {
@@ -105,12 +126,14 @@ public class DodgeballReflection : DodgeballAction
         lastPos = transform.position;
     }
 
-    public void StartReflectionAction()
+    private void StartReflectionDetection()
     {
+        lowestTravelDist = float.MaxValue;
         lastPos = transform.position;
         isRunning = true;
         C_Reflect();
     }
+
     public void Reflect(Vector3 vel,Vector3 startPoint, Vector3 endPoint,GameObject contactWith)
     {
         scheduler.StartAction(this);
@@ -139,10 +162,12 @@ public class DodgeballReflection : DodgeballAction
                 return;
 
             float dist = Vector3.Distance(lastValidHit.point, transform.position);
-
             if (dist <= expectedTravelDist)
             {
-                Log.Message("Dist " + dist + " :: " + expectedTravelDist + " :: FPS " + avgFPSTime + " With Speed " + travelSpeed);
+                this.SetKinematic(this, false);
+                if (MakesLogSpheres)
+                    loggedSpheres.Add(Extentions.LogSphere(lastValidHit.point, Color.magenta, 0.35f));
+                Log.Message("Dist " + dist + " :: Expected Dist :: " + expectedTravelDist + " :: FPS " + avgFPSTime + " With Speed " + travelSpeed);
                 SetReflectionData();
 
                 ball.RunCommand(Command);
@@ -204,7 +229,8 @@ public class DodgeballReflection : DodgeballAction
     private bool UpdateValidHit()
     {
         lastValidHit = new RaycastHit();
-        travelVel = (transform.position - lastPos) / Time.fixedDeltaTime;
+
+        travelVel = (transform.position - lastPos) / Time.deltaTime;
         Ray ray = new Ray(transform.position, travelDir);
         RaycastHit[] hits = Physics.RaycastAll(ray,castDist);
         Debug.DrawRay(transform.position, travelDir * castDist, Color.blue);
@@ -214,6 +240,12 @@ public class DodgeballReflection : DodgeballAction
             if (chara)
             {
                 lastValidHit = h;
+                float dist = (transform.position - lastPos).magnitude;
+                if (dist <= lowestTravelDist)
+                {
+                    lowestTravelDist = dist;
+                }
+
                 return true;
             }
         }
@@ -229,12 +261,14 @@ public class DodgeballReflection : DodgeballAction
             avgFPSTime = fpsTimeCounter / fpsCounter;
             fpsTimeCounter = 0;
             fpsCounter = 0;
-            highestFPSTime = 0;
+            highestFPSTime = Time.deltaTime;
+            lowestFPS = Time.deltaTime;
         }
+
         if (currDt > highestFPSTime)
-        {
             highestFPSTime = currDt;
-        }
+        if (currDt < lowestFPS)
+            lowestFPS = currDt;
     }
     public override void Cancel()
     {

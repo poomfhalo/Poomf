@@ -160,8 +160,8 @@ namespace GW_Lib
                 SetStateOfBody(toState);
                 return;
             }
-
-            delayer.InvokeDelayed(new WaitForEndOfFrame(), () => {
+            Debug.Log("Started Setting Kinemactic State :: to " + toState);
+            delayer.InvokeDelayed(2, () => {
                 SetStateOfBody(toState);
             });
             void SetStateOfBody(bool s)
@@ -276,7 +276,10 @@ namespace GW_Lib
             s.transform.localScale = Vector3.one * scale;
             return s;
         }
-
+        public static Coroutine InvokeDelayed(this MonoBehaviour m,int i,Action a)
+        {
+            return m.StartCoroutine(DelayedInvoker(i, a));
+        }
         public static Coroutine InvokeDelayed(this MonoBehaviour m, float y, Action a)
         {
             return m.InvokeDelayed(new WaitForSeconds(y), a);
@@ -288,6 +291,14 @@ namespace GW_Lib
         public static Coroutine InvokeDelayed(this MonoBehaviour m, YieldInstruction y, Action a)
         {
             return m.StartCoroutine(DelayedInvoker(y, a));
+        }
+        private static IEnumerator DelayedInvoker(int i,Action a)
+        {
+            for (int c = 0; c < i; c++)
+            {
+                yield return 0;
+            }
+            a?.Invoke();
         }
         private static System.Collections.IEnumerator DelayedInvoker(CustomYieldInstruction y, Action a)
         {

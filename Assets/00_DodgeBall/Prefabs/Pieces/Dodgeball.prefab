@@ -191,8 +191,8 @@ MonoBehaviour:
   isRunning: 0
   autoActivate: 1
   castDist: 10
-  reflectionFramesPrediction: 2
-  useSafestPrediction: 0
+  reflectionFramesPrediction: 1
+  fpsType: 0
   maxTries: 60
   collisionDirThreshold: -0.75
   reflectionDist:
@@ -205,6 +205,7 @@ MonoBehaviour:
     absMax: 6
     rMin: 4.5
     rMax: 5.5
+  minReflectionDist: 1.35
   extReflectionTest: 1
   lastReflectionVel: {x: 0, y: 0, z: 0}
   lastReflectionTarget: {x: 0, y: 0, z: 0}
@@ -212,6 +213,7 @@ MonoBehaviour:
   lastContact: {fileID: 0}
   MakesLogSpheres: 1
   loggedSpheres: []
+  lowestTravelDist: 1e+13
 --- !u!114 &2571047185793813562
 MonoBehaviour:
   m_ObjectHideFlags: 0
