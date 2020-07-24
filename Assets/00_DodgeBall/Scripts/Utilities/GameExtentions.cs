@@ -52,25 +52,28 @@ public static class GameExtentions
     {
         List<CharaPath> playerSpawnPoints = UnityEngine.Object.FindObjectsOfType<CharaPath>().ToList();
         List<CharaPath> spawnPoints = playerSpawnPoints.FindAll(p => p.CheckTeam(team));
+        spawnPoints.RemoveAll(p => !p.CheckTag(PathType.GameStartPath));
         CharaPath s = null;
 
         int maxTries = 300;
-        do
+        while (s == null || s.HasPlayer)
         {
             int i = UnityEngine.Random.Range(0, spawnPoints.Count);
             s = spawnPoints[i];
+            Log.LogL0("Sending Position " + s.name);
             if(s.HasPlayer)
             {
-                Debug.Log(s.name + " Has Player ");
+                Log.LogL0("Failed To Send Position " + s.name + " It Has Player ");
+                s = null;
+                continue;
             }
             maxTries = maxTries - 1;
             if (maxTries <= 0)
             {
-                Debug.Log("failed to find Random Position?");
+                Log.Error("failed to find Random Position?");
                 break;
             }
-
-        } while (s == null || s.HasPlayer);
+        } 
         return s;
     }
 
