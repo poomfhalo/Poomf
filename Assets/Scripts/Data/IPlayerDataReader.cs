@@ -1,4 +1,5 @@
-﻿namespace Poomf.Data
+﻿// TODO : Outdated script. To be deleted.
+namespace Poomf.Data
 {
     public interface IPlayerDataReader
     {

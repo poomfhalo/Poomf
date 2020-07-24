@@ -42,13 +42,13 @@ namespace Poomf.Data
 
         void addCoins(int i_coinsToAdd)
         {
-            CurrencyManager.AddCoins(i_coinsToAdd);
+            CurrencyDataManager.AddCoins(i_coinsToAdd);
             debugCoins();
         }
 
         void addGems(int i_gemsToAdd)
         {
-            CurrencyManager.AddGems(i_gemsToAdd);
+            CurrencyDataManager.AddGems(i_gemsToAdd);
             debugGems();
         }
 
@@ -60,12 +60,12 @@ namespace Poomf.Data
 
         void debugCoins()
         {
-            Debug.LogWarning("Coins value: " + CurrencyManager.Coins);
+            Debug.LogWarning("Coins value: " + CurrencyDataManager.Coins);
         }
 
         void debugGems()
         {
-            Debug.LogWarning("Coins value: " + CurrencyManager.Gems);
+            Debug.LogWarning("Coins value: " + CurrencyDataManager.Gems);
         }
 
         #endregion
