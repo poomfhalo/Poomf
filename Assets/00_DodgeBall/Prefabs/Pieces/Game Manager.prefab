@@ -246,6 +246,7 @@ GameObject:
   - component: {fileID: 2812203220639854979}
   - component: {fileID: 5209031455014098621}
   - component: {fileID: 444778373521017559}
+  - component: {fileID: 3521920534742261112}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -333,6 +334,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPersistant: 0
+  gameEndSlowTimeDur: 3
   extCanPrepareOnStart: 1
 --- !u!114 &444778373521017559
 MonoBehaviour:
@@ -344,5 +346,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd6b02aed5dc2e70d854b8a34eae77ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slowingEaseInDur: 0.3
+  slowingEaseOutDur: 0.3
+  timeReductionPercent: 0.5
+--- !u!114 &3521920534742261112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7145794747918892414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96cbfb665ff9240eb8f0ce3ef9db21d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

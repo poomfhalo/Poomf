@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public enum DodgeballCharaCommand { MoveInput, Friendly, Enemy, BallAction, Dodge, FakeFire, Jump,
-    //BraceForBall,
-    //ReleaseFromBrace,
     PushBall,
     PathFollow,
     BraceForBallReciption,
@@ -248,22 +246,6 @@ public class DodgeballCharacter : MonoBehaviour
         OnCommandActivated?.Invoke(DodgeballCharaCommand.DisableBallReciption);
     }
 
-    //public void C_BraceForContact()
-    //{
-    //    Log.Error("Deprecated we no longer C_BraceForContact", gameObject);
-    //}
-    //public void C_ReleaseFromBrace()
-    //{
-    //    Log.Error("Deprecated we no longer C_ReleaseFromBrace", gameObject);
-    //}
-    //public void C_BraceForBallReciption()
-    //{
-    //    Log.Error("Deprecated we no longer C_BraceForBallReciption", gameObject);
-    //}
-    //public void C_ReleaseFromBallReciptionBrace()
-    //{
-    //    Log.Error("Deprecated we no longer C_ReleaseFromBallReciptionBrace", gameObject);
-    //}
     public void C_PushBall()
     {
         OnCommandActivated?.Invoke(DodgeballCharaCommand.PushBall);
