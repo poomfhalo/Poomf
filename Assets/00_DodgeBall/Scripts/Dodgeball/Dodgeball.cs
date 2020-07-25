@@ -84,8 +84,23 @@ public class Dodgeball : Singleton<Dodgeball>
 
         startGravity = cf.force;
         rb3d.useGravity = false;
-        bodyCol.onCollisionEnter.AddListener(OnBodyEntered);
-        bodyCol.onCollisionEnter.AddListener(OnBodyExitted);
+
+        E_OnStateUpdated += (newS) => {
+            switch (newS)
+            {
+                case BallState.Held:
+                    bodyCol.GetCollider.enabled = false;
+                    break;
+                case BallState.Flying:
+                    bodyCol.GetCollider.enabled = true;
+                    break;
+                case BallState.OnGround:
+                    bodyCol.GetCollider.enabled = true;
+                    break;
+            }
+        };
+
+        reflection.onReflected += () => bodyCol.GetCollider.enabled = true;
     }
     void OnEnable() => DodgeballGameManager.AddBall(this);
     void OnDisable() => DodgeballGameManager.RemoveBall(this);
@@ -121,8 +136,6 @@ public class Dodgeball : Singleton<Dodgeball>
         }
     }
 
-    private void OnBodyEntered(Collision col) { }
-    private void OnBodyExitted(Collision col) { }
     public void RunCommand(DodgeballCommand command) => E_OnCommandActivated?.Invoke(command);
 
     private void C_OnGroundHit()

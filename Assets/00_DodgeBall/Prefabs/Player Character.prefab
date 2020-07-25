@@ -15315,9 +15315,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recievedInput: {x: 0, y: 0, z: 0}
   ballRecieveZone: {fileID: 9203289622195823782}
+  timeToConsiderAsNewCatch: 0.1
   isBallIn: 0
   isDetecting: 0
   extCanRecieveBall: 1
+  justCaughtBall: 0
   isButtonClicked: 0
 --- !u!114 &5682459526312892566
 MonoBehaviour:
@@ -15467,6 +15469,7 @@ MonoBehaviour:
     absMax: 3
     rMin: 0.5
     rMax: 2
+  patrolOutSide: 0
   isInField: 1
 --- !u!114 &6963099543513805061
 MonoBehaviour:
@@ -15481,6 +15484,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currActionName: 
+  actions: []
 --- !u!1 &6963099543659376352
 GameObject:
   m_ObjectHideFlags: 0
