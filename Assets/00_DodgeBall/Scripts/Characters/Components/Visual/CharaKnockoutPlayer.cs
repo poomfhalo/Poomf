@@ -138,6 +138,7 @@ public class CharaKnockoutPlayer : MonoBehaviour
         this.InvokeDelayed(timeBeforePatrol, () => {
             if(patrolOutSide)
                 chara.C_PathFollow(path, true, stopTimeAtPoint.GetValue());
+            charaController.Unlock();
         });
     }
 }
