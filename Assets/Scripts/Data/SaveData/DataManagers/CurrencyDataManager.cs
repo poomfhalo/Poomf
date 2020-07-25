@@ -1,9 +1,9 @@
-﻿using UnityEngine;
-
-namespace Poomf.Data
+﻿namespace Poomf.Data
 {
-    public class CurrencyManager : MonoBehaviour
+    public class CurrencyDataManager : DataManager
     {
+        public static DataManagerDelegate OnCurrencyDataUpdated = null;
+
         private const string coinsKey = "currency_coins";
         private const string gemsKey = "currency_gems";
         private const int defaultCoinsValue = 0;
@@ -42,6 +42,9 @@ namespace Poomf.Data
         {
             int currentCurrencyValue = SaveManager.GetData(i_currencyKey, i_defaultValue) + i_coinsToAdd;
             SaveManager.SaveData(i_currencyKey, currentCurrencyValue);
+
+            if (null != OnCurrencyDataUpdated)
+                OnCurrencyDataUpdated();
         }
 
         #endregion

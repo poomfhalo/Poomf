@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿// TODO : Outdated script. To be deleted.
 using UnityEngine;
 
 namespace Poomf.Data
