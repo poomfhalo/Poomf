@@ -27,6 +27,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     [SerializeField] Vector3 netDisp = new Vector3();
     [SerializeField] Vector3 netDir = new Vector3();
     [SerializeField] DodgeballCharaCommand lastCommand = DodgeballCharaCommand.MoveInput;
+
     bool firstRead = true;
     bool canCallMovement = true;
 

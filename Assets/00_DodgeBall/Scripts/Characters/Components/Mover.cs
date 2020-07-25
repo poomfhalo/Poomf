@@ -93,6 +93,11 @@ public class Mover : DodgeballCharaAction, ICharaAction
     bool isGoingToMove => movabilityDir == 1;
     bool isGoingToStop => movabilityDir == -1;
 
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.collider.GetComponent<Dodgeball>())
+            rb3d.velocity = Vector3.zero;
+    }
     void OnEnable()
     {
         scheduler = GetComponent<ActionsScheduler>();

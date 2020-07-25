@@ -37,7 +37,7 @@ public class CharaKnockoutPlayer : MonoBehaviour
 
     [Header("OutOfField Data")]
     [SerializeField] MinMaxRange stopTimeAtPoint = new MinMaxRange(0.2f, 3, 0.5f, 2);
-
+    [SerializeField] bool patrolOutSide = false;
     [Header("ReadOnly")]
     [SerializeField] bool isInField = true;
 
@@ -136,7 +136,8 @@ public class CharaKnockoutPlayer : MonoBehaviour
         });
 
         this.InvokeDelayed(timeBeforePatrol, () => {
-            chara.C_PathFollow(path, true, stopTimeAtPoint.GetValue());
+            if(patrolOutSide)
+                chara.C_PathFollow(path, true, stopTimeAtPoint.GetValue());
         });
     }
 }
