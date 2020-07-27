@@ -3,21 +3,57 @@ using GW_Lib;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MatchResult : MonoBehaviour
 {
+    public bool allowRematch = false;
+    public bool allowScoreBoard = false;
+
+    [SerializeField] Button home = null, rematch = null, scoreBoard = null;
+    [SerializeField] GameObject voteTexts = null; 
+
     public event Action beforeChangingScene = null;
     [SerializeField] TextMeshProUGUI winnerText = null;
+    [SerializeField] bool autoMove = false;
 
     void Start()
     {
-        winnerText.text = MatchState.Instance.GetMatchWinner().ToString();
-        this.InvokeDelayed(3, () => {
+        if (!allowRematch)
+        {
+            rematch.gameObject.SetActive(false);
+            voteTexts.SetActive(false);
+        }
+        if (!allowScoreBoard)
+            scoreBoard.gameObject.SetActive(false);
+
+        scoreBoard.onClick.AddListener(OnScoreboardClicked);
+        rematch.onClick.AddListener(OnRematchClicked);
+        home.onClick.AddListener(OnHomeClicked);
+        winnerText.text = MatchState.Instance.GetMatchWinner().ToString() + " Wins";
+
+        if (!autoMove)
+            return;
+
+        home.onClick.Invoke();
+    }
+
+    private void OnHomeClicked()
+    {
+        home.interactable = false;
+        this.InvokeDelayed(1, () => {
             beforeChangingScene?.Invoke();
             SceneFader.instance.FadeIn(1, () => {
                 SceneManager.LoadScene("Menu");
             });
         });
     }
+    private void OnRematchClicked()
+    {
 
+    }
+    private void OnScoreboardClicked()
+    {
+
+    }
 }
