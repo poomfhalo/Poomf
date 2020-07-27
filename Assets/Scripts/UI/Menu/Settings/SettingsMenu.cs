@@ -47,14 +47,17 @@ public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
         Resolution[] allResolutions = Screen.resolutions;
         for (int i = 0; i < allResolutions.Length; i++)
         {
-            if (allResolutions[i].width < resolutionThreshold.x || allResolutions[i].height < resolutionThreshold.y)
+            Resolution currentRes = allResolutions[i];
+            if (currentRes.width < resolutionThreshold.x || currentRes.height < resolutionThreshold.y)
             {
                 // Dont add it, it's below the threshold
                 continue;
             }
             else
             {
-                resolutions.Add(allResolutions[i]);
+                // Only add each resolution once, since Screen.resolutions has duplicate resolutions with different refresh rates
+                if (!resolutions.Exists(res => res.width == currentRes.width && res.height == currentRes.height))
+                    resolutions.Add(currentRes);
             }
         }
 

@@ -22,7 +22,7 @@ public class VideoSettingsUI : MonoBehaviour
             List<string> resolutionsStrings = new List<string>();
             for (int i = 0; i < resolutions.Count; i++)
             {
-                resolutionsStrings.Add(resolutions[i].width + " x " + resolutions[i].height + " " + resolutions[i].refreshRate + "Hz");
+                resolutionsStrings.Add(resolutions[i].width + " x " + resolutions[i].height);
             }
 
             // Finally, add the options

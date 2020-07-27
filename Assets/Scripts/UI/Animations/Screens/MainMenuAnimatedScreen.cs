@@ -9,8 +9,8 @@ public class MainMenuAnimatedScreen : AUIAnimatedScreen
 {
     [SerializeField] private Vector3 shrinkScale = Vector3.zero;
     // The edges of the screen that the screens will fade in/out to or from
-    [SerializeField] Transform midLeftEdge;
-    [SerializeField] Transform midRightEdge;
+    [SerializeField] Transform midLeftEdge = null;
+    [SerializeField] Transform midRightEdge = null;
 
     #region AUIAnimatedScreen
     public override void Initialize()
