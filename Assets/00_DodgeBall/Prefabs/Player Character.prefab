@@ -9539,7 +9539,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3035974004660430676}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -1.034}
   m_LocalScale: {x: 0.01, y: 0.01, z: 1}
   m_Children:
   - {fileID: 114315499086041671}
@@ -14898,7 +14898,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5914340365307725248}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.444, z: 0}
+  m_LocalPosition: {x: 0.001843375, y: 2.2068744, z: -0.0000000037487555}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 9103890936502185981}
@@ -14952,7 +14952,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6167937996938106693}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.16999984}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7346324663508175731}
@@ -14960,7 +14960,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -199}
+  m_AnchoredPosition: {x: 27, y: -523}
   m_SizeDelta: {x: -743.2854, y: -398.2928}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2991824207723952457
@@ -15017,8 +15017,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
-  m_fontSizeBase: 100
+  m_fontSize: 75
+  m_fontSizeBase: 75
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -15250,6 +15250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recievedInput: {x: 0, y: 0, z: 0}
+  fakeThrowEnergyCost: 5
   throwFacingSpeed: 200
   throwData: {fileID: 11400000, guid: 85e253f2e592b0bb784f06d2e0373da2, type: 2}
   isThrowing: 0
@@ -15269,6 +15270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recievedInput: {x: 0, y: 0, z: 0}
+  energyCost: 40
   playRndDodge: 1
   dodgeToPlay: 0
   dist: 7
@@ -15292,6 +15294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recievedInput: {x: 0, y: 0, z: 0}
+  energyCost: 20
   gravity: -40
   jumpHeigth: 2
   timeBeforeReapplyGravity: 0.1
@@ -15408,6 +15411,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recievedInput: {x: 0, y: 0, z: 0}
+  fakeThrowEnergyCost: 5
   throwFacingSpeed: 200
   throwData: {fileID: 11400000, guid: 85e253f2e592b0bb784f06d2e0373da2, type: 2}
   isThrowing: 0
@@ -15514,10 +15518,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86b3420ec1a57ba40848e85da924f40b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startEnergy: 100
+  maxEnergy: 100
   regenSpeed: 5
   autoFillOnStart: 1
+  decisionMaker: 1
   currEnergy: 0
+  traveledDist: 0
 --- !u!1 &6963099543659376352
 GameObject:
   m_ObjectHideFlags: 0
@@ -15717,7 +15723,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8165368946856502306}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.17}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7346324663508175731}
@@ -15725,7 +15731,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -74.00002}
+  m_AnchoredPosition: {x: -33, y: -532}
   m_SizeDelta: {x: -743.2854, y: -398.2928}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7242680031112675739
@@ -15764,8 +15770,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278320896
+  m_fontColor: {r: 0, g: 1, b: 0.0056221485, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -15782,8 +15788,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
-  m_fontSizeBase: 100
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -17167,9 +17173,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 54c1253a611fbfdbbb6ba37302055fcd, type: 3}
---- !u!4 &3302477631334740666 stripped
+--- !u!4 &3302477631334740664 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 5198813397511452856, guid: 54c1253a611fbfdbbb6ba37302055fcd,
+  m_CorrespondingSourceObject: {fileID: 5198813397511452858, guid: 54c1253a611fbfdbbb6ba37302055fcd,
     type: 3}
   m_PrefabInstance: {fileID: 7345692964906551810}
   m_PrefabAsset: {fileID: 0}
@@ -17179,15 +17185,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7345692964906551810}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &3302477631334740664 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5198813397511452858, guid: 54c1253a611fbfdbbb6ba37302055fcd,
-    type: 3}
-  m_PrefabInstance: {fileID: 7345692964906551810}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3302477631334740668 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5198813397511452862, guid: 54c1253a611fbfdbbb6ba37302055fcd,
+    type: 3}
+  m_PrefabInstance: {fileID: 7345692964906551810}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3302477631334740666 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5198813397511452856, guid: 54c1253a611fbfdbbb6ba37302055fcd,
     type: 3}
   m_PrefabInstance: {fileID: 7345692964906551810}
   m_PrefabAsset: {fileID: 0}
@@ -17266,12 +17272,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4328074830d262838910bdc760a8dc7, type: 3}
---- !u!4 &6963099544742490870 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1828201718854840054, guid: d4328074830d262838910bdc760a8dc7,
-    type: 3}
-  m_PrefabInstance: {fileID: 8790733874659761152}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6963099544742490871 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1828201718854840055, guid: d4328074830d262838910bdc760a8dc7,
@@ -17284,6 +17284,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f94e60a89352de17aaa18e8518fdaf77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &6963099544742490870 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1828201718854840054, guid: d4328074830d262838910bdc760a8dc7,
+    type: 3}
+  m_PrefabInstance: {fileID: 8790733874659761152}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8963375858890475470
 PrefabInstance:
   m_ObjectHideFlags: 0
