@@ -20,14 +20,14 @@ public class CharaFXPlayer : MonoBehaviour
         hp.OnHpSubtracted += OnHPSubtracted;
         hp.OnZeroHP += OnZeroHP;
         chara.launcher.E_OnThrowStarted += OnThrowStarted;
-        chara.launcher.E_OnThrowPointReached += OnThrowPointReached;
+        chara.launcher.E_OnThrowAnimEnded += OnThrowPointReached;
     }
     void OnDestroy()
     {
         hp.OnHpSubtracted -= OnHPSubtracted;
         hp.OnZeroHP -= OnZeroHP;
         chara.launcher.E_OnThrowStarted -= OnThrowStarted;
-        chara.launcher.E_OnThrowPointReached -= OnThrowPointReached;
+        chara.launcher.E_OnThrowAnimEnded -= OnThrowPointReached;
     }
 
     private void OnHPSubtracted()

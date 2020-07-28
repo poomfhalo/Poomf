@@ -43,7 +43,11 @@ public class GameIntroManager : Singleton<GameIntroManager>
         }
         else if (introReactor && !MatchState.Instance.IsFirstRound)
         {
-            textAnims.Play(OnReactorCompleted);
+            GameExtentions.SetCharasLock(true, null);
+            textAnims.Play(()=> {
+                GameExtentions.SetCharasLock(false, null);
+                OnReactorCompleted(); 
+            });
         }
         else if(introReactor == null)
         {

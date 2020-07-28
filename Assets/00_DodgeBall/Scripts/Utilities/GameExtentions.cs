@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -12,7 +11,7 @@ public static class GameExtentions
     /// <param name="objsGroup">Objects group.</param>
     /// <param name="index">-1 means we select one randomly</param>
     /// <typeparam name="T">The 1st type parameter.</typeparam>
-    public static T Make<T>(T[] objsGroup,int index =-1) where T: UnityEngine.Object
+    public static T Make<T>(T[] objsGroup, int index = -1) where T : UnityEngine.Object
     {
         if (objsGroup.Length == 0)
             return null;
@@ -25,7 +24,7 @@ public static class GameExtentions
 
     public static Transform GetRndChild(Transform hitEffectsHead)
     {
-        if (hitEffectsHead.childCount== 0)
+        if (hitEffectsHead.childCount == 0)
             return null;
         if (hitEffectsHead.childCount == 1)
             return hitEffectsHead.GetChild(0);
@@ -48,6 +47,34 @@ public static class GameExtentions
         return null;
     }
 
+    /// <summary>
+    /// Sets the charas lock.
+    /// </summary>
+    /// <param name="lockState">If set to <c>true</c> lock state.</param>
+    /// <param name="slots">Setting as null, means all characters</param>
+    public static void SetCharasLock(bool lockState, int[] slots)
+    {
+        if (slots == null)
+        {
+            CharaController[] charas = UnityEngine.Object.FindObjectsOfType<CharaController>();
+            foreach (var chara in charas)
+            {
+                chara.SetLockTo(lockState);
+            }
+
+            return;
+        }
+
+        foreach (var slot in slots)
+        {
+            CharaController chara = GetCharaOfSlot(slot);
+            if (chara == null)
+                continue;
+
+            chara.SetLockTo(lockState);
+        }
+    }
+
     public static CharaPath GetSpawnPosition(TeamTag team)
     {
         List<CharaPath> playerSpawnPoints = UnityEngine.Object.FindObjectsOfType<CharaPath>().ToList();
@@ -61,7 +88,7 @@ public static class GameExtentions
             int i = UnityEngine.Random.Range(0, spawnPoints.Count);
             s = spawnPoints[i];
             Log.LogL0("Sending Position " + s.name);
-            if(s.HasPlayer)
+            if (s.HasPlayer)
             {
                 Log.LogL0("Failed To Send Position " + s.name + " It Has Player ");
                 s = null;
@@ -73,7 +100,7 @@ public static class GameExtentions
                 Log.Error("failed to find Random Position?");
                 break;
             }
-        } 
+        }
         return s;
     }
 
@@ -84,7 +111,7 @@ public static class GameExtentions
     /// <param name="slotID">Slot identifier.</param>
     /// <param name="tag">Tag.</param>
     /// <param name="index">Index, use -1 for random path, 0 for first path,note value is clampped correctly</param>
-    public static CharaPath GetPath(int slotID,PathType tag,int index)
+    public static CharaPath GetPath(int slotID, PathType tag, int index)
     {
         List<CharaPath> allPaths = UnityEngine.Object.FindObjectsOfType<CharaPath>().ToList();
         List<CharaPath> goodPaths = allPaths.FindAll(p => p.CheckSlot(slotID) && p.CheckTag(tag));
@@ -96,7 +123,7 @@ public static class GameExtentions
         {
             return goodPaths[0];
         }
-        if(index == -1)
+        if (index == -1)
         {
             index = UnityEngine.Random.Range(0, goodPaths.Count);
         }

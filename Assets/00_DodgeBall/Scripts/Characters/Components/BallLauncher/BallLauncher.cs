@@ -1,16 +1,19 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class BallLauncher : DodgeballCharaAction, ICharaAction
+public abstract class BallLauncher : DodgeballCharaAction, ICharaAction,IEnergyAction
 {
     public event Action E_OnThrowStarted = null;
     public event Action E_OnThrowP1Finished = null;
     public event Action E_OnThrowPointReached = null;
     public event Action E_OnBallLaunchedSafely = null;
+    public event Action E_OnThrowAnimEnded = null;
 
     public bool IsThrowing => isThrowing;
     public string actionName => activityName;
 
+    [SerializeField] float fakeThrowEnergyCost = 5;
+    [Header("Throw Data")]
     [Tooltip("If the value is less than 1 then we will use the Mover turn speed, noting that, if its too low, character may not" +
 "\nface the target, by the end of the animation, but the ball, will still travel towards the target")]
     [SerializeField] float throwFacingSpeed = 200;
@@ -28,6 +31,10 @@ public abstract class BallLauncher : DodgeballCharaAction, ICharaAction
     protected Mover mover = null;
     protected DodgeballCharacter aimedAtChara = null;
     protected SelectionIndicator selectionIndicator => GetComponent<DodgeballCharacter>().selectionIndicator;
+
+    public Action<float> ConsumeEnergy { get; set; }
+    public Func<float, bool> CanConsumeEnergy { get; set; }
+    public Func<bool> AllowRegen => () => !IsThrowing;
 
     protected virtual void Awake()
     {
@@ -47,7 +54,11 @@ public abstract class BallLauncher : DodgeballCharaAction, ICharaAction
     {
         if (isThrowing)
             return;
+        if (!CanConsumeEnergy(fakeThrowEnergyCost))
+            return;
 
+        RunOnBallThrowStart();
+        ConsumeEnergy(fakeThrowEnergyCost);
         isThrowing = true;
         aimedAtChara = activeChara;
 
@@ -61,7 +72,11 @@ public abstract class BallLauncher : DodgeballCharaAction, ICharaAction
         else
             a.Invoke();
     }
-    public virtual void A_OnFakeThrowEnded() => isThrowing = false;
+    public virtual void A_OnFakeThrowEnded()
+    {
+        isThrowing = false;
+        RunOnThrowAnimEnded();
+    }
     public virtual void A_OnThrowPointReached()
     {
         if (!aimedAtChara)
@@ -91,6 +106,7 @@ public abstract class BallLauncher : DodgeballCharaAction, ICharaAction
 
         selectionIndicator.SetFocus(null);
         RunOnThrowPointReached();
+        RunOnThrowAnimEnded();
     }
     public virtual void A_OnThrowEnded()
     {
@@ -120,4 +136,5 @@ public abstract class BallLauncher : DodgeballCharaAction, ICharaAction
     {
         E_OnThrowStarted?.Invoke();
     }
+    protected virtual void RunOnThrowAnimEnded() => E_OnThrowAnimEnded?.Invoke();
 }

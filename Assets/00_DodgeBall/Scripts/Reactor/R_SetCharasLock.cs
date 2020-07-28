@@ -18,22 +18,13 @@ public class R_SetCharasLock : Reaction,I_R_CharaSupplier
     }
     protected override IEnumerator ReactionBehavior()
     {
-        foreach (var slot in slots)
-        {
-            CharaController chara = GameExtentions.GetCharaOfSlot(slot);
-            if (chara == null)
-                continue;
+        bool lockState = false;
+        if (command == Command.Lock)
+            lockState = true;
+        else if (command == Command.Unlock)
+            lockState = false;
 
-            switch (command)
-            {
-                case Command.Lock:
-                    chara.GetComponent<CharaController>().Lock();
-                    break;
-                case Command.Unlock:
-                    chara.GetComponent<CharaController>().Unlock();
-                    break;
-            }
-        }
+        GameExtentions.SetCharasLock(lockState, slots);
         yield return 0;
     }
     public void RecieveCharacters(int[] charaSlots)=> this.slots = charaSlots;

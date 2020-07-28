@@ -2,7 +2,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-public class Dodger : DodgeballCharaAction, ICharaAction
+public class Dodger : DodgeballCharaAction, ICharaAction,IEnergyAction
 {
     [Serializable]
     class DodgeAnimData
@@ -21,6 +21,12 @@ public class Dodger : DodgeballCharaAction, ICharaAction
     public bool IsDodging => isDodging;
     public string actionName => "Dodge Action";
 
+    public Action<float> ConsumeEnergy { get; set; }
+    public Func<float, bool> CanConsumeEnergy { get; set; }
+    public Func<bool> AllowRegen => () => !IsDodging;
+
+    [SerializeField] float energyCost = 40;
+    [Header("Dodge Data")]
     [SerializeField] bool playRndDodge = true;
     [Tooltip("If playRndDodge is true, this will be randomly set, otherwise, we will dodge using this animation only")]
     [SerializeField] int dodgeToPlay = 0;
@@ -54,6 +60,11 @@ public class Dodger : DodgeballCharaAction, ICharaAction
     }
     public void StartDodgeAction(Vector3 targetPos,Action onComplete)
     {
+        if (!CanConsumeEnergy(energyCost))
+            return;
+
+        ConsumeEnergy(energyCost);
+
         if (playRndDodge)
         {
             dodgeToPlay = UnityEngine.Random.Range(0, anims.Length);
@@ -94,6 +105,4 @@ public class Dodger : DodgeballCharaAction, ICharaAction
         chara.C_MoveInput(recievedInput);
         Cancel();
     }
-
-
 }

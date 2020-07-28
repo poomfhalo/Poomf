@@ -1,12 +1,20 @@
-﻿using GW_Lib;
+﻿using System;
+using GW_Lib;
 using UnityEngine;
 
-public class Jumper : DodgeballCharaAction, ICharaAction
+public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
 {
     public bool FeelsGround => feelsGround;
     public bool IsJumping => isJumping;
     public string actionName => "Jump Action";
 
+    public Action<float> ConsumeEnergy { get; set; }
+    public Func<float, bool> CanConsumeEnergy { get; set; }
+    public Func<bool> AllowRegen => () => !IsJumping;
+
+    [SerializeField] float energyCost = 20;
+
+    [Header("Jump Data")]
     [SerializeField] float gravity = -20;
     [SerializeField] float jumpHeigth = 3;
     [SerializeField] float timeBeforeReapplyGravity = 0.1f;
@@ -99,7 +107,10 @@ public class Jumper : DodgeballCharaAction, ICharaAction
             return;
         if (IsJumping)
             return;
+        if (CanConsumeEnergy != null && !CanConsumeEnergy(energyCost))
+            return;
 
+        ConsumeEnergy?.Invoke(energyCost);
         isJumping = true;
         animator.SetTrigger("Jump");
         scheduler.StartAction(this, false);
