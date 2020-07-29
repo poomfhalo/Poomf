@@ -49,6 +49,7 @@ public class CharaKnockoutPlayer : MonoBehaviour
     CharaSlot slot => GetComponent<CharaSlot>();
     DodgeballCharacter chara => GetComponent<DodgeballCharacter>();
     CharaController charaController => GetComponent<CharaController>();
+    Mover mover => GetComponent<Mover>();
 
     void Awake()
     {
@@ -138,6 +139,8 @@ public class CharaKnockoutPlayer : MonoBehaviour
         this.InvokeDelayed(timeBeforePatrol, () => {
             if(patrolOutSide)
                 chara.C_PathFollow(path, true, stopTimeAtPoint.GetValue());
+
+            mover.allowSpeedMultiplication = true;
             charaController.Unlock();
         });
     }

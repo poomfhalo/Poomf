@@ -72,3 +72,61 @@ public class CharaSkinData : PersistantSO
     SkinItemData GetItemData(ItemCategory itemType) => items.Single(i => i.type == itemType);
     private void Refresh() => onDataUpdated?.Invoke();
 }
+
+//To turn the CharaSkinData, to plain data that can be transfered across the network.
+[Serializable]
+public class CharaSkinDataPlain
+{
+    public int[] types = new int[0];
+    public int[] ids = new int[0];
+
+    public float[] reds = new float[0];
+    public float[] greens = new float[0];
+    public float[] blues = new float[0];
+
+    public int[] colorIndicies = new int[0];
+    public int[] texesIndicies = new int[0];
+
+    public CharaSkinDataPlain() { }
+
+    public CharaSkinDataPlain(CharaSkinData skinData)
+    {
+        int itemsCount = skinData.items.Count;
+        types = ids = colorIndicies = texesIndicies = new int[itemsCount];
+        reds = greens = blues = new float[itemsCount];
+
+        for (int i = 0; i < itemsCount; i++)
+        {
+            SkinItemData item = skinData.items[i];
+            types[i] = (int)item.type;
+            ids[i] = item.activeItemID;
+
+            reds[i] = item.currentColor.r;
+            greens[i] = item.currentColor.g;
+            blues[i] = item.currentColor.b;
+
+            colorIndicies[i] = item.currentColorIndex;
+            texesIndicies[i] = item.currentTextureIndex;
+        }
+    }
+    public CharaSkinData CreateSkinData()
+    {
+        int itemsCount = types.Length;
+        CharaSkinData skinData = ScriptableObject.CreateInstance<CharaSkinData>();
+        skinData.items = new List<SkinItemData>();
+
+        for (int i = 0; i < itemsCount; i++)
+        {
+            SkinItemData item = new SkinItemData();
+            item.type = (ItemCategory)types[i];
+            item.activeItemID = ids[i];
+
+            Color c = new Color(reds[i], greens[i], blues[i]);
+            item.SetColor(c);
+
+            item.SetColorIndex(colorIndicies[i]);
+            item.SetTextureIndex(texesIndicies[i]);
+        }
+        return skinData;
+    }
+}

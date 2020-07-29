@@ -22,6 +22,9 @@ public class Energy : MonoBehaviour
     [Header("Read Only")]
     [SerializeField] float currEnergy = 0;
     [SerializeField] float traveledDist = 0;
+    public Func<bool> ExtAllowWork = () => true;
+
+
     List<IEnergyAction> actions = new List<IEnergyAction>();
     Vector3 lastXZPos = new Vector3();
     Vector3 xzPos => new Vector3(transform.position.x, 0, transform.position.z);
@@ -40,7 +43,7 @@ public class Energy : MonoBehaviour
       
         GameIntroManager.instance.OnEntryCompleted += () => {
             if (autoFillOnStart)
-                currEnergy = maxEnergy;
+                SetEnergy(maxEnergy);
 
             lastXZPos = xzPos;
             wasStarted = true;
@@ -48,10 +51,13 @@ public class Energy : MonoBehaviour
     }
     void FixedUpdate()
     {
+        if (!ExtAllowWork())
+            return;
         if (!wasStarted)
             return;
 
         SetRegenData();
+
         if (!CanRegen())
             return;
 
@@ -65,9 +71,16 @@ public class Energy : MonoBehaviour
     public bool CanConsumeEnergy(float ofVal) => currEnergy >= ofVal;
     public void ConsumeEnergy(float val)
     {
-        currEnergy = currEnergy - val;
+        SetEnergy(currEnergy - val);
     }
 
+    //Called To Set the Energy Directly, no calculations involved
+    //for now, used as part of the multiplayer syncing, can be used in cutscenes.
+    public void SetEnergy(float energy)
+    {
+        currEnergy = energy;
+        currEnergy = Mathf.Clamp(currEnergy, 0, maxEnergy);
+    }
     private void SetRegenData()
     {
         deltaDist = (lastXZPos - xzPos).magnitude;
@@ -76,8 +89,7 @@ public class Energy : MonoBehaviour
     }
     private void RegenrateEnergy()
     {
-        currEnergy = currEnergy + deltaDist * regenSpeed;
-        currEnergy = Mathf.Clamp(currEnergy, 0, maxEnergy);
+        SetEnergy(currEnergy + deltaDist * regenSpeed);
     }
     private bool CanRegen()
     {

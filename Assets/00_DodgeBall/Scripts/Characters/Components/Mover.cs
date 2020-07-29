@@ -25,7 +25,9 @@ public class Mover : DodgeballCharaAction, ICharaAction
 
     [SerializeField] float accel = 10;
     [SerializeField] float maxSpeed = 3;
-
+    [Tooltip("This value is multiplied by the maximum speed when 'allowSpeedMultiplication'" +
+    	" is true (bool is controlled by code), example, when player is out")]
+    [SerializeField] float speedMultiplayer = 1.5f;
 
     [Header("Slowing Down")]
     [Tooltip("how fast speed decreases, when no input is being applied")]
@@ -62,6 +64,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
     [SerializeField] float distToLastPos = 0;
     [SerializeField] MovementType m_movementType = MovementType.ByInput;
     [SerializeField] bool isMoving = false;
+    public bool allowSpeedMultiplication = false;
     public bool workAsAction = true;
 
     Vector3 dir = Vector3.zero;
@@ -127,7 +130,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
                 float s = 0;
                 if (distToLastPos > stoppingDist)
                 {
-                    s = maxSpeed;
+                    s = GetMaxSpeed();
                 }
                 animator.SetFloat("Speed", s);
                 break;
@@ -241,7 +244,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
         if (speed > dampingSpeed)
         {
             lastNonZeroVel = xzVel;
-            xzVel = Vector3.ClampMagnitude(xzVel, maxSpeed);
+            xzVel = Vector3.ClampMagnitude(xzVel, GetMaxSpeed());
         }
     }
     private void SetVelByInput()
@@ -277,7 +280,7 @@ public class Mover : DodgeballCharaAction, ICharaAction
         else if (distToLastPos < slowingDist && distToLastPos > stoppingDist)
         {
             float distFactor = distToLastPos / slowingDist;
-            xzVel = dir * distFactor * maxSpeed;
+            xzVel = dir * distFactor * GetMaxSpeed();
         }
         else if (distToLastPos < stoppingDist)
         {
@@ -351,4 +354,10 @@ public class Mover : DodgeballCharaAction, ICharaAction
         }
     }
     #endregion
+    private float GetMaxSpeed()
+    {
+        if (allowSpeedMultiplication)
+            return maxSpeed * speedMultiplayer;
+        return maxSpeed;
+    }
 }

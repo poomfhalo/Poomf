@@ -5,8 +5,7 @@ using GW_Lib;
 
 public class CharaOutCamShaker : MonoBehaviour
 {
-    [SerializeField] float shakeAmp = 3;
-    [SerializeField] float shakeFreq = 3;
+    [Header("CoreData")]
     [SerializeField] float shakeDur = 0.3f;
     [SerializeField] float shakeEaseInDur = 0.05f;
     [SerializeField] float shakeEaseOutDur = 0.05f;
@@ -14,6 +13,13 @@ public class CharaOutCamShaker : MonoBehaviour
     [SerializeField] bool shakeOnTeleportedOut = true;
     [Tooltip("Activates the moment, the character turns into a rag doll/has zero hp")]
     [SerializeField] bool shakeOnKnockedOut = true;
+
+    [Header("Konckout Shake Data")]
+    [SerializeField] float shakeAmp = 3;
+    [SerializeField] float shakeFreq = 3;
+    [Header("Hit Shake Data")]
+    [SerializeField] float hitShakeAmp = 1.5f;
+    [SerializeField] float hitShakeFreq = 1.5f;
 
     CinemachineVirtualCamera cam = null;
     CinemachineBasicMultiChannelPerlin noise = null;
@@ -40,53 +46,66 @@ public class CharaOutCamShaker : MonoBehaviour
                         knockedOut.E_OnTeleportedOut -= OnCharaKnockedOut;
                         knockedOut.E_OnKnockedOut -= OnCharaKnockedOut;
                     }
+                    CharaHitPoints hp = c.GetComponent<CharaHitPoints>();
+                    if (hp)
+                        hp.OnHpSubtracted -= OnHpSubtracted;
                 }
             });
         }
         if (GameIntroManager.instance)
             GameIntroManager.instance.OnEntryCompleted -= OnEntryCompleted;
     }
+
     private void OnEntryCompleted()
     {
         TeamsManager.instance.AllCharacters.ForEach(c => {
             CharaKnockoutPlayer knockedOut = c.GetComponent<CharaKnockoutPlayer>();
             knockedOut.E_OnTeleportedOut += OnCharaKnockedOut;
             knockedOut.E_OnKnockedOut += OnCharaKnockedOut;
+            CharaHitPoints hp = c.GetComponent<CharaHitPoints>();
+            hp.OnHpSubtracted += OnHpSubtracted;
         });
     }
-
+    private void OnHpSubtracted()
+    {
+        ApplyShake(hitShakeAmp, hitShakeFreq);
+    }
     private void OnCharaKnockedOut(DodgeballCharacter chara)
+    {
+        ApplyShake(shakeAmp, shakeFreq);
+    }
+
+    private void ApplyShake(float amp, float freq)
     {
         if (isShaking)
             return;
 
         isShaking = true;
-        EaseIntoShake();
+        EaseIntoShake(amp, freq);
         this.InvokeDelayed(shakeDur + shakeEaseInDur, EaseOutOfShake);
+    }
+    void EaseIntoShake(float amp,float freq)
+    {
+        float lerper = 0;
+        float startAmp = noise.m_AmplitudeGain;
+        float startFreq = noise.m_FrequencyGain;
 
-        void EaseIntoShake()
-        {
-            float lerper = 0;
-            float startAmp = noise.m_AmplitudeGain;
-            float startFreq = noise.m_FrequencyGain;
+        DOTween.To(() => lerper, f => lerper = f, 1, shakeEaseInDur).SetEase(Ease.InOutSine).OnUpdate(() => {
+            noise.m_AmplitudeGain = Mathf.Lerp(startAmp, amp, lerper);
+            noise.m_FrequencyGain = Mathf.Lerp(startFreq, freq, lerper);
+        });
+    }
+    void EaseOutOfShake()
+    {
+        float lerper = 0;
+        float startAmp = noise.m_AmplitudeGain;
+        float startFreq = noise.m_FrequencyGain;
 
-            DOTween.To(() => lerper, f => lerper = f, 1, shakeEaseInDur).SetEase(Ease.InOutSine).OnUpdate(() =>{
-                noise.m_AmplitudeGain = Mathf.Lerp(startAmp, shakeAmp, lerper);
-                noise.m_FrequencyGain = Mathf.Lerp(startFreq, shakeFreq, lerper);
-            }); ;
-        }
-        void EaseOutOfShake()
-        {
-            float lerper = 0;
-            float startAmp = noise.m_AmplitudeGain;
-            float startFreq = noise.m_FrequencyGain;
-
-            DOTween.To(() => lerper, f => lerper = f, 1, shakeEaseOutDur).SetEase(Ease.InOutSine).OnUpdate(()=> {
-                noise.m_AmplitudeGain = Mathf.Lerp(startAmp, 0, lerper);
-                noise.m_FrequencyGain = Mathf.Lerp(startFreq, 0, lerper);
-            }).OnComplete(()=> {
-                isShaking = false;
-            });
-        }
+        DOTween.To(() => lerper, f => lerper = f, 1, shakeEaseOutDur).SetEase(Ease.InOutSine).OnUpdate(() => {
+            noise.m_AmplitudeGain = Mathf.Lerp(startAmp, 0, lerper);
+            noise.m_FrequencyGain = Mathf.Lerp(startFreq, 0, lerper);
+        }).OnComplete(() => {
+            isShaking = false;
+        });
     }
 }
