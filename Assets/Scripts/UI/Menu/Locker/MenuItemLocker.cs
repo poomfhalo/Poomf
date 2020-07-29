@@ -118,18 +118,42 @@ namespace Poomf.UI
             for (int i = 0; i < itemsCount; i++)
             {
                 HeadItemData itemData = testItemHeads[i];
-                GameObject newItem = Instantiate(lockerItemPrefab);
-                InventoryItem item = newItem.GetComponent<InventoryItem>();
-                if (null == item) return;
-                item.InitializeItem(itemData.ItemName, null, null, itemData.ItemSprite, "", itemData.ItemID, ItemCategory.Head);
-                if (skinData.GetItemID(ItemCategory.Head) == itemData.ItemID)
+                if (itemData.HasVariants)
                 {
-                    // This is the currently equipped head
-                    item.Equip(equippedButtonSprite);
-                    currentHead = item;
+                    VariantHeadItemData variantData = itemData as VariantHeadItemData;
+                    // Create an "inventory item" for each variant
+                    for (int j = 0; j < variantData.GetVariantsCount(); j++)
+                    {
+                        GameObject newItem = Instantiate(lockerItemPrefab);
+                        InventoryItem item = newItem.GetComponent<InventoryItem>();
+                        if (null == item) return;
+                        item.InitializeItem(variantData.GetVariantName(j), null, null, variantData.ItemSprite, "", variantData.ItemID, ItemCategory.Head, j);
+                        if (skinData.GetItemID(ItemCategory.Head) == variantData.ItemID && j == skinData.GetTextureIndex(ItemCategory.Head))
+                        {
+                            // This is the currently equipped variant
+                            item.Equip(equippedButtonSprite);
+                            currentHead = item;
+                        }
+                        newItem.transform.SetParent(headsContentParent, false);
+                        item.MyButton.onClick.AddListener(OnInventoryItemButtonPressed);
+                    }
                 }
-                newItem.transform.SetParent(headsContentParent, false);
-                item.MyButton.onClick.AddListener(OnInventoryItemButtonPressed);
+                else
+                {
+                    // Create 1 inventory item only
+                    GameObject newItem = Instantiate(lockerItemPrefab);
+                    InventoryItem item = newItem.GetComponent<InventoryItem>();
+                    if (null == item) return;
+                    item.InitializeItem(itemData.ItemName, null, null, itemData.ItemSprite, "", itemData.ItemID, ItemCategory.Head);
+                    if (skinData.GetItemID(ItemCategory.Head) == itemData.ItemID)
+                    {
+                        // This is the currently equipped head
+                        item.Equip(equippedButtonSprite);
+                        currentHead = item;
+                    }
+                    newItem.transform.SetParent(headsContentParent, false);
+                    item.MyButton.onClick.AddListener(OnInventoryItemButtonPressed);
+                }
             }
         }
 
@@ -186,6 +210,8 @@ namespace Poomf.UI
                         if (testItemHeads[i].ItemID == selectedItem.ItemID)
                         {
                             skinData.SetItemID(ItemCategory.Head, testItemHeads[i].ItemID);
+                            if (testItemHeads[i].HasVariants)
+                                skinData.SetTextureIndex(ItemCategory.Head, selectedItem.VariantNumber);
                             // Unequip the previous item and equip the new one
                             if (currentHead != null)
                                 currentHead.Unequip(defaultButtonSprite);

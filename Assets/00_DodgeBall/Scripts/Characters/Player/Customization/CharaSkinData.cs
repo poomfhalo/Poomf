@@ -24,7 +24,7 @@ public class SkinItemData
     // Used with items that use preset colors rather than arbitrary ones like Eyes
     [ConditionalField(nameof(type), false, ItemCategory.Eyes, ItemCategory.Skin)] public int currentColorIndex = 0;
     // The currently active texture of Texture customizable items like outfits
-    [ConditionalField(nameof(type), false, ItemCategory.Eyes, ItemCategory.Body)] public int currentTextureIndex = 0;
+    [ConditionalField(nameof(type), false, ItemCategory.Eyes, ItemCategory.Body, ItemCategory.Head)] public int currentTextureIndex = 0;
     //Never Call, Setters/Getters of this class, from anywhere other than CharaSkinData
     public Color GetColor() => currentColor;
     public void SetColor(Color c) => currentColor = c;

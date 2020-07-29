@@ -4,9 +4,6 @@ using Poomf.Data;
 [RequireComponent(typeof(Renderer))]
 public abstract class CustomItemBase : MonoBehaviour
 {
-    [Tooltip("The index of the material, among the mesh renderer's materials, that will be customized when the color or texture change.")]
-    [SerializeField] protected int matToCustomize = 0;
-
     #region Setters/Getters
     public ItemCategory itemType => m_itemType;
     #endregion
@@ -20,11 +17,6 @@ public abstract class CustomItemBase : MonoBehaviour
     public virtual void Initialize()
     {
         meshRenderer = GetComponent<SkinnedMeshRenderer>();
-        if (matToCustomize >= meshRenderer.materials.Length)
-        {
-            Debug.LogError("CustomItemBase : \"material index to customize\" is out of range! It will be set to 0.");
-            matToCustomize = 0;
-        }
         materialProperties = new MaterialPropertyBlock();
         // Update colors
         //if (isColorable)

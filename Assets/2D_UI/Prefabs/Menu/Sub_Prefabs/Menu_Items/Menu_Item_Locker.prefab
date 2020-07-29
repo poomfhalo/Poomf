@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1357994804}
   - component: {fileID: 1357994803}
   - component: {fileID: 1357994802}
+  - component: {fileID: 2417498555246540947}
   m_Layer: 5
   m_Name: Zoom Button
   m_TagString: Untagged
@@ -35,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -251.7, y: -461.91}
+  m_AnchoredPosition: {x: -113, y: -461.91}
   m_SizeDelta: {x: 128, y: 128}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1357994804
@@ -129,6 +130,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2417498555246540947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1357994800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 3, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &36443956665940865
 GameObject:
   m_ObjectHideFlags: 0
@@ -1756,7 +1772,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -449, y: 14}
+  m_AnchoredPosition: {x: -34, y: 14}
   m_SizeDelta: {x: 869.9658, y: 111.88458}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &4804028572747122732
@@ -2285,7 +2301,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -933.55237, y: 141}
+  m_AnchoredPosition: {x: -228, y: 141}
   m_SizeDelta: {x: 389.80945, y: 47.156006}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &21920703832327422
@@ -2795,7 +2811,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &936689067329789009
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2814,7 +2830,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 956, y: -104}
+  m_AnchoredPosition: {x: 885, y: -104}
   m_SizeDelta: {x: 341.8, y: 193.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6760625213317284676
@@ -3513,7 +3529,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d3df105fceafad942837ec5df5fc457f, type: 2}
   - {fileID: 11400000, guid: a1c0102b0c7add94399e8762f68afbac, type: 2}
   - {fileID: 11400000, guid: cb9998d2926cbaf40a5dadcf92e27676, type: 2}
-  - {fileID: 11400000, guid: d10a682737048734a86baf6593e53b06, type: 2}
+  - {fileID: 11400000, guid: 72ff69cb5f9ff5643879b60bf7faf4cc, type: 2}
   testItemBodies:
   - {fileID: 11400000, guid: 90a7217fef0875c419d2dbdd536bd162, type: 2}
   - {fileID: 11400000, guid: 65da9806883d782499ccffc4aa815b0c, type: 2}
@@ -3588,8 +3604,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -76.53, y: -0.00038194508}
-  m_SizeDelta: {x: 76.53003, y: 30.6}
+  m_AnchoredPosition: {x: -76.53, y: -0.00035100864}
+  m_SizeDelta: {x: 76.53003, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &638546235400208865
 MonoBehaviour:
@@ -5206,12 +5222,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f0d41ae8e625614cb9f441303bf624a, type: 3}
---- !u!224 &122291512882187204 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6402520494761046680, guid: 5f0d41ae8e625614cb9f441303bf624a,
-    type: 3}
-  m_PrefabInstance: {fileID: 6442440002117876060}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2031084706321407839 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4992233362640119299, guid: 5f0d41ae8e625614cb9f441303bf624a,
@@ -5224,3 +5234,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf24bab69ea12bd408e6646c3bb50746, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &122291512882187204 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6402520494761046680, guid: 5f0d41ae8e625614cb9f441303bf624a,
+    type: 3}
+  m_PrefabInstance: {fileID: 6442440002117876060}
+  m_PrefabAsset: {fileID: 0}

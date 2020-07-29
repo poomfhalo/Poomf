@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Poomf.Data
 {
-    [CreateAssetMenu(fileName = "BodyItemData", menuName = "ScriptableObjects/Items/BodyItemData", order = 2)]
-    public class BodyItemData : ItemDataBase
+    [CreateAssetMenu(fileName = "VariantHeadData", menuName = "ScriptableObjects/Items/VariantHeadData", order = 3)]
+    public class VariantHeadItemData : HeadItemData
     {
         [Tooltip("Names appended to the original item's name that distinguishes between different variants.")]
         [SerializeField] string[] variantNamesExtensions = new string[3] { "A", "B", "C" };
@@ -15,18 +15,11 @@ namespace Poomf.Data
 
         [Tooltip("The amount of gems added to each variant's price. 0 means it costs the same as its \"PriceGems\"")]
         [SerializeField] int[] variantAdditionalGemPrices = new int[3] { 0, 0, 0 };
-
-        [SerializeField, HideInInspector] bool initialized = false;
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             HasVariants = true;
-            if (!initialized)
-            {
-                ItemCategory = ItemCategory.Body;
-                initialized = true;
-            }
         }
-
         public string GetVariantName(int index)
         {
             return ItemName + " " + variantNamesExtensions[index];

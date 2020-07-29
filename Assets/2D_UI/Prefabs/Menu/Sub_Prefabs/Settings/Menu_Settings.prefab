@@ -1769,7 +1769,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -109.6001, y: -73.69995}
+  m_AnchoredPosition: {x: -109.6001, y: -73.700195}
   m_SizeDelta: {x: 161.38132, y: 101.2728}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4247246517946772841
@@ -4725,14 +4725,7 @@ MonoBehaviour:
   sfxUISettings: {fileID: 6488927288267979216}
   musicUISettings: {fileID: 8084314523550812456}
   videoSettingsUI: {fileID: 1423678670064020826}
-  audioManager: {fileID: 11400000, guid: b66e93f29211dd44fb5a35058d7a3b04, type: 2}
-  videoManager: {fileID: 11400000, guid: 49519b6654e91bf47b2c54e58a21ddff, type: 2}
-  resolutionThreshold: {x: 1280, y: 600}
-  currentMixer: {fileID: 24100000, guid: 7851bc8e8cda87c4c805de6327a7fc54, type: 2}
-  defaultAudioSettings: {fileID: 11400000, guid: a11658c76a0143944bb6791bbd1f8731,
-    type: 2}
-  defaultVideoSettings: {fileID: 11400000, guid: ba65e6c4f19542c46a8b6a67c574edd4,
-    type: 2}
+  resolutionThreshold: {x: 1280, y: 720}
 --- !u!1 &6094124475878659529
 GameObject:
   m_ObjectHideFlags: 0

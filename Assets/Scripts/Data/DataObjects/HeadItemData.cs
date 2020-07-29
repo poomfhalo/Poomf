@@ -8,8 +8,9 @@ namespace Poomf.Data
     public class HeadItemData : ItemDataBase
     {
         [SerializeField, HideInInspector] bool initialized = false;
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
+            HasVariants = false;
             if (!initialized)
             {
                 ItemCategory = ItemCategory.Head;

@@ -16,6 +16,7 @@ namespace Poomf.Data
         [SerializeField] private ItemSet itemSet = ItemSet.SCHOOL;
         [SerializeField] private Gender itemGender = Gender.UNISEX;
 
+        [SerializeField, HideInInspector] private bool hasVariants = false;
         [SerializeField, HideInInspector] private int itemID = -1;
 
         public string ItemName { get { return itemName; } }
@@ -26,6 +27,7 @@ namespace Poomf.Data
         public ItemRarity ItemRarity { get { return itemRarity; } }
         public ItemSet ItemSet { get { return itemSet; } }
         public Sprite ItemSprite { get { return itemSprite; } }
+        public bool HasVariants { get { return hasVariants; } protected set { hasVariants = value; } }
         public int ItemID { get { return itemID; } }
 
         public bool SetItemID(int i_itemID, bool i_debug = false)

@@ -1,31 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Poomf.Data;
 
-public class CustomBody : CustomItemBase
+public class CustomVariantHead : CustomHead
 {
     [Tooltip("The index of the material, among the mesh renderer's materials, that will be customized when the texture changes.")]
     [SerializeField] protected int textureMaterialIndex = 0;
     [Tooltip("Contains the different textures that are used to customize this item. Applied 1 at a time using an index.")]
     [SerializeField] protected Texture2D[] itemTextures = null;
-    [SerializeField] protected ItemDataBase itemData = null;
-    public int ItemID { get; private set; }
-
-    public override void Initialize()
-    {
-        m_itemType = ItemCategory.Body;
-        base.Initialize();
-        if (itemData != null)
-            ItemID = itemData.ItemID;
-    }
 
     public override void SetTexture(int textureIndex)
     {
         materialProperties.Clear();
         if (itemTextures.Length == 0)
         {
-            Debug.LogWarning("CustomBody -> SetTexture : Textures array empty!");
+            Debug.LogWarning("CustomVariantHead -> SetTexture : Textures array empty!");
             return;
         }
         if (textureIndex >= itemTextures.Length)

@@ -12,6 +12,9 @@ public class CustomEyes : CustomItemBase
         public Texture2D blinkTexture;
     }
 
+    [Tooltip("The index of the material, among the mesh renderer's materials, that will be customized when the color changes.")]
+    [SerializeField] protected int colorMaterialIndex = 0;
+
     // An array that contains the color textures of each available eye type.
     [SerializeField] EyeColorTextures[] eyeTypesInfo = null;
     [Header("Blinking")]
@@ -53,6 +56,7 @@ public class CustomEyes : CustomItemBase
     /// </summary>
     public override void SetColor(int colorIndex)
     {
+        materialProperties.Clear();
         // The number of available colors of the currently selected eye type
         int colorsCount = eyeTypesInfo[eyeTypeIndex].colorTextures.Length;
         if (colorsCount == 0)
@@ -66,7 +70,7 @@ public class CustomEyes : CustomItemBase
             colorIndex = colorsCount - 1;
         }
         materialProperties.SetTexture("_MainTex", eyeTypesInfo[eyeTypeIndex].colorTextures[colorIndex]);
-        meshRenderer.SetPropertyBlock(materialProperties, matToCustomize);
+        meshRenderer.SetPropertyBlock(materialProperties, colorMaterialIndex);
         eyeColorIndex = colorIndex;
     }
 
@@ -88,7 +92,7 @@ public class CustomEyes : CustomItemBase
             textureIndex = eyeTypeCount - 1;
         }
         materialProperties.SetTexture("_MainTex", eyeTypesInfo[textureIndex].colorTextures[eyeColorIndex]);
-        meshRenderer.SetPropertyBlock(materialProperties, matToCustomize);
+        meshRenderer.SetPropertyBlock(materialProperties, colorMaterialIndex);
         eyeTypeIndex = textureIndex;
     }
 
@@ -96,11 +100,11 @@ public class CustomEyes : CustomItemBase
     {
         // Set the texture to the current eye type's blink texture
         materialProperties.SetTexture("_MainTex", eyeTypesInfo[eyeTypeIndex].blinkTexture);
-        meshRenderer.SetPropertyBlock(materialProperties, matToCustomize);
+        meshRenderer.SetPropertyBlock(materialProperties, colorMaterialIndex);
         // Wait for a while
         yield return new WaitForSeconds(blinkDuration);
         // Change the texture back
         materialProperties.SetTexture("_MainTex", eyeTypesInfo[eyeTypeIndex].colorTextures[eyeColorIndex]);
-        meshRenderer.SetPropertyBlock(materialProperties, matToCustomize);
+        meshRenderer.SetPropertyBlock(materialProperties, colorMaterialIndex);
     }
 }
