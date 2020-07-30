@@ -5,6 +5,8 @@ using Poomf.Data;
 using Cinemachine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Poomf.UI
 {
@@ -14,10 +16,6 @@ namespace Poomf.UI
         [SerializeField] Transform headsContentParent = null;
         [SerializeField] Transform bodiesContentParent = null;
         [SerializeField] GameObject lockerItemPrefab = null;
-        // TODO : For testing, to be removed.
-        [SerializeField] private HeadItemData[] testItemHeads = null;
-        // TODO : For testing, to be removed.
-        [SerializeField] private BodyItemData[] testItemBodies = null;
         [Header("UI")]
         [SerializeField] Image zoomButtonImage = null;
         [SerializeField] Sprite zoomInSprite = null;
@@ -29,10 +27,13 @@ namespace Poomf.UI
         [SerializeField] CustomizablePlayer customizablePlayer = null;
         [SerializeField] List<MenuLockerColorOption> colorControlMenus = null;
 
+        List<HeadItemData> headsList = new List<HeadItemData>();
+        List<BodyItemData> bodiesList = new List<BodyItemData>();
         InventoryItem currentHead = null;
         InventoryItem currentBody = null;
         bool initialized = false;
         bool zoomedIn = false;
+
         CharaSkinData skinData => customizablePlayer.GetSkinData;
 
         protected override void OnEnable()
@@ -53,8 +54,8 @@ namespace Poomf.UI
         void initialize()
         {
             if (true == initialized) return;
-
-            populateLockerItems();
+            LoadItemsData();
+            //populateLockerItems();
             // Make sure the zoom button has the zoom in image
             zoomButtonImage.sprite = zoomInSprite;
             // Make sure zoomed in is false
@@ -68,14 +69,14 @@ namespace Poomf.UI
 
         private void populateLockerItems()
         {
-            if (null == lockerItemPrefab || null == testItemBodies || 0 == testItemBodies.Length || null == testItemHeads || 0 == testItemHeads.Length) return;
+            if (null == lockerItemPrefab || null == bodiesList || 0 == bodiesList.Count || null == headsList || 0 == headsList.Count) return;
 
             // Initialize the bodies
-            int itemsCount = testItemBodies.Length;
+            int itemsCount = bodiesList.Count;
 
             for (int i = 0; i < itemsCount; i++)
             {
-                BodyItemData itemData = testItemBodies[i];
+                BodyItemData itemData = bodiesList[i];
                 // Create an "inventory item" for each variant
                 for (int j = 0; j < itemData.GetVariantsCount(); j++)
                 {
@@ -113,11 +114,11 @@ namespace Poomf.UI
             }
 
             // Initialize the heads
-            itemsCount = testItemHeads.Length;
+            itemsCount = headsList.Count;
 
             for (int i = 0; i < itemsCount; i++)
             {
-                HeadItemData itemData = testItemHeads[i];
+                HeadItemData itemData = headsList[i];
                 if (itemData.HasVariants)
                 {
                     VariantHeadItemData variantData = itemData as VariantHeadItemData;
@@ -177,7 +178,6 @@ namespace Poomf.UI
             }
         }
 
-        // TODO: change to a more suitable implementation when Asset Bundles are ready
         public void OnInventoryItemButtonPressed()
         {
             // Get the currently selected inventory item
@@ -187,11 +187,11 @@ namespace Poomf.UI
                 if (selectedItem.ItemType == ItemCategory.Body)
                 {
                     // Get the item corresponding to that button
-                    for (int i = 0; i < testItemBodies.Length; i++)
+                    for (int i = 0; i < bodiesList.Count; i++)
                     {
-                        if (testItemBodies[i].ItemID == selectedItem.ItemID)
+                        if (bodiesList[i].ItemID == selectedItem.ItemID)
                         {
-                            skinData.SetItemID(ItemCategory.Body, testItemBodies[i].ItemID);
+                            skinData.SetItemID(ItemCategory.Body, bodiesList[i].ItemID);
                             // Variants are just different textures, so set the texture index as the variant number
                             skinData.SetTextureIndex(ItemCategory.Body, selectedItem.VariantNumber);
                             // Unequip the previous item and equip the new one
@@ -205,12 +205,12 @@ namespace Poomf.UI
                 }
                 else if (selectedItem.ItemType == ItemCategory.Head)
                 {
-                    for (int i = 0; i < testItemHeads.Length; i++)
+                    for (int i = 0; i < headsList.Count; i++)
                     {
-                        if (testItemHeads[i].ItemID == selectedItem.ItemID)
+                        if (headsList[i].ItemID == selectedItem.ItemID)
                         {
-                            skinData.SetItemID(ItemCategory.Head, testItemHeads[i].ItemID);
-                            if (testItemHeads[i].HasVariants)
+                            skinData.SetItemID(ItemCategory.Head, headsList[i].ItemID);
+                            if (headsList[i].HasVariants)
                                 skinData.SetTextureIndex(ItemCategory.Head, selectedItem.VariantNumber);
                             // Unequip the previous item and equip the new one
                             if (currentHead != null)
@@ -221,8 +221,36 @@ namespace Poomf.UI
                         }
                     }
                 }
-
             }
         }
+
+        #region Addressables and their Delegates
+        // Callback that's called each time a body data is loaded
+        event System.Action<BodyItemData> onBodyLoaded;
+        // Callback that's called each time a head data is loaded
+        event System.Action<HeadItemData> onHeadLoaded;
+        void LoadItemsData()
+        {
+            // Add events
+            onBodyLoaded += OnBodyLoaded;
+            onHeadLoaded += OnHeadLoaded;
+            // Load the heads data
+            Addressables.LoadAssetsAsync<HeadItemData>("Heads Data", onHeadLoaded);
+            // Load the bodies data
+            Addressables.LoadAssetsAsync<BodyItemData>("Bodies Data", onBodyLoaded).Completed += operation =>
+            {
+                // All data has been loaded, populate the locker
+                populateLockerItems();
+            };
+        }
+        void OnBodyLoaded(BodyItemData body)
+        {
+            bodiesList.Add(body);
+        }
+        void OnHeadLoaded(HeadItemData head)
+        {
+            headsList.Add(head);
+        }
+        #endregion
     }
 }
