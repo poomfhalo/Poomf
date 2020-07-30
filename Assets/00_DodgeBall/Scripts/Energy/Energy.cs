@@ -22,9 +22,9 @@ public class Energy : MonoBehaviour
     [Header("Read Only")]
     [SerializeField] float currEnergy = 0;
     [SerializeField] float traveledDist = 0;
+    public bool isInfinity = false;
+
     public Func<bool> ExtAllowWork = () => true;
-
-
     List<IEnergyAction> actions = new List<IEnergyAction>();
     Vector3 lastXZPos = new Vector3();
     Vector3 xzPos => new Vector3(transform.position.x, 0, transform.position.z);
@@ -64,13 +64,13 @@ public class Energy : MonoBehaviour
         RegenrateEnergy();
     }
 
-    public float GetEnergy()
-    {
-        return currEnergy;
-    }
+    public float GetEnergy() => currEnergy;
     public bool CanConsumeEnergy(float ofVal) => currEnergy >= ofVal;
     public void ConsumeEnergy(float val)
     {
+        if (isInfinity)
+            return;
+
         SetEnergy(currEnergy - val);
     }
 
@@ -86,11 +86,12 @@ public class Energy : MonoBehaviour
         deltaDist = (lastXZPos - xzPos).magnitude;
         traveledDist = traveledDist + deltaDist;
         lastXZPos = xzPos;
+        if (isInfinity && Mathf.Abs(GetEnergy() - maxEnergy) > Mathf.Epsilon)
+        {
+            SetEnergy(maxEnergy);
+        }
     }
-    private void RegenrateEnergy()
-    {
-        SetEnergy(currEnergy + deltaDist * regenSpeed);
-    }
+    private void RegenrateEnergy()=> SetEnergy(currEnergy + deltaDist * regenSpeed);
     private bool CanRegen()
     {
         List<bool> results = new List<bool>();

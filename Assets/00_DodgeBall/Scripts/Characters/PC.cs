@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(DodgeballCharacter))]
 public class PC : CharaController
@@ -9,6 +10,9 @@ public class PC : CharaController
     public bool extAllowInputOnStart = true;
     [SerializeField] MatchInputController inputPrefab = null;
     MatchInputController input = null;
+
+    public InputAction healthReduction = null;
+
     [Header("Read Only")]
     [SerializeField] bool isLocked = false;
     public override bool IsLocked { get => isLocked; protected set { isLocked = value; onLockUpdated?.Invoke(value); } }
@@ -31,8 +35,20 @@ public class PC : CharaController
 
             CreatePlayInput();
             Unlock();
+
+            if (Debug.isDebugBuild || Application.isEditor)
+            {
+                healthReduction.performed += OnHealthReductionCalled;
+                healthReduction.Enable();
+            }
         }
     }
+
+    private void OnHealthReductionCalled(InputAction.CallbackContext obj)
+    {
+        GetComponent<CharaHitPoints>().StartHitAction(1);
+    }
+
     public override void Lock()
     {
         IsLocked = true;
@@ -52,6 +68,7 @@ public class PC : CharaController
     {
         IsLocked = false;
         GetComponent<Mover>().movementType = moveTypeOnUnlock;
+        GetComponent<Mover>().ReadFacingValues();
         if(moveTypeOnUnlock == Mover.MovementType.ByInput)
         {
             chara.C_MoveInput(Vector3.zero);

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using GW_Lib;
 using UnityEngine;
 
@@ -7,10 +9,11 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
     public bool FeelsGround => feelsGround;
     public bool IsJumping => isJumping;
     public string actionName => "Jump Action";
+    public float PosToJumpHeigthPercent => posToJumpHeigthPercent;
 
     public Action<float> ConsumeEnergy { get; set; }
     public Func<float, bool> CanConsumeEnergy { get; set; }
-    public Func<bool> AllowRegen => () => !IsJumping;
+    public Func<bool> AllowRegen => () => !IsJumping && FeelsGround;
 
     [SerializeField] float energyCost = 20;
 
@@ -22,10 +25,13 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
     [Header("Ground Detection")]
     [SerializeField] float castDist = 0.2f;
     [SerializeField] Transform feet = null;
+
     [Header("Read Only")]
     [SerializeField] bool isJumping = false;
     [SerializeField] bool feelsGround = false;
     [SerializeField] float currYVel = 0;
+    [SerializeField] float posToJumpHeigthPercent = 0;
+    [SerializeField] float floorHeigthRef = -1;
 
     Animator animator = null;
     ActionsScheduler scheduler = null;
@@ -35,6 +41,7 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
     RaycastHit hit;
     Ray ray = new Ray();
     bool canApplyGravity = true;
+    bool heigthRefWasSet = false;
 
     void Awake()
     {
@@ -43,6 +50,42 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
         mover = GetComponent<Mover>();
         rb3d = GetComponent<Rigidbody>();
         mover.GetYDisp = GetYDisp;
+    }
+    void FixedUpdate()
+    {
+        UpdateHeigthPercent();
+        ApplyGroundTest();
+        ApplyGravity();
+    }
+
+    private void UpdateHeigthPercent()
+    {
+        if(!heigthRefWasSet)
+        {
+            List<RaycastHit> hs = Physics.RaycastAll(ray, 100).ToList();
+            if (hs.Count== 0)
+                return;
+            RaycastHit h = hs.Find(sampleHit => sampleHit.collider.GetComponent<Field>());
+            if (!h.collider)
+                return;
+
+            floorHeigthRef = h.point.y;
+            heigthRefWasSet = true;
+            return;
+        }
+
+        float diff = Mathf.Abs(rb3d.position.y - floorHeigthRef);
+        posToJumpHeigthPercent = diff / jumpHeigth;
+    }
+
+    public void StopFlight()
+    {
+        currYVel = 0;
+        canApplyGravity = false;
+    }
+    public void ResumeFlight()
+    {
+        canApplyGravity = true;
     }
 
     private Vector3 GetYDisp()
@@ -58,32 +101,22 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
             }
             return yDisp;
         }
+
         return currYVel * Time.fixedDeltaTime * Vector3.up;
     }
-
-    void FixedUpdate()
-    {
-        ApplyGroundTest();
-        ApplyGravity();
-    }
-
     private void ApplyGravity()
     {
         if(!canApplyGravity)
-        {
             return;
-        }
 
         if (FeelsGround)
         {
             currYVel = gravity * Time.fixedDeltaTime;
+            animator.ResetTrigger("Jump");
         }
         else
-        {
             currYVel = currYVel + gravity * Time.fixedDeltaTime;
-        }
     }
-
     private void ApplyGroundTest()
     {
         feelsGround = false;
@@ -99,6 +132,8 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
             return;
 
         feelsGround = true;
+        if (isJumping && feelsGround && canApplyGravity)
+            isJumping = false;
     }
 
     public void StartJumpAction()
@@ -117,16 +152,15 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
         float jumpVel = Extentions.GetJumpVelocity(jumpHeigth,gravity);
         currYVel = jumpVel;
         canApplyGravity = false;
-        this.InvokeDelayed(timeBeforeReapplyGravity, () => canApplyGravity = true);
+        this.InvokeDelayed(timeBeforeReapplyGravity, ResumeFlight);
     }
-    public void Cancel()
-    {
-
-    }
+    public void Cancel(){ }
     public void A_OnJumpEnded()
     {
         isJumping = false;
+        animator.ResetTrigger("Jump");
     }
+
     public override void RecieveInput(Vector3 i)
     {
         base.RecieveInput(i);

@@ -15380,6 +15380,22 @@ MonoBehaviour:
   extAllowInputOnStart: 1
   inputPrefab: {fileID: 45190570772085883, guid: 5cfe749bff975bb12a2263a0ddc41258,
     type: 3}
+  healthReduction:
+    m_Name: Health Reduction
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: ff580d46-fcfe-4b19-a357-723fe6a3d24a
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 91bb3c00-af17-4d85-b959-b4f586914f66
+      m_Path: <Keyboard>/k
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Health Reduction
+      m_Flags: 0
   isLocked: 0
 --- !u!114 &4258123539632355922
 MonoBehaviour:

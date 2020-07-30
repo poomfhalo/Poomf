@@ -60,14 +60,14 @@ public class CharaHitPoints : DodgeballCharaAction, ICharaAction
         if (IsInHitCd)
             return;
 
-        C_StartHitAction();
+        C_StartHitAction(1);
     }
 
     public void EnableHitDetection()
     {
         isWaitingForHit = true;
     }
-    public void C_StartHitAction()
+    public void C_StartHitAction(int damage)
     {
         if (!IsWaitingForHit)
             return;
@@ -78,15 +78,15 @@ public class CharaHitPoints : DodgeballCharaAction, ICharaAction
         if (!ExtApplyHealthChanges())
             return;
 
-        StartHitAction();
+        StartHitAction(damage);
     }
 
-    public void StartHitAction()
+    public void StartHitAction(int damage)
     {
         if (!ExtApplyHealthChanges())
             return;
 
-        currHP = currHP - 1;
+        currHP = currHP - damage;
         if (currHP <= 0)
         {
             OnZeroHP?.Invoke();
