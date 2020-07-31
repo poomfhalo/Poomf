@@ -2,6 +2,7 @@
 using System.Linq;
 using UnityEngine;
 using MyBox;
+using Poomf.Data;
 
 public class CustomizablePlayer : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class CustomizablePlayer : MonoBehaviour
     [SerializeField, ReadOnly] List<CustomBody> allOutfits = new List<CustomBody>();
     [SerializeField, ReadOnly] CustomEyes playerEyes = null;
     [SerializeField, ReadOnly] CustomSkin playerSkinTone = null;
+
+    const string charaSkinKey = "chara_skin_data";
+    const string relativeSkinDataPath = "Saves/SkinData.es3";
 
     void Start()
     {
@@ -32,6 +36,7 @@ public class CustomizablePlayer : MonoBehaviour
                 playerSkinTone = c as CustomSkin;
         });
         skinData.onDataUpdated += RefreshCharaVisuals;
+        skinData = SaveManager.GetData(charaSkinKey, skinData, relativeSkinDataPath);
         RefreshCharaVisuals();
     }
     void OnDestroy()
@@ -41,6 +46,8 @@ public class CustomizablePlayer : MonoBehaviour
 
     private void RefreshCharaVisuals()
     {
+        SaveManager.SaveData(charaSkinKey, skinData, relativeSkinDataPath);
+        
         CustomHead activeHead = allHeads.Single(h => h.ItemID == skinData.GetItemID(ItemCategory.Head));
         allHeads.ForEach(h => h.gameObject.SetActive(false));
 

@@ -9,6 +9,11 @@ namespace Poomf.Data
             ES3.Save(i_key, i_value);
         }
 
+        public static void SaveData<T>(string i_key, T i_value, string relativeFilePath)
+        {
+            ES3.Save(i_key, i_value, relativeFilePath);
+        }
+
         public static void SaveArrayData<T>(string i_key, T[] i_value)
         {
             ES3.Save(i_key, i_value);
@@ -25,6 +30,23 @@ namespace Poomf.Data
             else
             {
                 SaveData(i_key, i_defaultValue);
+                return i_defaultValue;
+            }
+
+            return data;
+        }
+
+        public static T GetData<T>(string i_key, T i_defaultValue, string relativeFilePath)
+        {
+            T data = default;
+
+            if (ES3.KeyExists(i_key, relativeFilePath))
+            {
+                data = ES3.Load<T>(i_key, relativeFilePath);
+            }
+            else
+            {
+                SaveData(i_key, i_defaultValue, relativeFilePath);
                 return i_defaultValue;
             }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using Poomf.Data;
 
 public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
 {
@@ -18,15 +19,18 @@ public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
     // Contains the UI elements of video settings
     [SerializeField] private VideoSettingsUI videoSettingsUI = null;
     [Header("Settings")]
+    // The asset that manages the audio settings
+    [SerializeField] private AudioManager audioManager = null;
+    // The asset that manages the video settings
+    [SerializeField] private VideoManager videoManager = null;
     // Any resolution that's less than this resolution will be omitted
     // In other words, this is the minimum supported resolution
     // X: width, Y: height
     [SerializeField] private Vector2 resolutionThreshold = Vector2.zero;
 
-    // The asset that manages the audio settings
-    private AudioManager audioManager = null;
-    // The asset that manages the video settings
-    private VideoManager videoManager = null;
+    private const string audioSettingsKey = "audio_settings";
+    private const string videoSettingsKey = "video_settings";
+    private const string relativeSettingsPath = "Settings.es3";
     private AudioManager defaultAudioSettings = null;
     private VideoManager defaultVideoSettings = null;
     private AudioMixer currentMixer = null;
@@ -41,7 +45,7 @@ public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
     // A list of available resolutions
     private List<Resolution> resolutions = new List<Resolution>();
 
-    private void Start()
+    private void Awake()
     {
         // Get the supported resolutions, omit any ones that are less than the threshold
         Resolution[] allResolutions = Screen.resolutions;
@@ -99,11 +103,14 @@ public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
             {
                 // Apply the new audio settings
                 audioManager.UpdateAllSettings(tempAudioSettings);
+                // Save the changes
+                SaveManager.SaveData(audioSettingsKey, audioManager, relativeSettingsPath);
             }
             if (videoSettingsChanged)
             {
                 // Apply the new video settings
                 videoManager.UpdateAllSettings(tempVideoSettings);
+                SaveManager.SaveData(videoSettingsKey, videoManager, relativeSettingsPath);
             }
         }
         else
@@ -265,7 +272,7 @@ public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
 
     #endregion
 
-    #region Addressables and thier Delegates
+    #region Addressables and Initialization
     void LoadAddressableAssets()
     {
         // Load the audio mixer and assign it if it succeeded.
@@ -283,8 +290,8 @@ public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
                     else
                         Debug.LogError("SettingsMenu: Default Audio Settings couldn't be loaded!");
                 };
-                // Load the current audio settings and assign a callback to initialize them when it's done loading
-                Addressables.LoadAssetAsync<AudioManager>("Audio Settings").Completed += OnAudioSettingsLoaded;
+
+                InitializeAudioSettings();
             }
             else
                 Debug.LogError("SettingsMenu: Audio Mixer couldn't be loaded!");
@@ -299,42 +306,28 @@ public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
             else
                 Debug.LogError("SettingsMenu: Default Video Settings couldn't be loaded!");
         };
-        // Load the current video settings and assign a callback to initialize them when it's done loading
-        Addressables.LoadAssetAsync<VideoManager>("Video Settings").Completed += OnVideoSettingsLoaded;
+
+        InitializeVideoSettings();
     }
-    void OnAudioSettingsLoaded(AsyncOperationHandle<AudioManager> operation)
+    void InitializeAudioSettings()
     {
-        if (operation.Status == AsyncOperationStatus.Succeeded)
-        {
-            // Assign the audio manager
-            audioManager = operation.Result;
-            // Initialize the audio manager and the UI with the saved audio settings
-            audioManager.isCurrent = true;
-            audioManager.Initialize(this);
-            sfxUISettings.Initialize(audioManager.GetSFXVolume());
-            musicUISettings.Initialize(audioManager.GetMusicVolume());
-        }
-        else
-        {
-            Debug.LogError("SettingsMenu: Audio Settings couldn't be loaded!");
-        }
+        // Get the saved settings
+        audioManager = SaveManager.GetData(audioSettingsKey, audioManager, relativeSettingsPath);
+        // Initialize the audio manager and the UI with the saved audio settings
+        audioManager.isCurrent = true;
+        audioManager.Initialize(this);
+        sfxUISettings.Initialize(audioManager.GetSFXVolume());
+        musicUISettings.Initialize(audioManager.GetMusicVolume());
     }
 
-    void OnVideoSettingsLoaded(AsyncOperationHandle<VideoManager> operation)
+    void InitializeVideoSettings()
     {
-        if (operation.Status == AsyncOperationStatus.Succeeded)
-        {
-            // Assign the video manager
-            videoManager = operation.Result;
-            // Initialize Video UI
-            videoManager.isCurrent = true;
-            videoManager.Initialize(this);
-            videoSettingsUI.Initialize(this);
-        }
-        else
-        {
-            Debug.LogError("SettingsMenu: Video settings couldn't be loaded!");
-        }
+        // Get the saved settings
+        videoManager = SaveManager.GetData(videoSettingsKey, videoManager, relativeSettingsPath);
+        // Initialize Video UI
+        videoManager.isCurrent = true;
+        videoManager.Initialize(this);
+        videoSettingsUI.Initialize(this);
     }
     #endregion
 }
