@@ -20,7 +20,6 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
     [Header("Jump Data")]
     [SerializeField] float gravity = -20;
     [SerializeField] float jumpHeigth = 3;
-    [SerializeField] float timeBeforeReapplyGravity = 0.1f;
     [SerializeField] float yStopping = 0.0250f;
     [Header("Ground Detection")]
     [SerializeField] float castDist = 0.2f;
@@ -32,16 +31,18 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
     [SerializeField] float currYVel = 0;
     [SerializeField] float posToJumpHeigthPercent = 0;
     [SerializeField] float floorHeigthRef = -1;
+    [SerializeField] bool isGoingUp = false;
 
     Animator animator = null;
     ActionsScheduler scheduler = null;
     Mover mover = null;
     Rigidbody rb3d = null;
+    BallLauncher launcher = null;
 
     RaycastHit hit;
     Ray ray = new Ray();
-    bool canApplyGravity = true;
     bool heigthRefWasSet = false;
+    bool canApplyGravity = true;
 
     void Awake()
     {
@@ -49,6 +50,8 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
         scheduler = GetComponent<ActionsScheduler>();
         mover = GetComponent<Mover>();
         rb3d = GetComponent<Rigidbody>();
+        launcher = GetComponents<BallLauncher>().ToList().Find(b => b.enabled);
+
         mover.GetYDisp = GetYDisp;
     }
     void FixedUpdate()
@@ -75,22 +78,24 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
         }
 
         float diff = Mathf.Abs(rb3d.position.y - floorHeigthRef);
-        posToJumpHeigthPercent = diff / jumpHeigth;
+        posToJumpHeigthPercent = 1 - (diff / jumpHeigth);
     }
 
     public void StopFlight()
     {
-        currYVel = 0;
         canApplyGravity = false;
+        Debug.Log("Stopping Flight");
+        currYVel = 0;
     }
     public void ResumeFlight()
     {
         canApplyGravity = true;
+        Debug.Log("Resuming Flight");
     }
 
     private Vector3 GetYDisp()
     {
-        if (canApplyGravity && FeelsGround)
+        if (FeelsGround && !isGoingUp)
         {
             Vector3 yDisp = Vector3.zero;
             yDisp = hit.point - rb3d.position;
@@ -106,10 +111,13 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
     }
     private void ApplyGravity()
     {
-        if(!canApplyGravity)
+        if (!canApplyGravity)
             return;
 
-        if (FeelsGround)
+        if (currYVel <= 0)
+            isGoingUp = false;
+
+        if (FeelsGround && !isGoingUp)
         {
             currYVel = gravity * Time.fixedDeltaTime;
             animator.ResetTrigger("Jump");
@@ -132,7 +140,7 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
             return;
 
         feelsGround = true;
-        if (isJumping && feelsGround && canApplyGravity)
+        if (isJumping && feelsGround && !isGoingUp)
             isJumping = false;
     }
 
@@ -151,8 +159,7 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
         scheduler.StartAction(this, false);
         float jumpVel = Extentions.GetJumpVelocity(jumpHeigth,gravity);
         currYVel = jumpVel;
-        canApplyGravity = false;
-        this.InvokeDelayed(timeBeforeReapplyGravity, ResumeFlight);
+        isGoingUp = true;
     }
     public void Cancel(){ }
     public void A_OnJumpEnded()
@@ -166,9 +173,10 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
         base.RecieveInput(i);
 
         if (!IsJumping)
-        {
             return;
-        }
+        if (launcher.IsThrowing)
+            return;
+
         mover.ApplyInput(i);
     }
 }

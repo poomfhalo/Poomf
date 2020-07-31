@@ -34,7 +34,6 @@ public class PC : CharaController
             p.GetComponent<Cinemachine.CinemachineVirtualCamera>().Priority = 15;
 
             CreatePlayInput();
-            Unlock();
 
             if (Debug.isDebugBuild || Application.isEditor)
             {

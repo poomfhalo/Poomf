@@ -15074,7 +15074,6 @@ GameObject:
   - component: {fileID: 6963099543513805066}
   - component: {fileID: 6963099543513805181}
   - component: {fileID: 7695761373045912386}
-  - component: {fileID: 6963099543513805062}
   - component: {fileID: 6963099543513805063}
   - component: {fileID: 6963099543513805065}
   - component: {fileID: 6963099543513805064}
@@ -15239,26 +15238,6 @@ MonoBehaviour:
   changingPointCounter: 0
   IsRunning: 0
   isLooping: 0
---- !u!114 &6963099543513805062
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6963099543513805180}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1977e5199803bee518990b746542a32c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  recievedInput: {x: 0, y: 0, z: 0}
-  fakeThrowEnergyCost: 5
-  throwFacingSpeed: 200
-  throwData: {fileID: 11400000, guid: 85e253f2e592b0bb784f06d2e0373da2, type: 2}
-  isThrowing: 0
-  activityName: Throw Action
-  ExtThrowCondition: 1
-  isLastThrowAtEnemy: 0
 --- !u!114 &6963099543513805063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15298,14 +15277,16 @@ MonoBehaviour:
   recievedInput: {x: 0, y: 0, z: 0}
   energyCost: 20
   gravity: -40
-  jumpHeigth: 2
-  timeBeforeReapplyGravity: 0.1
+  jumpHeigth: 3.4
   yStopping: 0.025
   castDist: 0.3
   feet: {fileID: 6963099543936337335}
   isJumping: 0
   feelsGround: 0
   currYVel: 0
+  posToJumpHeigthPercent: 0
+  floorHeigthRef: -1
+  isGoingUp: 0
 --- !u!114 &6963099543513805064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15436,8 +15417,10 @@ MonoBehaviour:
   activityName: 
   ExtThrowCondition: 1
   isLastThrowAtEnemy: 0
+  flyingThrowLaunchRange: 0.2
   throwAtEnemyDelay: 0.3
   finishedThrowP1: 0
+  midAirThrow: 0
   travelPercentToThrow: 0
 --- !u!114 &3845013188078415913
 MonoBehaviour:
@@ -15528,6 +15511,7 @@ MonoBehaviour:
   decisionMaker: 1
   currEnergy: 0
   traveledDist: 0
+  isInfinity: 0
 --- !u!114 &6963099543513805061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17191,15 +17175,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 54c1253a611fbfdbbb6ba37302055fcd, type: 3}
---- !u!4 &3302477631334740666 stripped
+--- !u!4 &436484578604985273 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 5198813397511452856, guid: 54c1253a611fbfdbbb6ba37302055fcd,
-    type: 3}
-  m_PrefabInstance: {fileID: 7345692964906551810}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &3302477631334740754 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5198813397511452944, guid: 54c1253a611fbfdbbb6ba37302055fcd,
+  m_CorrespondingSourceObject: {fileID: 7205637068024242619, guid: 54c1253a611fbfdbbb6ba37302055fcd,
     type: 3}
   m_PrefabInstance: {fileID: 7345692964906551810}
   m_PrefabAsset: {fileID: 0}
@@ -17215,9 +17193,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7345692964906551810}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &436484578604985273 stripped
+--- !u!4 &3302477631334740754 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 7205637068024242619, guid: 54c1253a611fbfdbbb6ba37302055fcd,
+  m_CorrespondingSourceObject: {fileID: 5198813397511452944, guid: 54c1253a611fbfdbbb6ba37302055fcd,
+    type: 3}
+  m_PrefabInstance: {fileID: 7345692964906551810}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3302477631334740666 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5198813397511452856, guid: 54c1253a611fbfdbbb6ba37302055fcd,
     type: 3}
   m_PrefabInstance: {fileID: 7345692964906551810}
   m_PrefabAsset: {fileID: 0}

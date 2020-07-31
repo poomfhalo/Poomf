@@ -30,7 +30,11 @@ public class BallLauncherV2 : BallLauncher
             return;
 
         bool isInAir = !jumper.FeelsGround || jumper.IsJumping;
+        //Let flyingThrowLaunchRange = 0.2
+        //Let PostoJumpHeigthPercent = 0.8 (Very Close To The Top).
+
         bool flyingJumpRangeTest = flyingThrowLaunchRange >= jumper.PosToJumpHeigthPercent;
+        Log.LogL0("Flying throw Comparision Range " + flyingThrowLaunchRange + " :: For Percent :: " + jumper.PosToJumpHeigthPercent + " is " + flyingJumpRangeTest);
 
         if (isInAir)
         {
