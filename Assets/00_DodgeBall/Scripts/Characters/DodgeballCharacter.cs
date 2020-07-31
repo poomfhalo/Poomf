@@ -104,7 +104,6 @@ public class DodgeballCharacter : MonoBehaviour
         TeamsManager.AddCharacter(this);
         wasInitialized = true;
     }
-
     public void SetTeam(TeamTag team)
     {
         this.team = team;
@@ -188,6 +187,8 @@ public class DodgeballCharacter : MonoBehaviour
             return;
         if (IsJumping)
             return;
+        if (!IsInField)
+            return;
 
         dodger.StartDodgeAction();
         OnCommandActivated?.Invoke(DodgeballCharaCommand.Dodge);
@@ -198,19 +199,21 @@ public class DodgeballCharacter : MonoBehaviour
             return;
         if (IsThrowing)
             return;
+
         launcher.StartFakeThrow(selectionIndicator.ActiveSelection);
         OnCommandActivated?.Invoke(DodgeballCharaCommand.FakeFire);
     }
     public void C_Jump()
     {
-        if (HasBall)
-            return;
         if (IsThrowing)
             return;
         if (IsDodging)
             return;
         if (IsJumping)
             return;
+        if (!IsInField)
+            return;
+
         jumper.StartJumpAction();
         OnCommandActivated?.Invoke(DodgeballCharaCommand.Jump);
     }

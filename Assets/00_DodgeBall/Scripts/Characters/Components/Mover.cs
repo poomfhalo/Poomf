@@ -345,7 +345,21 @@ public class Mover : DodgeballCharaAction, ICharaAction
     }
     public void ApplyInput(Vector3 input)
     {
-        isMoving = true;
+        //new start
+        if (movementType == MovementType.ByInput && input != Vector3.zero)
+            isMoving = true;
+        if (movementType == MovementType.ToPoint)
+        {
+            float dist = Vector3.Distance(transform.position, input);
+            if (dist > stoppingDist)
+                isMoving = true;
+        }
+        //new end
+
+        //old start
+        //isMoving = true;
+        //old end
+
         this.recievedInput = input;
         movabilityDir = 1;
         if (input == Vector3.zero && movementType == MovementType.ByInput)

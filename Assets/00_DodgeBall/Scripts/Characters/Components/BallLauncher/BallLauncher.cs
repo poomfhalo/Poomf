@@ -29,6 +29,7 @@ public abstract class BallLauncher : DodgeballCharaAction, ICharaAction,IEnergyA
     protected Animator animator = null;
     protected ActionsScheduler scheduler = null;
     protected Mover mover = null;
+    protected Jumper jumper = null;
     protected DodgeballCharacter aimedAtChara = null;
     protected SelectionIndicator selectionIndicator => GetComponent<DodgeballCharacter>().selectionIndicator;
 
@@ -42,6 +43,7 @@ public abstract class BallLauncher : DodgeballCharaAction, ICharaAction,IEnergyA
         animator = GetComponent<Animator>();
         scheduler = GetComponent<ActionsScheduler>();
         mover = GetComponent<Mover>();
+        jumper = GetComponent<Jumper>();
     }
     protected virtual void Update()
     {

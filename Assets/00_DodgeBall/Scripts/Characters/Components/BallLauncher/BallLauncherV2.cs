@@ -6,12 +6,19 @@ using UnityEngine;
 [RequireComponent(typeof(DodgeballCharacter))]
 public class BallLauncherV2 : BallLauncher
 {
+    [Tooltip("0.1 means, we need to be 10% close enough to the maximum jump heigth, to be able to throw mid air" +
+    	"\n0.9 means, we need to be 90% close enough to maximum heigth jump to throw in mid air, meaning, even if we are " +
+    	"slightly above ground, then we will be able to throw mid air.")]
+    [Range(0.1f,0.9f)]
+    [SerializeField] float flyingThrowLaunchRange = 0.2f;
+
     [Header("Launcher Data")]
     [SerializeField] float throwAtEnemyDelay = 0.3f;
 
     [Header("Read Only")]
     [SerializeField] bool finishedThrowP1 = false;
     [Tooltip("To be set, from external scripts, mainly used in multiplayer")]
+    [SerializeField] bool midAirThrow = false;
     public float travelPercentToThrow = 0;
 
     Coroutine conditionalThrowCoro = null;
@@ -21,6 +28,23 @@ public class BallLauncherV2 : BallLauncher
     {
         if (isThrowing)
             return;
+
+        bool isInAir = !jumper.FeelsGround || jumper.IsJumping;
+        //Let flyingThrowLaunchRange = 0.2
+        //Let PostoJumpHeigthPercent = 0.8 (Very Close To The Top).
+
+        bool flyingJumpRangeTest = flyingThrowLaunchRange >= jumper.PosToJumpHeigthPercent;
+        Log.LogL0("Flying throw Comparision Range " + flyingThrowLaunchRange + " :: For Percent :: " + jumper.PosToJumpHeigthPercent + " is " + flyingJumpRangeTest);
+
+        if (isInAir)
+        {
+            if (!flyingJumpRangeTest)
+                return;
+            midAirThrow = true;
+            jumper.StopFlight();
+        }
+        else
+            midAirThrow = false;
 
         isLastThrowAtEnemy = !TeamsManager.AreFriendlies(chara, toChara);
         finishedThrowP1 = false;
@@ -41,6 +65,13 @@ public class BallLauncherV2 : BallLauncher
         else
             beginThrow.Invoke();
     }
+    protected override void RunOnThrowPointReached()
+    {
+        base.RunOnThrowPointReached();
+        if (midAirThrow)
+            jumper.ResumeFlight();
+    }
+
     IEnumerator ConditionalThrow()
     {
         yield return new WaitUntil(() => finishedThrowP1);//wait for animation P1
@@ -74,6 +105,7 @@ public class BallLauncherV2 : BallLauncher
             yield return new WaitForSeconds(remainingTime);
         }
     }
+   
     public void A_OnThrowP1Finished()
     {
         if (!aimedAtChara)

@@ -22,6 +22,8 @@ public class RoundResult : MonoBehaviour
         }
     }
     Func<IEnumerator> loadStagfunc = null;
+
+    [SerializeField] float loadWaitTime = 10;
     [SerializeField] TextMeshProUGUI winnerText = null;
 
     void Start()
@@ -31,7 +33,7 @@ public class RoundResult : MonoBehaviour
         {
             winnerText.text += "Round " + i + " Was Won By " + MatchState.Instance.GetRoundWinner(MatchState.Instance.PreviousRoundNum).ToString() + "\n";
         }
-        this.InvokeDelayed(4, () =>{
+        this.InvokeDelayed(loadWaitTime, () =>{
             StartCoroutine(LoadStageFunc());
         });
     }

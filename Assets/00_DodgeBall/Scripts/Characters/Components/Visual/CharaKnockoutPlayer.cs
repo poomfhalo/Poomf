@@ -141,6 +141,7 @@ public class CharaKnockoutPlayer : MonoBehaviour
                 chara.C_PathFollow(path, true, stopTimeAtPoint.GetValue());
 
             mover.allowSpeedMultiplication = true;
+            GetComponent<Energy>().isInfinity = true;
             charaController.Unlock();
         });
     }

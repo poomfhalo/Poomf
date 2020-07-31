@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using GW_Lib;
 using UnityEngine;
 
@@ -7,33 +9,39 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
     public bool FeelsGround => feelsGround;
     public bool IsJumping => isJumping;
     public string actionName => "Jump Action";
+    public float PosToJumpHeigthPercent => posToJumpHeigthPercent;
 
     public Action<float> ConsumeEnergy { get; set; }
     public Func<float, bool> CanConsumeEnergy { get; set; }
-    public Func<bool> AllowRegen => () => !IsJumping;
+    public Func<bool> AllowRegen => () => !IsJumping && FeelsGround;
 
     [SerializeField] float energyCost = 20;
 
     [Header("Jump Data")]
     [SerializeField] float gravity = -20;
     [SerializeField] float jumpHeigth = 3;
-    [SerializeField] float timeBeforeReapplyGravity = 0.1f;
     [SerializeField] float yStopping = 0.0250f;
     [Header("Ground Detection")]
     [SerializeField] float castDist = 0.2f;
     [SerializeField] Transform feet = null;
+
     [Header("Read Only")]
     [SerializeField] bool isJumping = false;
     [SerializeField] bool feelsGround = false;
     [SerializeField] float currYVel = 0;
+    [SerializeField] float posToJumpHeigthPercent = 0;
+    [SerializeField] float floorHeigthRef = -1;
+    [SerializeField] bool isGoingUp = false;
 
     Animator animator = null;
     ActionsScheduler scheduler = null;
     Mover mover = null;
     Rigidbody rb3d = null;
+    BallLauncher launcher = null;
 
     RaycastHit hit;
     Ray ray = new Ray();
+    bool heigthRefWasSet = false;
     bool canApplyGravity = true;
 
     void Awake()
@@ -42,12 +50,52 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
         scheduler = GetComponent<ActionsScheduler>();
         mover = GetComponent<Mover>();
         rb3d = GetComponent<Rigidbody>();
+        launcher = GetComponents<BallLauncher>().ToList().Find(b => b.enabled);
+
         mover.GetYDisp = GetYDisp;
+    }
+    void FixedUpdate()
+    {
+        UpdateHeigthPercent();
+        ApplyGroundTest();
+        ApplyGravity();
+    }
+
+    private void UpdateHeigthPercent()
+    {
+        if(!heigthRefWasSet)
+        {
+            List<RaycastHit> hs = Physics.RaycastAll(ray, 100).ToList();
+            if (hs.Count== 0)
+                return;
+            RaycastHit h = hs.Find(sampleHit => sampleHit.collider.GetComponent<Field>());
+            if (!h.collider)
+                return;
+
+            floorHeigthRef = h.point.y;
+            heigthRefWasSet = true;
+            return;
+        }
+
+        float diff = Mathf.Abs(rb3d.position.y - floorHeigthRef);
+        posToJumpHeigthPercent = 1 - (diff / jumpHeigth);
+    }
+
+    public void StopFlight()
+    {
+        canApplyGravity = false;
+        Debug.Log("Stopping Flight");
+        currYVel = 0;
+    }
+    public void ResumeFlight()
+    {
+        canApplyGravity = true;
+        Debug.Log("Resuming Flight");
     }
 
     private Vector3 GetYDisp()
     {
-        if (canApplyGravity && FeelsGround)
+        if (FeelsGround && !isGoingUp)
         {
             Vector3 yDisp = Vector3.zero;
             yDisp = hit.point - rb3d.position;
@@ -58,32 +106,25 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
             }
             return yDisp;
         }
+
         return currYVel * Time.fixedDeltaTime * Vector3.up;
     }
-
-    void FixedUpdate()
-    {
-        ApplyGroundTest();
-        ApplyGravity();
-    }
-
     private void ApplyGravity()
     {
-        if(!canApplyGravity)
-        {
+        if (!canApplyGravity)
             return;
-        }
 
-        if (FeelsGround)
+        if (currYVel <= 0)
+            isGoingUp = false;
+
+        if (FeelsGround && !isGoingUp)
         {
             currYVel = gravity * Time.fixedDeltaTime;
+            animator.ResetTrigger("Jump");
         }
         else
-        {
             currYVel = currYVel + gravity * Time.fixedDeltaTime;
-        }
     }
-
     private void ApplyGroundTest()
     {
         feelsGround = false;
@@ -99,6 +140,8 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
             return;
 
         feelsGround = true;
+        if (isJumping && feelsGround && !isGoingUp)
+            isJumping = false;
     }
 
     public void StartJumpAction()
@@ -116,25 +159,24 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
         scheduler.StartAction(this, false);
         float jumpVel = Extentions.GetJumpVelocity(jumpHeigth,gravity);
         currYVel = jumpVel;
-        canApplyGravity = false;
-        this.InvokeDelayed(timeBeforeReapplyGravity, () => canApplyGravity = true);
+        isGoingUp = true;
     }
-    public void Cancel()
-    {
-
-    }
+    public void Cancel(){ }
     public void A_OnJumpEnded()
     {
         isJumping = false;
+        animator.ResetTrigger("Jump");
     }
+
     public override void RecieveInput(Vector3 i)
     {
         base.RecieveInput(i);
 
         if (!IsJumping)
-        {
             return;
-        }
+        if (launcher.IsThrowing)
+            return;
+
         mover.ApplyInput(i);
     }
 }
