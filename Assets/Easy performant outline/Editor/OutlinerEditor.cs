@@ -15,6 +15,8 @@ namespace EPOOutline
 
         [SerializeField] private bool isResolutionSettingsOpen = false;
 
+        [SerializeField] private bool isPerformanceOpen = false;
+
         public override void OnInspectorGUI()
         {
 #if SRP_OUTLINE
@@ -34,6 +36,7 @@ namespace EPOOutline
             var blurShift = serializedObject.FindProperty("blurShift");
             var dilateShift = serializedObject.FindProperty("dilateShift");
             var usingInfoBuffer = serializedObject.FindProperty("usingInfoBuffer");
+            var sustainedMode = serializedObject.FindProperty("sustainedPerformanceMode");
 
             isIterationsOpen = EditorGUILayout.Foldout(isIterationsOpen, "Iterations");
 
@@ -86,6 +89,14 @@ namespace EPOOutline
                 }
 
                 EditorGUI.indentLevel = 0;
+            }
+
+            isPerformanceOpen = EditorGUILayout.Foldout(isPerformanceOpen, "Performance settings");
+            if (isPerformanceOpen)
+            {
+                EditorGUILayout.HelpBox("If enabled outline post processing passes will continue to work even if there is no outlinables in view field. Helps to remove hiccups at the moment you see first outlinable.", MessageType.Info);
+                EditorGUILayout.PropertyField(sustainedMode, 
+                    new GUIContent(sustainedMode.displayName, "If enabled outline post processing passes will continue to work even if there is no outlinables in view field. Helps to remove hiccups at the moment you see first outlinable."));
             }
 
             serializedObject.ApplyModifiedProperties();

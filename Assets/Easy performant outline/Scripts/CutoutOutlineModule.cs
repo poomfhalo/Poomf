@@ -4,8 +4,9 @@ using UnityEngine;
 
 namespace EPOOutline
 {
+    [ExecuteAlways]
     [RequireComponent(typeof(Renderer))]
-    public class CutoutOutlineModule : MonoBehaviour
+    public class CutoutOutlineModule : Module
     {
         enum MaterialAccessMode
         {
@@ -28,6 +29,8 @@ namespace EPOOutline
         [SerializeField]
         private MaterialAccessMode materialAccessMode;
 
+        private Renderer renderer;
+
         public float CutoutAlpha
         {
             get
@@ -48,7 +51,6 @@ namespace EPOOutline
                 if (cutoutTexture != null)
                     return cutoutTexture;
 
-                var renderer = GetComponent<Renderer>();
                 if (renderer is SpriteRenderer)
                     return (renderer as SpriteRenderer).sprite.texture;
                 else
@@ -73,6 +75,16 @@ namespace EPOOutline
             {
                 cutoutTexture = value;
             }
+        }
+
+        private void Awake()
+        {
+            renderer = GetComponent<Renderer>();
+        }
+
+        private void OnDestroy()
+        {
+            
         }
     }
 }

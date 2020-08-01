@@ -6,7 +6,6 @@ using System;
 namespace EPOOutline
 {
     [ExecuteAlways]
-    [DisallowMultipleComponent]
     public class Outlinable : MonoBehaviour
     {
         public enum OutlineMask
@@ -14,6 +13,12 @@ namespace EPOOutline
             None,
             Front,
             Back
+        }
+
+        public enum ModulesUsageApproach
+        {
+            Use,
+            Ignore
         }
 
         private static Material basicOutlineMaterial;
@@ -24,6 +29,22 @@ namespace EPOOutline
 
         [SerializeField]
         private int layer = 0;
+
+        [SerializeField]
+        private ModulesUsageApproach modulesUsageApproach = ModulesUsageApproach.Use;
+
+        public ModulesUsageApproach ModulesInteractionApproachType
+        {
+            get
+            {
+                return modulesUsageApproach;
+            }
+
+            set
+            {
+                modulesUsageApproach = value;
+            }
+        }
 
         public int Layer
         {
@@ -69,7 +90,7 @@ namespace EPOOutline
             get
             {
                 CheckMaterials();
-                return outlineMaterialInstance;
+                return basicOutlineMaterial;
             }
         }
 
@@ -133,9 +154,6 @@ namespace EPOOutline
         [SerializeField]
         private Color outlineColor = Color.green;
 
-        [NonSerialized]
-        private Material outlineMaterialInstance;
-
         [SerializeField]
         [HideInInspector]
         [Range(0.0f, 2.0f)]
@@ -149,8 +167,6 @@ namespace EPOOutline
         [SerializeField]
         [HideInInspector]
         private List<Renderer> renderers = new List<Renderer>();
-
-        private static int? colorHash;
 
         private int visiblePartsCount = 0;
 
@@ -194,18 +210,6 @@ namespace EPOOutline
 
             if (!backMask)
                 backMask = Resources.Load<Material>("Outline/Materials/Back mask");
-
-            UpdateMaterialIfRequired();
-            UpdateAccordingToColor();
-        }
-
-        public void UpdateMaterialIfRequired()
-        {
-            if (outlineMaterialInstance != null)
-                return;
-
-            outlineMaterialInstance = Instantiate(basicOutlineMaterial);
-            UpdateAccordingToColor();
         }
 
         private void Reset()
@@ -219,17 +223,6 @@ namespace EPOOutline
         {
             renderers.Clear();
             GetComponentsInChildren<Renderer>(true, renderers);
-        }
-
-        private void UpdateAccordingToColor()
-        {
-            if (outlineMaterialInstance != null)
-            {
-                if (!colorHash.HasValue)
-                    colorHash = Shader.PropertyToID("_Color");
-
-                outlineMaterialInstance.SetColor(colorHash.Value, outlineColor);
-            }
         }
 
         public void GetRenderers(List<Renderer> result)

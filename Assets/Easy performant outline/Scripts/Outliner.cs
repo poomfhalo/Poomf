@@ -39,10 +39,11 @@ namespace EPOOutline
 
         [SerializeField]
         private bool usingInfoBuffer = false;
+        
+        [SerializeField]
+        private bool sustainedPerformanceMode = true;
 
         private List<Outlinable> outlinables = new List<Outlinable>();
-
-        private HashSet<int> layers = new HashSet<int>();
 
         private CommandBuffer basicBuffer;
 

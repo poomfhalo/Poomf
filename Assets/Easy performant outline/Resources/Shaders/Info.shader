@@ -1,5 +1,3 @@
-﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
-
 Shader "Unlit/Info"
 {   
     Properties
@@ -36,7 +34,7 @@ Shader "Unlit/Info"
             {
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
-                float1 depth : TEXCOORD1;
+                float depth : TEXCOORD1;
             };
 
             float4 _Color;
@@ -53,8 +51,8 @@ Shader "Unlit/Info"
             float4 frag (v2f i) : SV_Target
             {
                 float4 result = _Color;
-
                 result.b = i.depth;
+
                 return result;
             }
             ENDCG

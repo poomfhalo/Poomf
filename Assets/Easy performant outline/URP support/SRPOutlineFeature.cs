@@ -113,18 +113,12 @@ public class SRPOutlineFeature : ScriptableRendererFeature
 
         [SerializeField] public LayerMask LayerMask = -1;
 
+        public bool SustainedPerformanceMode = true;
+
         public bool UsingInfoBuffer = false;
     }
 
     private SRPOutline pass;
-
-    [SerializeField] private Settings settings = new Settings();
-
-    public override void Create()
-    {
-        pass = new SRPOutline();
-        pass.renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
-    }
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
@@ -139,7 +133,7 @@ public class SRPOutlineFeature : ScriptableRendererFeature
         pass.Parameters.BlurShift = settings.BlurShift;
         pass.Parameters.DilateShift = settings.DilateShift;
         pass.Parameters.Depth = renderer.cameraDepth;
-
+        pass.Parameters.SustainedPerformanceMode = settings.SustainedPerformanceMode;
         pass.Mask = settings.LayerMask;
 
         renderer.EnqueuePass(pass);

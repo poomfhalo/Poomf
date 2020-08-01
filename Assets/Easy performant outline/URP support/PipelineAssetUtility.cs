@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 #if SRP_OUTLINE && UNITY_2019_1_OR_NEWER
 #if UNITY_2019_3_OR_NEWER
@@ -12,7 +15,7 @@ using UnityEngine.Rendering.LWRP;
 #endif
 #endif
 
-#if SRP_OUTLINE
+#if SRP_OUTLINE && UNITY_EDITOR
 namespace EPOOutline
 {
     public static class PipelineAssetUtility

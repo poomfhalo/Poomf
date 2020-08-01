@@ -2,7 +2,6 @@
 {
     Properties
     {
-        _Color ("Color", Color) = (0, 0, 0, 1)
         _Stencil ("Mask stencil", Int) = 6
     }
     SubShader

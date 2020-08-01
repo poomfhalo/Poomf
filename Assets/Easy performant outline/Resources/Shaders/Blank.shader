@@ -4,7 +4,6 @@
         _Stencil ("Stencil", Int) = 6
     }
     SubShader {
-        Tags { "RenderType"="Opaque" "Queue"="Geometry+1"}
         ZWrite Off
 
         Stencil 

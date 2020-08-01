@@ -17,6 +17,7 @@ namespace EPOOutline
 
     public class OutlineParameters
     {
+        public bool SustainedPerformanceMode = true;
         public IGraphicsControlProvider ControlProvider;
         public int Width;
         public int Height;
@@ -64,7 +65,25 @@ namespace EPOOutline
         private static List<Outlinable> outlinables = new List<Outlinable>();
         private static List<Renderer> renderers = new List<Renderer>();
 
+        private static List<RenderInfo> targets = new List<RenderInfo>(); 
+
         private static RenderTextureFormat? hdrFormat = null;
+
+        private struct RenderInfo
+        {
+            public readonly Renderer Renderer;
+            public readonly int SubmeshesCount;
+            public readonly Outlinable Outlinable;
+            public readonly CutoutOutlineModule CutoutModule;
+
+            public RenderInfo(Renderer renderer, int submeshesCount, Outlinable outlinable, CutoutOutlineModule cutoutModule)
+            {
+                Renderer = renderer;
+                SubmeshesCount = submeshesCount;
+                Outlinable = outlinable;
+                CutoutModule = cutoutModule;
+            }
+        }
 
         private static void CheckIsPrepared()
         {
@@ -102,7 +121,7 @@ namespace EPOOutline
             if (currentRenderer is MeshRenderer)
             {
                 var filter = currentRenderer.GetComponent<MeshFilter>();
-                return filter == null ? 0 : filter.sharedMesh.subMeshCount;
+                return filter == null || filter.sharedMesh == null ? 0 : filter.sharedMesh.subMeshCount;
             }
             else if (currentRenderer is SkinnedMeshRenderer)
                 return (currentRenderer as SkinnedMeshRenderer).sharedMesh.subMeshCount;
@@ -163,9 +182,8 @@ namespace EPOOutline
             }
         }
 
-        private static bool SetupCutout(OutlineParameters parameters, Renderer renderer)
+        private static bool SetupCutout(OutlineParameters parameters, CutoutOutlineModule module)
         {
-            var module = renderer.GetComponent<CutoutOutlineModule>();
             if (module == null)
                 return false;
 
@@ -191,16 +209,19 @@ namespace EPOOutline
             Outlinable.GetAllActiveOutlinables(outlinables);
             parameters.Buffer.Clear();
 
-            if (outlinables.Count == 0)
+            if (outlinables.Count == 0 && !parameters.SustainedPerformanceMode)
                 return;
 
             SetupDepth(parameters);
 
+            if (parameters.SustainedPerformanceMode && parameters.Layers.Count == 0)
+                parameters.Layers.Add(int.MaxValue);
+
+            var scaledWidth     = (int)(parameters.Width * parameters.PrimaryRendererScale);
+            var scaledHeight    = (int)(parameters.Height * parameters.PrimaryRendererScale);
+
             foreach (var layer in parameters.Layers)
             {
-                var scaledWidth = (int)(parameters.Width * parameters.PrimaryRendererScale);
-                var scaledHeight = (int)(parameters.Height * parameters.PrimaryRendererScale);
-
                 GetTemporaryRT(parameters, temporaryRT, parameters.Width, parameters.Height, 0);
 
                 parameters.ControlProvider.Blit(parameters.Target, temporaryRT, basicBlitMaterial, 0);
@@ -209,49 +230,58 @@ namespace EPOOutline
 
                 parameters.Buffer.ClearRenderTarget(false, true, Color.clear);
 
+                targets.Clear();
                 foreach (var outlinable in outlinables)
                 {
                     if (outlinable.Layer != layer)
                         continue;
 
-                    if (((1 << outlinable.gameObject.layer) & parameters.RenderMask.value) == 0)
-                        continue;
-
                     if (!parameters.DrawPredicate(outlinable))
                         continue;
-
-                    var maskMaterialToUse = outlinable.MaskMaterial;
 
                     renderers.Clear();
                     outlinable.GetRenderers(renderers);
                     foreach (var currentRenderer in renderers)
                     {
-                        if (currentRenderer == null)
+                        if (currentRenderer == null || 
+                            !currentRenderer.enabled || 
+                            !currentRenderer.gameObject.activeInHierarchy)
+                            continue;
+
+                        if (((1 << currentRenderer.gameObject.layer) & parameters.RenderMask.value) == 0)
                             continue;
 
                         var submeshesCount = GetSubmeshCount(currentRenderer);
-                        for (var submesh = 0; submesh < submeshesCount; submesh++)
-                        {
-                            if (maskMaterialToUse != null)
-                                parameters.ControlProvider.DrawRenderer(currentRenderer, maskMaterialToUse, submesh, false);
+                        var ignoreModules = outlinable.ModulesInteractionApproachType == Outlinable.ModulesUsageApproach.Ignore;
 
-                            parameters.ControlProvider.DrawRenderer(currentRenderer, outlinable.OutlineMaterial, submesh, SetupCutout(parameters, currentRenderer));
+                        targets.Add(new RenderInfo(currentRenderer, submeshesCount, outlinable, 
+                            ignoreModules ? null : currentRenderer.GetComponent<CutoutOutlineModule>()));
+                    }
+                }
 
-                            if (maskMaterialToUse != null)
-                                parameters.ControlProvider.DrawRenderer(currentRenderer, clearStencilMaterial, submesh, false);
-                        }
+                foreach (var target in targets)
+                {
+                    var maskMaterialToUse = target.Outlinable.MaskMaterial;
+                    parameters.Buffer.SetGlobalColor(colorHash, target.Outlinable.OutlineColor);
+
+                    for (var submesh = 0; submesh < target.SubmeshesCount; submesh++)
+                    {
+                        if (maskMaterialToUse != null)
+                            parameters.ControlProvider.DrawRenderer(target.Renderer, maskMaterialToUse, submesh, false);
+
+                        parameters.ControlProvider.DrawRenderer(target.Renderer, target.Outlinable.OutlineMaterial, submesh, SetupCutout(parameters, target.CutoutModule));
+
+                        if (maskMaterialToUse != null)
+                            parameters.ControlProvider.DrawRenderer(target.Renderer, clearStencilMaterial, submesh, false);
                     }
                 }
 
                 // Post processing
                 GetTemporaryRT(parameters, postprocessRT, scaledWidth, scaledHeight, 0);
-
                 GetTemporaryRT(parameters, secondaryPostprocessRT, scaledWidth, scaledHeight, 0);
-
                 GetTemporaryRT(parameters, copySurface, parameters.Width, parameters.Height, 0);
 
                 parameters.ControlProvider.Blit(parameters.Target, copySurface, addAlphaBlitMaterial, 0);
-
                 parameters.ControlProvider.Blit(copySurface, postprocessRT, basicBlitMaterial, -1);
 
                 parameters.ControlProvider.SetTarget(parameters.Target);
@@ -265,37 +295,20 @@ namespace EPOOutline
 
                     GetTemporaryRT(parameters, infoBuffer, scaledInfoWidth, scaledInfoHeight, 0);
 
-                    foreach (var outlinable in outlinables)
+                    foreach (var target in targets)
                     {
-                        if (outlinable.Layer != layer)
-                            continue;
+                        var maskMaterialToUse = target.Outlinable.MaskMaterial;
 
-                        if (((1 << outlinable.gameObject.layer) & parameters.RenderMask.value) == 0)
-                            continue;
-
-                        if (!parameters.DrawPredicate(outlinable))
-                            continue;
-
-                        var maskMaterialToUse = outlinable.MaskMaterial;
-
-                        parameters.Buffer.SetGlobalColor(colorHash, new Color(outlinable.BlurShift, outlinable.DilateShift, 0, 0));
-                        outlinable.GetRenderers(renderers);
-                        foreach (var currentRenderer in renderers)
+                        parameters.Buffer.SetGlobalColor(colorHash, new Color(target.Outlinable.BlurShift, target.Outlinable.DilateShift, 0, 0));
+                        for (var submesh = 0; submesh < target.SubmeshesCount; submesh++)
                         {
-                            if (currentRenderer == null)
-                                continue;
+                            if (maskMaterialToUse != null)
+                                parameters.ControlProvider.DrawRenderer(target.Renderer, maskMaterialToUse, submesh, false);
 
-                            var submeshesCount = GetSubmeshCount(currentRenderer);
-                            for (var submesh = 0; submesh < submeshesCount; submesh++)
-                            {
-                                if (maskMaterialToUse != null)
-                                    parameters.ControlProvider.DrawRenderer(currentRenderer, maskMaterialToUse, submesh, false);
+                            parameters.ControlProvider.DrawRenderer(target.Renderer, infoMaterial, submesh, false);
 
-                                parameters.ControlProvider.DrawRenderer(currentRenderer, infoMaterial, submesh, false);
-
-                                if (maskMaterialToUse != null)
-                                    parameters.ControlProvider.DrawRenderer(currentRenderer, clearStencilMaterial, submesh, false);
-                            }
+                            if (maskMaterialToUse != null)
+                                parameters.ControlProvider.DrawRenderer(target.Renderer, clearStencilMaterial, submesh, false);
                         }
                     }
 
@@ -349,28 +362,10 @@ namespace EPOOutline
 
                 // Carving
 
-                foreach (var outlinable in outlinables)
+                foreach (var target in targets)
                 {
-                    if (outlinable.Layer != layer)
-                        continue;
-
-                    if (((1 << outlinable.gameObject.layer) & parameters.RenderMask.value) == 0)
-                        continue;
-
-                    if (!parameters.DrawPredicate(outlinable))
-                        continue;
-
-                    outlinable.GetRenderers(renderers);
-
-                    foreach (var currentRenderer in renderers)
-                    {
-                        if (currentRenderer == null)
-                            continue;
-
-                        var submeshesCount = GetSubmeshCount(currentRenderer);
-                        for (var submesh = 0; submesh < submeshesCount; submesh++)
-                            parameters.ControlProvider.DrawRenderer(currentRenderer, fillMaterial, submesh, SetupCutout(parameters, currentRenderer));
-                    }
+                    for (var submesh = 0; submesh < target.SubmeshesCount; submesh++)
+                        parameters.ControlProvider.DrawRenderer(target.Renderer, fillMaterial, submesh, SetupCutout(parameters, target.CutoutModule));
                 }
 
                 parameters.ControlProvider.Blit(copySurface, temporaryRT, blitMaterial, -1);
