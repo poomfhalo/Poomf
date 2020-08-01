@@ -138,10 +138,6 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
             p.SetUp(s.SlotId);
             p.GetComponent<PhotonView>().RPC("SetUp",RpcTarget.Others, s.SlotId);
         }
-        foreach (var player in PhotonNetwork.PlayerList)
-        {
-
-        }
     }
     private void M_PreparePlayersForGame()
     {

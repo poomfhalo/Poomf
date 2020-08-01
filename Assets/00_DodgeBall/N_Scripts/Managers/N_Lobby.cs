@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Photon.Pun;
 using TMPro;
+using GW_Lib;
 
 //this Must be placed on a game object that is always active, in the Menu Scene.
 //this component, must also never be disabled. 
@@ -20,21 +21,35 @@ public class N_Lobby : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        PlayersRunDataSO.Instance.ClearOtherPlayersData();
+        PlayersRunDataSO.Instance.localSkin = FindObjectOfType<CustomizablePlayer>().GetSkinData;
+
         ready.onClick.AddListener(OnReadyClicked);
         findingPlayers.onClick.AddListener(OnFindingPlayersClicked);
         findingPlayers.gameObject.SetActive(false);
+
         if (PhotonNetwork.IsConnectedAndReady || !string.IsNullOrEmpty(PhotonNetwork.NickName))
         {
             loginMenu.SetActive(false);
             playerNameText.text = PhotonNetwork.NickName;
+
+            PlayersRunDataSO.Instance.localPlayerName = playerNameText.text;
         }
         else
         {
-            loginMenu.GetComponent<N_LoginMenu>().onNameSet += (n) => playerNameText.text = n;
+            loginMenu.GetComponent<N_LoginMenu>().onNameSet += (n) =>{
+                playerNameText.text = n;
+                PlayersRunDataSO.Instance.localPlayerName = playerNameText.text;
+            };
         }
 
         matchStarter = GetComponent<N_MatchStarter>();
-        matchStarter.onStartGame += GoToRoom;
+        matchStarter.onStartGame += SpreadLocalData;
+        PhotonNetwork.AddCallbackTarget(this);
+    }
+    void OnDestroy()
+    {
+        PhotonNetwork.RemoveCallbackTarget(this);
     }
 
     private void OnReadyClicked()
@@ -95,16 +110,41 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         ready.gameObject.SetActive(false);
         findingPlayers.gameObject.SetActive(true);
     }
-    private void GoToRoom()
+    private void SpreadLocalData()
+    {
+        PlayersRunDataSO data = PlayersRunDataSO.Instance;
+        data.ClearOtherPlayersData();
+
+        void SendLocalData()
+        {
+            CharaSkinDataPlain plain = new CharaSkinDataPlain(FindObjectOfType<CustomizablePlayer>().GetSkinData);
+
+            photonView.RPC("RecieveLocalData", RpcTarget.AllViaServer, PhotonNetwork.LocalPlayer.ActorNumber, data.localPlayerName,
+                plain.types, plain.ids, plain.reds, plain.greens, plain.blues, plain.colorIndicies, plain.texesIndicies);
+        }
+        this.InvokeDelayed(3, SendLocalData);
+    }
+    private void RecieveLocalData(int actorID,string playerName, int[] types, int[] ids, float[] reds, float[] greens, float[] blues, int[] colorIndicies, int[] texesIndicies)
+    {
+        PlayersRunDataSO data = PlayersRunDataSO.Instance;
+        CharaSkinDataPlain plainSkin = new CharaSkinDataPlain(types, ids, reds, greens, blues, colorIndicies, texesIndicies);
+
+        data.AddPlayerRunData(actorID, plainSkin.CreateSkinData(), playerName);
+
+        if (PhotonNetwork.PlayerList.Length == data.playersRunData.Count)
+            GoToRoom();
+    }
+    public void GoToRoom()
     {
         if (PhotonNetwork.IsMasterClient)
         {
             Log.Message("Loading MP_Room");
-            SceneFader.instance.FadeIn(1.3f, () => PhotonNetwork.LoadLevel("MP_Room"));
+            SceneFader.instance.FadeIn(1.2f, () => PhotonNetwork.LoadLevel("MP_Room"));
         }
         else
         {
             SceneFader.instance.FadeIn(1, null);
         }
     }
+
 }

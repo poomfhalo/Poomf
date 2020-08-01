@@ -73,4 +73,10 @@ public class CustomizablePlayer : MonoBehaviour
         item.SetColor(skinData.GetColorIndex(item.itemType));
         item.SetTexture(skinData.GetTextureIndex(item.itemType));
     }
+
+    public void SetNewSkinData(CharaSkinData skinData)
+    {
+        this.skinData = skinData;
+        RefreshCharaVisuals();
+    }
 }

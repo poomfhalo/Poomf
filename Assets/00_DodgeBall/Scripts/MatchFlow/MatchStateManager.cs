@@ -37,7 +37,7 @@ public class MatchStateManager : Singleton<MatchStateManager>
     }
     private void ConnectToPlayers()
     {
-        TeamsManager.instance.AllCharacters.ForEach(c =>{
+        TeamsManager.instance.AllCharacters.ForEach(c => {
             c.GetComponent<CharaKnockoutPlayer>().E_OnKnockedOut += OnCharaKnockedOut;
         });
     }

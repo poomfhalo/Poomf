@@ -77,6 +77,7 @@ public class CharaSkinData : PersistantSO
 [Serializable]
 public class CharaSkinDataPlain
 {
+    public bool IsEmpty => types.Length == 0;
     public int[] types = new int[0];
     public int[] ids = new int[0];
 
@@ -91,6 +92,9 @@ public class CharaSkinDataPlain
 
     public CharaSkinDataPlain(CharaSkinData skinData)
     {
+        if (skinData == null)
+            return;
+
         int itemsCount = skinData.items.Count;
         types = ids = colorIndicies = texesIndicies = new int[itemsCount];
         reds = greens = blues = new float[itemsCount];
@@ -109,6 +113,17 @@ public class CharaSkinDataPlain
             texesIndicies[i] = item.currentTextureIndex;
         }
     }
+    public CharaSkinDataPlain(int[] types, int[] ids, float[] reds, float[] greens, float[] blues, int[] colorIndicies, int[] texesIndicies)
+    {
+        this.types = types;
+        this.ids = ids;
+        this.reds = reds;
+        this.greens = greens;
+        this.blues = blues;
+        this.colorIndicies = colorIndicies;
+        this.texesIndicies = texesIndicies;
+    }
+
     public CharaSkinData CreateSkinData()
     {
         int itemsCount = types.Length;

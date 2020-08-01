@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6095459455670513205}
-  - component: {fileID: 6330209677079083072}
+  - component: {fileID: 1353537446397037516}
   m_Layer: 0
   m_Name: Showcase Room
   m_TagString: Untagged
@@ -35,7 +35,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6330209677079083072
+--- !u!114 &1353537446397037516
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b05b0027fbc7bfaa8b45b8bdb25fe63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 2670627116283461704}
+  roomSlot: 0
 --- !u!1 &2472714931628400380
 GameObject:
   m_ObjectHideFlags: 0
@@ -1053,3 +1055,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8192147902768004545}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2670627116283461704 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6106777927090224521, guid: 74954060ed8cdad41be593b89de07905,
+    type: 3}
+  m_PrefabInstance: {fileID: 8192147902768004545}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c013cf3df1699841b9a4070dd9d40bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -9,6 +9,7 @@ public class LevelsRoom : MonoBehaviour
 {
     public Func<IEnumerator> TryLoadLevelFunc = null;
     public bool extLoadOnClick = true;
+
     [Header("Constants")]
     [SerializeField] Image levelBGImage = null;
     [SerializeField] TextMeshProUGUI timerText = null;
@@ -28,6 +29,7 @@ public class LevelsRoom : MonoBehaviour
         levelChangeCounter = levelChangeTimer;
         isTimerRunning = true;
         delegators = GetComponentsInChildren<VoteSlot>();
+
         foreach (var d in delegators)
         {
             d.E_OnPointerEntered += OnEntered;
