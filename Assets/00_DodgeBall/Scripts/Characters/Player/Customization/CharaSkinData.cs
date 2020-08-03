@@ -69,7 +69,17 @@ public class CharaSkinData : PersistantSO
     }
 
     public int GetItemID(ItemCategory ofItem) => GetItemData(ofItem).activeItemID;
-    SkinItemData GetItemData(ItemCategory itemType) => items.Single(i => i.type == itemType);
+    SkinItemData GetItemData(ItemCategory itemType)
+    {
+        Debug.LogWarning("Tryign To find " + itemType);
+        string s = "";
+        foreach (var item in items)
+        {
+            s = s + item.type + " , ";
+        }
+        Debug.LogWarning(s);
+        return items.Single(i => i.type == itemType);
+    }
     private void Refresh() => onDataUpdated?.Invoke();
 
     public override string ToString()
@@ -159,6 +169,7 @@ public class CharaSkinDataPlain
 
             item.SetColorIndex(colorIndicies[i]);
             item.SetTextureIndex(texesIndicies[i]);
+            skinData.items.Add(item);
         }
         return skinData;
     }
