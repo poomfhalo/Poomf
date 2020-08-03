@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-public class VoteRoomUI : MonoBehaviour
+public class AdvancedPlayerSlotsUI : MonoBehaviour
 {
     [SerializeField] List<ShowcaseSlot> slots = new List<ShowcaseSlot>();
 

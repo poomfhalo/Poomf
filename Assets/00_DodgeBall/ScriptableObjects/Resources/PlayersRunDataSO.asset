@@ -13,8 +13,30 @@ MonoBehaviour:
   m_Name: PlayersRunDataSO
   m_EditorClassIdentifier: 
   playersRunData:
+  - actorID: 2
+    charaName: lappy
+    charaSkinData:
+      types: 00000000010000000200000003000000
+      ids: 030000000d0000001000000011000000
+      reds:
+      - 0.9333334
+      - 1
+      - 1
+      - 1
+      greens:
+      - 0.654902
+      - 1
+      - 1
+      - 1
+      blues:
+      - 0.33333334
+      - 1
+      - 1
+      - 1
+      colorIndicies: 00000000000000000300000000000000
+      texesIndicies: 00000000010000000000000000000000
   - actorID: 1
-    charaName: gggg
+    charaName: pc
     charaSkinData:
       types: 00000000010000000200000003000000
       ids: 100000000d0000001000000011000000
@@ -35,27 +57,5 @@ MonoBehaviour:
       - 1
       colorIndicies: 00000000000000000300000000000000
       texesIndicies: 00000000020000000000000000000000
-  - actorID: 2
-    charaName: www
-    charaSkinData:
-      types: 00000000010000000200000003000000
-      ids: 030000000d0000001000000011000000
-      reds:
-      - 0.9333334
-      - 1
-      - 1
-      - 1
-      greens:
-      - 0.654902
-      - 1
-      - 1
-      - 1
-      blues:
-      - 0.33333334
-      - 1
-      - 1
-      - 1
-      colorIndicies: 00000000000000000300000000000000
-      texesIndicies: 02000000010000000000000000000000
-  localPlayerName: gggg
+  localPlayerName: pc
   localSkin: {fileID: 11400000, guid: 2b967bce3a8192d6eada0ef487ca6943, type: 2}

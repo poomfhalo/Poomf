@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 
 public class ShowcaseSlot : MonoBehaviour
@@ -12,7 +10,10 @@ public class ShowcaseSlot : MonoBehaviour
 
     public void SetPlayerData(int playerLevel, string playerName)
     {
-        this.playerName.text = playerName;
-        this.playerLevel.text = playerLevel.ToString();
+        if(this.playerName)
+            this.playerName.text = playerName;
+
+        if(this.playerLevel)
+            this.playerLevel.text = playerLevel.ToString();
     }
 }

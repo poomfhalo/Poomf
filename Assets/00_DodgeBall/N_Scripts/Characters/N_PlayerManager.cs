@@ -48,7 +48,7 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
             CharaSkinData skinData = data.charaSkinData.CreateSkinData();
             pc.GetComponentInChildren<CustomizablePlayer>().SetNewSkinData(skinData);
 
-            Log.Warning("Applying skin data " + skinData + " to " + data.charaName);
+            Log.Message("Applying skin data " + skinData + " to " + data.charaName);
         }
 
         if (!photonView.IsMine)
