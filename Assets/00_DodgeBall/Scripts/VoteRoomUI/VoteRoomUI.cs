@@ -47,14 +47,12 @@ public class VoteRoomUI : MonoBehaviour
 
             if (room == null || slot == null)
             {
-                Debug.Log("No room, Or no Slot");
+                Log.Message("No room, Or no Slot");
                 continue;
             }
 
             room.UpdateUsableSkin(p.charaSkinData.CreateSkinData());
             slot.SetPlayerData(11, p.charaName);
-            Debug.Log("Updating Data");
         }
-        Debug.Log("WT?");
     }
 }
