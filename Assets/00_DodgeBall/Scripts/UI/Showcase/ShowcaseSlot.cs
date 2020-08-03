@@ -10,10 +10,10 @@ public class ShowcaseSlot : MonoBehaviour
     [SerializeField] TextMeshProUGUI playerLevel = null;
     [SerializeField] TextMeshProUGUI playerName = null;
 
-    public void SetPlayerData(int playerLevel,string playerName)
+    public void SetPlayerData(int playerLevel, string playerName)
     {
         this.playerName.text = playerName;
         this.playerLevel.text = playerLevel.ToString();
         Debug.Log("Updating Texts");
-            }
+    }
 }

@@ -52,7 +52,7 @@ public class VoteRoomUI : MonoBehaviour
             }
 
             room.UpdateUsableSkin(p.charaSkinData.CreateSkinData());
-            slot.SetPlayerData(99, p.charaName);
+            slot.SetPlayerData(11, p.charaName);
             Debug.Log("Updating Data");
         }
         Debug.Log("WT?");

@@ -119,6 +119,15 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         {
             CharaSkinDataPlain plain = new CharaSkinDataPlain(FindObjectOfType<CustomizablePlayer>().GetSkinData);
 
+            Log.Message("Sending Customization Data Player Name :: " + data.localPlayerName);
+
+            string s = "IDS : (";
+            foreach (var id in plain.ids)
+            {
+                s = s + id + ",";
+            }
+            s = s + ")";
+
             photonView.RPC("RecieveLocalData", RpcTarget.AllViaServer, PhotonNetwork.LocalPlayer.ActorNumber, data.localPlayerName,
                 plain.types, plain.ids, plain.reds, plain.greens, plain.blues, plain.colorIndicies, plain.texesIndicies);
         }
@@ -129,6 +138,15 @@ public class N_Lobby : MonoBehaviourPunCallbacks
     {
         PlayersRunDataSO data = PlayersRunDataSO.Instance;
         CharaSkinDataPlain plainSkin = new CharaSkinDataPlain(types, ids, reds, greens, blues, colorIndicies, texesIndicies);
+        Log.Message("Recieved Customization Data");
+
+        Log.Message("Player Name :: " + playerName);
+        string s = "IDS : (";
+        foreach (var id in ids)
+        {
+            s = s + id + ",";
+        }
+        s = s + ")";
 
         data.AddPlayerRunData(actorID, plainSkin, playerName);
 
