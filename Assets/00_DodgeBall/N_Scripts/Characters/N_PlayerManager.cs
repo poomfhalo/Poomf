@@ -32,8 +32,15 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
         pc = N_Extentions.N_MakeObj(N_Prefab.Player, Vector3.zero, Quaternion.identity);
         pc.GetComponent<PhotonView>().RPC("OnCreated", RpcTarget.All, GetComponent<PhotonView>().ViewID);
         yield return new WaitForSeconds(0.1f);
+
         Log.LogL0(photonView.Controller + " Created a PC ", pc);
-        CharaSkinData skinData = PlayersRunDataSO.Instance.GetSkinData(PhotonNetwork.LocalPlayer.ActorNumber);
+
+        PlayersRunDataSO dataSO = PlayersRunDataSO.Instance;
+        PlayersRunDataSO.PlayerRunData data = dataSO.GetPlayerRunData(photonView.ControllerActorNr);
+        CharaSkinData skinData = data.charaSkinData.CreateSkinData();
+
+        Debug.Log("Applying skin data "+skinData + " to " + data.charaName);
+
         pc.GetComponentInChildren<CustomizablePlayer>().SetNewSkinData(skinData);
         N_Extentions.N_RaiseEvent(N_GameManager.N_OnCreatedPC, null, false);
     }

@@ -50,6 +50,13 @@ public class PlayersRunDataSO : PersistantSO
     }
     public CharaSkinData GetSkinData(int actorNumber)
     {
+        PlayerRunData data = GetPlayerRunData(actorNumber);
+        if (data == null)
+            return null;
+        return data.charaSkinData.CreateSkinData();
+    }
+    public PlayerRunData GetPlayerRunData(int actorNumber)
+    {
         if (!HasCharacter(actorNumber))
         {
             Log.Warning("Attempted To Find Player Of ActorNum" + actorNumber + " But it is not added to the data object ");
@@ -58,10 +65,9 @@ public class PlayersRunDataSO : PersistantSO
         foreach (var data in playersRunData)
         {
             if (data.actorID == actorNumber)
-                return data.charaSkinData.CreateSkinData();
+                return data;
         }
         Log.Warning("Should not be here, character was not found, and HasCharacter failed to detect it");
         return null;
     }
-
 }
