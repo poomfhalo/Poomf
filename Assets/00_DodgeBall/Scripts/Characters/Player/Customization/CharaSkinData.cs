@@ -71,6 +71,17 @@ public class CharaSkinData : PersistantSO
     public int GetItemID(ItemCategory ofItem) => GetItemData(ofItem).activeItemID;
     SkinItemData GetItemData(ItemCategory itemType) => items.Single(i => i.type == itemType);
     private void Refresh() => onDataUpdated?.Invoke();
+
+    public override string ToString()
+    {
+        string s = "(";
+        foreach (var id in items)
+        {
+            s = s + id.activeItemID + ",";
+        }
+        s = s + ")";
+        return name + " IDS: " + s; 
+    }
 }
 
 //To turn the CharaSkinData, to plain data that can be transfered across the network.
@@ -96,8 +107,15 @@ public class CharaSkinDataPlain
             return;
 
         int itemsCount = skinData.items.Count;
-        types = ids = colorIndicies = texesIndicies = new int[itemsCount];
-        reds = greens = blues = new float[itemsCount];
+
+        types = new int[itemsCount];
+        ids = new int[itemsCount];
+        colorIndicies = new int[itemsCount];
+        texesIndicies = new int[itemsCount];
+
+        reds = new float[itemsCount];
+        greens = new float[itemsCount];
+        blues = new float[itemsCount]; 
 
         for (int i = 0; i < itemsCount; i++)
         {
@@ -143,5 +161,15 @@ public class CharaSkinDataPlain
             item.SetTextureIndex(texesIndicies[i]);
         }
         return skinData;
+    }
+    public override string ToString()
+    {
+        string s = "(";
+        foreach (var id in ids)
+        {
+            s = s + id + ",";
+        }
+        s = s + ")";
+        return " IDS: " + s;
     }
 }
