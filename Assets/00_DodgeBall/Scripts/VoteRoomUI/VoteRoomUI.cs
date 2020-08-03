@@ -47,7 +47,7 @@ public class VoteRoomUI : MonoBehaviour
             if (room == null || slot == null)
                 continue;
 
-            room.UpdateUsableSkin(p.charaSkinData);
+            room.UpdateUsableSkin(p.charaSkinData.CreateSkinData());
 
             slot.SetPlayerData(99, p.charaName);
         }

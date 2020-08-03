@@ -130,7 +130,7 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         PlayersRunDataSO data = PlayersRunDataSO.Instance;
         CharaSkinDataPlain plainSkin = new CharaSkinDataPlain(types, ids, reds, greens, blues, colorIndicies, texesIndicies);
 
-        data.AddPlayerRunData(actorID, plainSkin.CreateSkinData(), playerName);
+        data.AddPlayerRunData(actorID, plainSkin, playerName);
 
         if (PhotonNetwork.PlayerList.Length == data.playersRunData.Count)
             GoToRoom();

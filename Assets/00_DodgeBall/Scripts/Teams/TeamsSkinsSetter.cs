@@ -19,7 +19,7 @@ public class TeamsSkinsSetter : MonoBehaviour
 
             if (playerObj == null)
                 continue;
-            playerObj.GetComponentInChildren<CustomizablePlayer>().SetNewSkinData(p.charaSkinData);
+            playerObj.GetComponentInChildren<CustomizablePlayer>().SetNewSkinData(p.charaSkinData.CreateSkinData());
         }
     }
 }
