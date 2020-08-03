@@ -33,6 +33,8 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
         pc.GetComponent<PhotonView>().RPC("OnCreated", RpcTarget.All, GetComponent<PhotonView>().ViewID);
         yield return new WaitForSeconds(0.1f);
         Log.LogL0(photonView.Controller + " Created a PC ", pc);
+        CharaSkinData skinData = PlayersRunDataSO.Instance.GetSkinData(PhotonNetwork.LocalPlayer.ActorNumber);
+        pc.GetComponentInChildren<CustomizablePlayer>().SetNewSkinData(skinData);
         N_Extentions.N_RaiseEvent(N_GameManager.N_OnCreatedPC, null, false);
     }
 
@@ -42,6 +44,7 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
         {
             pc = N_Extentions.GetCharacter(GetComponent<PhotonView>().Controller.ActorNumber).gameObject;
         }
+
         if (!photonView.IsMine)
             return;
         Team team = TeamsManager.GetTeam(pc.GetComponent<DodgeballCharacter>());

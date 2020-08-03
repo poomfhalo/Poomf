@@ -9,17 +9,10 @@ public class TeamsSkinsSetter : MonoBehaviour
         if (data == null)
             return;
 
-        if (data.IsSP)
+        if (!data.IsSP)
             return;
 
 
-        foreach (var p in data.playersRunData)
-        {
-            N_PC playerObj = N_TeamsManager.GetPlayer(p.actorID);
-
-            if (playerObj == null)
-                continue;
-            playerObj.GetComponentInChildren<CustomizablePlayer>().SetNewSkinData(p.charaSkinData.CreateSkinData());
-        }
+        Debug.Log("Adding Different Skins in SP is to be implemented yet");
     }
 }

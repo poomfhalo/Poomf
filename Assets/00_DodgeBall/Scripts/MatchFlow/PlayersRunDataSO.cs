@@ -39,13 +39,29 @@ public class PlayersRunDataSO : PersistantSO
         PlayerRunData rData = new PlayerRunData(actorID, charaSkinData, charaName);
         playersRunData.Add(rData);
     }
-    public bool HasCharacter(int slotID)
+    public bool HasCharacter(int actorID)
     {
         foreach (var data in playersRunData)
         {
-            if (data.actorID == slotID)
+            if (data.actorID == actorID)
                 return true;
         }
         return false;
     }
+    public CharaSkinData GetSkinData(int actorNumber)
+    {
+        if (!HasCharacter(actorNumber))
+        {
+            Log.Warning("Attempted To Find Player Of ActorNum" + actorNumber + " But it is not added to the data object ");
+            return null;
+        }
+        foreach (var data in playersRunData)
+        {
+            if (data.actorID == actorNumber)
+                return data.charaSkinData.CreateSkinData();
+        }
+        Log.Warning("Should not be here, character was not found, and HasCharacter failed to detect it");
+        return null;
+    }
+
 }
