@@ -25,17 +25,6 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
         {
             yield return StartCoroutine(SpawnPC());
         }
-        else
-        {
-            yield return new WaitForSeconds(0.1f);
-
-            PlayersRunDataSO dataSO = PlayersRunDataSO.Instance;
-            PlayersRunDataSO.PlayerRunData data = dataSO.GetPlayerRunData(photonView.ControllerActorNr);
-            CharaSkinData skinData = data.charaSkinData.CreateSkinData();
-            pc.GetComponentInChildren<CustomizablePlayer>().SetNewSkinData(skinData);
-
-            Log.Warning("Applying skin data " + skinData + " to " + data.charaName);
-        }
     }
     IEnumerator SpawnPC()
     {
@@ -53,6 +42,13 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
         if (pc == null)
         {
             pc = N_Extentions.GetCharacter(GetComponent<PhotonView>().Controller.ActorNumber).gameObject;
+
+            PlayersRunDataSO dataSO = PlayersRunDataSO.Instance;
+            PlayersRunDataSO.PlayerRunData data = dataSO.GetPlayerRunData(photonView.ControllerActorNr);
+            CharaSkinData skinData = data.charaSkinData.CreateSkinData();
+            pc.GetComponentInChildren<CustomizablePlayer>().SetNewSkinData(skinData);
+
+            Log.Warning("Applying skin data " + skinData + " to " + data.charaName);
         }
 
         if (!photonView.IsMine)
