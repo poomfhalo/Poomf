@@ -20,7 +20,7 @@ public class CustomizablePlayer : MonoBehaviour
     const string charaSkinKey = "chara_skin_data";
     const string relativeSkinDataPath = "Saves/SkinData.es3";
 
-    void Start()
+    void Awake()
     {
         // Initializes the custom items lists, all custom items and equipment slots
         transform.GetComponentsInChildren<CustomItemBase>(true).ToList().ForEach(c =>
@@ -37,6 +37,9 @@ public class CustomizablePlayer : MonoBehaviour
                 playerSkinTone = c as CustomSkin;
         });
         skinData.onDataUpdated += RefreshCharaVisuals;
+    }
+    void Start()
+    {
         //skinData = SaveManager.GetData(charaSkinKey, skinData, relativeSkinDataPath);
         RefreshCharaVisuals();
     }
