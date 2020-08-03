@@ -47,7 +47,7 @@ public class CustomizablePlayer : MonoBehaviour
 
     private void RefreshCharaVisuals()
     {
-        SaveManager.SaveData(charaSkinKey, skinData, relativeSkinDataPath);
+        //SaveManager.SaveData(charaSkinKey, skinData, relativeSkinDataPath);
         
         CustomHead activeHead = allHeads.Single(h => h.ItemID == skinData.GetItemID(ItemCategory.Head));
         allHeads.ForEach(h => h.gameObject.SetActive(false));

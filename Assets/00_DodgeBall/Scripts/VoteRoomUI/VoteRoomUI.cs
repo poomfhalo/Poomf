@@ -39,17 +39,22 @@ public class VoteRoomUI : MonoBehaviour
                 s.gameObject.SetActive(false);
         });
         slots.RemoveAll(s => !s.gameObject.activeSelf);
+
         foreach (var p in playerRunData.playersRunData)
         {
             ShowcaseSlot slot = slots.Find(s => s.GetID == p.actorID);
             ShowcaseRoom room = rooms.Find(r => r.GetRoomSlotID == p.actorID);
 
             if (room == null || slot == null)
+            {
+                Debug.Log("No room, Or no Slot");
                 continue;
+            }
 
             room.UpdateUsableSkin(p.charaSkinData.CreateSkinData());
-
             slot.SetPlayerData(99, p.charaName);
+            Debug.Log("Updating Data");
         }
+        Debug.Log("WT?");
     }
 }

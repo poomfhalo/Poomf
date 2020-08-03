@@ -14,5 +14,6 @@ public class ShowcaseSlot : MonoBehaviour
     {
         this.playerName.text = playerName;
         this.playerLevel.text = playerLevel.ToString();
-    }
+        Debug.Log("Updating Texts");
+            }
 }
