@@ -124,6 +124,7 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         }
         this.InvokeDelayed(3, SendLocalData);
     }
+    [PunRPC]
     private void RecieveLocalData(int actorID,string playerName, int[] types, int[] ids, float[] reds, float[] greens, float[] blues, int[] colorIndicies, int[] texesIndicies)
     {
         PlayersRunDataSO data = PlayersRunDataSO.Instance;
