@@ -9,6 +9,7 @@ public class N_Energy : MonoBehaviour,IPunObservable
     void Start()
     {
         energy = GetComponent<Energy>();
+        pv = GetComponent<PhotonView>();
         energy.ExtAllowWork = () => pv.IsMine;
     }
 
