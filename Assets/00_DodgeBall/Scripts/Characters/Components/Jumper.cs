@@ -11,11 +11,11 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
     public string actionName => "Jump Action";
     public float PosToJumpHeigthPercent => posToJumpHeigthPercent;
 
-    public Action<float> ConsumeEnergy { get; set; }
-    public Func<float, bool> CanConsumeEnergy { get; set; }
+    public Action<int> ConsumeEnergy { get; set; }
+    public Func<int, bool> CanConsumeEnergy { get; set; }
     public Func<bool> AllowRegen => () => !IsJumping && FeelsGround;
 
-    [SerializeField] float energyCost = 20;
+    [SerializeField] int energyCost = 20;
 
     [Header("Jump Data")]
     [SerializeField] float gravity = -20;

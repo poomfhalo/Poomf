@@ -21,11 +21,11 @@ public class Dodger : DodgeballCharaAction, ICharaAction,IEnergyAction
     public bool IsDodging => isDodging;
     public string actionName => "Dodge Action";
 
-    public Action<float> ConsumeEnergy { get; set; }
-    public Func<float, bool> CanConsumeEnergy { get; set; }
+    public Action<int> ConsumeEnergy { get; set; }
+    public Func<int, bool> CanConsumeEnergy { get; set; }
     public Func<bool> AllowRegen => () => !IsDodging;
 
-    [SerializeField] float energyCost = 40;
+    [SerializeField] int energyCost = 40;
     [Header("Dodge Data")]
     [SerializeField] bool playRndDodge = true;
     [Tooltip("If playRndDodge is true, this will be randomly set, otherwise, we will dodge using this animation only")]

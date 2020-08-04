@@ -8,7 +8,7 @@ public class Energy : MonoBehaviour
 {
     public float GetEnergyAsPercent => currEnergy / maxEnergy;
 
-    [SerializeField] float maxEnergy = 100;
+    [SerializeField] int maxEnergy = 100;
     [Tooltip("1 means, if player moves 1 world unit of distance, 1 unit of energy is regenerated," +
     	" if its 5 then each 1 unit the palyer moves, then he gains 5 energy unts")]
     [SerializeField] float regenSpeed = 5;
@@ -20,8 +20,7 @@ public class Energy : MonoBehaviour
     [SerializeField] DecisionOperator decisionMaker = DecisionOperator.And;
 
     [Header("Read Only")]
-    [SerializeField] float currEnergy = 0;
-    [SerializeField] float traveledDist = 0;
+    [SerializeField] int currEnergy = 0;
     public bool isInfinity = false;
 
     public Func<bool> ExtAllowWork = () => true;
@@ -31,7 +30,7 @@ public class Energy : MonoBehaviour
     float deltaDist = 0;
     bool wasStarted = false;
     List<Func<bool>> regenTests = new List<Func<bool>>();
-
+    float regenPointscounter = 0;
     void Start()
     {
         actions = GetComponentsInChildren<IEnergyAction>(true).ToList();
@@ -60,13 +59,18 @@ public class Energy : MonoBehaviour
 
         if (!CanRegen())
             return;
-
-        RegenrateEnergy();
+        regenPointscounter = regenPointscounter + deltaDist * regenSpeed;
+        GameExtentions.StripFloat(regenPointscounter, out int ints, out float frac);
+        if (ints > 0)
+        {
+            RegenrateEnergy(ints);
+            regenPointscounter = frac;
+        }
     }
 
-    public float GetEnergy() => currEnergy;
-    public bool CanConsumeEnergy(float ofVal) => currEnergy >= ofVal;
-    public void ConsumeEnergy(float val)
+    public int GetEnergy() => currEnergy;
+    public bool CanConsumeEnergy(int ofVal) => currEnergy >= ofVal;
+    public void ConsumeEnergy(int val)
     {
         if (isInfinity)
             return;
@@ -78,7 +82,7 @@ public class Energy : MonoBehaviour
 
     //Called To Set the Energy Directly, no calculations involved
     //for now, used as part of the multiplayer syncing, can be used in cutscenes.
-    public void SetEnergy(float energy)
+    public void SetEnergy(int energy)
     {
         currEnergy = energy;
         currEnergy = Mathf.Clamp(currEnergy, 0, maxEnergy);
@@ -86,14 +90,13 @@ public class Energy : MonoBehaviour
     private void SetRegenData()
     {
         deltaDist = (lastXZPos - xzPos).magnitude;
-        traveledDist = traveledDist + deltaDist;
         lastXZPos = xzPos;
         if (isInfinity && Mathf.Abs(GetEnergy() - maxEnergy) > Mathf.Epsilon)
         {
             SetEnergy(maxEnergy);
         }
     }
-    private void RegenrateEnergy()=> SetEnergy(currEnergy + deltaDist * regenSpeed);
+    private void RegenrateEnergy(int byVal)=> SetEnergy(currEnergy + byVal);
     private bool CanRegen()
     {
         List<bool> results = new List<bool>();

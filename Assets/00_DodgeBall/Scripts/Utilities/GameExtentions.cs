@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -45,6 +46,12 @@ public static class GameExtentions
             return charaSlot.GetComponent<CharaController>();
 
         return null;
+    }
+
+    public static void StripFloat(float f, out int ints, out float frac)
+    {
+        ints = (int)f;
+        frac = f - ints;
     }
 
     /// <summary>

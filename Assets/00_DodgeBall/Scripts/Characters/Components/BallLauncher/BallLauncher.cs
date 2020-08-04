@@ -12,7 +12,7 @@ public abstract class BallLauncher : DodgeballCharaAction, ICharaAction,IEnergyA
     public bool IsThrowing => isThrowing;
     public string actionName => activityName;
 
-    [SerializeField] float fakeThrowEnergyCost = 5;
+    [SerializeField] int fakeThrowEnergyCost = 5;
     [Header("Throw Data")]
     [Tooltip("If the value is less than 1 then we will use the Mover turn speed, noting that, if its too low, character may not" +
 "\nface the target, by the end of the animation, but the ball, will still travel towards the target")]
@@ -33,8 +33,8 @@ public abstract class BallLauncher : DodgeballCharaAction, ICharaAction,IEnergyA
     protected DodgeballCharacter aimedAtChara = null;
     protected SelectionIndicator selectionIndicator => GetComponent<DodgeballCharacter>().selectionIndicator;
 
-    public Action<float> ConsumeEnergy { get; set; }
-    public Func<float, bool> CanConsumeEnergy { get; set; }
+    public Action<int> ConsumeEnergy { get; set; }
+    public Func<int, bool> CanConsumeEnergy { get; set; }
     public Func<bool> AllowRegen => () => !IsThrowing;
 
     protected virtual void Awake()

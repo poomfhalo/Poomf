@@ -2,7 +2,7 @@
 using GW_Lib.Utility;
 using UnityEngine;
 
-public class BallReciever : DodgeballCharaAction, ICharaAction,IEnergyAction
+public class BallReciever : DodgeballCharaAction, ICharaAction, IEnergyAction
 {
     public bool IsDetecting => isDetecting;
     public bool CanRecieveBallNow => extCanRecieveBall && IsDetecting && isBallIn && isButtonClicked;
@@ -20,11 +20,12 @@ public class BallReciever : DodgeballCharaAction, ICharaAction,IEnergyAction
     public string actionName => "Recieve Ball";
     CharaHitPoints hp => GetComponent<CharaHitPoints>();
 
-    public Action<float> ConsumeEnergy { set; get; }
-    public Func<float, bool> CanConsumeEnergy { set; get; }
+    public Action<int> ConsumeEnergy { set; get; }
+    public Func<int, bool> CanConsumeEnergy { set; get; }
     public Func<bool> AllowRegen => () => !(IsDetecting && isButtonClicked);
 
     float newCatchCounter = 0;
+    [SerializeField] float reductionCounter = 0;
 
     void OnEnable() => hp.OnHpSubtracted += DisableDetection;
     void OnDisable() => hp.OnHpSubtracted -= DisableDetection;
@@ -32,17 +33,28 @@ public class BallReciever : DodgeballCharaAction, ICharaAction,IEnergyAction
     {
         if (GetComponent<BallGrabber>().HasBall)
             return;
-        if(!IsDetecting)
+        if (!IsDetecting)
         {
             SetIsBallIn(false);
             return;
         }
+
         if (IsDetecting && isButtonClicked)
         {
             float energyFraction = Time.deltaTime * energyCostPerSec;
-            if (CanConsumeEnergy(energyFraction))
-                ConsumeEnergy(energyFraction);
+            reductionCounter = reductionCounter + Time.deltaTime * energyCostPerSec;
+            GameExtentions.StripFloat(reductionCounter, out int ints, out float frac);
+            if (CanConsumeEnergy(ints))
+            {
+                ConsumeEnergy(ints);
+                reductionCounter = frac;
+            }
+            else
+                reductionCounter = 0;
         }
+        if (!CanConsumeEnergy(1))
+            return;
+
         Bounds b = ballRecieveZone.GetCollider.bounds;
         Collider[] overlaps = Physics.OverlapBox(b.center, b.extents);
         foreach (var col in overlaps)
@@ -75,7 +87,7 @@ public class BallReciever : DodgeballCharaAction, ICharaAction,IEnergyAction
 
     public void C_RecieveBall()
     {
-        if(CanRecieveBallNow)
+        if (CanRecieveBallNow)
         {
             RecieveBall();
         }
@@ -89,8 +101,16 @@ public class BallReciever : DodgeballCharaAction, ICharaAction,IEnergyAction
         onBallGrabbed?.Invoke();
         justCaughtBall = true;
     }
-    public void EnableDetection() => isDetecting = true;
-    public void DisableDetection() => isDetecting = false;
+    public void EnableDetection()
+    {
+        isDetecting = true;
+        reductionCounter = 0;
+    }
+    public void DisableDetection()
+    {
+        isDetecting = false;
+        reductionCounter = 0;
+    }
 
     private void SetIsBallIn(bool state)
     {
