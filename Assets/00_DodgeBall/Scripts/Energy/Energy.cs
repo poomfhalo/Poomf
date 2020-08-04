@@ -70,6 +70,8 @@ public class Energy : MonoBehaviour
     {
         if (isInfinity)
             return;
+        if (!ExtAllowWork())
+            return;
 
         SetEnergy(currEnergy - val);
     }
