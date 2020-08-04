@@ -34,6 +34,7 @@ public class SelectionIndicator : MonoBehaviour
             enemy.SetActive(false);
             transform.SetParent(owner.transform);
             transform.localPosition = startLocalPos;
+            transform.localRotation = Quaternion.identity;
             return;
         }
 

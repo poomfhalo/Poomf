@@ -2,7 +2,7 @@
 using GW_Lib.Utility;
 using UnityEngine;
 
-public class BallReciever : DodgeballCharaAction, ICharaAction
+public class BallReciever : DodgeballCharaAction, ICharaAction,IEnergyAction
 {
     public bool IsDetecting => isDetecting;
     public bool CanRecieveBallNow => extCanRecieveBall && IsDetecting && isBallIn && isButtonClicked;
@@ -10,6 +10,7 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
 
     [SerializeField] TriggerDelegator ballRecieveZone = null;
     [SerializeField] float timeToConsiderAsNewCatch = 0.1f;
+    [SerializeField] float energyCostPerSec = 40;
     [Header("Read Only")]
     [SerializeField] bool isBallIn = false;
     [SerializeField] bool isDetecting = false;
@@ -19,11 +20,14 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
     public string actionName => "Recieve Ball";
     CharaHitPoints hp => GetComponent<CharaHitPoints>();
 
+    public Action<float> ConsumeEnergy { set; get; }
+    public Func<float, bool> CanConsumeEnergy { set; get; }
+    public Func<bool> AllowRegen => () => !(IsDetecting && isButtonClicked);
+
+    float newCatchCounter = 0;
+
     void OnEnable() => hp.OnHpSubtracted += DisableDetection;
     void OnDisable() => hp.OnHpSubtracted -= DisableDetection;
-    float counter = 0;
-
-    #region BallDetection
     void Update()
     {
         if (GetComponent<BallGrabber>().HasBall)
@@ -32,6 +36,12 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
         {
             SetIsBallIn(false);
             return;
+        }
+        if (IsDetecting && isButtonClicked)
+        {
+            float energyFraction = Time.deltaTime * energyCostPerSec;
+            if (CanConsumeEnergy(energyFraction))
+                ConsumeEnergy(energyFraction);
         }
         Bounds b = ballRecieveZone.GetCollider.bounds;
         Collider[] overlaps = Physics.OverlapBox(b.center, b.extents);
@@ -45,15 +55,14 @@ public class BallReciever : DodgeballCharaAction, ICharaAction
         }
         SetIsBallIn(false);
     }
-    #endregion
     void FixedUpdate()
     {
         if (justCaughtBall)
         {
-            counter = counter + Time.deltaTime / timeToConsiderAsNewCatch;
-            if (counter > 1)
+            newCatchCounter = newCatchCounter + Time.deltaTime / timeToConsiderAsNewCatch;
+            if (newCatchCounter > 1)
             {
-                counter = 0;
+                newCatchCounter = 0;
                 justCaughtBall = false;
             }
         }
