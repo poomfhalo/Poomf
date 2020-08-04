@@ -4,11 +4,12 @@ using Photon.Pun;
 public class N_Energy : MonoBehaviour,IPunObservable
 {
     Energy energy = null;
+    PhotonView pv = null;
 
     void Start()
     {
         energy = GetComponent<Energy>();
-        energy.ExtAllowWork = () => PhotonNetwork.IsMasterClient;
+        energy.ExtAllowWork = () => pv.IsMine;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
