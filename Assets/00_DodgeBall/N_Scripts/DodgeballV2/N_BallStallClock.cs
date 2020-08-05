@@ -8,6 +8,7 @@ public class N_BallStallClock : MonoBehaviour
 
     void Start()
     {
+        pv = GetComponent<PhotonView>();
         stallClock = GetComponent<BallStallClock>();
         stallClock.ExtAllowTeleport = () => pv.IsMine;
     }
