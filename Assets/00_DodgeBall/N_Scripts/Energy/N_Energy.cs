@@ -23,7 +23,7 @@ public class N_Energy : MonoBehaviour,IPunObservable
         {
             var o = stream.ReceiveNext();
             print(o.GetType());
-            int e = (int)stream.ReceiveNext();
+            int e = (int)o;
             energy.SetEnergy(e);
         }
     }
