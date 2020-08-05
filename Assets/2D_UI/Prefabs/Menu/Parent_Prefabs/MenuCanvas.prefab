@@ -771,7 +771,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1065701152
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5993,6 +5993,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 699130570097028721, guid: 7f32371f208e6fc42827e52b4d1d4c85,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.00006966411
+      objectReference: {fileID: 0}
     - target: {fileID: 798899925864977781, guid: 7f32371f208e6fc42827e52b4d1d4c85,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -6321,6 +6326,11 @@ PrefabInstance:
     - target: {fileID: 5536694302586765871, guid: 7f32371f208e6fc42827e52b4d1d4c85,
         type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5536694302586765871, guid: 7f32371f208e6fc42827e52b4d1d4c85,
+        type: 3}
+      propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6112047593640082125, guid: 7f32371f208e6fc42827e52b4d1d4c85,
@@ -7723,7 +7733,7 @@ PrefabInstance:
     - target: {fileID: 2677900374630298369, guid: ee8f8fd176e1c764d9390ed04412b5f8,
         type: 3}
       propertyPath: m_Size
-      value: 1
+      value: 0.41566655
       objectReference: {fileID: 0}
     - target: {fileID: 3690168811433154032, guid: ee8f8fd176e1c764d9390ed04412b5f8,
         type: 3}
@@ -7848,7 +7858,7 @@ PrefabInstance:
     - target: {fileID: 6763323457170448434, guid: ee8f8fd176e1c764d9390ed04412b5f8,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1523122.1
+      value: 1529832.4
       objectReference: {fileID: 0}
     - target: {fileID: 9001158404226253878, guid: ee8f8fd176e1c764d9390ed04412b5f8,
         type: 3}
@@ -8261,7 +8271,7 @@ PrefabInstance:
     - target: {fileID: 6591246333955385615, guid: a2d850c60c76b3a47aa843665cdc1644,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 10489186
+      value: 10493192
       objectReference: {fileID: 0}
     - target: {fileID: 7377838306466049246, guid: a2d850c60c76b3a47aa843665cdc1644,
         type: 3}

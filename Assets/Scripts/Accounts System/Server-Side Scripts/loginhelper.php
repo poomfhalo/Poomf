@@ -2,9 +2,8 @@
 
 // LOGINHELPER.PHP
 // INPUT: (username) via _POST
-// FUNCTIONALITY: Tries to login with the provided username
-// NOTES: Will create a new entry if the username doesn't exist
-// OUTPUT: "duplicate match", "login success" or "new user"
+// FUNCTIONALITY: Checks if the supplied username exists or not
+// OUTPUT:  0 for new user, 1 for existing user
 
 // And some helper functions
 require('helper.php');
@@ -24,24 +23,16 @@ $username = $_POST['username'];
 $username = stripslashes($username);
 $username = mysqli_real_escape_string($link, $username);
 
-$query = "SELECT * FROM poomf WHERE username= '$username'";
+$query = "SELECT * FROM es3cloud WHERE user= '$username'";
 $result = try_mysql_query($link, $query);
 
 // Mysql_num_row is counting table row
 $count = mysqli_num_rows($result);
 
 if ($count == 0) {
-    // No match, add a new user to the database
-    $query = "INSERT INTO poomf (username) VALUES ('$username')";
-
-    try_mysql_query($link, $query);
-    echo 'new user';
-    exit();
-} else if ($count == 1) {
-
-    echo 'login success';
-    exit();
+    // No match, this is a new user
+    die("0");
+} else {
+    // Existing user
+    die("1");
 }
-// If we found more than 1 entry
-else
-    die('duplicate match');
