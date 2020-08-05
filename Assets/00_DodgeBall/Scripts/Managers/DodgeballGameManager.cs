@@ -2,9 +2,14 @@
 using GW_Lib.Utility;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class DodgeballGameManager : Singleton<DodgeballGameManager>
 {
+    public event Action<Dodgeball> onBallAdded = null;
+    public event Action<Dodgeball> onBallRemoved = null;
+
+    public List<Dodgeball> GetBalls => balls;
     public GameSlotsData gameSlotsData => m_gameSlotsData;
     public DodgeballCharacter GetLocalPlayer => player;
 
@@ -88,12 +93,18 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
     public static void AddBall(Dodgeball b)
     {
         if (!instance.balls.Contains(b))
+        {
             instance.balls.Add(b);
+            instance.onBallAdded?.Invoke(b);
+        }
     }
     public static void RemoveBall(Dodgeball b)
     {
         if (instance && instance.balls.Contains(b))
+        {
             instance.balls.Remove(b);
+            instance.onBallRemoved?.Invoke(b);
+        }
     }
     public static BallThrowData GetThrow(byte id)
     {

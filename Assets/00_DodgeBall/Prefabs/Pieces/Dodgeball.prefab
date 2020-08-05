@@ -30,6 +30,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad0f3cc6134cd77f98ce1d3bd737ecf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6724319732735763540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57221109536736246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cffe756fa05bd9151b6649f203d704a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDur: 0.15
+  vibrations: 10
+  target: {fileID: 57221109536736250}
+  minSTR: 0.1
+  maxSTR: 16
+  oldParent: {fileID: 0}
 --- !u!1 &57221109919460844
 GameObject:
   m_ObjectHideFlags: 0
@@ -50,6 +68,7 @@ GameObject:
   - component: {fileID: 2571047185793813562}
   - component: {fileID: 7279175448926025499}
   - component: {fileID: 307524554354280576}
+  - component: {fileID: 7786089751437400063}
   m_Layer: 29
   m_Name: Dodgeball
   m_TagString: Untagged
@@ -253,6 +272,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd9a35765e2460eb1b23d1f4f32cb26d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7786089751437400063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57221109919460844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d6e892b43498f95a99e65236d4503b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stallingTime: 10
+  posCheckDist: 0.5
+  shakeRate: 0.1
+  scaleShakeMulti: 2.25
+  posShakeMulti: 1.5
+  isConstantShake: 0
+  isStaling: 0
+  stallingCounter: 0
+  shakeRateCounter: 0
 --- !u!114 &120227174602930443
 MonoBehaviour:
   m_ObjectHideFlags: 0
