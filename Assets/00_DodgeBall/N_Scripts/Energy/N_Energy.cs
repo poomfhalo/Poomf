@@ -22,7 +22,6 @@ public class N_Energy : MonoBehaviour,IPunObservable
         else if(stream.IsReading)
         {
             var o = stream.ReceiveNext();
-            print(o.GetType());
             int e = (int)o;
             energy.SetEnergy(e);
         }

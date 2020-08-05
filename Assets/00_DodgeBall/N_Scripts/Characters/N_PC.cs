@@ -65,6 +65,7 @@ public class N_PC : MonoBehaviour,IPunObservable
             GetComponent<CharaController>().moveTypeOnUnlock = Mover.MovementType.ToPoint;
             chara.GetComponentInChildren<CharaFeet>().extCanPush = false;
             GetComponent<PathFollower>().extCanPlayAction = false;
+            GetComponent<PlayerStallClock>().ExtAllowForcedThrow = () => false;
         }
 
         chara.launcher.ExtThrowCondition = PhotonNetwork.IsMasterClient;
