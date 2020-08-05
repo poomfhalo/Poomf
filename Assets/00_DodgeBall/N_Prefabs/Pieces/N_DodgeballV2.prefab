@@ -35,6 +35,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 928aa5ae834b74b38bb777196b8647b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delayAfterThrowToEnable: 0.2
+  traveledDistBeforeEnable: 0.45
+  lastTimeStamp: 0
 --- !u!114 &-801644117369678759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,6 +87,18 @@ MonoBehaviour:
   useLocalTransformOnly: 0
   maxPositionDifferenceForVelocitySyncing: 10
   receivedStatesCounter: 0
+--- !u!114 &8171254430086322627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6220388117144572040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87f21f64020eb648ab6d52343ac6d3ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6239746366723177828
 PrefabInstance:
   m_ObjectHideFlags: 0
