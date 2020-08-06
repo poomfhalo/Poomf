@@ -37,10 +37,14 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         }
         else
         {
-            loginMenu.GetComponent<N_LoginMenu>().onNameSet += (n) =>{
-                playerNameText.text = n;
-                PlayersRunDataSO.Instance.localPlayerName = playerNameText.text;
-            };
+            string n = PhotonNetwork.NickName;
+            if (string.IsNullOrEmpty(n))
+                n = "Random Name " + UnityEngine.Random.Range(-100, 100);
+            playerNameText.text = PhotonNetwork.NickName;
+            PlayersRunDataSO.Instance.localPlayerName = playerNameText.text;
+            //loginMenu.GetComponent<N_LoginMenu>().onNameSet += (n) =>{
+
+            //};
         }
 
         matchStarter = GetComponent<N_MatchStarter>();

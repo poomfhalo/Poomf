@@ -34,10 +34,25 @@ public static class GameExtentions
         return hitEffectsHead.GetChild(i);
     }
 
-    public static void PlayChildEffect(Transform head)
+    public static Transform PlayChildEffect(Transform head)
     {
         Transform child = GetRndChild(head);
         child.GetComponent<ParticleSystem>().Play(true);
+        return child;
+    }
+    public static Transform PlayChildEffectMake(Transform head, float timeToDie)
+    {
+        Transform child = GetRndChild(head);
+        Transform copy = UnityEngine.Object.Instantiate(child);
+        copy.transform.position = child.position;
+        if (timeToDie > 0)
+        {
+            DieAfter da = copy.gameObject.AddComponent<DieAfter>();
+            da.Begin(timeToDie);
+        }
+        ParticleSystem ps = copy.GetComponentInChildren<ParticleSystem>();
+        ps?.Play(true);
+        return copy;
     }
     public static CharaController GetCharaOfSlot(int slotID)
     {
@@ -81,7 +96,6 @@ public static class GameExtentions
             chara.SetLockTo(lockState);
         }
     }
-
     public static CharaPath GetSpawnPosition(TeamTag team)
     {
         List<CharaPath> playerSpawnPoints = UnityEngine.Object.FindObjectsOfType<CharaPath>().ToList();

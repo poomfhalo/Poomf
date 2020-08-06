@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
 {
+    public event Action E_OnJumped = null;
+    public event Action E_OnLanded = null;
+
     public bool FeelsGround => feelsGround;
     public bool IsJumping => isJumping;
     public string actionName => "Jump Action";
@@ -84,13 +87,13 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
     public void StopFlight()
     {
         canApplyGravity = false;
-        Debug.Log("Stopping Flight");
+        Log.Message("Stopping Flight");
         currYVel = 0;
     }
     public void ResumeFlight()
     {
         canApplyGravity = true;
-        Debug.Log("Resuming Flight");
+        Log.Message("Resuming Flight");
     }
 
     private Vector3 GetYDisp()
@@ -127,10 +130,9 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
     }
     private void ApplyGroundTest()
     {
-        feelsGround = false;
-
         ray.origin = feet.position;
         ray.direction = Vector3.down;
+        feelsGround = false;
         Debug.DrawRay(ray.origin, ray.direction * castDist, Color.red);
 
         if (!Physics.Raycast(ray, out hit, castDist))
@@ -141,7 +143,10 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
 
         feelsGround = true;
         if (isJumping && feelsGround && !isGoingUp)
+        {
             isJumping = false;
+            E_OnLanded?.Invoke();
+        }
     }
 
     public void StartJumpAction()
@@ -160,11 +165,12 @@ public class Jumper : DodgeballCharaAction, ICharaAction,IEnergyAction
         float jumpVel = Extentions.GetJumpVelocity(jumpHeigth,gravity);
         currYVel = jumpVel;
         isGoingUp = true;
+        E_OnJumped?.Invoke();
     }
     public void Cancel(){ }
     public void A_OnJumpEnded()
     {
-        isJumping = false;
+        //isJumping = false;
         animator.ResetTrigger("Jump");
     }
 

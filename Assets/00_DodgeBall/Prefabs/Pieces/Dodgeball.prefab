@@ -69,6 +69,7 @@ GameObject:
   - component: {fileID: 7279175448926025499}
   - component: {fileID: 307524554354280576}
   - component: {fileID: 7786089751437400063}
+  - component: {fileID: 4163374754911431654}
   m_Layer: 29
   m_Name: Dodgeball
   m_TagString: Untagged
@@ -293,6 +294,18 @@ MonoBehaviour:
   isStaling: 0
   stallingCounter: 0
   shakeRateCounter: 0
+--- !u!114 &4163374754911431654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57221109919460844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35cf39098d049577585aa56740b1bdce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &120227174602930443
 MonoBehaviour:
   m_ObjectHideFlags: 0

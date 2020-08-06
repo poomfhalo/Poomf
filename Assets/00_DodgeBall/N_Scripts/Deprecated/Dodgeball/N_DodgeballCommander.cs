@@ -38,7 +38,8 @@ public class N_DodgeballCommander : MonoBehaviour
                     pv.RPC("R_GoToChara", RpcTarget.Others, GetHolder());
                     break;
                 case DodgeballCommand.LaunchTo:
-                    pv.RPC("R_LaunchTo", RpcTarget.Others, ball.launchTo.lastAppliedThrow, ball.launchTo.lastTargetPos);
+                    int lastChara = GetComponent<DodgeballGoLaunchTo>().lastThrownAtChara.GetComponent<N_PC>().ActorID;
+                    pv.RPC("R_LaunchTo", RpcTarget.Others, lastChara, ball.launchTo.lastAppliedThrow, ball.launchTo.lastTargetPos);
                     break;
             }
         });
@@ -76,7 +77,7 @@ public class N_DodgeballCommander : MonoBehaviour
         }
     }
     [PunRPC]
-    private void R_LaunchTo(byte lastAppliedThrow,Vector3 lastTargetPos)
+    private void R_LaunchTo(int lastChara,byte lastAppliedThrow,Vector3 lastTargetPos)
     {
         Log.Message("N_Ball().RPC :: R_LaunchTo()");
         if (ball.ballState == Dodgeball.BallState.Flying)
@@ -84,7 +85,8 @@ public class N_DodgeballCommander : MonoBehaviour
 
         Log.Message("Launched Ball By RPC");
         BallThrowData d = DodgeballGameManager.GetThrow(lastAppliedThrow);
-        ball.launchTo.GoLaunchTo(lastTargetPos, d);
+        DodgeballCharacter chara = N_TeamsManager.GetPlayer(lastChara).GetComponent<DodgeballCharacter>();
+        ball.launchTo.GoLaunchTo(chara, lastTargetPos, d);
     }
     [PunRPC]
     private void R_OnGroundHit()

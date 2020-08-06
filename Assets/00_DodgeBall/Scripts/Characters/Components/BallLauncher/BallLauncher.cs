@@ -95,7 +95,7 @@ public abstract class BallLauncher : DodgeballCharaAction, ICharaAction,IEnergyA
 
         Vector3 dir = (targetPos - transform.position).normalized;
         targetPos = targetPos + dir * throwData.ofShootDist;
-        Dodgeball.instance.launchTo.C_GoLaunchTo(targetPos, throwData);
+        Dodgeball.instance.launchTo.C_GoLaunchTo(aimedAtChara, targetPos, throwData);
 
         if (!isLastThrowAtEnemy)
         {

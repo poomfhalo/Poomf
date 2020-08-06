@@ -32,8 +32,8 @@ public class DodgeballGoTo : DodgeballAction
     }
     public void GoTo(DodgeballCharacter chara, Action onCompleted)
     {
-        ball.ballState = Dodgeball.BallState.Held;
         onGoto?.Invoke();
+        ball.ballState = Dodgeball.BallState.Held;
         isRunning = true;
         scheduler.StartAction(this);
 

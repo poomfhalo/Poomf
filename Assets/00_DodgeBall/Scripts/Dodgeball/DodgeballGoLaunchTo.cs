@@ -17,11 +17,12 @@ public class DodgeballGoLaunchTo : DodgeballAction
     [SerializeField] float tweenerVal = 0;
     public Vector3 lastTargetPos = new Vector3();
     public byte lastAppliedThrow = 0;
+    public DodgeballCharacter lastThrownAtChara = null;
 
     Tweener activeTweener = null;
 
-
-    public void C_GoLaunchTo(Vector3 targetPos, BallThrowData d)
+    //TODO: Add The Last character, who threw the ball
+    public void C_GoLaunchTo(DodgeballCharacter targetChara,Vector3 targetPos, BallThrowData d)
     {
         lastTargetPos = targetPos;
         lastAppliedThrow = d.id;
@@ -32,12 +33,14 @@ public class DodgeballGoLaunchTo : DodgeballAction
             return;
         }
 
-        GoLaunchTo(targetPos, d);
+        GoLaunchTo(targetChara, targetPos, d);
     }
-    public void GoLaunchTo(Vector3 targetPos, BallThrowData d)
+    public void GoLaunchTo(DodgeballCharacter targetChara,Vector3 targetPos, BallThrowData d)
     {
         if (activeTweener != null)
             return;
+
+        this.lastThrownAtChara = targetChara;
         onLaunchedTo?.Invoke();
         isRunning = true;
         scheduler.StartAction(this);
