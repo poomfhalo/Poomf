@@ -17,7 +17,6 @@ public abstract class BallLauncher : DodgeballCharaAction, ICharaAction,IEnergyA
     [Tooltip("If the value is less than 1 then we will use the Mover turn speed, noting that, if its too low, character may not" +
 "\nface the target, by the end of the animation, but the ball, will still travel towards the target")]
     [SerializeField] float throwFacingSpeed = 200;
-    [SerializeField] BallThrowData throwData = null;
 
     [Header("Read Only")]
     [SerializeField] protected bool isThrowing = false;
@@ -93,9 +92,11 @@ public abstract class BallLauncher : DodgeballCharaAction, ICharaAction,IEnergyA
         else
             targetPos = aimedAtChara.ShootablePoint.position;
 
+        BallThrowData throwData = Dodgeball.instance.GetComponent<DodgeballThrowSetter>().GetLastSelectedThrowData();
+
         Vector3 dir = (targetPos - transform.position).normalized;
         targetPos = targetPos + dir * throwData.ofShootDist;
-        Dodgeball.instance.launchTo.C_GoLaunchTo(aimedAtChara, targetPos, throwData);
+        Dodgeball.instance.launchTo.C_GoLaunchTo(GetComponent<DodgeballCharacter>(), aimedAtChara, targetPos);
 
         if (!isLastThrowAtEnemy)
         {

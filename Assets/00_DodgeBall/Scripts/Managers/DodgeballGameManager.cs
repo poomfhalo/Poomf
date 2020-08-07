@@ -24,8 +24,6 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
     public bool extSetPlayerOnStart = true;
     [SerializeField] DodgeballCharacter player = null;
 
-    BallThrowData[] throws = new BallThrowData[0];
-
     void Start()
     {
         buildText.text = build;
@@ -105,19 +103,6 @@ public class DodgeballGameManager : Singleton<DodgeballGameManager>
             instance.balls.Remove(b);
             instance.onBallRemoved?.Invoke(b);
         }
-    }
-    public static BallThrowData GetThrow(byte id)
-    {
-        if (instance.throws == null || instance.throws.Length == 0)
-        {
-            instance.throws = Resources.LoadAll<BallThrowData>("");
-        }
-        foreach (BallThrowData t in instance.throws)
-        {
-            if (t.id == id)
-                return t;
-        }
-        return null;
     }
     public static Dodgeball GetClosestBall(Transform closestTo)
     {

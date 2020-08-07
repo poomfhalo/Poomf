@@ -84,9 +84,8 @@ public class N_DodgeballCommander : MonoBehaviour
             return;
 
         Log.Message("Launched Ball By RPC");
-        BallThrowData d = DodgeballGameManager.GetThrow(lastAppliedThrow);
         DodgeballCharacter chara = N_TeamsManager.GetPlayer(lastChara).GetComponent<DodgeballCharacter>();
-        ball.launchTo.GoLaunchTo(chara, lastTargetPos, d);
+        ball.launchTo.GoLaunchTo(GetComponent<DodgeballCharacter>(),chara, lastTargetPos);
     }
     [PunRPC]
     private void R_OnGroundHit()

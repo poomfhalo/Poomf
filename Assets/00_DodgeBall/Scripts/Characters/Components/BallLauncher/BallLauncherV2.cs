@@ -46,6 +46,8 @@ public class BallLauncherV2 : BallLauncher
         else
             midAirThrow = false;
 
+        Dodgeball.instance.GetComponent<DodgeballThrowSetter>().SelectThrowData();
+
         isLastThrowAtEnemy = !TeamsManager.AreFriendlies(chara, toChara);
         finishedThrowP1 = false;
         isThrowing = true;

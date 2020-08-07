@@ -18,14 +18,15 @@ public class DodgeballGoLaunchTo : DodgeballAction
     public Vector3 lastTargetPos = new Vector3();
     public byte lastAppliedThrow = 0;
     public DodgeballCharacter lastThrownAtChara = null;
+    public DodgeballCharacter lastThrower = null;
 
     Tweener activeTweener = null;
 
-    //TODO: Add The Last character, who threw the ball
-    public void C_GoLaunchTo(DodgeballCharacter targetChara,Vector3 targetPos, BallThrowData d)
+    public void C_GoLaunchTo(DodgeballCharacter lastThrower, DodgeballCharacter targetChara,Vector3 targetPos)
     {
+        this.lastThrower = lastThrower;
         lastTargetPos = targetPos;
-        lastAppliedThrow = d.id;
+        lastAppliedThrow = GetComponent<DodgeballThrowSetter>().GetLastSelectedThrowData().id;
         ball.RunCommand(Command);
 
         if (!ApplyActionWithCommand())
@@ -33,14 +34,15 @@ public class DodgeballGoLaunchTo : DodgeballAction
             return;
         }
 
-        GoLaunchTo(targetChara, targetPos, d);
+        GoLaunchTo(lastThrower,targetChara, targetPos);
     }
-    public void GoLaunchTo(DodgeballCharacter targetChara,Vector3 targetPos, BallThrowData d)
+    public void GoLaunchTo(DodgeballCharacter lastThrower,DodgeballCharacter targetChara,Vector3 targetPos)
     {
         if (activeTweener != null)
             return;
 
         this.lastThrownAtChara = targetChara;
+        this.lastThrower = lastThrower;
         onLaunchedTo?.Invoke();
         isRunning = true;
         scheduler.StartAction(this);
@@ -48,6 +50,7 @@ public class DodgeballGoLaunchTo : DodgeballAction
         ball.ballState = Dodgeball.BallState.Flying;
         ball.InvokeDelayed(leavingHandsTime, () => ball.bodyCol.GetCollider.enabled = true);
         float dist = Vector3.Distance(rb3d.position, targetPos);
+        BallThrowData d = GetComponent<DodgeballThrowSetter>().GetLastSelectedThrowData();
         float time = d.GetTimeOfDist(dist);
         float tweenV = 0;
 
