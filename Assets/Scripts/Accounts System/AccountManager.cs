@@ -2,18 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Poomf.Data;
 using UnityEngine.Networking;
+using System.Threading.Tasks;
 
 public static class AccountManager
 {
     #region Constants
     const string scriptsLocation = "http://naturechase-com.stackstaging.com/Poomf/Scripts";
     const string loginHelperLocation = scriptsLocation + "/loginhelper.php?";
+    const string es3CloudLocation = scriptsLocation + "/ES3Cloud.php";
     #endregion
 
     // The user name of the currently logged in user.
     static string username = String.Empty;
-
+    // Used to sync cloud saves
+    public static ES3Cloud cloud = new ES3Cloud(es3CloudLocation, "db0572a04fa0");
     #region Properties
     public static string Username { get { return username; } private set { username = value; } }
     #endregion
@@ -53,16 +57,16 @@ public static class AccountManager
         else if (www.downloadHandler.text == "0")
         {
             // New user
+            username = name;
             statusCallback("Welcome to Poomf!");
             resultCallback(LoginResult.NewUser);
-            username = name;
         }
         else if (www.downloadHandler.text == "1")
         {
             // Existing user
+            username = name;
             statusCallback("Welcome back, " + name + "!");
             resultCallback(LoginResult.ExistingUser);
-            username = name;
         }
         else
         {
@@ -70,5 +74,28 @@ public static class AccountManager
             statusCallback(www.error);
             resultCallback(LoginResult.Failed);
         }
+    }
+
+    public static async Task SyncAllData(Action<string> statusCallback = null)
+    {
+        statusCallback?.Invoke("Syncing Skin Data...");
+        await SyncCharaSkinData();
+        statusCallback?.Invoke("Syncing Save Data...");
+        await SyncSaveFile();
+    }
+
+    public static async Task SyncCharaSkinData(Action<string> statusCallback = null)
+    {
+        Debug.Log("Syncing");
+        await cloud.Sync(SaveManager.relativeSkinDataPath, username);
+        if (cloud.isError)
+            Debug.LogError(cloud.error);
+    }
+
+    public static async Task SyncSaveFile(Action<string> statusCallback = null)
+    {
+        await cloud.Sync(ES3Settings.defaultSettings.path, username);
+        if (cloud.isError)
+            Debug.LogError(cloud.error);
     }
 }

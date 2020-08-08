@@ -28,9 +28,6 @@ public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
     // X: width, Y: height
     [SerializeField] private Vector2 resolutionThreshold = Vector2.zero;
 
-    private const string audioSettingsKey = "audio_settings";
-    private const string videoSettingsKey = "video_settings";
-    private const string relativeSettingsPath = "Settings.es3";
     private AudioManager defaultAudioSettings = null;
     private VideoManager defaultVideoSettings = null;
     private AudioMixer currentMixer = null;
@@ -44,9 +41,17 @@ public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
     private bool videoSettingsChanged = false;
     // A list of available resolutions
     private List<Resolution> resolutions = new List<Resolution>();
+    // Custom save settings
+    private ES3Settings customSettings = null;
 
     private void Awake()
     {
+        // Set up the custom save settings
+        customSettings = new ES3Settings();
+        customSettings.encryptionType = ES3.EncryptionType.None;
+        customSettings.directory = ES3.Directory.PersistentDataPath;
+        customSettings.location = ES3.Location.File;
+        customSettings.path = SaveManager.relativeSettingsPath;
         // Get the supported resolutions, omit any ones that are less than the threshold
         Resolution[] allResolutions = Screen.resolutions;
         for (int i = 0; i < allResolutions.Length; i++)
@@ -104,13 +109,13 @@ public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
                 // Apply the new audio settings
                 audioManager.UpdateAllSettings(tempAudioSettings);
                 // Save the changes
-                SaveManager.SaveData(audioSettingsKey, audioManager, relativeSettingsPath);
+                SaveManager.SaveData(SaveManager.audioSettingsKey, audioManager, customSettings);
             }
             if (videoSettingsChanged)
             {
                 // Apply the new video settings
                 videoManager.UpdateAllSettings(tempVideoSettings);
-                SaveManager.SaveData(videoSettingsKey, videoManager, relativeSettingsPath);
+                SaveManager.SaveData(SaveManager.videoSettingsKey, videoManager, customSettings);
             }
         }
         else
@@ -312,7 +317,7 @@ public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
     void InitializeAudioSettings()
     {
         // Get the saved settings
-        audioManager = SaveManager.GetData(audioSettingsKey, audioManager, relativeSettingsPath);
+        audioManager = SaveManager.GetData(SaveManager.audioSettingsKey, audioManager, customSettings);
         // Initialize the audio manager and the UI with the saved audio settings
         audioManager.isCurrent = true;
         audioManager.Initialize(this);
@@ -323,7 +328,7 @@ public class SettingsMenu : MonoBehaviour, IGeneralSettingsProvider
     void InitializeVideoSettings()
     {
         // Get the saved settings
-        videoManager = SaveManager.GetData(videoSettingsKey, videoManager, relativeSettingsPath);
+        videoManager = SaveManager.GetData(SaveManager.videoSettingsKey, videoManager, customSettings);
         // Initialize Video UI
         videoManager.isCurrent = true;
         videoManager.Initialize(this);

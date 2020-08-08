@@ -17,8 +17,6 @@ public class CustomizablePlayer : MonoBehaviour
     [SerializeField, ReadOnly] CustomSkin playerSkinTone = null;
     [SerializeField] CharaSkinDataPlain plain = null;
 
-    const string charaSkinKey = "chara_skin_data";
-    const string relativeSkinDataPath = "Saves/SkinData.es3";
 
     void Awake()
     {
@@ -40,7 +38,7 @@ public class CustomizablePlayer : MonoBehaviour
     }
     void Start()
     {
-        //skinData = SaveManager.GetData(charaSkinKey, skinData, relativeSkinDataPath);
+        skinData = SaveManager.GetData(SaveManager.charaSkinKey, skinData, SaveManager.relativeSkinDataPath);
         RefreshCharaVisuals();
     }
     void OnDestroy()
@@ -50,8 +48,10 @@ public class CustomizablePlayer : MonoBehaviour
 
     private void RefreshCharaVisuals()
     {
-        //SaveManager.SaveData(charaSkinKey, skinData, relativeSkinDataPath);
-        
+        SaveManager.SaveData(SaveManager.charaSkinKey, skinData, SaveManager.relativeSkinDataPath);
+        //AccountManager.SyncCharaSkinData().WrapErrors();
+        //StartCoroutine(AccountManager.cloud.Sync(SaveManager.relativeSkinDataPath, AccountManager.Username));
+
         CustomHead activeHead = allHeads.Single(h => h.ItemID == skinData.GetItemID(ItemCategory.Head));
         allHeads.ForEach(h => h.gameObject.SetActive(false));
 

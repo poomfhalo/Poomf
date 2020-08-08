@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using TMPro;
 using Photon.Pun;
 using System;
+using UnityEngine.SceneManagement;
+using Poomf.Data;
 
 public enum LoginResult
 {
@@ -13,7 +15,7 @@ public enum LoginResult
 
 public class N_LoginMenu : MonoBehaviour
 {
-    public event Action<string> onNameSet = null;
+    //public event Action<string> onNameSet = null;
     [SerializeField] TMP_InputField nickName = null;
     [SerializeField] Text statusText = null;
     [SerializeField] Button login = null;
@@ -38,6 +40,9 @@ public class N_LoginMenu : MonoBehaviour
     {
         if (string.IsNullOrEmpty(nickName.text))
             return;
+
+        // Disable the Login button
+        login.interactable = false;
         StartCoroutine(AccountManager.Login(nickName.text, statusMessagesHandler, loginResultHandler));
         // PhotonNetwork.NickName = nickName.text;
 
@@ -56,21 +61,34 @@ public class N_LoginMenu : MonoBehaviour
         {
             // Failure specific code here
             Debug.Log("Login Failed!");
+            // Clear the Login input field
+            nickName.text = String.Empty;
+            // Re-enable the login button
+            login.interactable = true;
             return;
         }
+
+        // Set the relative data paths
+        SaveManager.SetRelativeDataPaths();
 
         if (result == LoginResult.ExistingUser)
         {
             // Existing user specific code here
             Debug.Log("Existing user logged in!");
+            // Sync the player's data
+            //await AccountManager.SyncAllData(statusMessagesHandler);
         }
         else if (result == LoginResult.NewUser)
         {
             // New user specific code here
             Debug.Log("New user logged in!");
+            // Ask for gender here
         }
 
+        // Will always happen if login is successful
         PhotonNetwork.NickName = nickName.text;
-        onNameSet?.Invoke(nickName.text);
+        // Load the Menu scene
+        SceneFader.instance.FadeIn(1f, () => { SceneManager.LoadScene("Menu"); });
+        //onNameSet?.Invoke(nickName.text);
     }
 }

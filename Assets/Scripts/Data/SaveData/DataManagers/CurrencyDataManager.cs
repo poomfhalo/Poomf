@@ -6,8 +6,8 @@
 
         private const string coinsKey = "currency_coins";
         private const string gemsKey = "currency_gems";
-        private const int defaultCoinsValue = 0;
-        private const int defaultGemsValue = 0;
+        private const int defaultCoinsValue = 1000;
+        private const int defaultGemsValue = 50;
 
         #region PUBLIC API
 
