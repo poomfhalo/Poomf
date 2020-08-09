@@ -21,6 +21,7 @@ namespace Poomf.UI
             {
                 // Skin uses preset color indices. Use the button's order in the hierarchy as an index
                 skinData.SetColorIndex(itemToModify, buttonImage.transform.GetSiblingIndex());
+                SyncData();
             }
         }
     }

@@ -30,6 +30,7 @@ namespace Poomf.UI
         // Called when one of the Color buttons is pressed. Sets the current slot's color to the selected color.
         public override void OnColorButtonSelected()
         {
+            
             // Get the currently selected button's image and send its color to the equip slot
             Image buttonImage = EventSystem.current.currentSelectedGameObject.GetComponent<Image>();
             if (buttonImage != null)
@@ -40,6 +41,8 @@ namespace Poomf.UI
                 redSlider.value = buttonImage.color.r;
                 greenSlider.value = buttonImage.color.g;
                 blueSlider.value = buttonImage.color.b;
+
+                SyncData();
             }
         }
         // Called when Sliders values change. Updates the corresponding color value in the equipment
@@ -48,6 +51,7 @@ namespace Poomf.UI
             Color currentColor = skinData.GetColor(itemToModify);
             Color newColor = new Color(value, currentColor.g, currentColor.b);
             skinData.SetColor(itemToModify, newColor);
+            //TODO: SYNC DATA
         }
 
         public void AdjustGreen(float value)

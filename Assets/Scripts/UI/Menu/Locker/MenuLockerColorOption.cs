@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Poomf.Data;
 
 namespace Poomf.UI
 {
@@ -22,5 +23,12 @@ namespace Poomf.UI
 
         // Called when one of the Color buttons is pressed. Sets the current slot's color to the selected color.
         public abstract void OnColorButtonSelected();
+
+        protected void SyncData()
+        {
+            // Sync the player's skin data
+            SaveManager.SaveData(SaveManager.charaSkinKey, skinData, SaveManager.relativeSkinDataPath);
+            AccountManager.SyncCharaSkinData().WrapErrors();
+        }
     }
 }

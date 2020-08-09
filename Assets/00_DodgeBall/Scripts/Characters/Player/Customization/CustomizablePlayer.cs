@@ -48,7 +48,7 @@ public class CustomizablePlayer : MonoBehaviour
 
     private void RefreshCharaVisuals()
     {
-        SaveManager.SaveData(SaveManager.charaSkinKey, skinData, SaveManager.relativeSkinDataPath);
+        //SaveManager.SaveData(SaveManager.charaSkinKey, skinData, SaveManager.relativeSkinDataPath);
         //AccountManager.SyncCharaSkinData().WrapErrors();
         //StartCoroutine(AccountManager.cloud.Sync(SaveManager.relativeSkinDataPath, AccountManager.Username));
 

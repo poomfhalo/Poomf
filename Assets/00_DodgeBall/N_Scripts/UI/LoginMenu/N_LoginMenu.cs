@@ -55,7 +55,7 @@ public class N_LoginMenu : MonoBehaviour
         statusText.text = message;
     }
 
-    void OnLoginAttemptDone(LoginResult result)
+   async void OnLoginAttemptDone(LoginResult result)
     {
         if (result == LoginResult.Failed)
         {
@@ -76,12 +76,13 @@ public class N_LoginMenu : MonoBehaviour
             // Existing user specific code here
             Debug.Log("Existing user logged in!");
             // Sync the player's data
-            //await AccountManager.SyncAllData(statusMessagesHandler);
+            await AccountManager.SyncAllData(statusMessagesHandler);
         }
         else if (result == LoginResult.NewUser)
         {
             // New user specific code here
             Debug.Log("New user logged in!");
+            //await AccountManager.SyncAllData(statusMessagesHandler);
             // Ask for gender here
         }
 

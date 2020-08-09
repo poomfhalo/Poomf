@@ -84,7 +84,7 @@ namespace Poomf.Data
         {
             T data = default;
 
-            if (ES3.KeyExists(i_key))
+            if (ES3.KeyExists(i_key, customSettings))
             {
                 data = ES3.Load<T>(i_key, customSettings);
             }

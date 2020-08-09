@@ -44,6 +44,7 @@ namespace Poomf.UI
             {
                 // Eyes use preset color indices. Use the button's order in the hierarchy as an index
                 skinData.SetColorIndex(itemToModify, buttonImage.transform.GetSiblingIndex());
+                SyncData();
             }
         }
 
@@ -55,6 +56,7 @@ namespace Poomf.UI
                 currentType++;
                 skinData.SetTextureIndex(itemToModify, currentType);
                 SetTypeName(currentType);
+                SyncData();
             }
         }
 
@@ -66,6 +68,7 @@ namespace Poomf.UI
                 currentType--;
                 skinData.SetTextureIndex(itemToModify, currentType);
                 SetTypeName(currentType);
+                SyncData();
             }
         }
     }

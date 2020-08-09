@@ -222,6 +222,10 @@ namespace Poomf.UI
                     }
                 }
             }
+
+            // Sync the player's skin data
+            SaveManager.SaveData(SaveManager.charaSkinKey, skinData, SaveManager.relativeSkinDataPath);
+            AccountManager.SyncCharaSkinData().WrapErrors();
         }
 
         #region Addressables and their Delegates

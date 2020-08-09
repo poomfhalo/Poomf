@@ -34,8 +34,11 @@ public static class AccountManager
     /// </param>
     public static IEnumerator Login(string name, Action<string> statusCallback, Action<LoginResult> resultCallback)
     {
+        // Create a new form
+        WWWForm form = new WWWForm();
+        form.AddField("username", name);
         // Create a new web request
-        UnityWebRequest www = UnityWebRequest.Post(loginHelperLocation, name);
+        UnityWebRequest www = UnityWebRequest.Post(loginHelperLocation, form);
         // Display status
         statusCallback("Attempting to login...");
         // Wait for the request
@@ -86,7 +89,6 @@ public static class AccountManager
 
     public static async Task SyncCharaSkinData(Action<string> statusCallback = null)
     {
-        Debug.Log("Syncing");
         await cloud.Sync(SaveManager.relativeSkinDataPath, username);
         if (cloud.isError)
             Debug.LogError(cloud.error);

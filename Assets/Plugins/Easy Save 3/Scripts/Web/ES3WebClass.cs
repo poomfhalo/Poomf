@@ -77,7 +77,7 @@ namespace ES3Internal
 				user += password;
 
 			#if !DISABLE_ENCRYPTION && !DISABLE_HASHING
-			user = ES3Internal.ES3Hash.SHA1Hash(user);
+			//user = ES3Internal.ES3Hash.SHA1Hash(user);
 			#endif
 			return user;
 		}

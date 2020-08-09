@@ -42,7 +42,7 @@
         {
             int currentCurrencyValue = SaveManager.GetData(i_currencyKey, i_defaultValue) + i_coinsToAdd;
             SaveManager.SaveData(i_currencyKey, currentCurrencyValue);
-
+            AccountManager.SyncSaveFile().WrapErrors();
             if (null != OnCurrencyDataUpdated)
                 OnCurrencyDataUpdated();
         }
