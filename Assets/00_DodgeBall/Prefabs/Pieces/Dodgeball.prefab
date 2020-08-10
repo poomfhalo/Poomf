@@ -315,6 +315,8 @@ MonoBehaviour:
     throwType: 0
   - throwData: {fileID: 11400000, guid: 4084ac3488470361f8a56cf9a3fdf817, type: 2}
     throwType: 1
+  - throwData: {fileID: 11400000, guid: 53931bb1abe9d2017a46235d4553136e, type: 2}
+    throwType: 2
   lastSelectedThrowData: {fileID: 0}
   wasJustCaught: 1
 --- !u!114 &1837828787948967931
@@ -329,6 +331,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eecde19e920f4d244b252d0d0880bfda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  effectsDeathTime: 2
+  currActiveEffect: {fileID: 0}
+  lastUsedData: {fileID: 0}
 --- !u!114 &120227174602930443
 MonoBehaviour:
   m_ObjectHideFlags: 0

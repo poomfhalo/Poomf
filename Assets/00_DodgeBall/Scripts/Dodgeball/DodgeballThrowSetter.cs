@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DodgeballThrowSetter : MonoBehaviour
 {
-    public enum ThrowType { Def, Speeder }
+    public enum ThrowType { Def, QuickThrow, FlyingQuickThrow }
     public event Action E_OnThrowSelected = null;
 
     [Serializable]
@@ -42,11 +42,14 @@ public class DodgeballThrowSetter : MonoBehaviour
     }
 
     public BallThrowData GetLastSelectedThrowData() => lastSelectedThrowData;
-    public void SelectThrowData()
+    public void SelectThrowData(DodgeballCharacter from, DodgeballCharacter to)
     {
         ThrowType throwType = ThrowType.Def;
-        if (wasJustCaught)
-            throwType = ThrowType.Speeder;
+        if (from.IsJumping)
+            throwType = ThrowType.FlyingQuickThrow;
+        else if (!from.IsJumping && wasJustCaught)
+            throwType = ThrowType.QuickThrow;
+
         ThrowDataToType dataToType = ballThrows.Find(bt => bt.throwType == throwType);
         lastSelectedThrowData = dataToType.throwData;
     }
