@@ -26,7 +26,7 @@ public class DodgeballThrowSetter : MonoBehaviour
     DodgeballGoTo goTo = null;
     Coroutine caughtCoro = null;
 
-    void Start()
+    void OnEnable()
     {
         ball = GetComponent<Dodgeball>();
         goTo = GetComponent<DodgeballGoTo>();
@@ -37,9 +37,6 @@ public class DodgeballThrowSetter : MonoBehaviour
     void OnDisable()
     {
         wasJustCaught = false;
-    }
-    void OnDestroy()
-    {
         goTo.onGoto -= OnGoTo;
         ball.E_OnStateUpdated -= OnStateUpdated;
     }
@@ -53,7 +50,14 @@ public class DodgeballThrowSetter : MonoBehaviour
         ThrowDataToType dataToType = ballThrows.Find(bt => bt.throwType == throwType);
         lastSelectedThrowData = dataToType.throwData;
     }
-    public BallThrowData GetThrowData(byte id)
+    public void SetThrowDataTo(byte id)//Used for Multiplayer, in case, there is a miss calculation on the client's end.
+    {
+        BallThrowData newThrowdata = GetThrowData(id);
+        if (GetLastSelectedThrowData() != newThrowdata)
+            lastSelectedThrowData = GetThrowData(id);
+    }
+
+    private BallThrowData GetThrowData(byte id)
     {
         foreach (ThrowDataToType t in ballThrows)
         {
@@ -62,13 +66,6 @@ public class DodgeballThrowSetter : MonoBehaviour
         }
         return null;
     }
-    public void SetThrowDataTo(byte id)//Used for Multiplayer, in case, there is a miss calculation on the client's end.
-    {
-        BallThrowData newThrowdata = GetThrowData(id);
-        if (GetLastSelectedThrowData() != newThrowdata)
-            lastSelectedThrowData = GetThrowData(id);
-    }
-
     private void OnGoTo()
     {
         if (ball.ballState == Dodgeball.BallState.Flying)

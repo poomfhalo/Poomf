@@ -10,6 +10,9 @@ public class BallThrowData : ScriptableObject
     public Ease ease = Ease.InOutSine;
     [Tooltip("Extra Distance, the ball will travel, after reaching the point")]
     public float ofShootDist = 0.2f;
+    [Header("Visual Changes")]
+    public ParticleSystem throwEffect = null;
+    public bool canBeCaught = true;
 
     public float GetTimeOfDist(float dist)
     {

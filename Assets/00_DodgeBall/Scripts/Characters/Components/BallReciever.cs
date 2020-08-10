@@ -59,11 +59,14 @@ public class BallReciever : DodgeballCharaAction, ICharaAction, IEnergyAction
         Collider[] overlaps = Physics.OverlapBox(b.center, b.extents);
         foreach (var col in overlaps)
         {
-            if (col.GetComponent<Dodgeball>())
-            {
-                SetIsBallIn(true);
-                return;
-            }
+            Dodgeball ball = col.GetComponent<Dodgeball>();
+            if (!ball)
+                continue;
+            if (!ball.GetComponent<DodgeballThrowSetter>().GetLastSelectedThrowData().canBeCaught)
+                continue;
+
+            SetIsBallIn(true);
+            return;
         }
         SetIsBallIn(false);
     }
