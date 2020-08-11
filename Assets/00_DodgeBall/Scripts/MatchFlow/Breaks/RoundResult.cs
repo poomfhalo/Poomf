@@ -31,7 +31,11 @@ public class RoundResult : MonoBehaviour
         winnerText.text = "";
         for (int i = 1;i<=MatchState.Instance.PreviousRoundNum;i++)
         {
-            winnerText.text += "Round " + i + " Was Won By " + MatchState.Instance.GetRoundWinner(MatchState.Instance.PreviousRoundNum).ToString() + "\n";
+            TeamTag t = MatchState.Instance.GetRoundWinner(MatchState.Instance.PreviousRoundNum);
+            if (t ==  TeamTag.None)
+                winnerText.text = "Round " + i + " Was A Tie\n";
+            else
+                winnerText.text += "Round " + i + " Was Won By " + t.ToString() + "\n";
         }
         this.InvokeDelayed(loadWaitTime, () =>{
             StartCoroutine(LoadStageFunc());

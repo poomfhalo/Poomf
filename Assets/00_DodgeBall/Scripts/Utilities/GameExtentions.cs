@@ -1,10 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public static class GameExtentions
 {
+    public static string GetTimeAsMinSecPair(float sTime,int spacesBefore,int spacesAfter)
+    {
+        int minutes = Mathf.FloorToInt(sTime) / 60;
+        int seconds = Mathf.FloorToInt(sTime) % 60;
+        seconds = Mathf.FloorToInt(Mathf.Clamp(seconds, 0, sTime));
+
+        string m = "";
+        string s = "";
+
+        if (minutes < 10)
+        {
+            m = "0" + minutes;
+        }
+        else
+        {
+            m = minutes.ToString();
+        }
+        if (seconds < 10)
+        {
+            s = "0" + seconds;
+        }
+        else
+        {
+            s = seconds.ToString();
+        }
+        string text = m + ":" + s;
+
+        return text;
+    }
     /// <summary>
     /// Make the specified objsGroup and index.
     /// </summary>

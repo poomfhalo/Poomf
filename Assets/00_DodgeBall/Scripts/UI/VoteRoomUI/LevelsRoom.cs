@@ -45,30 +45,8 @@ public class LevelsRoom : MonoBehaviour
             return;
 
         levelChangeCounter = levelChangeCounter - Time.deltaTime;
-        int minutes = Mathf.FloorToInt(levelChangeCounter) / 60;
-        int seconds = Mathf.FloorToInt(levelChangeCounter) % 60;
-        seconds = Mathf.FloorToInt(Mathf.Clamp(seconds, 0, levelChangeTimer));
 
-        string m = "";
-        string s = "";
-
-        if (minutes < 10)
-        {
-            m = "0" + minutes;
-        }
-        else
-        {
-            m = minutes.ToString();
-        }
-        if (seconds < 10)
-        {
-            s = "0" + seconds;
-        }
-        else
-        {
-            s = seconds.ToString();
-        }
-        timerText.text = m + ":" + s;
+        timerText.text = GameExtentions.GetTimeAsMinSecPair(levelChangeCounter, 1, 1);
 
         if (levelChangeCounter <= 0)
         {

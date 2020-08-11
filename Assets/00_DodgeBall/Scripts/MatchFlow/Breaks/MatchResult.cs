@@ -30,7 +30,11 @@ public class MatchResult : MonoBehaviour
         scoreBoard.onClick.AddListener(OnScoreboardClicked);
         rematch.onClick.AddListener(OnRematchClicked);
         home.onClick.AddListener(OnHomeClicked);
-        winnerText.text = MatchState.Instance.GetMatchWinner().ToString() + " Wins";
+        TeamTag winner = MatchState.Instance.GetMatchWinner();
+        if (winner == TeamTag.None)
+            winnerText.text = "A Tie";
+        else
+            winnerText.text = winner.ToString() + " Wins";
 
         if (!autoMove)
             return;

@@ -37,6 +37,12 @@ public class MatchState : PersistantSO
     [SerializeField] int currRound = 0;
     [SerializeField] string matchSceneName = "";
 
+    public void SetRoundAsTie()
+    {
+        GetWinsList(TeamTag.A).Add(0);
+        GetWinsList(TeamTag.B).Add(0);
+        currRound = currRound + 1;
+    }
     public void SetRoundWinner(TeamTag toTeam)
     {
         GetWinsList(toTeam).Add(1);
@@ -47,19 +53,25 @@ public class MatchState : PersistantSO
     public bool IsFinalRound() => currRound >= totalRoundsCount;
     public TeamTag GetMatchWinner()
     {
-        TeamTag winners = TeamTag.A;
-        if (GetTeamBWins > GetTeamAWins)
-            winners = TeamTag.B;
-        return winners;
+        TeamTag winner = TeamTag.None;
+        if (GetTeamAWins > GetTeamBWins)
+            winner = TeamTag.A;
+        if (GetTeamAWins < GetTeamBWins)
+            winner = TeamTag.B;
+        else if (GetTeamAWins == GetTeamBWins)
+            winner = TeamTag.None;
+        return winner;
     }
     public TeamTag GetRoundWinner(int round)
     {
         round = Mathf.Clamp(round, 1, TotalRoundsCount);
-        if(teamARounds[round-1] == 1)
-        {
-            return TeamTag.A;
-        }
-        return TeamTag.B;
+        bool hasALost = teamARounds[round - 1] == 0;
+        bool hasBLost = teamBRounds[round - 1] == 0;
+        if (hasALost && hasBLost)
+            return TeamTag.None;
+        if (hasALost)
+            return TeamTag.B;
+        return TeamTag.A;
     }
     public void StartNewGame(string sceneOfGame)
     {

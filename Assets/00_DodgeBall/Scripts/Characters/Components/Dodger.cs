@@ -53,6 +53,10 @@ public class Dodger : DodgeballCharaAction, ICharaAction,IEnergyAction
         rb3d = GetComponent<Rigidbody>();
         chara = GetComponent<DodgeballCharacter>();
     }
+    void OnDestroy()
+    {
+        transform.DOKill();
+    }
 
     public void StartDodgeAction()
     {

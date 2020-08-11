@@ -11,7 +11,6 @@ public class N_Lobby : MonoBehaviourPunCallbacks
 {
     [SerializeField] Button ready = null;
     [SerializeField] Button findingPlayers = null;
-    [SerializeField] GameObject loginMenu = null;
     [SerializeField] TextMeshProUGUI playerNameText = null;
     [SerializeField] RegionSelector regionSelector = null;
     [SerializeField] MatchTypeSelector matchTypeSelector = null;
@@ -28,24 +27,12 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         findingPlayers.onClick.AddListener(OnFindingPlayersClicked);
         findingPlayers.gameObject.SetActive(false);
 
-        if (PhotonNetwork.IsConnectedAndReady || !string.IsNullOrEmpty(PhotonNetwork.NickName))
-        {
-            loginMenu.SetActive(false);
-            playerNameText.text = PhotonNetwork.NickName;
-
-            PlayersRunDataSO.Instance.localPlayerName = playerNameText.text;
-        }
-        else
-        {
-            string n = PhotonNetwork.NickName;
-            if (string.IsNullOrEmpty(n))
-                n = "Random Name " + UnityEngine.Random.Range(-100, 100);
-            playerNameText.text = PhotonNetwork.NickName;
-            PlayersRunDataSO.Instance.localPlayerName = playerNameText.text;
-            //loginMenu.GetComponent<N_LoginMenu>().onNameSet += (n) =>{
-
-            //};
-        }
+        string n = PhotonNetwork.NickName;
+        if (string.IsNullOrEmpty(n))
+            n = "Random Name " + UnityEngine.Random.Range(-100, 100);
+        playerNameText.text = n;
+        PlayersRunDataSO.Instance.localPlayerName = playerNameText.text;
+        PhotonNetwork.NickName = n;
 
         matchStarter = GetComponent<N_MatchStarter>();
         matchStarter.onStartGame += SpreadLocalData;
@@ -109,7 +96,6 @@ public class N_Lobby : MonoBehaviourPunCallbacks
     }
     private void DisableEnteringGameUI()
     {
-        loginMenu.SetActive(false);
         ready.interactable = true;
         ready.gameObject.SetActive(false);
         findingPlayers.gameObject.SetActive(true);

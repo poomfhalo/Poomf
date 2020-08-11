@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public enum TeamTag { A, B }
+public enum TeamTag { A, B, None }
 
 [Serializable]
 public class Team
@@ -25,7 +25,24 @@ public class Team
             return true;
         }
     }
-
+    public int GetAliveCount()
+    {
+        int aliveCount = 0;
+        players.ForEach(p => { 
+            if(p.IsInField)
+                aliveCount = aliveCount + 1;
+        });
+        return aliveCount;
+    }
+    public int GetTotalTeamHP()
+    {
+        int totalTeamHP = 0;
+        players.ForEach(p => {
+            if (p.IsInField)
+                totalTeamHP = totalTeamHP + p.GetComponent<CharaHitPoints>().CurrHP;
+        });
+        return totalTeamHP;
+    }
     public Team(TeamTag teamTag)
     {
         this.teamTag = teamTag;
