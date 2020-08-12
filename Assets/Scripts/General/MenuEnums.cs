@@ -27,7 +27,9 @@ public enum ItemSet
     SUPPORTER = 8,
     ANIME = 9,
     ROBOT = 10,
-    CHRISTMAS = 11
+    CHRISTMAS = 11,
+    BASE = 12,
+    STYLISH = 13
 }
 public enum Gender
 {
