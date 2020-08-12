@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using TMPro;
 using GW_Lib;
+using System;
 
 //this Must be placed on a game object that is always active, in the Menu Scene.
 //this component, must also never be disabled. 
@@ -14,12 +15,14 @@ public class N_Lobby : MonoBehaviourPunCallbacks
     [SerializeField] TextMeshProUGUI playerNameText = null;
     [SerializeField] RegionSelector regionSelector = null;
     [SerializeField] MatchTypeSelector matchTypeSelector = null;
+    [SerializeField] PracticeMenu practiceMenu = null;
 
     N_MatchStarter matchStarter = null;
     bool wasReadyClicked = false;
 
     void Start()
     {
+        practiceMenu.E_OnBack += OnPracticeBackPressed;
         PlayersRunDataSO.Instance.ClearOtherPlayersData();
         PlayersRunDataSO.Instance.localSkin = FindObjectOfType<CustomizablePlayer>().GetSkinData;
 
@@ -38,9 +41,20 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         matchStarter.onStartGame += SpreadLocalData;
         PhotonNetwork.AddCallbackTarget(this);
     }
+
     void OnDestroy()
     {
         PhotonNetwork.RemoveCallbackTarget(this);
+    }
+
+    public override void OnConnectedToMaster()
+    {
+        if (wasReadyClicked)
+        {
+            DisableEnteringGameUI();
+            matchStarter.PrepareGame();
+        }
+        Log.Message("I Connected To Master " + PhotonNetwork.NickName + " Trying To Join RND Room in " + PhotonNetwork.CloudRegion);
     }
 
     private void OnReadyClicked()
@@ -50,15 +64,15 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         matchTypeSelector.GetMatchType(out MatchType type);
         if (type == MatchType.Practice)
         {
-            SceneFader.instance.FadeIn(1, () => SceneManager.LoadScene("SP_Room"));
+            practiceMenu.Show();
             return;
         }
 
-        if(PhotonNetwork.IsConnectedAndReady)
+        if (PhotonNetwork.IsConnectedAndReady)
         {
             return;
         }
-        if(regionSelector.GetRegion(out string region) && region != "DEF")
+        if (regionSelector.GetRegion(out string region) && region != "DEF")
         {
             Log.LogL0("Trying to connect to region " + region);
             PhotonNetwork.ConnectToRegion(region);
@@ -73,16 +87,11 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         matchTypeSelector.SetInteractable(false);
     }
 
-    public override void OnConnectedToMaster()
+    private void OnPracticeBackPressed()
     {
-        if (wasReadyClicked)
-        {
-            DisableEnteringGameUI();
-            matchStarter.PrepareGame();
-        }
-        Log.Message("I Connected To Master " + PhotonNetwork.NickName + " Trying To Join RND Room in " + PhotonNetwork.CloudRegion);
+        wasReadyClicked = false;
+        ready.interactable = true;
     }
-
     private void OnFindingPlayersClicked()
     {
         findingPlayers.gameObject.SetActive(false);
@@ -125,7 +134,7 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         this.InvokeDelayed(3, SendLocalData);
     }
     [PunRPC]
-    private void RecieveLocalData(int actorID,string playerName, int[] types, int[] ids, float[] reds, float[] greens, float[] blues, int[] colorIndicies, int[] texesIndicies)
+    private void RecieveLocalData(int actorID, string playerName, int[] types, int[] ids, float[] reds, float[] greens, float[] blues, int[] colorIndicies, int[] texesIndicies)
     {
         PlayersRunDataSO data = PlayersRunDataSO.Instance;
         CharaSkinDataPlain plainSkin = new CharaSkinDataPlain(types, ids, reds, greens, blues, colorIndicies, texesIndicies);
@@ -144,7 +153,7 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         if (PhotonNetwork.PlayerList.Length == data.playersRunData.Count)
             GoToRoom();
     }
-    public void GoToRoom()
+    private void GoToRoom()
     {
         if (PhotonNetwork.IsMasterClient)
         {
@@ -156,5 +165,4 @@ public class N_Lobby : MonoBehaviourPunCallbacks
             SceneFader.instance.FadeIn(1, null);
         }
     }
-
 }
