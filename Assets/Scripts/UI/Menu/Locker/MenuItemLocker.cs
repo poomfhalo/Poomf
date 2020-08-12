@@ -13,8 +13,7 @@ namespace Poomf.UI
     public class MenuItemLocker : MenuItemBase
     {
         [SerializeField] CinemachineVirtualCamera zoomedInCamera = null;
-        [SerializeField] Transform headsContentParent = null;
-        [SerializeField] Transform bodiesContentParent = null;
+        [SerializeField] ItemSorter itemSorter = null;
         [SerializeField] GameObject lockerItemPrefab = null;
         [Header("UI")]
         [SerializeField] Image zoomButtonImage = null;
@@ -29,16 +28,23 @@ namespace Poomf.UI
 
         List<HeadItemData> headsList = new List<HeadItemData>();
         List<BodyItemData> bodiesList = new List<BodyItemData>();
+        List<InventoryItem> inventoryItems = new List<InventoryItem>();
         InventoryItem currentHead = null;
         InventoryItem currentBody = null;
         bool initialized = false;
         bool zoomedIn = false;
+        SortMethod currentSort = SortMethod.Rarity;
 
         CharaSkinData skinData => customizablePlayer.GetSkinData;
 
+        protected override void Awake()
+        {
+            base.Awake();
+            initialize();
+        }
+
         protected override void OnEnable()
         {
-            initialize();
             base.OnEnable();
             // Make sure the Zoomed in camera is disabled
             zoomedInCamera.gameObject.SetActive(false);
@@ -54,6 +60,7 @@ namespace Poomf.UI
         void initialize()
         {
             if (true == initialized) return;
+
             LoadItemsData();
             //populateLockerItems();
             // Make sure the zoom button has the zoom in image
@@ -82,15 +89,15 @@ namespace Poomf.UI
                 {
                     GameObject newItem = Instantiate(lockerItemPrefab);
                     InventoryItem item = newItem.GetComponent<InventoryItem>();
+                    inventoryItems.Add(item);
                     if (null == item) return;
-                    item.InitializeItem(itemData.GetVariantName(j), null, null, itemData.ItemSprite, "", itemData.ItemID, ItemCategory.Body, j);
+                    item.InitializeItem(itemData.GetVariantName(j), null, null, itemData.ItemSprite, "", itemData.ItemID, ItemCategory.Body, itemData.ItemSet, j);
                     if (skinData.GetItemID(ItemCategory.Body) == itemData.ItemID && j == skinData.GetTextureIndex(ItemCategory.Body))
                     {
                         // This is the currently equipped variant!
                         item.Equip(equippedButtonSprite);
                         currentBody = item;
                     }
-                    newItem.transform.SetParent(bodiesContentParent, false);
                     item.MyButton.onClick.AddListener(OnInventoryItemButtonPressed);
                 }
 
@@ -127,15 +134,15 @@ namespace Poomf.UI
                     {
                         GameObject newItem = Instantiate(lockerItemPrefab);
                         InventoryItem item = newItem.GetComponent<InventoryItem>();
+                        inventoryItems.Add(item);
                         if (null == item) return;
-                        item.InitializeItem(variantData.GetVariantName(j), null, null, variantData.ItemSprite, "", variantData.ItemID, ItemCategory.Head, j);
+                        item.InitializeItem(variantData.GetVariantName(j), null, null, variantData.ItemSprite, "", variantData.ItemID, ItemCategory.Head, itemData.ItemSet, j);
                         if (skinData.GetItemID(ItemCategory.Head) == variantData.ItemID && j == skinData.GetTextureIndex(ItemCategory.Head))
                         {
                             // This is the currently equipped variant
                             item.Equip(equippedButtonSprite);
                             currentHead = item;
                         }
-                        newItem.transform.SetParent(headsContentParent, false);
                         item.MyButton.onClick.AddListener(OnInventoryItemButtonPressed);
                     }
                 }
@@ -144,18 +151,23 @@ namespace Poomf.UI
                     // Create 1 inventory item only
                     GameObject newItem = Instantiate(lockerItemPrefab);
                     InventoryItem item = newItem.GetComponent<InventoryItem>();
+                    inventoryItems.Add(item);
                     if (null == item) return;
-                    item.InitializeItem(itemData.ItemName, null, null, itemData.ItemSprite, "", itemData.ItemID, ItemCategory.Head);
+                    item.InitializeItem(itemData.ItemName, null, null, itemData.ItemSprite, "", itemData.ItemID, ItemCategory.Head, itemData.ItemSet);
                     if (skinData.GetItemID(ItemCategory.Head) == itemData.ItemID)
                     {
                         // This is the currently equipped head
                         item.Equip(equippedButtonSprite);
                         currentHead = item;
                     }
-                    newItem.transform.SetParent(headsContentParent, false);
                     item.MyButton.onClick.AddListener(OnInventoryItemButtonPressed);
                 }
             }
+
+            // Initialize the item sorter
+            itemSorter.Initialize(inventoryItems);
+            // Sort by rarity, the default sort method
+            itemSorter.Sort(inventoryItems, SortMethod.Rarity);
         }
 
         public void OnZoomButtonPressed()
@@ -226,6 +238,19 @@ namespace Poomf.UI
             // Sync the player's skin data
             SaveManager.SaveData(SaveManager.charaSkinKey, skinData, SaveManager.relativeSkinDataPath);
             AccountManager.SyncCharaSkinData().WrapErrors();
+        }
+
+        public void OnSortButtonPressed()
+        {
+            // Use the next sorting method
+            currentSort++;
+            if ((int)currentSort >= itemSorter.SortMethodsCount)
+            {
+                // Use the first sorting method
+                currentSort = 0;
+            }
+
+            itemSorter.Sort(inventoryItems, currentSort);
         }
 
         #region Addressables and their Delegates
