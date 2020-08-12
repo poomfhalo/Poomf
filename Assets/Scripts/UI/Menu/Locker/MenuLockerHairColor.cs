@@ -51,7 +51,6 @@ namespace Poomf.UI
             Color currentColor = skinData.GetColor(itemToModify);
             Color newColor = new Color(value, currentColor.g, currentColor.b);
             skinData.SetColor(itemToModify, newColor);
-            //TODO: SYNC DATA
         }
 
         public void AdjustGreen(float value)
@@ -66,6 +65,12 @@ namespace Poomf.UI
             Color currentColor = skinData.GetColor(itemToModify);
             Color newColor = new Color(currentColor.r, currentColor.g, value);
             skinData.SetColor(itemToModify, newColor);
+        }
+
+        // Called when the player stops adjusting the RGB sliders, saves data
+        public void OnPointerUp()
+        {
+            SyncData();
         }
     }
 }
