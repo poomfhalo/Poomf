@@ -47,7 +47,8 @@ public class Dodgeball : Singleton<Dodgeball>
                     break;
                 case BallState.OnGround:
                     this.KillCoro(ref delayedGroundedCoro);
-                    delayedGroundedCoro = this.InvokeDelayed(timeToGrounded, () => {
+                    delayedGroundedCoro = this.InvokeDelayed(timeToGrounded, () =>
+                    {
                         E_OnStateUpdated?.Invoke(BallState.OnGround);
                     });
                     break;
@@ -65,6 +66,7 @@ public class Dodgeball : Singleton<Dodgeball>
 
     [Header("Read Only")]
     [SerializeField] BallState m_ballState = BallState.Flying;
+    public DodgeballCharacter lastThrower => GetComponent<DodgeballGoLaunchTo>().lastThrower;
 
     Coroutine delayedGroundedCoro = null;
     Rigidbody rb3d = null;
@@ -85,7 +87,8 @@ public class Dodgeball : Singleton<Dodgeball>
         startGravity = cf.force;
         rb3d.useGravity = false;
 
-        E_OnStateUpdated += (newS) => {
+        E_OnStateUpdated += (newS) =>
+        {
             switch (newS)
             {
                 case BallState.Held:
@@ -105,7 +108,7 @@ public class Dodgeball : Singleton<Dodgeball>
     void OnEnable() => DodgeballGameManager.AddBall(this);
     void OnDisable() => DodgeballGameManager.RemoveBall(this);
     void OnDestroy() => transform.DOKill();
-    
+
     void OnTriggerEnter(Collider col)
     {
         if (!ExtCanDetectGroundByTrig())

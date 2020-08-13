@@ -144,7 +144,7 @@ public class DodgeballReflection : DodgeballAction
             loggedSpheres.Add(Extentions.LogSphere(endPoint, Color.green, 0.35f));
 
         CharaHitPoints hp = contactWith.GetComponent<CharaHitPoints>();
-        hp.C_StartHitAction(1);
+        hp.C_StartHitAction(1, GetComponent<Dodgeball>().lastThrower);
         onReflected?.Invoke();
     }
 

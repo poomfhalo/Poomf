@@ -44,7 +44,7 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
             pc = N_Extentions.GetCharacter(GetComponent<PhotonView>().Controller.ActorNumber).gameObject;
 
             PlayersRunDataSO dataSO = PlayersRunDataSO.Instance;
-            PlayersRunDataSO.PlayerRunData data = dataSO.GetPlayerRunData(photonView.ControllerActorNr);
+            PlayerRunData data = dataSO.GetPlayerRunData(photonView.ControllerActorNr);
             CharaSkinData skinData = data.charaSkinData.CreateSkinData();
             pc.GetComponentInChildren<CustomizablePlayer>().SetNewSkinData(skinData);
 
@@ -53,6 +53,7 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
 
         if (!photonView.IsMine)
             return;
+
         Team team = TeamsManager.GetTeam(pc.GetComponent<DodgeballCharacter>());
         if(team == null)
         {

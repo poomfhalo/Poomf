@@ -100,11 +100,11 @@ public abstract class BallLauncher : DodgeballCharaAction, ICharaAction,IEnergyA
 
         if (!isLastThrowAtEnemy)
         {
-            DodgeballGameManager.instance.OnBallThrownAtAlly(GetComponent<DodgeballCharacter>());
+            DodgeballGameManager.instance.OnBallThrownAtAlly(chara);
         }
         else
         {
-            DodgeballGameManager.instance.OnBallThrownAtEnemy(GetComponent<DodgeballCharacter>());
+            DodgeballGameManager.instance.OnBallThrownAtEnemy(chara);
         }
 
         selectionIndicator.SetFocus(null);

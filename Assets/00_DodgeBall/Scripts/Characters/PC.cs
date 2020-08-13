@@ -45,7 +45,7 @@ public class PC : CharaController
 
     private void OnHealthReductionCalled(InputAction.CallbackContext obj)
     {
-        GetComponent<CharaHitPoints>().StartHitAction(1);
+        GetComponent<CharaHitPoints>().StartHitAction(1, null);
     }
 
     public override void Lock()

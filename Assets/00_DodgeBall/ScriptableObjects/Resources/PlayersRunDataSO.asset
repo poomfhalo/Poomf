@@ -12,6 +12,94 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ceebb8f2241f1f1931bafc175a690f, type: 3}
   m_Name: PlayersRunDataSO
   m_EditorClassIdentifier: 
-  playersRunData: []
-  localPlayerName: Random Name 12
+  playersRunData:
+  - charaName: Random Name -74
+    charaSkinData:
+      types: 00000000010000000200000003000000
+      ids: 100000000d0000001000000011000000
+      reds:
+      - 0.9333334
+      - 1
+      - 1
+      - 1
+      greens:
+      - 0.654902
+      - 1
+      - 1
+      - 1
+      blues:
+      - 0.33333334
+      - 1
+      - 1
+      - 1
+      colorIndicies: 00000000000000000300000000000000
+      texesIndicies: 00000000020000000000000000000000
+    actorID: 0
+  - charaName: Aplayer2
+    charaSkinData:
+      types: 00000000010000000200000003000000
+      ids: 100000000d0000001000000011000000
+      reds:
+      - 0.9333334
+      - 1
+      - 1
+      - 1
+      greens:
+      - 0.654902
+      - 1
+      - 1
+      - 1
+      blues:
+      - 0.33333334
+      - 1
+      - 1
+      - 1
+      colorIndicies: 00000000000000000300000000000000
+      texesIndicies: 00000000020000000000000000000000
+    actorID: 2
+  - charaName: BPlayer 1
+    charaSkinData:
+      types: 00000000010000000200000003000000
+      ids: 02000000080000001000000011000000
+      reds:
+      - 0.162079
+      - 1
+      - 1
+      - 1
+      greens:
+      - 0.051619805
+      - 1
+      - 1
+      - 1
+      blues:
+      - 0.3773585
+      - 1
+      - 1
+      - 1
+      colorIndicies: 00000000000000000300000000000000
+      texesIndicies: 00000000020000000000000001000000
+    actorID: 1
+  - charaName: BPlayer 2
+    charaSkinData:
+      types: 00000000010000000200000003000000
+      ids: 02000000080000001000000011000000
+      reds:
+      - 0.162079
+      - 1
+      - 1
+      - 1
+      greens:
+      - 0.051619805
+      - 1
+      - 1
+      - 1
+      blues:
+      - 0.3773585
+      - 1
+      - 1
+      - 1
+      colorIndicies: 00000000000000000300000000000000
+      texesIndicies: 00000000020000000000000001000000
+    actorID: 3
+  localPlayerName: Random Name -74
   localSkin: {fileID: 11400000, guid: 2b967bce3a8192d6eada0ef487ca6943, type: 2}

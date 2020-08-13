@@ -2,16 +2,20 @@
 
 public class TeamsSkinsSetter : MonoBehaviour
 {
-    PlayersRunDataSO data = null;
+    PlayersRunDataSO dataSO = null;
     void Start()
     {
-        data = PlayersRunDataSO.Instance;
-        if (data == null)
+        dataSO = PlayersRunDataSO.Instance;
+        if (dataSO == null)
             return;
 
-        if (!data.IsSP)
+        if (!dataSO.IsSP)
             return;
 
+
+        //PlayerRunData data = dataSO.GetPlayerRunData(photonView.ControllerActorNr);
+        //CharaSkinData skinData = data.charaSkinData.CreateSkinData();
+        //pc.GetComponentInChildren<CustomizablePlayer>().SetNewSkinData(skinData);
 
         Debug.Log("Adding Different Skins in SP is to be implemented yet");
     }

@@ -3,24 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName ="Dodgeball/PlayersRunDataSO",fileName = "PlayersRunDataSO")]
-public class PlayersRunDataSO : PersistantSO
+public partial class PlayersRunDataSO : PersistantSO
 {
-    [Serializable]
-    public class PlayerRunData
-    {
-        public int actorID = -1;
-        public string charaName = "";
-        public CharaSkinDataPlain charaSkinData = null;
-
-        public PlayerRunData() { }
-        public PlayerRunData(int actorID, CharaSkinDataPlain charaSkinData,string charaName)
-        {
-            this.charaSkinData = charaSkinData;
-            this.actorID = actorID;
-            this.charaName = charaName;
-        }
-    }
-
     public static PlayersRunDataSO Instance => Resources.Load<PlayersRunDataSO>("PlayersRunDataSO");
 
     [Header("Read Only")]
@@ -39,6 +23,10 @@ public class PlayersRunDataSO : PersistantSO
         PlayerRunData rData = new PlayerRunData(actorID, charaSkinData, charaName);
         playersRunData.Add(rData);
     }
+    public void AddPlayerRunData(int actorID, CharaSkinData charaSkinData, string charaName)
+    {
+        AddPlayerRunData(actorID, new CharaSkinDataPlain(charaSkinData), charaName);
+    }
     public bool HasCharacter(int actorID)
     {
         foreach (var data in playersRunData)
@@ -48,6 +36,9 @@ public class PlayersRunDataSO : PersistantSO
         }
         return false;
     }
+
+
+
     public CharaSkinData GetSkinData(int actorNumber)
     {
         PlayerRunData data = GetPlayerRunData(actorNumber);

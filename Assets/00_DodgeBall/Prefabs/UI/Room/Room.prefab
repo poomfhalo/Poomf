@@ -1228,7 +1228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f978eb3bdbcc8e9a915c7e5fa3fea76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rooms: []
+  defSPMatch: {fileID: 11400000, guid: a77173c5337cdaa19912b8f1e12e644c, type: 2}
   slots:
   - {fileID: 4909517045336766370}
   - {fileID: 2645637480276799759}
@@ -1238,6 +1238,7 @@ MonoBehaviour:
   - {fileID: 2715055954708197168}
   - {fileID: 3435490182040144316}
   - {fileID: 2681775804733369321}
+  rooms: []
 --- !u!1 &8664759648174554939
 GameObject:
   m_ObjectHideFlags: 0

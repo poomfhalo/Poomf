@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AdvancedPlayerSlotsUI : MonoBehaviour
 {
+    [SerializeField] SP_MatchData defSPMatch = null;
     [SerializeField] List<ShowcaseSlot> slots = new List<ShowcaseSlot>();
 
     [Header("Read Only")]
@@ -19,17 +20,40 @@ public class AdvancedPlayerSlotsUI : MonoBehaviour
 
         rooms = FindObjectsOfType<ShowcaseRoom>().ToList();
         if (playerRunData.IsSP)
-            UseClearData();
-        else
-            UseFilledData();
+            PopulateRunData();
+
+        UseFilledData();
     }
 
-    private void UseClearData()
+    private void PopulateRunData()
     {
-        ShowcaseSlot slot = slots.Find(s => s.GetID == 0);
-        slot.SetPlayerData(99, playerRunData.localPlayerName);
-        ShowcaseRoom room = rooms.Find(r => r.GetRoomSlotID == 0);
-        room.UpdateUsableSkin(playerRunData.localSkin);
+        PlayersRunDataSO so = PlayersRunDataSO.Instance;
+        int actorID = 0;
+
+        foreach (var p in defSPMatch.teamA)
+        {
+            if(defSPMatch.playerActorID==actorID)
+            {
+                so.AddPlayerRunData(actorID, so.localSkin, so.localPlayerName);
+                actorID = actorID + 2;
+                continue;
+            }
+            so.AddPlayerRunData(actorID ,p.skinData, p.charaName);
+            actorID = actorID + 2;
+        }
+        actorID = 1;
+
+        foreach(var p in defSPMatch.teamB)
+        {
+            if (defSPMatch.playerActorID == actorID)
+            {
+                so.AddPlayerRunData(actorID, so.localSkin, so.localPlayerName);
+                actorID = actorID + 2;
+                continue;
+            }
+            so.AddPlayerRunData(actorID, p.skinData, p.charaName);
+            actorID = actorID + 2;
+        }
     }
 
     private void UseFilledData()

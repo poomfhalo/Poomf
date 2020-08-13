@@ -28,6 +28,8 @@ public class CharaHitPoints : DodgeballCharaAction, ICharaAction
     [SerializeField] bool isWaitingForHit = false;
     [SerializeField] bool isInHitCd = false;
 
+    public DodgeballCharacter lastDamager = null;
+
     Animator animator = null;
     ActionsScheduler scheduler = null;
     Rigidbody rb3d = null;
@@ -60,17 +62,19 @@ public class CharaHitPoints : DodgeballCharaAction, ICharaAction
         if (IsInHitCd)
             return;
 
-        C_StartHitAction(1);
+       C_StartHitAction(1,ball.lastThrower);
     }
 
     public void EnableHitDetection()
     {
         isWaitingForHit = true;
     }
-    public void C_StartHitAction(int damage)
+    public void C_StartHitAction(int damage,DodgeballCharacter lastHitter)
     {
         if (!IsWaitingForHit)
             return;
+
+        lastDamager = lastHitter == null ? GetComponent<DodgeballCharacter>() : lastHitter;
 
         OnHpCommand?.Invoke(HPCommand.Subtract);
         isWaitingForHit = false;
@@ -78,13 +82,15 @@ public class CharaHitPoints : DodgeballCharaAction, ICharaAction
         if (!ExtApplyHealthChanges())
             return;
 
-        StartHitAction(damage);
+        StartHitAction(damage, lastHitter);
     }
 
-    public void StartHitAction(int damage)
+    public void StartHitAction(int damage,DodgeballCharacter lastHitter)
     {
         if (!ExtApplyHealthChanges())
             return;
+
+        lastDamager = lastHitter == null ? GetComponent<DodgeballCharacter>() : lastHitter;
 
         currHP = currHP - damage;
         if (currHP <= 0)

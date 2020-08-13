@@ -25,17 +25,19 @@ public class N_CharaHitPoints : MonoBehaviour
         switch (command)
         {
             case HPCommand.Subtract:
-                pv.RPC("R_StartHitAction", RpcTarget.AllViaServer);
+                int lastHitter = hp.lastDamager.GetComponent<N_PC>().ActorID;
+                pv.RPC("R_StartHitAction", RpcTarget.AllViaServer, lastHitter);
                 break;
         }
     }
 
     [PunRPC]
-    private void R_StartHitAction()
+    private void R_StartHitAction(int lastHitter)
     {
         Log.Message("N_CharaHitPoints().RPC :: R_StartHitAction");
         hp.ExtApplyHealthChanges = () => true;
-        hp.StartHitAction(1);
+        DodgeballCharacter chara = N_TeamsManager.GetPlayer(lastHitter).GetComponent<DodgeballCharacter>();
+        hp.StartHitAction(1,chara);
         hp.ExtApplyHealthChanges = () => false;
     }
 }
