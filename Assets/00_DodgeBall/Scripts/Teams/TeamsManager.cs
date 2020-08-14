@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GW_Lib.Utility;
 using UnityEngine;
@@ -45,6 +44,7 @@ public class TeamsManager : Singleton<TeamsManager>
     public static DodgeballCharacter GetNextFriendly(DodgeballCharacter ofThis,DodgeballCharacter curr)
     {
         Team thisTeam = GetTeam(ofThis);
+        thisTeam.CleanUp();
 
         DodgeballCharacter next = curr;
         int maxTries = 30;
@@ -66,7 +66,7 @@ public class TeamsManager : Singleton<TeamsManager>
     {
         Team t = GetNextTeam(ofThis);
         DodgeballCharacter next = t.GetNext(curr);
-
+        t.CleanUp();
         int maxTries = 10;
         if (onlyInField)
         {
@@ -117,6 +117,7 @@ public class TeamsManager : Singleton<TeamsManager>
             return;
 
         instance.allCharacters.Add(dodgeballCharacter);
+        instance.allCharacters.RemoveAll(c => c == null);
     }
 
     public static void GetEmptyTeams(out bool isTeamAEmpty, out bool isTeamBEmpty)
@@ -124,6 +125,7 @@ public class TeamsManager : Singleton<TeamsManager>
         isTeamAEmpty = isTeamBEmpty = false;
         if (!instance)
             return;
+
         Team testTeam = GetTeam(TeamTag.A);
         isTeamAEmpty = testTeam.IsEmpty;
         testTeam = GetNextTeam(testTeam);

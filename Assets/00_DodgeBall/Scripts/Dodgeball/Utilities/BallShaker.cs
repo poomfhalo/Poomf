@@ -10,6 +10,7 @@ public class BallShaker : MonoBehaviour
     [SerializeField] Transform target = null;
     [SerializeField] float minSTR = 6;
     [SerializeField] float maxSTR = 16;
+    [SerializeField] bool canRun = true;
 
     Vector3 startLocalPos = Vector3.zero;
     Vector3 startScale = Vector3.zero;
@@ -31,6 +32,9 @@ public class BallShaker : MonoBehaviour
 
     public void ApplyShake(float scaleSTR, float posSTR)
     {
+        if (!canRun)
+            return;
+
         scaleSTR = Mathf.Clamp(scaleSTR, minSTR, maxSTR);
         posSTR = Mathf.Clamp(posSTR, minSTR, maxSTR);
         target.transform.SetParent(null);
@@ -52,6 +56,9 @@ public class BallShaker : MonoBehaviour
 
     public void CancelShake()
     {
+        if (!canRun)
+            return;
+
         tweens.ForEach(t => t.Kill());
         tweens.Clear();
         this.KillCoro(ref shakeCoro);

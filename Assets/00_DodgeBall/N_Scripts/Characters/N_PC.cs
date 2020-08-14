@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class N_PC : MonoBehaviour,IPunObservable
 {
-    public int CreatorViewID => creatorViewID;
+    public int CreatorViewID => actorID;
     public int ActorID => pv.Controller.ActorNumber;
-    [SerializeField] int creatorViewID = 0;
+    [SerializeField] int actorID = 0;
     [SerializeField] float afterDodgeMovementBlock = 0.1f;
     [SerializeField] float safeThrowPercentThreshold = 0.15f;
 
@@ -82,11 +82,11 @@ public class N_PC : MonoBehaviour,IPunObservable
     }
 
     [PunRPC]//Called In N_PlayerManager
-    private void OnCreated(int creatorViewID)
+    private void OnCreated(int actorID)//TODO:Consider Removal
     {
-        this.creatorViewID = creatorViewID;
+        this.actorID = actorID;
         gameObject.SetActive(false);
-        name = pv.Controller.NickName;
+        name = pv.Controller.NickName + "_" + actorID;
     }
     [PunRPC]//Called In N_GameManager
     private void PrepareForGame()

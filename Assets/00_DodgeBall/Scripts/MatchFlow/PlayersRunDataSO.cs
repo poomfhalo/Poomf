@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName ="Dodgeball/PlayersRunDataSO",fileName = "PlayersRunDataSO")]
-public partial class PlayersRunDataSO : PersistantSO
+public class PlayersRunDataSO : PersistantSO
 {
     public static PlayersRunDataSO Instance => Resources.Load<PlayersRunDataSO>("PlayersRunDataSO");
 
@@ -12,6 +11,7 @@ public partial class PlayersRunDataSO : PersistantSO
     public bool IsSP => playersRunData.Count == 0;
     public string localPlayerName = "";
     public CharaSkinData localSkin = null;
+    public int localPlayerID = 0;
 
     public void ClearOtherPlayersData()
     {
@@ -36,8 +36,6 @@ public partial class PlayersRunDataSO : PersistantSO
         }
         return false;
     }
-
-
 
     public CharaSkinData GetSkinData(int actorNumber)
     {

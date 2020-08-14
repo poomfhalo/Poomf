@@ -50,6 +50,8 @@ public class Team
 
     public void Join(DodgeballCharacter player)
     {
+        CleanUp();
+
         if (!player)
         {
             UnityEngine.Debug.Log("Null player trying to join " + teamTag);
@@ -72,7 +74,8 @@ public class Team
 
     public void Leave(DodgeballCharacter player)
     {
-        if(!player)
+        CleanUp();
+        if (!player)
         {
             UnityEngine.Debug.Log("Null player trying to leave " + teamTag);
         }
@@ -85,6 +88,7 @@ public class Team
 
     public DodgeballCharacter GetNext(DodgeballCharacter curr)
     {
+        CleanUp();
         if (players.Count == 0)
             return null;
         if (curr == null)

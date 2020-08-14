@@ -135,8 +135,8 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
             CharaPath s = GameExtentions.GetSpawnPosition(t);
             CharaSlot p = N_TeamsManager.GetPlayer(player.ActorNumber).GetComponent<CharaSlot>();
 
-            p.SetUp(s.SlotId);
-            p.GetComponent<PhotonView>().RPC("SetUp",RpcTarget.Others, s.SlotId);
+            p.SetUp(p.name,s.SlotId);
+            p.GetComponent<PhotonView>().RPC("SetUp", RpcTarget.Others, p.name, s.SlotId);
         }
     }
     private void M_PreparePlayersForGame()

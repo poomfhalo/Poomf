@@ -16,7 +16,7 @@ public class CustomizablePlayer : MonoBehaviour
     [SerializeField, ReadOnly] CustomEyes playerEyes = null;
     [SerializeField, ReadOnly] CustomSkin playerSkinTone = null;
     [SerializeField] CharaSkinDataPlain plain = null;
-
+    public bool extLoadOnStart = true;
 
     void Awake()
     {
@@ -38,8 +38,11 @@ public class CustomizablePlayer : MonoBehaviour
     }
     void Start()
     {
-        skinData = SaveManager.GetData(SaveManager.charaSkinKey, skinData, SaveManager.relativeSkinDataPath);
-        RefreshCharaVisuals();
+        if (extLoadOnStart)
+        {
+            skinData = SaveManager.GetData(SaveManager.charaSkinKey, skinData, SaveManager.relativeSkinDataPath);
+            RefreshCharaVisuals();
+        }
     }
     void OnDestroy()
     {

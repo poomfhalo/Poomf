@@ -104,6 +104,11 @@ public class DodgeballCharacter : MonoBehaviour
         TeamsManager.AddCharacter(this);
         wasInitialized = true;
     }
+    void OnDestroy()
+    {
+        if(TeamsManager.instance)
+            TeamsManager.GetTeam(this).Leave(this);
+    }
     public void SetTeam(TeamTag team)
     {
         this.team = team;

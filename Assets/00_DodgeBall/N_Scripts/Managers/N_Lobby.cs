@@ -54,6 +54,7 @@ public class N_Lobby : MonoBehaviourPunCallbacks
             DisableEnteringGameUI();
             matchStarter.PrepareGame();
         }
+
         Log.Message("I Connected To Master " + PhotonNetwork.NickName + " Trying To Join RND Room in " + PhotonNetwork.CloudRegion);
     }
 
@@ -112,10 +113,12 @@ public class N_Lobby : MonoBehaviourPunCallbacks
     private void SpreadLocalData()
     {
         PlayersRunDataSO data = PlayersRunDataSO.Instance;
-        data.ClearOtherPlayersData();
+        data.ClearOtherPlayersData();//TODO: Consider Deleting this line?
 
         void SendLocalData()
         {
+            data.localPlayerID = PhotonNetwork.LocalPlayer.ActorNumber;
+
             CharaSkinDataPlain plain = new CharaSkinDataPlain(FindObjectOfType<CustomizablePlayer>().GetSkinData);
 
             Log.Message("Sending Customization Data Player Name :: " + data.localPlayerName);

@@ -46,6 +46,8 @@ public class CharaFXPlayer : MonoBehaviour
     }
     void OnDestroy()
     {
+        if (chara == null || hp == null || chara.launcher == null || jumper == null)
+            return;
         hp.OnHpSubtracted -= OnHPSubtracted;
         hp.OnZeroHP -= OnZeroHP;
         chara.launcher.E_OnThrowStarted -= OnThrowStarted;

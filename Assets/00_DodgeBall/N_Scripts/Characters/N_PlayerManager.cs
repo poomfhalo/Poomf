@@ -30,7 +30,7 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
     {
         yield return 0;
         pc = N_Extentions.N_MakeObj(N_Prefab.Player, Vector3.zero, Quaternion.identity);
-        pc.GetComponent<PhotonView>().RPC("OnCreated", RpcTarget.All, GetComponent<PhotonView>().ViewID);
+        pc.GetComponent<PhotonView>().RPC("OnCreated", RpcTarget.All, GetComponent<PhotonView>().Controller.ActorNumber);
         yield return new WaitForSeconds(0.1f);
         Log.LogL0(photonView.Controller + " Created a PC ", pc);
 

@@ -17,18 +17,19 @@ public class CharaSlot : MonoBehaviour
     {
         if (setActiveOnStart)
         {
-            SetUp(id);
+            SetUp(name, id);
             GetComponent<DodgeballCharacter>().PrepareForGame();
         }
     }
 
     [PunRPC]
-    public void SetUp(int id)
+    public void SetUp(string playerName,int id)
     {
-        activeSlot = DodgeballGameManager.instance.gameSlotsData.GetData(id);
+        name = playerName + "_" + id;
         this.id = id;
         wasSetUp = true;
 
+        activeSlot = DodgeballGameManager.instance.gameSlotsData.GetData(id);
         CharaPath path = GameExtentions.GetPath(id, PathType.GameStartPath, 0);
         path.Fill();
     }
