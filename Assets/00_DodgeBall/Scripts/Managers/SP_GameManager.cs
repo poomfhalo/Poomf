@@ -34,8 +34,7 @@ public class SP_GameManager : MonoBehaviour
 
             CharaSlot cs = createdCharacter.GetComponent<CharaSlot>();
             cs.setActiveOnStart = false;
-            string charaName = d.charaName + "_" + d.actorID;
-            cs.SetUp(charaName, d.actorID);
+            cs.SetUp(d.charaName, d.actorID);
             createdCharacter.PrepareForGame();
 
             CustomizablePlayer cp = createdCharacter.GetComponentInChildren<CustomizablePlayer>();
