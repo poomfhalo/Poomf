@@ -1,23 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &57221110444787069
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 57221109536736246}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: baeb95c2d25c7a65fb7e45f0196dd4d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onCollisionEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  onCollisionExit:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &3697698984310588697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42,12 +24,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cffe756fa05bd9151b6649f203d704a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeToStartShaking: 1
   shakeDur: 0.15
   vibrations: 10
   target: {fileID: 57221109536736250}
   minSTR: 0.1
   maxSTR: 16
-  canRun: 0
+  canRun: 1
   oldParent: {fileID: 0}
 --- !u!1 &57221109919460844
 GameObject:
@@ -91,6 +74,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 57221109536736250}
+  - {fileID: 240558406487512101}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -148,7 +132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPersistant: 0
-  bodyCol: {fileID: 57221110444787069}
+  bodyCol: {fileID: 1194413654353681384}
   timeToGrounded: 0.2
   m_ballState: 2
 --- !u!114 &5475323293589320073
@@ -361,6 +345,69 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ball: {fileID: 57221109919460845}
+--- !u!1 &3904192635816159664
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 240558406487512101}
+  - component: {fileID: 6580787331541191877}
+  - component: {fileID: 1194413654353681384}
+  m_Layer: 29
+  m_Name: DodgeballCollision
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &240558406487512101
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3904192635816159664}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 57221109919460846}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &6580787331541191877
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3904192635816159664}
+  m_Material: {fileID: 13400000, guid: daf488e42c529d2c4b2d38c77125652e, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.33
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1194413654353681384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3904192635816159664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baeb95c2d25c7a65fb7e45f0196dd4d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onCollisionEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  onCollisionExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &7324318474472625760
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -454,7 +501,8 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.6
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7308918417230321047, guid: 987689bb65ebb9946b56cd0d83298db5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 987689bb65ebb9946b56cd0d83298db5, type: 3}
 --- !u!4 &57221109536736250 stripped
 Transform:

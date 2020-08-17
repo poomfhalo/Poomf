@@ -47,10 +47,14 @@ public class Dodgeball : Singleton<Dodgeball>
                     break;
                 case BallState.OnGround:
                     this.KillCoro(ref delayedGroundedCoro);
-                    delayedGroundedCoro = this.InvokeDelayed(timeToGrounded, () =>
+                    delayedGroundedCoro = this.InvokeDelayed(delayedGroundedTime, () =>
                     {
                         E_OnStateUpdated?.Invoke(BallState.OnGround);
                     });
+                    break;
+                case BallState.StoppedOnGround:
+                    this.KillCoro(ref delayedGroundedCoro);
+                    E_OnStateUpdated?.Invoke(BallState.StoppedOnGround);
                     break;
             }
         }
@@ -58,11 +62,12 @@ public class Dodgeball : Singleton<Dodgeball>
     public DodgeballCharacter holder => goTo.LastHolder;
 
     public event Action<DodgeballCommand> E_OnCommandActivated = null;
-    public enum BallState { OnGround, Held, Flying }
+    public enum BallState { OnGround, Held, Flying, StoppedOnGround }
     public Vector3 position { get { return rb3d.position; } set { rb3d.MovePosition(value); } }
 
     public CollisionDelegator bodyCol = null;
-    [SerializeField] float timeToGrounded = 0.1f;
+    [SerializeField] float delayedGroundedTime = 0.08f;
+    [SerializeField] float timeToStoppedOnGround = 0.1f;
 
     [Header("Read Only")]
     [SerializeField] BallState m_ballState = BallState.Flying;
@@ -73,6 +78,7 @@ public class Dodgeball : Singleton<Dodgeball>
     ConstantForce cf = null;
     Vector3 startGravity = Vector3.zero;
     Tweener activeTweener = null;
+    float stoppedCounter = 0;
 
     protected override void Awake()
     {
@@ -136,6 +142,27 @@ public class Dodgeball : Singleton<Dodgeball>
         if (ballState == BallState.OnGround)
         {
             ballState = BallState.Flying;
+        }
+    }
+    void Update()
+    {
+        if(ballState == BallState.OnGround)
+        {
+            if(Mathf.Abs(rb3d.velocity.magnitude) > Mathf.Epsilon)//We Are Moving On Ground
+            {
+                stoppedCounter = 0;
+                return;
+            }
+
+            stoppedCounter += Time.deltaTime / timeToStoppedOnGround;
+            if(stoppedCounter>1)
+            {
+                ballState = BallState.StoppedOnGround;
+            }
+        }
+        else
+        {
+            stoppedCounter = 0;
         }
     }
 

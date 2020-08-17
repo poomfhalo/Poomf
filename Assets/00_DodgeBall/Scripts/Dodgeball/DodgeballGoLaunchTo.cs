@@ -66,6 +66,7 @@ public class DodgeballGoLaunchTo : DodgeballAction
         {
             Log.Message("Ball Completed Its movement");
             this.SetKinematic(false);
+            rb3d.velocity = d.GetSpeed() * (targetPos - startPos).normalized;
             Cancel();
         }
     }

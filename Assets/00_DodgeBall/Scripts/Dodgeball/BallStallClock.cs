@@ -44,7 +44,7 @@ public class BallStallClock : MonoBehaviour
 
         stallingCounter += Time.deltaTime / stallingTime;
         shakeRateCounter += Time.deltaTime / stallingTime;
-        if(shakeRateCounter>shakeRate)
+        if (shakeRateCounter > shakeRate)
         {
             shakeRateCounter = 0;
             if (IsAtPotentialTeleport())
@@ -67,7 +67,10 @@ public class BallStallClock : MonoBehaviour
         isStaling = false;
 
         if (IsAtPotentialTeleport() && ExtAllowTeleport())
+        {
+            ballShaker.CancelShake();
             transform.position = startPos;
+        }
     }
     private bool IsAtPotentialTeleport()
     {
@@ -77,7 +80,7 @@ public class BallStallClock : MonoBehaviour
 
     private void OnStateUpdated(Dodgeball.BallState state)
     {
-        if (state == Dodgeball.BallState.OnGround)
+        if (state == Dodgeball.BallState.StoppedOnGround)
         {
             isStaling = true;
             stallingCounter = 0;

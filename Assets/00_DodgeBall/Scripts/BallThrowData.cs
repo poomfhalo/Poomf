@@ -4,6 +4,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "BallThrow", menuName = "Dodgeball/BallThrow")]
 public class BallThrowData : ScriptableObject
 {
+    public float GetSpeed() => speed;
+
     public byte id = 0;
     [Tooltip("Usable in GetSpeedOfDist")]
     [SerializeField] float speed = 10;

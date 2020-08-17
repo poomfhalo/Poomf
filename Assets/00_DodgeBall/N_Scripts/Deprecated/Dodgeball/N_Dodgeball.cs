@@ -29,6 +29,7 @@ public class N_Dodgeball : N_Singleton<N_Dodgeball>,IPunObservable
                     break;
                 case Dodgeball.BallState.Held:
                     //syncer.enabled = false;
+                    //TODO: Call this when, the ball is regiestered as actually in hands.
                     this.InvokeDelayed(0.1f, () => transform.localPosition = Vector3.zero);
                     break;
             }

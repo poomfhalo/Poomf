@@ -5,6 +5,7 @@ using GW_Lib;
 
 public class BallShaker : MonoBehaviour
 {
+    [SerializeField] float timeToStartShaking = 1;
     [SerializeField] float shakeDur = 0.15f;
     [SerializeField] int vibrations = 10;
     [SerializeField] Transform target = null;
@@ -19,6 +20,7 @@ public class BallShaker : MonoBehaviour
 
     Coroutine shakeCoro = null;
     List<Tween> tweens = new List<Tween>();
+
     void Reset()
     {
         target = transform;
@@ -40,13 +42,12 @@ public class BallShaker : MonoBehaviour
         target.transform.SetParent(null);
 
         //Debug.Break();
-        shakeCoro = this.InvokeDelayed(1, () => {
+        shakeCoro = (this).InvokeDelayed(timeToStartShaking, () => {
             Tween t = target.DOShakeScale(shakeDur, scaleSTR, vibrations);
             tweens.Add(t);
-            t = target.DOShakePosition(shakeDur, posSTR, vibrations).OnComplete(() => {
-                target.SetParent(oldParent);
-                target.localPosition = startLocalPos;
-                target.localScale = startScale;
+            t = target.DOShakePosition(shakeDur, posSTR, vibrations).OnComplete(() =>
+            {
+                ResetBody();
                 tweens.Clear();
             });
             tweens.Add(t);
@@ -61,6 +62,13 @@ public class BallShaker : MonoBehaviour
 
         tweens.ForEach(t => t.Kill());
         tweens.Clear();
+        ResetBody();
         this.KillCoro(ref shakeCoro);
+    }
+    private void ResetBody()
+    {
+        target.SetParent(oldParent);
+        target.localPosition = startLocalPos;
+        target.localScale = startScale;
     }
 }
