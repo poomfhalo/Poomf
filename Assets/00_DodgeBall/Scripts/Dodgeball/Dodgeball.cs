@@ -67,6 +67,9 @@ public class Dodgeball : Singleton<Dodgeball>
 
     public CollisionDelegator bodyCol = null;
     [SerializeField] float delayedGroundedTime = 0.08f;
+
+    [Header("On Ground Stopping Data")]
+    [SerializeField] float onGroundStoppingSpeed = 0.05f;
     [SerializeField] float timeToStoppedOnGround = 0.1f;
 
     [Header("Read Only")]
@@ -148,14 +151,15 @@ public class Dodgeball : Singleton<Dodgeball>
     {
         if(ballState == BallState.OnGround)
         {
-            if(Mathf.Abs(rb3d.velocity.magnitude) > Mathf.Epsilon)//We Are Moving On Ground
+            float f = rb3d.velocity.magnitude;
+            if (f > onGroundStoppingSpeed)//We Are Moving On Ground
             {
                 stoppedCounter = 0;
                 return;
             }
 
             stoppedCounter += Time.deltaTime / timeToStoppedOnGround;
-            if(stoppedCounter>1)
+            if (stoppedCounter>1)
             {
                 ballState = BallState.StoppedOnGround;
             }

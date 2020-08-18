@@ -11,8 +11,6 @@ public class DodgeballGoLaunchTo : DodgeballAction
 
     public float traveledPercent = 0;
 
-    [Tooltip("Time, before ball can collide again, with physics colliders after being thrown")]
-    [SerializeField] float leavingHandsTime = 0.1f;
     [Header("Read Only")]
     [SerializeField] float tweenerVal = 0;
     public Vector3 lastTargetPos = new Vector3();
@@ -48,7 +46,7 @@ public class DodgeballGoLaunchTo : DodgeballAction
         scheduler.StartAction(this);
         ball.SetKinematic(true);
         ball.ballState = Dodgeball.BallState.Flying;
-        ball.InvokeDelayed(leavingHandsTime, () => ball.bodyCol.GetCollider.enabled = true);
+        ball.bodyCol.GetCollider.enabled = false;
         float dist = Vector3.Distance(rb3d.position, targetPos);
         BallThrowData d = GetComponent<DodgeballThrowSetter>().GetLastSelectedThrowData();
         float time = d.GetTimeOfDist(dist);

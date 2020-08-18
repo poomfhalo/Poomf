@@ -20,7 +20,7 @@ public class DodgeballTrail : MonoBehaviour
             case Dodgeball.BallState.Held:
                 tr.enabled = false;
                 break;
-            case Dodgeball.BallState.OnGround:
+            case Dodgeball.BallState.StoppedOnGround:
                 tr.enabled = false;
                 break;
         }   

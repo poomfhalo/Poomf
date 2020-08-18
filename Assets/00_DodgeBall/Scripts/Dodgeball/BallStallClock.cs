@@ -80,7 +80,7 @@ public class BallStallClock : MonoBehaviour
 
     private void OnStateUpdated(Dodgeball.BallState state)
     {
-        if (state == Dodgeball.BallState.StoppedOnGround)
+        if (state == Dodgeball.BallState.StoppedOnGround && IsAtPotentialTeleport() && ExtAllowTeleport())
         {
             isStaling = true;
             stallingCounter = 0;

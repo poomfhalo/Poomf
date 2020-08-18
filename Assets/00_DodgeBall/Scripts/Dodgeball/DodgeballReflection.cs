@@ -23,18 +23,19 @@ public class DodgeballReflection : DodgeballAction
     [SerializeField] int maxTries = 60;
 
     [Header("Reflection Data")]
+    [Tooltip("The Reflection, will do tis best, so that, the ball, never reaches closer than this distance to the player.")]
+    [SerializeField] float minReflectionDist = 1.35f;
     [Tooltip("-1 means the ball must be exactly in opposite direction of hit character\n" +
-    	"0 means perpindicular to hit character is the maximum direction of reflection\n" +
-    	"1 means the ball have a chance to be reflected at all 360 angles\n" +
-    	"everything else, is in between, depending on value")]
+    "0 means perpindicular to hit character is the maximum direction of reflection\n" +
+    "1 means the ball have a chance to be reflected at all 360 angles\n" +
+    "everything else, is in between, depending on value")]
     [Range(-1, 1)]
     [SerializeField] float collisionDirThreshold = -0.75f;
     [Tooltip("How far the reflection point is")]
-    [SerializeField] MinMaxRange reflectionDist = new MinMaxRange(0.5f, 3, 0.8f, 2.5f);
+    [SerializeField] MinMaxRange reflectionDist = new MinMaxRange(0.5f, 6, 2, 3.5f);
     [Tooltip("the number that the speed of the ball gets divided by")]
-    [SerializeField] MinMaxRange reflectionSpeedDivider = new MinMaxRange(1.1f, 6, 4.5f, 6f);
-    [Tooltip("The Reflection, will do tis best, so that, the ball, never reaches closer than this distance to the player.")]
-    [SerializeField] float minReflectionDist = 1.35f;
+    [SerializeField] MinMaxRange reflectionSpeedDivider = new MinMaxRange(1.1f, 6, 4.5f, 5.5f);
+
 
     [Header("Read Only")]
     public bool extReflectionTest = true;
@@ -181,7 +182,7 @@ public class DodgeballReflection : DodgeballAction
     {
         TryGetCollisionPoint(out Vector3 colPoint);
         Vector3 reflectionDir = (colPoint - rb3d.position).normalized;
-        Vector3 vel = reflectionDir * travelSpeed / reflectionSpeedDivider.GetValue();
+        Vector3 vel = reflectionDir * travelSpeed / GetReflectionSpeedDivider();
 
         lastReflectionVel = vel;
         lastReflectionTarget = colPoint;
@@ -193,7 +194,7 @@ public class DodgeballReflection : DodgeballAction
     {
         int currTries = maxTries;
         Ray ray = new Ray(transform.position, Vector3.down);
-        List<RaycastHit> hits = Physics.RaycastAll(ray, 30).ToList();
+        List<RaycastHit> hits = Physics.RaycastAll(ray, 40).ToList();
         RaycastHit floorHit = hits.Find(h => h.collider.GetComponent<Field>());
 
         do
@@ -204,9 +205,9 @@ public class DodgeballReflection : DodgeballAction
             float z = Mathf.Sin(a);
             Vector3 dir = new Vector3(x, 0, z);
             float dot = Vector3.Dot(dir, travelDir);
-            Vector3 rndPoint = floorHit.point + dir * reflectionDist.GetValue();
+            Vector3 rndPoint = floorHit.point + dir * GetReflectionDist();
 
-            if (dot < collisionDirThreshold)
+            if (dot < GetCollisionDirThreshold())
             {
                 collisionPoint = rndPoint;
                 return true;
@@ -218,7 +219,7 @@ public class DodgeballReflection : DodgeballAction
         flatTravelDir.y = 0;
         flatTravelDir.Normalize();
 
-        Vector3 backUpPos = floorHit.point - flatTravelDir*reflectionDist.GetValue();
+        Vector3 backUpPos = floorHit.point - flatTravelDir* GetReflectionDist();
 
         if(MakesLogSpheres)
             loggedSpheres.Add(Extentions.LogSphere(backUpPos, Color.blue, 0.5f));
@@ -273,5 +274,34 @@ public class DodgeballReflection : DodgeballAction
     public override void Cancel()
     {
         isRunning = false;
+    }
+    private DodgeballReflectionSurface GetLastReflectionSurface()
+    {
+        if(!lastValidHit.collider)
+        {
+            return lastValidHit.collider.GetComponent<DodgeballReflectionSurface>();
+        }
+        return null;
+    }
+    private float GetReflectionSpeedDivider()
+    {
+        DodgeballReflectionSurface surface = GetLastReflectionSurface();
+        if (surface)
+            return surface.GetReflectionSpeedDivider();
+        return reflectionSpeedDivider.GetValue();
+    }
+    private float GetReflectionDist()
+    {
+        DodgeballReflectionSurface surface = GetLastReflectionSurface();
+        if (surface)
+            return surface.GetReflectionDist();
+        return reflectionDist.GetValue();
+    }
+    private float GetCollisionDirThreshold()
+    {
+        DodgeballReflectionSurface surface = GetLastReflectionSurface();
+        if (surface)
+            return surface.GetCollisionDirThreshold();
+        return reflectionDist.GetValue();
     }
 }

@@ -133,7 +133,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPersistant: 0
   bodyCol: {fileID: 1194413654353681384}
-  timeToGrounded: 0.2
+  delayedGroundedTime: 0.08
+  onGroundStoppingSpeed: 0.05
+  timeToStoppedOnGround: 0.1
   m_ballState: 2
 --- !u!114 &5475323293589320073
 MonoBehaviour:
@@ -149,7 +151,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isRunning: 0
   traveledPercent: 0
-  leavingHandsTime: 0.1
   tweenerVal: 0
   lastTargetPos: {x: 0, y: 0, z: 0}
   lastAppliedThrow: 0
@@ -199,7 +200,7 @@ MonoBehaviour:
   isRunning: 0
   autoActivate: 1
   castDist: 10
-  reflectionFramesPrediction: 1
+  reflectionFramesPrediction: 2
   fpsType: 0
   maxTries: 60
   collisionDirThreshold: -0.75
