@@ -25,12 +25,14 @@ public class CharaSlot : MonoBehaviour
     [PunRPC]
     public void SetUp(string playerName,int id)
     {
-        name = playerName + "_" + id;
+        //name = playerName + "_" + id;
+        GetComponent<DodgeballCharacter>().SetName(playerName + "_" + id);
         this.id = id;
         wasSetUp = true;
 
         activeSlot = DodgeballGameManager.instance.gameSlotsData.GetData(id);
         CharaPath path = GameExtentions.GetPath(id, PathType.GameStartPath, 0);
         path.Fill();
+        print("Set Up Chara Slot ? With ID " + id);
     }
 }

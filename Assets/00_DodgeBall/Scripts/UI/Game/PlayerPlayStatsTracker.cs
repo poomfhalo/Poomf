@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-public class PlayerPlayStatsTracker : PlayerPlayStatsDisplayer
+﻿public class PlayerPlayStatsTracker : PlayerPlayStatsDisplayer
 {
     int localPlayerID = 0;
     PlayerRoundStatsCollector collector = null;
@@ -18,7 +16,16 @@ public class PlayerPlayStatsTracker : PlayerPlayStatsDisplayer
     private void OnGameStatred()
     {
         localPlayerID = PlayersRunDataSO.Instance.localPlayerID;
-        collector = FindObjectsOfType<CharaSlot>().ToList().Find(c => c.GetID == localPlayerID).GetComponent<PlayerRoundStatsCollector>();
+        print("Local Player ID " + localPlayerID);
+        foreach (var chara in TeamsManager.instance.AllCharacters)
+        {
+            print("Found Character Of ID " + chara.GetID());
+            if(localPlayerID == chara.GetID())
+            {
+                collector = chara.GetComponent<PlayerRoundStatsCollector>();
+                break;
+            }
+        }
         collector.OnDataUpdated += ()=> RefreshByData(collector.GetRoundStats);
     }
 }

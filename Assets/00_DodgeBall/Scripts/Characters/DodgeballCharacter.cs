@@ -3,14 +3,16 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public enum DodgeballCharaCommand { MoveInput, Friendly, Enemy, BallAction, Dodge, FakeFire, Jump,
+public enum DodgeballCharaCommand
+{
+    MoveInput, Friendly, Enemy, BallAction, Dodge, FakeFire, Jump,
     PushBall,
     PathFollow,
     BraceForBallReciption,
     ReleaseFromBallReciptionBrace,
 
-    EnableBallReciption,DisableBallReciption,
-    EnableHitDetection,DisableHitDetection
+    EnableBallReciption, DisableBallReciption,
+    EnableHitDetection, DisableHitDetection
 }
 
 [RequireComponent(typeof(Animator))]
@@ -66,6 +68,7 @@ public class DodgeballCharacter : MonoBehaviour
     protected CharaFeet feet = null;
     protected PathFollower pathFollower = null;
     protected CharaKnockoutPlayer knockedOut = null;
+    protected CharaSlot charaSlot = null;
 
     protected virtual void Reset()
     {
@@ -90,13 +93,14 @@ public class DodgeballCharacter : MonoBehaviour
         feet = GetComponentInChildren<CharaFeet>();
         pathFollower = GetComponent<PathFollower>();
         knockedOut = GetComponent<CharaKnockoutPlayer>();
+        charaSlot = GetComponent<CharaSlot>();
 
         SetTeam(team);
 
         selectionIndicator.SetOwner(this);
         selectionIndicator.SetFocus(null);
 
-        if(feet)
+        if (feet)
             feet.SetUp(this);
         if (grabber)
             grabber.onBallInHands += OnBallInHands;
@@ -106,7 +110,7 @@ public class DodgeballCharacter : MonoBehaviour
     }
     void OnDestroy()
     {
-        if(TeamsManager.instance)
+        if (TeamsManager.instance)
             TeamsManager.GetTeam(this).Leave(this);
     }
     public void SetTeam(TeamTag team)
@@ -138,7 +142,7 @@ public class DodgeballCharacter : MonoBehaviour
             return;
         if (IsBeingHurt)
             return;
-        if(cam)
+        if (cam)
             mover.StartMoveByInput(i, cam.transform);
         OnCommandActivated?.Invoke(DodgeballCharaCommand.MoveInput);
     }
@@ -169,7 +173,7 @@ public class DodgeballCharacter : MonoBehaviour
 
         if (reciever.IsDetecting)
             return;//Recieving is handled in its own update
-        
+
         if (!HasBall && IsBallInGrabZone)
         {
             grabber.StartCatchAction();
@@ -264,9 +268,9 @@ public class DodgeballCharacter : MonoBehaviour
     /// <param name="path">Path.</param>
     /// <param name="isLooping">If set to <c>true</c> is looping.</param>
     /// <param name="stopTimeAtPoint">Stop time at point, -1 means we do not stop at any point.</param>
-    public void C_PathFollow(CharaPath path,bool isLooping,float stopTimeAtPoint)
+    public void C_PathFollow(CharaPath path, bool isLooping, float stopTimeAtPoint)
     {
-        pathFollower.StartFollowAction(path,isLooping,stopTimeAtPoint);
+        pathFollower.StartFollowAction(path, isLooping, stopTimeAtPoint);
         OnCommandActivated?.Invoke(DodgeballCharaCommand.PathFollow);
     }
     #endregion
@@ -274,10 +278,10 @@ public class DodgeballCharacter : MonoBehaviour
     public Vector3 PrepareForGame()
     {
         CharaSlot slot = GetComponent<CharaSlot>();
-        CharaPath s = GameExtentions.GetPath(slot.GetID, PathType.GameStartPath, -1);
+        CharaPath s = GameExtentions.GetPath(GetID(), PathType.GameStartPath, -1);
         Vector3 pos = s.position;
         Quaternion rot = s.rotation;
-        if(!MatchState.Instance.IsFirstRound)
+        if (!MatchState.Instance.IsFirstRound)
         {
             pos = s.finalPosition;
             rot = s.finalRotation;
@@ -290,4 +294,20 @@ public class DodgeballCharacter : MonoBehaviour
         SetTeam(slot.GetTeam);
         return s.position;
     }
+
+    public void SetName(string v) => name = v;
+
+    public Func<int> GetID
+    {
+        set { getID = value; }
+        get
+        {
+            if(getID == null)
+            {
+                return () => charaSlot.GetID;
+            }
+            return getID;
+        }
+    }
+    Func<int> getID = null;
 }

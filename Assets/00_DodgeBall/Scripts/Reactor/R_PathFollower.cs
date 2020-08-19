@@ -38,7 +38,7 @@ public class R_PathFollower : Reaction
         List<bool> oldStates = new List<bool>();
         foreach (var pathData in pathsDatas)
         {
-            CharaController controller = GameExtentions.GetCharaOfSlot(pathData.slotToMove);
+            CharaController controller = GameExtentions.GetCharaOfID(pathData.slotToMove);
             if (controller == null)
                 continue;
 

@@ -68,6 +68,7 @@ public class N_PC : MonoBehaviour,IPunObservable
             GetComponent<PlayerStallClock>().ExtAllowForcedThrow = () => false;
         }
 
+        chara.GetID = () => pv.Controller.ActorNumber;
         chara.launcher.ExtThrowCondition = PhotonNetwork.IsMasterClient;
         chara.launcher.E_OnBallLaunchedSafely += OnBallLaunchedSafely;
         chara.launcher.E_OnThrowPointReached += OnThrowPointReached;
@@ -86,7 +87,7 @@ public class N_PC : MonoBehaviour,IPunObservable
     {
         this.actorID = actorID;
         gameObject.SetActive(false);
-        name = pv.Controller.NickName + "_" + actorID;
+        chara.SetName(pv.Controller.NickName + "_" + actorID);
     }
     [PunRPC]//Called In N_GameManager
     private void PrepareForGame()
@@ -277,7 +278,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         netPos.x = currX;
         netPos.z = currZ;
 
-        int slotID = GetComponent<CharaSlot>().GetID;
+        int slotID = chara.GetID();
         CharaPath path = GameExtentions.GetPath(slotID, (PathType)pathTag, pathName);
         chara.C_PathFollow(path,isLooping,stopTimeAtPoint);
     }

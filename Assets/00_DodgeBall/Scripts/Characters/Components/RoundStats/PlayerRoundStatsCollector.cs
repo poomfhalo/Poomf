@@ -14,14 +14,12 @@ public class PlayerRoundStatsCollector : MonoBehaviour
     DodgeballCharacter chara = null;
     BallLauncher launcher = null;
     CharaHitPoints hp = null;
-    int charaID = 0;
 
     void Start()
     {
         chara = GetComponent<DodgeballCharacter>();
         launcher = GetComponent<BallLauncher>();
         hp = GetComponent<CharaHitPoints>();
-        charaID = GetComponent<CharaSlot>().GetID;
 
         launcher.E_OnThrowPointReached += OnThrowPointReached;
         hp.OnZeroHP += OnZeroHp;
@@ -34,7 +32,7 @@ public class PlayerRoundStatsCollector : MonoBehaviour
         PlayerPlayStatsGameHolder holder = PlayerPlayStatsGameHolder.instance;
 
         if(holder)
-            holder.AddStats(charaID, roundStats);
+            holder.AddStats(chara.GetID(), roundStats);
     }
 
     private void OnThrowPointReached()

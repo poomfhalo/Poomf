@@ -82,9 +82,9 @@ public static class GameExtentions
         ps?.Play(true);
         return copy;
     }
-    public static CharaController GetCharaOfSlot(int slotID)
+    public static CharaController GetCharaOfID(int charaID)
     {
-        CharaSlot charaSlot = UnityEngine.Object.FindObjectsOfType<CharaSlot>().ToList().Find(s => s.GetID == slotID);
+        DodgeballCharacter charaSlot = UnityEngine.Object.FindObjectsOfType<DodgeballCharacter>().ToList().Find(c=>c.GetID()==charaID);
         if (charaSlot)
             return charaSlot.GetComponent<CharaController>();
 
@@ -117,7 +117,7 @@ public static class GameExtentions
 
         foreach (var slot in slots)
         {
-            CharaController chara = GetCharaOfSlot(slot);
+            CharaController chara = GetCharaOfID(slot);
             if (chara == null)
                 continue;
 
