@@ -9,7 +9,22 @@ public class N_MatchStarter : MonoBehaviourPunCallbacks
 {
     [SerializeField] MatchTypeSelector matchSelector = null;
     public event Action onStartGame = null;
-    bool reachedMaxPlayers => PhotonNetwork.InRoom && PhotonNetwork.PlayerList.Length >= PhotonNetwork.CurrentRoom.MaxPlayers;
+    bool reachedMaxPlayers
+    {
+        get
+        {
+            bool v = PhotonNetwork.InRoom && PhotonNetwork.PlayerList.Length >= PhotonNetwork.CurrentRoom.MaxPlayers;
+            if(!PhotonNetwork.InRoom)
+            {
+                Log.LogL0("Not In Room");
+            }
+            if(PhotonNetwork.PlayerList.Length<PhotonNetwork.CurrentRoom.MaxPlayers)
+            {
+                Log.LogL0("Still not enough players in the room, we want " + PhotonNetwork.CurrentRoom.MaxPlayers + " But we have " + PhotonNetwork.PlayerList.Length);
+            }
+            return v;
+        }
+    }
 
     public void CancelSearch()//Called, once we want to stop searching for the targeted match
     {
@@ -41,7 +56,8 @@ public class N_MatchStarter : MonoBehaviourPunCallbacks
     {
         Log.Message("Joined room " + PhotonNetwork.CurrentRoom.Name);
         PhotonNetwork.AutomaticallySyncScene = true;
-        if (reachedMaxPlayers)
+
+        if (reachedMaxPlayers && PhotonNetwork.IsMasterClient)
         {
             onStartGame?.Invoke();
         }

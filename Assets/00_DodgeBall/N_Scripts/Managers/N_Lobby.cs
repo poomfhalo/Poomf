@@ -5,6 +5,7 @@ using Photon.Pun;
 using TMPro;
 using GW_Lib;
 using System;
+using System.Collections;
 
 //this Must be placed on a game object that is always active, in the Menu Scene.
 //this component, must also never be disabled. 
@@ -16,6 +17,9 @@ public class N_Lobby : MonoBehaviourPunCallbacks
     [SerializeField] RegionSelector regionSelector = null;
     [SerializeField] MatchTypeSelector matchTypeSelector = null;
     [SerializeField] PracticeMenu practiceMenu = null;
+
+    [Header("Read Only")]
+    [SerializeField] GameObject onSpreadLocalData = null;
 
     N_MatchStarter matchStarter = null;
     bool wasReadyClicked = false;
@@ -38,7 +42,7 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         PhotonNetwork.NickName = n;
 
         matchStarter = GetComponent<N_MatchStarter>();
-        matchStarter.onStartGame += SpreadLocalData;
+        matchStarter.onStartGame += OnStartGame;
         PhotonNetwork.AddCallbackTarget(this);
     }
 
@@ -110,8 +114,17 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         ready.gameObject.SetActive(false);
         findingPlayers.gameObject.SetActive(true);
     }
+
+    private void OnStartGame()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+        photonView.RPC("SpreadLocalData", RpcTarget.AllViaServer);
+    }
+    [PunRPC]
     private void SpreadLocalData()
     {
+        onSpreadLocalData.SetActive(true);
         PlayersRunDataSO data = PlayersRunDataSO.Instance;
         data.ClearOtherPlayersData();//TODO: Consider Deleting this line?
 
@@ -134,6 +147,7 @@ public class N_Lobby : MonoBehaviourPunCallbacks
             photonView.RPC("RecieveLocalData", RpcTarget.AllViaServer, PhotonNetwork.LocalPlayer.ActorNumber, data.localPlayerName,
                 plain.types, plain.ids, plain.reds, plain.greens, plain.blues, plain.colorIndicies, plain.texesIndicies);
         }
+
         this.InvokeDelayed(3, SendLocalData);
     }
     [PunRPC]
@@ -154,7 +168,13 @@ public class N_Lobby : MonoBehaviourPunCallbacks
         data.AddPlayerRunData(actorID, plainSkin, playerName);
 
         if (PhotonNetwork.PlayerList.Length == data.playersRunData.Count)
+        {
             GoToRoom();
+        }
+        else
+        {
+            Debug.Log("Players Count " + PhotonNetwork.PlayerList.Length + " But, Recieved Skins Data Is " + data.playersRunData.Count);
+        }
     }
     private void GoToRoom()
     {

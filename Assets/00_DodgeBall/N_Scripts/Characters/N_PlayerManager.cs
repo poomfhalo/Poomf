@@ -42,11 +42,13 @@ public class N_PlayerManager : MonoBehaviourPunCallbacks
         if (pc == null)
         {
             pc = N_Extentions.GetCharacter(GetComponent<PhotonView>().Controller.ActorNumber).gameObject;
-
             PlayersRunDataSO dataSO = PlayersRunDataSO.Instance;
             PlayerRunData data = dataSO.GetPlayerRunData(photonView.ControllerActorNr);
             CharaSkinData skinData = data.charaSkinData.CreateSkinData();
-            pc.GetComponentInChildren<CustomizablePlayer>().SetNewSkinData(skinData);
+
+            CustomizablePlayer customizablePlayer = pc.GetComponentInChildren<CustomizablePlayer>();
+            customizablePlayer.extLoadOnStart = false;
+            customizablePlayer.SetNewSkinData(skinData);
 
             Log.Message("Applying skin data " + skinData + " to " + data.charaName);
         }

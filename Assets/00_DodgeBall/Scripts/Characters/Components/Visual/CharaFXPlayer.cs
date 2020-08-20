@@ -108,11 +108,16 @@ public class CharaFXPlayer : MonoBehaviour
     public void A_LeftStep()
     {
         Transform fx = PlayVFX(vOnStep, true, 5);
+        if (fx == null)
+            return;
+
         fx.transform.position = leftFoot.position;
     }
     public void A_RightStep()
     {
         Transform fx = PlayVFX(vOnStep, true, 5);
+        if (fx == null)
+            return;
         fx.transform.position = rightFoot.position;
     }
 }
