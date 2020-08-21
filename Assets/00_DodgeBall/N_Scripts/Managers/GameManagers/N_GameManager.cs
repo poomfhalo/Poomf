@@ -135,8 +135,8 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
             CharaPath s = GameExtentions.GetSpawnPosition(t);
             CharaSlot p = N_TeamsManager.GetPlayer(player.ActorNumber).GetComponent<CharaSlot>();
 
-            p.SetUp(p.name,s.SlotId);
-            p.GetComponent<PhotonView>().RPC("SetUp", RpcTarget.Others, p.name, s.SlotId);
+            p.SetUp(s.SlotId);
+            p.GetComponent<PhotonView>().RPC("SetUp", RpcTarget.Others, s.SlotId);
         }
     }
     private void M_PreparePlayersForGame()
@@ -158,6 +158,12 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
         this.InvokeDelayed(0.5f, GameIntroManager.instance.StartGame);
         MatchStateManager.instance.PrerpareForGame();
         DodgeballGameManager.PrepareForGame(N_TeamsManager.GetLocalPlayer());
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            DodgeballCharacter chara = N_TeamsManager.GetPlayer(player.ActorNumber).GetComponent<DodgeballCharacter>();
+            string playerObjName = player.NickName + "_" + chara.GetID();
+            chara.SetName(playerObjName);
+        }
     }
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {

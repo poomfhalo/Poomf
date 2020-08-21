@@ -127,7 +127,7 @@ public class CharaKnockoutPlayer : MonoBehaviour
     private void GoToWaitField()
     {
         DisableRagDoll();
-        CharaPath path = GameExtentions.GetPath(chara.GetID(), PathType.OutPath, -1);
+        CharaPath path = GameExtentions.GetPath(chara.GetSlotID(), PathType.OutPath, -1);
         transform.position = path.position;
         transform.rotation = path.rotation;
         ragDollHead.gameObject.SetActive(true);

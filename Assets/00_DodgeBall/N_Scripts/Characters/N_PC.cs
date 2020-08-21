@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class N_PC : MonoBehaviour,IPunObservable
 {
-    public int CreatorViewID => actorID;
     public int ActorID => pv.Controller.ActorNumber;
-    [SerializeField] int actorID = 0;
     [SerializeField] float afterDodgeMovementBlock = 0.1f;
     [SerializeField] float safeThrowPercentThreshold = 0.15f;
 
@@ -55,9 +53,9 @@ public class N_PC : MonoBehaviour,IPunObservable
         chara = GetComponent<DodgeballCharacter>();
         if (pv.IsMine)
         {
-            chara.OnCommandActivated += SendMyCommand;
             chara.GetComponent<Mover>().movementType = Mover.MovementType.ByInput;
             GetComponent<CharaController>().moveTypeOnUnlock = Mover.MovementType.ByInput;
+            chara.OnCommandActivated += SendMyCommand;
         }
         else
         {
@@ -82,13 +80,6 @@ public class N_PC : MonoBehaviour,IPunObservable
         chara.launcher.E_OnThrowPointReached -= OnThrowPointReached;
     }
 
-    [PunRPC]//Called In N_PlayerManager
-    private void OnCreated(int actorID)//TODO:Consider Removal
-    {
-        this.actorID = actorID;
-        gameObject.SetActive(false);
-        chara.SetName(pv.Controller.NickName + "_" + actorID);
-    }
     [PunRPC]//Called In N_GameManager
     private void PrepareForGame()
     {
@@ -278,7 +269,7 @@ public class N_PC : MonoBehaviour,IPunObservable
         netPos.x = currX;
         netPos.z = currZ;
 
-        int slotID = chara.GetID();
+        int slotID = chara.GetSlotID();
         CharaPath path = GameExtentions.GetPath(slotID, (PathType)pathTag, pathName);
         chara.C_PathFollow(path,isLooping,stopTimeAtPoint);
     }

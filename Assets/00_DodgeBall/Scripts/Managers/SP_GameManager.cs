@@ -20,9 +20,6 @@ public class SP_GameManager : MonoBehaviour
     }
     void Start()
     {
-        //var p = FindObjectsOfType<TaggedSpawnPoint>().ToList().Find(s => s.HasTag("MainCamera") && s.BelongsTo(team.teamTag));
-        //p.GetComponent<Cinemachine.CinemachineVirtualCamera>().Priority = 15;
-
         PlayersRunDataSO data = PlayersRunDataSO.Instance;
         foreach (var d in data.playersRunData)
         {
@@ -33,17 +30,26 @@ public class SP_GameManager : MonoBehaviour
                 createdCharacter = Instantiate(aiChara).GetComponent<DodgeballCharacter>();
 
             CharaSlot cs = createdCharacter.GetComponent<CharaSlot>();
-            cs.setActiveOnStart = false;
-            cs.SetUp(d.charaName, d.actorID);
+            cs.setActiveOnStart = false; 
+            cs.SetUp(d.actorID);
+
             createdCharacter.PrepareForGame();
+            createdCharacter.SetName(d.charaName + "_" + createdCharacter.GetID());
 
             CustomizablePlayer cp = createdCharacter.GetComponentInChildren<CustomizablePlayer>();
             createdCharacter.GetComponentInChildren<CustomizablePlayer>().extLoadOnStart = false;
             cp.SetNewSkinData(d.charaSkinData.CreateSkinData());
         }
 
+        DodgeballCharacter localPlayer = FindObjectOfType<PC>().chara;
+
         MatchStateManager.instance.PrerpareForGame();
-        DodgeballGameManager.PrepareForGame(FindObjectOfType<PC>().chara);
+        DodgeballGameManager.PrepareForGame(localPlayer);
+
+        TeamTag localPlayerTeam = TeamsManager.GetTeam(localPlayer).teamTag;
+        var p = FindObjectsOfType<TaggedSpawnPoint>().ToList().Find(s => s.HasTag("MainCamera") && s.BelongsTo(localPlayerTeam));
+        p.GetComponent<Cinemachine.CinemachineVirtualCamera>().Priority = 15;
+
         this.InvokeDelayed(0.5f, GameIntroManager.instance.StartGame);
     }
 }

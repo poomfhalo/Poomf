@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class CharaSlot : MonoBehaviour
 {
-    public int GetID => activeSlot.id;
+    public int GetSlotID => activeSlot.id;
+
     public TeamTag GetTeam => activeSlot.team;
     public bool setActiveOnStart = true;
     [Tooltip("To be Set Manually in SinglePlayer, and set up by code in multiplayer")]
@@ -17,22 +18,20 @@ public class CharaSlot : MonoBehaviour
     {
         if (setActiveOnStart)
         {
-            SetUp(name, id);
+            SetUp(id);
             GetComponent<DodgeballCharacter>().PrepareForGame();
         }
     }
 
     [PunRPC]
-    public void SetUp(string playerName,int id)
+    public void SetUp(int id)
     {
-        //name = playerName + "_" + id;
-        GetComponent<DodgeballCharacter>().SetName(playerName + "_" + id);
         this.id = id;
         wasSetUp = true;
 
         activeSlot = DodgeballGameManager.instance.gameSlotsData.GetData(id);
         CharaPath path = GameExtentions.GetPath(id, PathType.GameStartPath, 0);
         path.Fill();
-        print("Set Up Chara Slot ? With ID " + id);
+        print("Set Up Chara Slot ? With path ID " + id);
     }
 }

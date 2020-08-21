@@ -278,7 +278,7 @@ public class DodgeballCharacter : MonoBehaviour
     public Vector3 PrepareForGame()
     {
         CharaSlot slot = GetComponent<CharaSlot>();
-        CharaPath s = GameExtentions.GetPath(GetID(), PathType.GameStartPath, -1);
+        CharaPath s = GameExtentions.GetPath(GetSlotID(), PathType.GameStartPath, -1);
         Vector3 pos = s.position;
         Quaternion rot = s.rotation;
         if (!MatchState.Instance.IsFirstRound)
@@ -304,10 +304,11 @@ public class DodgeballCharacter : MonoBehaviour
         {
             if(getID == null)
             {
-                return () => charaSlot.GetID;
+                return () => charaSlot.GetSlotID;
             }
             return getID;
         }
     }
     Func<int> getID = null;
+    public int GetSlotID() => charaSlot.GetSlotID;
 }
