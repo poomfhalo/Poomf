@@ -21,7 +21,8 @@ namespace Poomf.UI
         [SerializeField] Text currentSortText = null;
         [Header("Sort by Set")]
         [SerializeField] GameObject setSortPanel = null;
-        [SerializeField] Transform setsContentParent = null;
+        [SerializeField] Transform setHeadsContentParent = null;
+        [SerializeField] Transform setBodiesContentParent = null;
         [SerializeField] GameObject itemSetPrefab = null;
 
         public List<ItemSetUI> ItemSets { get; private set; } = new List<ItemSetUI>();
@@ -36,18 +37,31 @@ namespace Poomf.UI
                 // Dont create a set for items without sets
                 if ((ItemSet)i == ItemSet.NONE)
                     continue;
-                List<InventoryItem> itemsInSet = items.FindAll(x => x.ItemSet == (ItemSet)i);
-                if (itemsInSet.Count == 0)
-                {
-                    // No items belonging to this set, skip
-                    continue;
-                }
-                GameObject set = Instantiate(itemSetPrefab, setsContentParent);
-                ItemSetUI setUI = set.GetComponent<ItemSetUI>();
-                ItemSets.Add(setUI);
 
-                // Add the relevant items to that set
-                setUI.Initialize(itemsInSet);
+                // Create a set for Heads    
+                List<InventoryItem> itemsInSet = items.FindAll(x => x.ItemSet == (ItemSet)i && x.ItemType == ItemCategory.Head);
+                if (itemsInSet.Count != 0)
+                {
+                    GameObject set = Instantiate(itemSetPrefab, setHeadsContentParent);
+                    ItemSetUI setUI = set.GetComponent<ItemSetUI>();
+                    ItemSets.Add(setUI);
+
+                    // Add the relevant items to that set
+                    setUI.Initialize(itemsInSet);
+                }
+
+                // Create a set for Bodies
+                itemsInSet = items.FindAll(x => x.ItemSet == (ItemSet)i && x.ItemType == ItemCategory.Body);
+                if (itemsInSet.Count != 0)
+                {
+                    GameObject set = Instantiate(itemSetPrefab, setBodiesContentParent);
+                    ItemSetUI setUI = set.GetComponent<ItemSetUI>();
+                    ItemSets.Add(setUI);
+
+                    // Add the relevant items to that set
+                    setUI.Initialize(itemsInSet);
+                }
+
             }
 
             SortMethodsCount = Enum.GetNames(typeof(SortMethod)).Length;
@@ -94,7 +108,7 @@ namespace Poomf.UI
             {
                 for (int j = 0; j < itemsToSort.Count; j++)
                 {
-                    if (itemsToSort[j].ItemSet == ItemSets[i].Set || ItemSets[i].SetName == string.Empty)
+                    if (itemsToSort[j].ItemSet == ItemSets[i].Set && itemsToSort[j].ItemType == ItemSets[i].Category)
                     {
                         ItemSets[i].AttachItem(itemsToSort[j]);
                     }

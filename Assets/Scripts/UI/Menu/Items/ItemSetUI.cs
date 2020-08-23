@@ -17,11 +17,13 @@ namespace Poomf.UI
         List<InventoryItem> itemsInSet = null;
         public string SetName { get { return setNameText.text; } }
         public ItemSet Set { get; private set; }
+        public ItemCategory Category { get; private set; }
 
         public void Initialize(List<InventoryItem> items)
         {
             itemsInSet = items;
             Set = items[0].ItemSet;
+            Category = items[0].ItemType;
             setNameText.text = Set.ToString();
             UpdateItemsCount();
             UpdateSetPrice();
