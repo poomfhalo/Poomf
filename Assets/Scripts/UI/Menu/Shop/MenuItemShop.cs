@@ -5,13 +5,9 @@ using Poomf.Data;
 
 namespace Poomf.UI
 {
-    public class MenuItemShop : MenuItemBase
+    public class MenuItemShop : MenuItemInventory
     {
         [SerializeField] private MenuNavigator mainmenuNavigator = null;
-        [SerializeField] private Transform storeContent = null;
-        [SerializeField] private GameObject storeItemPrefab = null;
-        // TODO : For testing, to be removed.
-        [SerializeField] private ItemDataBase[] testItemData = null;
 
         private bool initialized = false;
 
@@ -39,12 +35,12 @@ namespace Poomf.UI
         {
             if (true == initialized) return;
 
-            populateStoreItems();
+            //populateStoreItems();
             initialized = true;
         }
 
         // Shop isn't functional right now
-        private void populateStoreItems()
+        protected override void Populate()
         {
             /*if (null == storeItemPrefab || null == testItemData || 0 == testItemData.Length) return;
 

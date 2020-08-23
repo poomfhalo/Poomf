@@ -5403,7 +5403,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2441784210527688612}
   m_HandleRect: {fileID: 5536694302586765871}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -5437,7 +5437,7 @@ RectTransform:
   m_GameObject: {fileID: 7116790465877505198}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 1, z: 1}
   m_Children:
   - {fileID: 3118708671063148164}
   - {fileID: 521307162518267035}
@@ -5463,10 +5463,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultMenuButton: {fileID: 0}
   defaultCamera: {fileID: 0}
-  zoomedInCamera: {fileID: 0}
-  itemSorter: {fileID: 6038559767496305243}
-  lockerItemPrefab: {fileID: 6620272214087058705, guid: b1bcb4d28ddb82a4e808eb79577f1f5a,
+  inventoryItemPrefab: {fileID: 6620272214087058705, guid: b1bcb4d28ddb82a4e808eb79577f1f5a,
     type: 3}
+  itemSorter: {fileID: 6038559767496305243}
+  zoomedInCamera: {fileID: 0}
   zoomButtonImage: {fileID: 1357994803}
   zoomInSprite: {fileID: 21300000, guid: f69c2864b04b44c6bb95a43aa2b0600f, type: 3}
   zoomOutSprite: {fileID: 21300000, guid: 615947e3dc74541e79d8b7e3051ff9a1, type: 3}
@@ -5553,7 +5553,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -76.53, y: -0.00008709987}
+  m_AnchoredPosition: {x: -76.53, y: -0.00002914598}
   m_SizeDelta: {x: 76.53003, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &638546235400208865

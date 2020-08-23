@@ -5,16 +5,12 @@ using Poomf.Data;
 using Cinemachine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Poomf.UI
 {
-    public class MenuItemLocker : MenuItemBase
+    public class MenuItemLocker : MenuItemInventory
     {
         [SerializeField] CinemachineVirtualCamera zoomedInCamera = null;
-        [SerializeField] ItemSorter itemSorter = null;
-        [SerializeField] GameObject lockerItemPrefab = null;
         [Header("UI")]
         [SerializeField] Image zoomButtonImage = null;
         [SerializeField] Sprite zoomInSprite = null;
@@ -26,14 +22,11 @@ namespace Poomf.UI
         [SerializeField] CustomizablePlayer customizablePlayer = null;
         [SerializeField] List<MenuLockerColorOption> colorControlMenus = null;
 
-        List<HeadItemData> headsList = new List<HeadItemData>();
-        List<BodyItemData> bodiesList = new List<BodyItemData>();
-        List<InventoryItem> inventoryItems = new List<InventoryItem>();
         InventoryItem currentHead = null;
         InventoryItem currentBody = null;
         bool initialized = false;
         bool zoomedIn = false;
-        SortMethod currentSort = SortMethod.Rarity;
+        bool populated = false;
 
         CharaSkinData skinData => customizablePlayer.GetSkinData;
 
@@ -61,8 +54,6 @@ namespace Poomf.UI
         {
             if (true == initialized) return;
 
-            LoadItemsData();
-            //populateLockerItems();
             // Make sure the zoom button has the zoom in image
             zoomButtonImage.sprite = zoomInSprite;
             // Make sure zoomed in is false
@@ -74,10 +65,11 @@ namespace Poomf.UI
                 colorControlMenus[i].Initialize(skinData);
         }
 
-        private void populateLockerItems()
+        protected override void Populate()
         {
-            if (null == lockerItemPrefab || null == bodiesList || 0 == bodiesList.Count || null == headsList || 0 == headsList.Count) return;
+            if (true == populated || null == inventoryItemPrefab || null == bodiesList || 0 == bodiesList.Count || null == headsList || 0 == headsList.Count) return;
 
+            populated = true;
             // Initialize the bodies
             int itemsCount = bodiesList.Count;
 
@@ -87,7 +79,7 @@ namespace Poomf.UI
                 // Create an "inventory item" for each variant
                 for (int j = 0; j < itemData.GetVariantsCount(); j++)
                 {
-                    GameObject newItem = Instantiate(lockerItemPrefab);
+                    GameObject newItem = Instantiate(inventoryItemPrefab);
                     InventoryItem item = newItem.GetComponent<InventoryItem>();
                     inventoryItems.Add(item);
                     if (null == item) return;
@@ -132,7 +124,7 @@ namespace Poomf.UI
                     // Create an "inventory item" for each variant
                     for (int j = 0; j < variantData.GetVariantsCount(); j++)
                     {
-                        GameObject newItem = Instantiate(lockerItemPrefab);
+                        GameObject newItem = Instantiate(inventoryItemPrefab);
                         InventoryItem item = newItem.GetComponent<InventoryItem>();
                         inventoryItems.Add(item);
                         if (null == item) return;
@@ -149,7 +141,7 @@ namespace Poomf.UI
                 else
                 {
                     // Create 1 inventory item only
-                    GameObject newItem = Instantiate(lockerItemPrefab);
+                    GameObject newItem = Instantiate(inventoryItemPrefab);
                     InventoryItem item = newItem.GetComponent<InventoryItem>();
                     inventoryItems.Add(item);
                     if (null == item) return;
@@ -190,7 +182,7 @@ namespace Poomf.UI
             }
         }
 
-        public void OnInventoryItemButtonPressed()
+        public override void OnInventoryItemButtonPressed()
         {
             // Get the currently selected inventory item
             InventoryItem selectedItem = EventSystem.current.currentSelectedGameObject.GetComponent<InventoryItem>();
@@ -239,47 +231,5 @@ namespace Poomf.UI
             SaveManager.SaveData(SaveManager.charaSkinKey, skinData, SaveManager.relativeSkinDataPath);
             AccountManager.SyncCharaSkinData().WrapErrors();
         }
-
-        public void OnSortButtonPressed()
-        {
-            // Use the next sorting method
-            currentSort++;
-            if ((int)currentSort >= itemSorter.SortMethodsCount)
-            {
-                // Use the first sorting method
-                currentSort = 0;
-            }
-
-            itemSorter.Sort(inventoryItems, currentSort);
-        }
-
-        #region Addressables and their Delegates
-        // Callback that's called each time a body data is loaded
-        event System.Action<BodyItemData> onBodyLoaded;
-        // Callback that's called each time a head data is loaded
-        event System.Action<HeadItemData> onHeadLoaded;
-        void LoadItemsData()
-        {
-            // Add events
-            onBodyLoaded += OnBodyLoaded;
-            onHeadLoaded += OnHeadLoaded;
-            // Load the heads data
-            Addressables.LoadAssetsAsync<HeadItemData>("Heads Data", onHeadLoaded);
-            // Load the bodies data
-            Addressables.LoadAssetsAsync<BodyItemData>("Bodies Data", onBodyLoaded).Completed += operation =>
-            {
-                // All data has been loaded, populate the locker
-                populateLockerItems();
-            };
-        }
-        void OnBodyLoaded(BodyItemData body)
-        {
-            bodiesList.Add(body);
-        }
-        void OnHeadLoaded(HeadItemData head)
-        {
-            headsList.Add(head);
-        }
-        #endregion
     }
 }
