@@ -32,6 +32,9 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     [SerializeField] int sendRate = 20;
     [SerializeField] int serializationRate = 10;
 
+    int startSendRate = 0;
+    int startSerilizationRate = 0;
+
     #region UnityFunctions
     void Reset()
     {
@@ -50,6 +53,9 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
 
         N_Extentions.prefabs = prefabs;
 
+        startSendRate = PhotonNetwork.SendRate;
+        startSerilizationRate = PhotonNetwork.SendRate;
+
         PhotonNetwork.SendRate = sendRate;
         PhotonNetwork.SerializationRate = serializationRate;
     }
@@ -65,6 +71,9 @@ public class N_GameManager : N_Singleton<N_GameManager>, IOnEventCallback,IPunOb
     }
     protected override void OnDestroy()
     {
+        PhotonNetwork.SendRate = startSendRate;
+        PhotonNetwork.SerializationRate = startSerilizationRate;
+
         base.OnDestroy();
         OnTeamsAreSynced = null;
     }

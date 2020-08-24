@@ -351,6 +351,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3547511847683840753}
     m_Modifications:
+    - target: {fileID: -2047075410022130468, guid: 81471eb919ea089209404664737f46be,
+        type: 3}
+      propertyPath: sendRate
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: -2047075410022130468, guid: 81471eb919ea089209404664737f46be,
+        type: 3}
+      propertyPath: serializationRate
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 1413925014262740634, guid: 81471eb919ea089209404664737f46be,
         type: 3}
       propertyPath: m_TextStyleHashCode

@@ -1,11 +1,18 @@
-﻿public class PlayerPlayStatsTracker : PlayerPlayStatsDisplayer
+﻿using TMPro;
+using UnityEngine;
+
+public class PlayerPlayStatsTracker : PlayerPlayStatsDisplayer
 {
+    [Header("Tracker Uniques")]
+    [SerializeField] TextMeshProUGUI nameText = null;
     int localPlayerID = 0;
     PlayerRoundStatsCollector collector = null;
 
     void Start()
     {
         GameIntroManager.instance.OnEntryCompleted += OnGameStatred;
+        if(PlayersRunDataSO.Instance)
+            nameText.text = PlayersRunDataSO.Instance.localPlayerName;
     }
     void OnDestroy()
     {

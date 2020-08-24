@@ -31,7 +31,7 @@ public class RoundResult : MonoBehaviour
         winnerText.text = "";
         for (int i = 1;i<=MatchState.Instance.PreviousRoundNum;i++)
         {
-            TeamTag t = MatchState.Instance.GetRoundWinner(MatchState.Instance.PreviousRoundNum);
+            TeamTag t = MatchState.Instance.GetRoundWinner(i);
             if (t ==  TeamTag.None)
                 winnerText.text = "Round " + i + " Was A Tie\n";
             else

@@ -30,7 +30,7 @@ public class PlayerRoundStatsCollector : MonoBehaviour
             launcher.E_OnThrowPointReached -= OnThrowPointReached;
 
         PlayerPlayStatsGameHolder holder = PlayerPlayStatsGameHolder.instance;
-        if(holder)
+        if(holder && chara)
             holder.AddStats(chara.GetID(), roundStats);
     }
 
