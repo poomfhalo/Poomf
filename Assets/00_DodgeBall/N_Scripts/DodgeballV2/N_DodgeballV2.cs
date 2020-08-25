@@ -25,27 +25,37 @@ using GW_Lib;
 
 public class N_DodgeballV2 : MonoBehaviour, IPunObservable
 {
+    [SerializeField] bool useCustomSyncer = false;
     [SerializeField] float delayAfterThrowToEnable = 0.2f;
     [Tooltip("is true, if the ball, has traveled, over this percent of the total distance it should travel when thrown")]
     [Range(0.05f, 0.95f)]
     [SerializeField] float traveledDistBeforeEnable = 0.45f;
 
     [Header("Read Only")]
-    [SerializeField] float lastTimeStamp = 0;
     PhotonView pv = null;
     Dodgeball ball = null;
     SmoothSyncPUN2 syncer = null;
     Coroutine ballThrowSyncerCoro = null;
+    N_DodgeballSyncer c_syncer = null;
 
     void Start()
     {
         ball = GetComponent<Dodgeball>();
         pv = GetComponent<PhotonView>();
         syncer = GetComponent<SmoothSyncPUN2>();
+        c_syncer = GetComponentInChildren<N_DodgeballSyncer>();
 
         ball.E_OnCommandActivated += OnCommandActivated;
         ball.E_OnStateUpdated += OnStateUpdated;
         //ball.reflection.extReflectionTest = pv.IsMine;
+        if(useCustomSyncer)
+        {
+            syncer.enabled = false;
+        }
+        else
+        {
+            c_syncer.enabled = false;
+        }
     }
     void Update()
     {
@@ -65,13 +75,22 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
         switch (cmd)
         {
             case DodgeballCommand.GoToChara:
-                syncer.enabled = false;
+                if(!useCustomSyncer)
+                    syncer.enabled = false;
+
+                c_syncer.ClearData();
                 break;
             case DodgeballCommand.LaunchTo:
-                this.BeginCoro(ref ballThrowSyncerCoro, BallThrowSyncEnable());
+                if(!useCustomSyncer)
+                    this.BeginCoro(ref ballThrowSyncerCoro, BallThrowSyncEnable());
+
+                c_syncer.SetSendingData(true);
                 break;
             case DodgeballCommand.LaunchUp:
-                syncer.enabled = false;
+                if(!useCustomSyncer)
+                    syncer.enabled = false;
+
+                c_syncer.ClearData();
                 break;
         }
     }
@@ -80,19 +99,22 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
         yield return new WaitForSeconds(delayAfterThrowToEnable);
         while (GetComponent<DodgeballGoLaunchTo>().traveledPercent< traveledDistBeforeEnable)
         {
-            //syncer.addState(GetSimulatedState());
             yield return 0;
         }
-        //syncer.addState(GetSimulatedState());
-        syncer.enabled = true;
-        //syncer.addState(GetSimulatedState());
+        if (!useCustomSyncer)
+        {
+            syncer.addState(GetSimulatedState());
+            syncer.enabled = true;
+        }
+
     }
     private StatePUN2 GetSimulatedState()
     {
         StatePUN2 simulatedState = new StatePUN2();
-        simulatedState.position = GetComponent<Rigidbody>().position;
-        //simulatedState.receivedOnServerTimestamp = (float)PhotonNetwork.Time;
-        //simulatedState.ownerTimestamp = lastTimeStamp;
+        simulatedState.position = transform.position;
+        simulatedState.rotation = transform.rotation;
+        simulatedState.scale = transform.localScale;
+        simulatedState.ownerTimestamp = syncer.stateBuffer[0].ownerTimestamp - syncer.interpolationBackTime;
         return simulatedState;
     }
     private void OnStateUpdated(Dodgeball.BallState newState)
@@ -104,15 +126,14 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
         switch (newState)
         {
             case Dodgeball.BallState.OnGround:
-                syncer.enabled = true;
+                if(!useCustomSyncer)
+                    syncer.enabled = true;
                 break;
         }
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        lastTimeStamp = (float)info.SentServerTime;
-
         if (stream.IsWriting)
         {
 

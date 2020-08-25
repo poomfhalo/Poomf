@@ -20,6 +20,10 @@ public class CustomDebugText : GameDebuggable
 
         customText.text = o.ToString();
     }
+    public void SetText(object o)
+    {
+        AssignText(o);
+    }
 
     public override void SetActivity(bool toState)
     {

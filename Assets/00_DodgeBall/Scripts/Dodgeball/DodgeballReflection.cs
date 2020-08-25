@@ -14,7 +14,7 @@ public class DodgeballReflection : DodgeballAction
     [SerializeField] float castDist = 10;
     [Tooltip("Measured In Relation To Speed, based on the delta time, " +
         "1 means, if we're 1 frame away from contact, 5 means we start reacting when we're far by 5")]
-    [SerializeField] int reflectionFramesPrediction = 3;
+    [SerializeField] float reflectionFramesPrediction = 3;
     [Tooltip("if true, we will use the longest delta time for the prediction duration, " +
         "if false we will use the average")]
     [SerializeField] FPSType fpsType = FPSType.Min;
