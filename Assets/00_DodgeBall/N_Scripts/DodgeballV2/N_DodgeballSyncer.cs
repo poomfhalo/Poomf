@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon;
 using Photon.Pun;
+using UnityEngine.InputSystem;
+using System;
 
-public class N_DodgeballSyncer : MonoBehaviour, IPunObservable
+public class N_DodgeballSyncer : MonoBehaviourPunCallbacks, IPunObservable
 {
+    public InputAction i = null;
     [Tooltip("This Means, we record at least one result ever recordSpeed in seconds")]
-    [SerializeField] double recordSpeed = 0.1;
+    [SerializeField] double recordFrequency = 0.1;
     [SerializeField] int maxDataSlots = 600;
 
     [Header("Read Only")]
@@ -23,44 +26,56 @@ public class N_DodgeballSyncer : MonoBehaviour, IPunObservable
 
     void Start()
     {
+        if (!transform.parent)
+            return;
+
         ball = transform.parent;
         rb3d = ball.GetComponent<Rigidbody>();
         pv = GetComponent<PhotonView>();
+        i.Enable();
+        i.performed += InputCalled;
     }
+    private void InputCalled(InputAction.CallbackContext o)
+    {
+        if(o.performed)
+        {
+            sendingData = !sendingData;
+            Log.Warning("Flipped Reading Data State");
+        }
+    }
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if(!enabled)
-        {
-            Debug.Log("not enabled? Returning");
-            return;
-        }
         string s = "Sent Server Time " + info.SentServerTime.ToString() + "\n";
-        FindObjectOfType<CustomDebugText>().AssignText(s);
+        var v = FindObjectOfType<CustomDebugText>();
+
 
         double newTime = info.SentServerTime;
         double diff = System.Math.Abs(newTime - lastRecordedTime);
-        bool allowWriting = diff > recordSpeed;
+        bool reachedTimeThreshold = diff > recordFrequency;
 
-        if(allowWriting)
+        if (reachedTimeThreshold)
             lastRecordedTime = newTime;
 
         if (stream.IsWriting)
         {
-            print("WTF");
-            if (!allowWriting || !sendingData)
+            Debug.LogWarning("WTF");
+            if (!reachedTimeThreshold || !sendingData)
                 return;
 
-            print("Is Writing");
+            Debug.LogWarning("Is Writing");
             stream.SendNext(ball.position);
             stream.SendNext(rb3d.velocity);
+            v.AssignText(s);
         }
         else if (stream.IsReading)
         {
-            print("TRing to read");
+            Debug.LogWarning("Trying to read");
             if (stream.Count == 0)
                 return;
 
-            print("IsREading");
+            Debug.LogWarning("IsReading");
+
             Vector3 position = (Vector3)stream.ReceiveNext();
             Vector3 velocity = (Vector3)stream.ReceiveNext();
 
@@ -68,12 +83,15 @@ public class N_DodgeballSyncer : MonoBehaviour, IPunObservable
             {
                 positions.RemoveAt(0);
                 velocities.RemoveAt(0);
-                Debug.Log("removed Soemthing?");
+                Debug.LogWarning("removed Soemthing?");
             }
-            Debug.Log("ADded Element");
+            Debug.LogWarning("ADded Element");
 
             positions.Add(position);
             velocities.Add(velocity);
+
+            s = positions.Count.ToString();
+            v.AssignText(s);
         }
     }
     public void SetSendingData(bool toState)

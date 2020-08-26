@@ -200,9 +200,10 @@ MonoBehaviour:
   isRunning: 0
   autoActivate: 1
   castDist: 10
-  reflectionFramesPrediction: 2
+  reflectionFramesPrediction: 1.5
   fpsType: 0
   maxTries: 60
+  minReflectionDist: 1.35
   collisionDirThreshold: -0.75
   reflectionDist:
     absMin: 0.5
@@ -214,7 +215,6 @@ MonoBehaviour:
     absMax: 6
     rMin: 4.5
     rMax: 5.5
-  minReflectionDist: 1.35
   extReflectionTest: 1
   lastReflectionVel: {x: 0, y: 0, z: 0}
   lastReflectionTarget: {x: 0, y: 0, z: 0}

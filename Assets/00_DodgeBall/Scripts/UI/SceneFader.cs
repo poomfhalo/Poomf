@@ -53,6 +53,8 @@ public class SceneFader : MonoBehaviour
     }
     void OnDestroy()
     {
+        if(activeTween != null)
+            activeTween.Kill();
         transform.DOKill();
     }
 
@@ -64,6 +66,9 @@ public class SceneFader : MonoBehaviour
         }
         onCompleted += () =>
         {
+            if (!group)
+                return;
+
             group.interactable = false;
             group.blocksRaycasts = false;
         };
@@ -77,6 +82,9 @@ public class SceneFader : MonoBehaviour
         }
         onCompleted += () =>
         {
+            if (!group)
+                return;
+
             group.interactable = true;
             group.blocksRaycasts = true;
         };
