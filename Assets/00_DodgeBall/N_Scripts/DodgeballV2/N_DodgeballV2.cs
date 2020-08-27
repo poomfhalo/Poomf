@@ -69,11 +69,29 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
     {
         if(pv.IsMine)
         {
+            switch (cmd)
+            {
+                case DodgeballCommand.HitGround:
+                    c_syncer.SetSendingData(false);
+                    break;
+                case DodgeballCommand.GoToChara:
+                    c_syncer.SetSendingData(false);
+                    break;
+                case DodgeballCommand.LaunchTo:
+                    c_syncer.SetSendingData(true);
+                    break;
+                case DodgeballCommand.LaunchUp:
+                    c_syncer.SetSendingData(false);
+                    break;
+            }
             return;
         }
 
         switch (cmd)
         {
+            case DodgeballCommand.HitGround:
+                c_syncer.ClearData();
+                break;
             case DodgeballCommand.GoToChara:
                 if(!useCustomSyncer)
                     syncer.enabled = false;
@@ -84,7 +102,7 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
                 if(!useCustomSyncer)
                     this.BeginCoro(ref ballThrowSyncerCoro, BallThrowSyncEnable());
 
-                c_syncer.SetSendingData(true);
+                Debug.LogWarning("Data Sending Enabled");
                 break;
             case DodgeballCommand.LaunchUp:
                 if(!useCustomSyncer)
@@ -121,6 +139,12 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
     {
         if (pv.IsMine)
         {
+            switch (newState)
+            {
+                case Dodgeball.BallState.OnGround:
+                    c_syncer.SetSendingData(false);
+                    break;
+            }
             return;
         }
         switch (newState)
@@ -128,6 +152,8 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
             case Dodgeball.BallState.OnGround:
                 if(!useCustomSyncer)
                     syncer.enabled = true;
+
+                c_syncer.ClearData();
                 break;
         }
     }

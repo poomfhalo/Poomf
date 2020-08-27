@@ -17,6 +17,7 @@ public class DodgeballGoLaunchTo : DodgeballAction
     public byte lastAppliedThrow = 0;
     public DodgeballCharacter lastThrownAtChara = null;
     public DodgeballCharacter lastThrower = null;
+    public Func<bool> extAllowMovement = () => true;
 
     Tweener activeTweener = null;
 
@@ -38,6 +39,7 @@ public class DodgeballGoLaunchTo : DodgeballAction
     {
         if (activeTweener != null)
             return;
+
 
         this.lastThrownAtChara = targetChara;
         this.lastThrower = lastThrower;

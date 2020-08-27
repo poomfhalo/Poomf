@@ -12,11 +12,12 @@ public class N_DodgeballSyncer : MonoBehaviourPunCallbacks, IPunObservable
     [Tooltip("This Means, we record at least one result ever recordSpeed in seconds")]
     [SerializeField] double recordFrequency = 0.1;
     [SerializeField] int maxDataSlots = 600;
+    [SerializeField] float satisfactionRad = 0.2f;
 
     [Header("Read Only")]
-    [SerializeField] float recordCounter = 0;
-    [SerializeField] bool sendingData = false;
     [SerializeField] double lastRecordedTime = 0;
+    [SerializeField] bool sendingData = false;
+    [SerializeField] bool reachedTimeThreshold = false;
     [SerializeField] List<Vector3> positions = new List<Vector3>();
     [SerializeField] List<Vector3> velocities = new List<Vector3>();
 
@@ -34,47 +35,58 @@ public class N_DodgeballSyncer : MonoBehaviourPunCallbacks, IPunObservable
         pv = GetComponent<PhotonView>();
         i.Enable();
         i.performed += InputCalled;
+
+        ball.GetComponent<DodgeballGoLaunchTo>().ApplyActionWithCommand = () => pv.IsMine;
+    }
+    void FixedUpdate()
+    {
+        if(positions.Count == 0)
+            return;
+
+        Vector3 dir = (positions[0] - rb3d.position).normalized;
+        Vector3 vel = dir * velocities[0].magnitude;
+        if (vel == Vector3.zero)
+            rb3d.MovePosition(positions[0]);
+        else
+            rb3d.MovePosition(rb3d.position + vel * Time.fixedDeltaTime);
+
+        if(Vector3.Distance(rb3d.position,positions[0])<=satisfactionRad)
+        {
+            positions.RemoveAt(0);
+            velocities.RemoveAt(0);
+        }
     }
     private void InputCalled(InputAction.CallbackContext o)
     {
-        if(o.performed)
-        {
-            sendingData = !sendingData;
-            Log.Warning("Flipped Reading Data State");
-        }
+        //if(o.performed)
+        //{
+        //    sendingData = !sendingData;
+        //    Log.Warning("Flipped Reading Data State");
+        //}
     }
+
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        string s = "Sent Server Time " + info.SentServerTime.ToString() + "\n";
-        var v = FindObjectOfType<CustomDebugText>();
-
-
         double newTime = info.SentServerTime;
         double diff = System.Math.Abs(newTime - lastRecordedTime);
-        bool reachedTimeThreshold = diff > recordFrequency;
+        reachedTimeThreshold = diff > recordFrequency;
 
         if (reachedTimeThreshold)
             lastRecordedTime = newTime;
 
         if (stream.IsWriting)
         {
-            Debug.LogWarning("WTF");
             if (!reachedTimeThreshold || !sendingData)
                 return;
 
-            Debug.LogWarning("Is Writing");
             stream.SendNext(ball.position);
             stream.SendNext(rb3d.velocity);
-            v.AssignText(s);
         }
         else if (stream.IsReading)
         {
-            Debug.LogWarning("Trying to read");
             if (stream.Count == 0)
                 return;
-
-            Debug.LogWarning("IsReading");
 
             Vector3 position = (Vector3)stream.ReceiveNext();
             Vector3 velocity = (Vector3)stream.ReceiveNext();
@@ -83,14 +95,13 @@ public class N_DodgeballSyncer : MonoBehaviourPunCallbacks, IPunObservable
             {
                 positions.RemoveAt(0);
                 velocities.RemoveAt(0);
-                Debug.LogWarning("removed Soemthing?");
             }
-            Debug.LogWarning("ADded Element");
 
             positions.Add(position);
             velocities.Add(velocity);
 
-            s = positions.Count.ToString();
+            var v = FindObjectOfType<CustomDebugText>();
+            string s = positions.Count.ToString();
             v.AssignText(s);
         }
     }

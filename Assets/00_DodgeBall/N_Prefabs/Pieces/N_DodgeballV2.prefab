@@ -82,11 +82,12 @@ MonoBehaviour:
       m_Groups: 
       m_Action: I
       m_Flags: 0
-  recordFrequency: 0.1
+  recordFrequency: -1
   maxDataSlots: 600
-  recordCounter: 0
-  sendingData: 0
+  satisfactionRad: 1
   lastRecordedTime: 0
+  sendingData: 0
+  reachedTimeThreshold: 0
   positions: []
   velocities: []
 --- !u!114 &-7165740235301556278
