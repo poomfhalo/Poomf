@@ -24,6 +24,7 @@ public class N_DodgeballSyncer : MonoBehaviourPunCallbacks, IPunObservable
     Transform ball = null;
     Rigidbody rb3d = null;
     PhotonView pv = null;
+    Vector3 currVel = new Vector3();
 
     void Start()
     {
@@ -45,10 +46,20 @@ public class N_DodgeballSyncer : MonoBehaviourPunCallbacks, IPunObservable
 
         Vector3 dir = (positions[0] - rb3d.position).normalized;
         Vector3 vel = dir * velocities[0].magnitude;
-        if (vel == Vector3.zero)
+        if (vel.magnitude<=0.2f)
             rb3d.MovePosition(positions[0]);
         else
-            rb3d.MovePosition(rb3d.position + vel * Time.fixedDeltaTime);
+        {
+            Vector3 smoothPosition = rb3d.position + vel * Time.fixedDeltaTime;
+            float distByVel = Vector3.Distance(rb3d.position, smoothPosition);
+            float dist = Vector3.Distance(rb3d.position, positions[0]);
+            if (dist < distByVel)
+            {
+                vel = vel.normalized * dist;
+            }
+
+            rb3d.MovePosition(smoothPosition);
+        }
 
         if(Vector3.Distance(rb3d.position,positions[0])<=satisfactionRad)
         {
@@ -105,6 +116,31 @@ public class N_DodgeballSyncer : MonoBehaviourPunCallbacks, IPunObservable
             v.AssignText(s);
         }
     }
+
+    public void SendDataByRPC()
+    {
+        photonView.RPC("R_VelPos", RpcTarget.Others, rb3d.position, rb3d.velocity);
+    }
+    public void SendDataByRPC(int framesForceSend,float secondsDifference)
+    { 
+        IEnumerator ForceSendByInterval()
+        {
+            for (int i = 0; i < framesForceSend; i++)
+            {
+                SendDataByRPC();
+                yield return new WaitForSeconds(secondsDifference);
+            }
+        }
+        StartCoroutine(ForceSendByInterval());
+    }
+
+    [PunRPC]
+    private void R_VelPos(Vector3 pos,Vector3 vel)
+    {
+        positions.Add(pos);
+        velocities.Add(vel);
+    }
+
     public void SetSendingData(bool toState)
     {
         sendingData = toState;

@@ -71,9 +71,6 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
         {
             switch (cmd)
             {
-                case DodgeballCommand.HitGround:
-                    c_syncer.SetSendingData(false);
-                    break;
                 case DodgeballCommand.GoToChara:
                     c_syncer.SetSendingData(false);
                     break;
@@ -83,15 +80,15 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
                 case DodgeballCommand.LaunchUp:
                     c_syncer.SetSendingData(false);
                     break;
+                case DodgeballCommand.Reflection:
+                    c_syncer.SendDataByRPC(15,0.0150f);
+                    break;
             }
             return;
         }
 
         switch (cmd)
         {
-            case DodgeballCommand.HitGround:
-                c_syncer.ClearData();
-                break;
             case DodgeballCommand.GoToChara:
                 if(!useCustomSyncer)
                     syncer.enabled = false;
@@ -99,16 +96,20 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
                 c_syncer.ClearData();
                 break;
             case DodgeballCommand.LaunchTo:
-                if(!useCustomSyncer)
-                    this.BeginCoro(ref ballThrowSyncerCoro, BallThrowSyncEnable());
+                //if(!useCustomSyncer)
+                    //this.BeginCoro(ref ballThrowSyncerCoro, BallThrowSyncEnable());
 
-                Debug.LogWarning("Data Sending Enabled");
                 break;
             case DodgeballCommand.LaunchUp:
                 if(!useCustomSyncer)
                     syncer.enabled = false;
 
                 c_syncer.ClearData();
+                break;
+            case DodgeballCommand.Reflection:
+                if (!useCustomSyncer)
+                    TurnOnSmoothSyncer();
+
                 break;
         }
     }
@@ -120,41 +121,18 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
             yield return 0;
         }
         if (!useCustomSyncer)
-        {
-            syncer.addState(GetSimulatedState());
-            syncer.enabled = true;
-        }
+            TurnOnSmoothSyncer();
 
     }
-    private StatePUN2 GetSimulatedState()
-    {
-        StatePUN2 simulatedState = new StatePUN2();
-        simulatedState.position = transform.position;
-        simulatedState.rotation = transform.rotation;
-        simulatedState.scale = transform.localScale;
-        simulatedState.ownerTimestamp = syncer.stateBuffer[0].ownerTimestamp - syncer.interpolationBackTime;
-        return simulatedState;
-    }
+
     private void OnStateUpdated(Dodgeball.BallState newState)
     {
-        if (pv.IsMine)
-        {
-            switch (newState)
-            {
-                case Dodgeball.BallState.OnGround:
-                    c_syncer.SetSendingData(false);
-                    break;
-            }
-            return;
-        }
         switch (newState)
         {
-            case Dodgeball.BallState.OnGround:
-                if(!useCustomSyncer)
-                    syncer.enabled = true;
-
-                c_syncer.ClearData();
-                break;
+            case Dodgeball.BallState.StoppedOnGround:
+                if (!useCustomSyncer)
+                    TurnOnSmoothSyncer();
+            break;
         }
     }
 
@@ -168,5 +146,30 @@ public class N_DodgeballV2 : MonoBehaviour, IPunObservable
         {
 
         }
+    }
+    private void TurnOnSmoothSyncer()
+    {
+        StatePUN2 GetSimulatedState()
+        {
+            if (syncer == null || syncer.stateBuffer == null || syncer.stateBuffer.Length == 0 || syncer.stateBuffer[0] == null)
+                return null;
+
+            StatePUN2 simulatedState = new StatePUN2();
+            simulatedState.position = transform.position;
+            simulatedState.rotation = transform.rotation;
+            simulatedState.scale = transform.localScale;
+            Debug.LogWarning(simulatedState);
+            Debug.LogWarning(syncer);
+            Debug.LogWarning(syncer.stateBuffer);
+
+            simulatedState.ownerTimestamp = syncer.stateBuffer[0].ownerTimestamp - syncer.interpolationBackTime;
+            return simulatedState;
+        }
+
+        StatePUN2 s = GetSimulatedState();
+        if(s!=null)
+            syncer.addState(GetSimulatedState());
+
+        syncer.enabled = true;
     }
 }

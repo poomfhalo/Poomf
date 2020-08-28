@@ -42,6 +42,13 @@ public class PC : CharaController
             }
         }
     }
+    void OnDestroy()
+    {
+        if(Debug.isDebugBuild || Application.isEditor)
+        {
+            healthReduction.performed -= OnHealthReductionCalled;
+        }
+    }
 
     private void OnHealthReductionCalled(InputAction.CallbackContext obj)
     {
